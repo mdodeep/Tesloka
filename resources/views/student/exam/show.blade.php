@@ -9,6 +9,9 @@
     <style>
         [v-cloak] { display: none; }
         .no-select { user-select: none; -webkit-user-select: none; }
+        @media (min-width: 1024px) {
+            #paletteSidebar { display: block !important; }
+        }
     </style>
 </head>
 <body class="bg-default-100 text-default-800 font-sans min-h-screen flex flex-col no-select">

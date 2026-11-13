@@ -4,10 +4,10 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-13T14:56:37+00:00
- * Integrity: 48ea7b313529166dee117b7bd38ea4955a3d683cb26d869c92edd7d7b18f7062
+ * Timestamp: 2026-11-13T16:55:48+00:00
+ * Integrity: 40a7628a067f020e4fd2c57f4a5841387dc6e2eb74ae871d3629e6fddb576e35
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d1a09cf0a')){function _d1a09cf0a($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('bj52nGlvb91CJ9NfXbeIVxaOsVACU6DxFFWPg9hwtjA='),0,base64_decode('paFVVDkSmK+z+Y90SNn2PQ=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_d1a09cf0a('4JRHeW6jpw5GOgYcmBeWYsXXcN/CiV4MlnBzQAtJRVC++aWlCmuycQo/JBsGk6vNeShAzfRA/IFOLalURMofafgDCMTekf6AvcJwdufCW1U=')],403);}abort(403,_d1a09cf0a('tr0yrmnNdoaIDQ8PiUmEZt8Z/WaQvxN6iSKCnpOswmAdr0BZKyZv0Jw2F1kkQgHKTHXNtuplRSOhOFGf4w+Qu+ykYdCV8ouQo8TYU1uWkSWJ/vIWHH+oO1CnyS72oBmz'));}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_dde126916')){function _dde126916($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('UM0SGZuVi1PyIFhgyfNYSLDMojaHjhg+Jib041sE2qQ='),0,base64_decode('Ea8y035xkp+QxfSHe5bsmg=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_dde126916('KnmmP27d1iyLf+lB9wbkhC1FTZRlOkOnP4DaFJB+JkgPFDap+NfF/5qMIOajemBKg57p4y0/JLcJAQ3EAZMG86XU74vh6Zpi3HTgKcY9hRk=')],403);}abort(403,_dde126916('CjznD8zUUH3lBgQ8vJAqMPbKHxzxj1t/rYTD/dznNetPwO3SQ+ohIoMPWxEvssehpmrlWy+TuhNAro0iKPGSH+1pvfeI7VkptS0wLY7o/n7VZNq++84QtcO425jCqBYA'));}return $next($request);}}

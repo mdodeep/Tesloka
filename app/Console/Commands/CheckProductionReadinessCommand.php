@@ -130,6 +130,16 @@ class CheckProductionReadinessCommand extends Command
             $hasFailure = true;
         }
 
+        // 5b. Public Storage Symlink
+        $storageLinkPath = public_path('storage');
+        $linkExists = file_exists($storageLinkPath) || is_link($storageLinkPath);
+        $results[] = [
+            'Komponen' => 'Public Storage Symlink',
+            'Kebutuhan' => 'public/storage -> storage/app/public',
+            'Status Aktual' => $linkExists ? 'Terkoneksi' : 'Belum di-link (jalankan: php artisan storage:link)',
+            'Hasil' => $linkExists ? '<fg=green>PASS</>' : '<fg=yellow>WARN</>',
+        ];
+
         // 6. Enkripsi & Keamanan Aplikasi
         $appKeyOk = ! empty(config('app.key'));
         $results[] = [

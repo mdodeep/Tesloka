@@ -227,17 +227,21 @@ php artisan view:cache
 
 ---
 
-## 7. Konfigurasi Nginx Virtual Host
+## 7. Konfigurasi Nginx Virtual Host (Wajib Dilakukan di aaPanel)
 
-1. Buka **aaPanel > Website > Klik Nama Situs > Site Directory**:
-   - **Running directory:** Ubah ke `/public` lalu klik **Save**! *(Wajib agar mengarah ke direktori public Laravel)*.
-2. Buka tab **URL rewrite**:
-   - Pilih preset **laravel 5** atau pastikan terdapat baris:
-     ```nginx
-     location / {
-         try_files $uri $uri/ /index.php?$query_string;
-     }
-     ```
+> [!IMPORTANT]
+> **DUA LANGKAH KRITIS DI AAPANEL AGAR TIDAK ERROR 404 NOT FOUND ATAU 403 FORBIDDEN:**
+>
+> 1. **Running Directory Wajib `/public`:**
+>    - Buka **aaPanel > Website > Klik Nama Situs Anda > Site Directory**.
+>    - Pada kolom **Running directory**, ubah dari `/` menjadi `/public`.
+>    - Klik tombol **Save**! *(Wajib agar Nginx mengeksekusi `public/index.php` Laravel, bukan folder root proyek)*.
+>
+> 2. **URL Rewrite Wajib Preset `laravel 5`:**
+>    - Masih di jendela pengaturan situs, klik tab **URL rewrite**.
+>    - Pada dropdown pilihan framework, pilih **laravel 5** (atau pastikan isi kodenya memiliki `try_files $uri $uri/ /index.php?$query_string;`).
+>    - Klik tombol **Save**! *(Wajib agar seluruh sub-halaman seperti `/ujian/login`, `/staff/login`, dan API autosave tidak 404 Not Found)*.
+
 3. Buka tab **Configuration**:
    - Anda dapat meninjau template resmi dari `deploy/nginx/tesloka.conf` untuk tuning buffer, batas upload 50MB, dan caching aset statis.
 4. **Memasang SSL / HTTPS (Let's Encrypt):**
@@ -298,7 +302,17 @@ Jika seluruh indikator berstatus **PASS [OK]**, sistem siap digunakan untuk oper
 
 ## 10. Panduan Pemecahan Masalah (Troubleshooting)
 
-### Kendala 1: Error 502 Bad Gateway
+### Kendala 1: Error 404 Not Found atau 403 Forbidden Saat Membuka Website
+- **Penyebab Utama di aaPanel:**
+  1. Pengaturan **Running directory** di aaPanel masih mengarah ke root `/` alih-alih `/public`.
+  2. Aturan **URL Rewrite** belum diaktifkan sehingga rute dinamis Laravel dicari sebagai file fisik yang tidak ada di disk.
+- **Solusi Cepat 10 Detik di aaPanel:**
+  1. Buka **aaPanel > Website > Klik Nama Situs Anda**.
+  2. Buka tab **Site Directory**, ubah **Running directory** menjadi `/public` lalu klik **Save**!
+  3. Buka tab **URL rewrite**, pilih preset **laravel 5** lalu klik **Save**!
+  4. Bersihkan cache browser atau buka via incognito tab.
+
+### Kendala 2: Error 502 Bad Gateway
 - **Penyebab:** Nginx tidak dapat tersambung ke socket PHP-FPM.
 - **Solusi:**
   1. Periksa apakah PHP-FPM sedang berjalan: `systemctl status php-fpm` (atau cek tombol start di aaPanel).
@@ -306,9 +320,18 @@ Jika seluruh indikator berstatus **PASS [OK]**, sistem siap digunakan untuk oper
      Jalankan di terminal: `ls -la /tmp/php-cgi*.sock` (pada aaPanel) atau `ls -la /run/php/*.sock` (pada Ubuntu standar).
      Pastikan baris `fastcgi_pass` di Nginx sama persis dengan socket yang aktif.
 
-### Kendala 2: Error 500 Internal Server Error
-- **Penyebab:** `APP_KEY` belum dibuat, atau izin direktori `storage` belum diatur.
-- **Solusi:**
+### Kendala 3: Error 500 Internal Server Error
+- **Penyebab:** `APP_KEY` belum dibuat, izin direktori `storage` belum diatur, atau cache framework usang.
+- **Langkah Diagnosa Cepat:**
+  1. Jalankan perintah diagnosa resmi:
+     ```bash
+     php artisan tesloka:production-check
+     ```
+  2. Lihat error detail di log Laravel:
+     ```bash
+     tail -n 50 storage/logs/laravel.log
+     ```
+- **Solusi Perbaikan:**
   ```bash
   php artisan key:generate --force
   chown -R www:www storage bootstrap/cache
@@ -316,7 +339,7 @@ Jika seluruh indikator berstatus **PASS [OK]**, sistem siap digunakan untuk oper
   php artisan optimize:clear
   ```
 
-### Kendala 3: Gagal `php artisan storage:link` (The "public/storage" link already exists)
+### Kendala 4: Gagal `php artisan storage:link` (The "public/storage" link already exists)
 - **Penyebab:** Symlink lama masih tertinggal.
 - **Solusi:**
   ```bash
@@ -324,7 +347,7 @@ Jika seluruh indikator berstatus **PASS [OK]**, sistem siap digunakan untuk oper
   php artisan storage:link
   ```
 
-### Kendala 4: Database Error "Ident authentication failed" atau "Connection refused"
+### Kendala 5: Database Error "Ident authentication failed" atau "Connection refused"
 - **Penyebab:** Password database salah atau PostgreSQL belum mengizinkan koneksi lokal md5/scram.
 - **Solusi:**
   1. Pastikan `DB_HOST=127.0.0.1` (gunakan IP, hindari `localhost` jika socket lokal bermasalah).

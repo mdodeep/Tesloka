@@ -170,7 +170,7 @@ Panduan instalasi produksi langkah-demi-langkah yang lengkap untuk server Linux 
 1. **Instal Paket di App Store aaPanel:** Nginx (1.24+), PHP (PHP 8.3 / 8.4 / 8.5), PostgreSQL Manager, Redis, dan Supervisor Manager.
 2. **Pasang Ekstensi PHP Wajib:** `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `fileinfo`, `exif`, `gd`, `zip`, `bcmath`.
 3. **Buat Database PostgreSQL:** Database `tesloka_cbt`, user `tesloka_user`, encoding `UTF8`.
-4. **Deploy Kode:**
+4. **Deploy Kode & Konfigurasi:**
    ```bash
    cd /www/wwwroot/cbt.institusi.ac.id
    git clone https://github.com/mdodeep/Tesloka.git .
@@ -187,7 +187,12 @@ Panduan instalasi produksi langkah-demi-langkah yang lengkap untuk server Linux 
    php artisan route:cache
    php artisan view:cache
    ```
-5. **Konfigurasi Nginx:** Salin template dari [`deploy/nginx/tesloka.conf`](deploy/nginx/tesloka.conf) dan pasang SSL Let's Encrypt.
+5. **Konfigurasi Site Directory & URL Rewrite (PENTING ANTI-404):**
+   > [!IMPORTANT]
+   > **Langkah Kritis aaPanel agar tidak 404/403:**
+   > - Masuk ke **aaPanel > Website > Klik Nama Domain Anda**.
+   > - Tab **Site Directory**: Ubah **Running directory** dari `/` menjadi `/public` lalu klik **Save**! *(Ini mengarahkan Nginx ke `public/index.php` Laravel)*.
+   > - Tab **URL rewrite**: Pilih preset **laravel 5** lalu klik **Save**! *(Ini mengaktifkan `try_files $uri $uri/ /index.php?$query_string;` sehingga routing halaman ujian & login tidak 404)*.
 6. **Supervisor Background Worker:** Tambahkan daemon di aaPanel Supervisor Manager:
    - Command: `php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120`
    - User: `www`
@@ -195,6 +200,10 @@ Panduan instalasi produksi langkah-demi-langkah yang lengkap untuk server Linux 
 7. **Jadwalkan Task Scheduler:** Tambahkan cron di menu aaPanel Cron tiap 1 menit:
    ```bash
    cd /www/wwwroot/cbt.institusi.ac.id && php artisan schedule:run >> /dev/null 2>&1
+   ```
+8. **Verifikasi Kesiapan Produksi:**
+   ```bash
+   php artisan tesloka:production-check
    ```
 
 ---
@@ -217,7 +226,15 @@ Setelah menjalankan `php artisan migrate --seed`, seluruh akun awal institusi te
 
 ## Panduan Pemecahan Masalah (Troubleshooting)
 
-### 1. Error 502 Bad Gateway pada Nginx
+### 1. Error 404 Not Found Saat Mengakses Halaman / Sub-Route (Login, Dashboard, dsb.)
+- **Penyebab Utama di aaPanel:** Pengaturan **Running directory** di aaPanel masih mengarah ke `/` (bukan `/public`), atau **URL Rewrite** belum diaktifkan sehingga Nginx mencari folder fisik yang tidak ada dan menolak request.
+- **Solusi Cepat 10 Detik di aaPanel:**
+  1. Buka **aaPanel > Website > Klik Nama Domain Anda**.
+  2. Klik tab **Site Directory**, ubah **Running directory** dari `/` menjadi `/public`, lalu klik tombol **Save**!
+  3. Klik tab **URL rewrite**, pilih preset **laravel 5** (atau pastikan ada `try_files $uri $uri/ /index.php?$query_string;`), lalu klik tombol **Save**!
+  4. Buka kembali browser dan refresh halaman.
+
+### 2. Error 502 Bad Gateway pada Nginx
 - **Penyebab:** Nginx salah menunjuk socket PHP-FPM atau service PHP-FPM mati.
 - **Solusi:**
   1. Cek status PHP-FPM: `systemctl status php8.3-fpm` (atau via aaPanel App Store).
@@ -226,20 +243,31 @@ Setelah menjalankan `php artisan migrate --seed`, seluruh akun awal institusi te
      - Ubuntu Standar: `ls -la /run/php/*.sock`
   3. Sesuaikan baris `fastcgi_pass` di konfigurasi Nginx vhost agar sama persis dengan socket yang aktif.
 
-### 2. Error 500 Internal Server Error & Blank White Screen
-- **Penyebab:** `APP_KEY` kosong atau web server tidak memiliki hak tulis ke folder `storage/`.
-- **Solusi:**
+### 3. Error 500 Internal Server Error & Blank White Screen
+- **Penyebab Umum:** Kunci enkripsi aplikasi (`APP_KEY`) belum dibuat, izin folder `storage/` belum diberikan ke user web server (`www`), atau cache framework usang.
+- **Langkah Diagnosa Cepat:**
+  1. Jalankan perintah diagnosa resmi:
+     ```bash
+     php artisan tesloka:production-check
+     ```
+  2. Periksa baris error terakhir di log Laravel:
+     ```bash
+     tail -n 50 storage/logs/laravel.log
+     ```
+- **Solusi Perbaikan:**
   ```bash
+  # 1. Pastikan kunci enkripsi aktif:
   php artisan key:generate --force
-  # Di aaPanel:
+
+  # 2. Atur izin tulis folder storage & cache (untuk user aaPanel 'www'):
   chown -R www:www storage bootstrap/cache
-  # Di Ubuntu Standar:
-  chown -R www-data:www-data storage bootstrap/cache
   chmod -R 775 storage bootstrap/cache
+
+  # 3. Bersihkan seluruh cache konfigurasi & view yang usang:
   php artisan optimize:clear
   ```
 
-### 3. Gagal Menjalankan `php artisan storage:link`
+### 4. Gagal Menjalankan `php artisan storage:link`
 - **Pesan Error:** `The "public/storage" link already exists.`
 - **Solusi:**
   ```bash
@@ -247,7 +275,7 @@ Setelah menjalankan `php artisan migrate --seed`, seluruh akun awal institusi te
   php artisan storage:link
   ```
 
-### 4. Database Error "Connection Refused" atau "Ident authentication failed"
+### 5. Database Error "Connection Refused" atau "Ident authentication failed"
 - **Solusi:**
   1. Di `.env`, ubah `DB_HOST=localhost` menjadi `DB_HOST=127.0.0.1` (memaksa TCP stack IPv4).
   2. Pastikan file `/etc/postgresql/<version>/main/pg_hba.conf` mengizinkan metode autentikasi `scram-sha-256` atau `md5` untuk koneksi lokal:
@@ -256,8 +284,14 @@ Setelah menjalankan `php artisan migrate --seed`, seluruh akun awal institusi te
      ```
   3. Restart PostgreSQL: `sudo systemctl restart postgresql`.
 
-### 5. Redis Error "OOM command not allowed when used memory > 'maxmemory'"
+### 6. Redis Error "OOM command not allowed when used memory > 'maxmemory'"
 - **Penyebab:** Memori Redis penuh dan policy disetel ke `noeviction`.
+- **Solusi:**
+  Buka konfigurasi Redis, ubah baris `maxmemory-policy` menjadi:
+  ```ini
+  maxmemory-policy allkeys-lru
+  ```
+  Lalu restart Redis: `systemctl restart redis` (atau via tombol restart di aaPanel).
 - **Solusi:** Buka konfigurasi Redis (`redis.conf`), pastikan `maxmemory-policy` disetel ke `allkeys-lru` agar Redis otomatis mendaur ulang cache lama. Lalu restart Redis.
 
 ### 6. Supervisor Daemon "FATAL / Exited too quickly"

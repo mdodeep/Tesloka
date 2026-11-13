@@ -1,0 +1,15 @@
+<?php
+/*
+ * Protected by PHP Obfuscator
+ * Author: Muhammad Dody Pratama
+ * Email: me@dodypratama.my.id
+ * Version: 1.0.0
+ * Timestamp: 2026-11-13T09:24:27+00:00
+ * Integrity: 62f20babc5eea6536b6e1aa56caadff79a8350704ba9ab76a3389f3536e23e83
+ */
+
+namespace App\Services;
+if(!function_exists(__NAMESPACE__.'\_db02dbb37')){function _db02dbb37($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('m3ee9p1FGbUwe/F+9Zyan5h4gW/Mc0KeXkVaezrcJiM='),0,base64_decode('a8ycXTXxlMp5cid2buVwSw=='));}}
+use App\Models\Exam;use Illuminate\Support\Str;class SafeExamBrowserConfigService{public function generateConfigXml(Exam $exam,?string $startUrl=null,?string $quitPassword=null):string{$startUrl=$startUrl??route('student.exam.instructions',$exam->id);$quitPassword=$quitPassword??$exam->seb_quit_password??'TeslokaQuit2026';$_vb73e=hash('sha256',$quitPassword);
+if ((PHP_MAJOR_VERSION < 0)) { $_chk54 = substr(md5(strval(2270)), 0, 10); }$_ve3f3=$exam->seb_config_key??hash('sha256',_db02dbb37('+5m3owtNu7n3BfiLi5dSug==').$exam->code.'-'.$exam->id);$_v35bb=_db02dbb37('+coVul5LeoglBM6wnB3lxm4A1pMFdQfSloxvTX4mVmTE/KPqHOLpaVLmmlKs/BFL')."\n";$_v35bb.=_db02dbb37('39lyjkXYU0xG6noa6nx54HY8kE+5le+Szc+FfxONDeM3T3iTQOc2jiM1DWzUmBTOWtRn9lISS3q0x2hMa+FJavDSUpil8qXA2SaRfA0AMpejN4gtxdw+7Fxew5RZM6oTiug2nZak7/ZJK9ru/Q5uiw==')."\n";$_v35bb.=_db02dbb37('mb6YPKW7xiuKTBarKMQT3pesNkl9ZI/3HVDHKACxtF0=')."\n";$_v35bb.=_db02dbb37('sDPml6oNwDEUZ0oSycwHkg==')."\n";$_v35bb.="    <key>originURL</key>\n    <string>{$startUrl}</string>\n";$_v35bb.="    <key>startURL</key>\n    <string>{$startUrl}</string>\n";$_v35bb.="    <key>browserExamKey</key>\n    <string>{$_ve3f3}</string>\n";$_v35bb.=_db02dbb37('8++Zo9tQwxqBpQrmAX9TlHMl7OMWBLayk8m5K0np34CXcDMt3tV7TVMRJXNizzDR');$_v35bb.="    <key>hashedQuitPassword</key>\n    <string>{$_vb73e}</string>\n";$_v35bb.=_db02dbb37('EDjDQ1b8oMEWexGALu5O8VHBzoYbBHFb8DOjrYhRd8v0m2ttS8KSugJGLP1RLwEyaG3HL50ciOzeBsMlaGjSYg==');$_v35bb.=_db02dbb37('OaHUeSdMl4kJgtwzxHc3iOd9NBIreak2Cq7aBeAxnBIFkt/PP4gorwQ8BDZFQiv4SWD6rel74cC/mNwgHemZ5w==');$_v35bb.=_db02dbb37('Z73cOJPlIEprALyWuz19VStIj7GxwoZsr/1kFg64AqSC8GPgPwleaeHSK3HbvVPG');$_v35bb.=_db02dbb37('VelvKz9jD+jbmS4Z1t+GVJEgl/NK02A79gNsFwbw5cngVUzmki9SoPt3kNnNBIdciFYZtrW/sLkEvAChwOih/g==');$_v35bb.=_db02dbb37('F8XOFrqENMJFROo4WMJh0F/VvmNly4G6p+jfaN/fwkaRzOi4qerWDJkzUQqKY5wS').htmlspecialchars($exam->title,ENT_XML1,_db02dbb37('SG+r3HPwCVDXHYGSs1S2jA=='))._db02dbb37('WzcDmTmX8Jjr2+lgCdBIOQ==');$_v35bb.=_db02dbb37('PQjg1QcxXkbq8FHENFBuzKIrJsfsKdkuRL8YwO8YVHcCrjdVknd3ND+e+veaEu+B').htmlspecialchars($exam->code,ENT_XML1,_db02dbb37('SG+r3HPwCVDXHYGSs1S2jA=='))._db02dbb37('WzcDmTmX8Jjr2+lgCdBIOQ==');$_v35bb.=_db02dbb37('KIHyu8LE30PcxGR8//ABwQ==')."\n";$_v35bb.=_db02dbb37('LOZDU1262UEbiFobI4Tpew==');return $_v35bb;}public function verifyRequestHash(string $currentUrl,string $providedHash,string $browserExamKey):bool{$_ve7a4=hash('sha256',$currentUrl.$browserExamKey);
+if ((PHP_MAJOR_VERSION < 0)) { $_res32 = substr(md5(strval(3876)), 0, 7); }return hash_equals($_ve7a4,$providedHash);}}

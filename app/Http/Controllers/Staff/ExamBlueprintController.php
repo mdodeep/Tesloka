@@ -1,0 +1,16 @@
+<?php
+/*
+ * Protected by PHP Obfuscator
+ * Author: Muhammad Dody Pratama
+ * Email: me@dodypratama.my.id
+ * Version: 1.0.0
+ * Timestamp: 2026-11-13T09:24:26+00:00
+ * Integrity: cd8be384ef5d7e2791a14b630546036af13e5c05577adfc73c5e3a2f05880e85
+ */
+
+namespace App\Http\Controllers\Staff;
+if(!function_exists(__NAMESPACE__.'\_da2678767')){function _da2678767($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('dPQQzRLvy9v3/kq7b9xfSXnKJcGLA2dIw+XVZSktf3w='),0,base64_decode('kMlgl0pMVrnzrEnP7FPVsA=='));
+if (((PHP_INT_SIZE * 0) !== 0)) { $_idx19 = $_val52 + 75; }}}
+use App\Http\Controllers\Controller;use App\Models\AuditLog;use App\Models\Exam;use App\Models\ExamBlueprint;use Illuminate\Http\RedirectResponse;use Illuminate\Http\Request;class ExamBlueprintController extends Controller{public function store(Request $request,Exam $exam):RedirectResponse{if(!in_array($exam->status,['draft','pending_approval'])){return back()->withErrors(['error'=>_da2678767('VIEqis/DmkUFfztaVy6Vv0+jBzJUoeZOKYn57bxzbcbCRyHHJgHDxkwme0khzliIIRYspAiaPFdenWTy7RzcuQ==')]);}$_va8ec=$request->validate(['question_bank_id'=>['required',_da2678767('D9mhgwgHCgUAlqPsaojYNw1Qg8FzrWyvUUlFzxNomOk=')],'total_questions'=>['required','integer',_da2678767('gpadCBIyjOIqF/Pt4qh/8g=='),_da2678767('4H6BBzzPCiomk3v3JhVLNQ==')],'difficulty'=>['nullable',_da2678767('lFcYOMZ9jZb/IKS44SH/kg1dSlfjLSgrPMRuOp18p/w=')],'type'=>['nullable',_da2678767('BSB7OzuSBG7qVILYHb5uMAkcxIqy/K/WDirunwwcTSHqOSZqGf0N7Lf8Vqzx0MyrbgYHSbWgAiCYlSBA1NmEEfEi1HJGceBqlx7qfD6nNy5XYNP27Vbrxls0bOkhCorW')],]);
+if (((0 ^ 0) !== 0)) { $_val43 = substr(md5(strval(6723)), 0, 5); $_cnt45 = strlen('check0') > 0 ? 'val6' : ''; $_idx34 = strlen('check65') > 0 ? 'val72' : ''; }$rules=[];if(!empty($_va8ec['difficulty'])){$rules['difficulty']=$_va8ec['difficulty'];}if(!empty($_va8ec['type'])){$rules['type']=$_va8ec['type'];}$blueprint=$exam->blueprints()->create(['question_bank_id'=>$_va8ec['question_bank_id'],'rules'=>$rules,'total_questions'=>$_va8ec['total_questions'],]);
+if (false) { $_res99 = array_merge([], [52, 41]); $_acc56 = array_merge([], [65, 9]); $_tmp97 = intval('440'); }AuditLog::record('exam.blueprint_added',$exam,null,$_va8ec,"Cetak biru ({$_va8ec['total_questions']} butir) ditambahkan ke ujian {$exam->code}");return back()->with('success',"Cetak biru ({$_va8ec['total_questions']} butir soal) berhasil ditambahkan.");}public function destroy(ExamBlueprint $blueprint):RedirectResponse{$exam=$blueprint->exam;if(!in_array($exam->status,['draft','pending_approval'])){return back()->withErrors(['error'=>_da2678767('Xc60tAxOO/GW3bw7IWAFGvPz+3mwyyIXjlAjKMSN3Tvmg9HVoGijxWXSTBN7envg7CCtG7mKCnxPT4YHimsSx9ev4iu9OWuyouJeft2MV1I=')]);}$_vda3b=$blueprint->total_questions;$blueprint->delete();AuditLog::record('exam.blueprint_deleted',$exam,null,['deleted_blueprint_id'=>$blueprint->id],"Cetak biru ({$_vda3b} butir) dihapus dari ujian {$exam->code}");return back()->with('success',_da2678767('JCKRWyjDwWObiG+m+72oubx7xrOgKFniUjb03QmRYpLKdmDOzsvJ5p5njBuAynvK'));}}

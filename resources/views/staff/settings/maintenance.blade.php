@@ -1,0 +1,187 @@
+@extends('layouts.staff')
+
+@section('title', 'Manajemen Mode Pemeliharaan — TESLOKA CBT')
+@section('page-parent', 'Tata Kelola')
+@section('page-title', 'Kontrol Pemeliharaan Sistem CBT')
+@section('page-subtitle', 'Aktivasi mode pemeliharaan dengan proteksi ujian aktif, token rahasia (bypass secret), dan audit terperinci.')
+
+@section('page-actions')
+    @if($isDown)
+        <span class="inline-flex items-center px-3 py-1.5 rounded text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs">
+            <span class="size-2 rounded-full bg-amber-500 animate-ping mr-1.5"></span>
+            Sedang Pemeliharaan
+        </span>
+        <form action="{{ route('staff.settings.maintenance.disable') }}" method="POST" class="inline">
+            @csrf
+            <button type="submit" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-semibold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span>Buka Sistem</span>
+            </button>
+        </form>
+    @else
+        <span class="inline-flex items-center px-3 py-1.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+            <span class="size-2 rounded-full bg-emerald-500 mr-1.5"></span>
+            Normal (Aktif)
+        </span>
+    @endif
+@endsection
+
+@section('content')
+<div class="space-y-6 w-full">
+
+    <!-- Active Exams Safety Guard Notice -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white border border-default-200 rounded-md p-5 shadow-sm flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                    <div class="text-xs text-default-500">Pengerjaan Ujian Sedang Berlangsung</div>
+                    <div class="text-xl font-black {{ $activeAttemptsCount > 0 ? 'text-rose-600' : 'text-default-800' }}">
+                        {{ $activeAttemptsCount }} Siswa
+                    </div>
+                </div>
+            </div>
+            @if($activeAttemptsCount > 0)
+                <span class="px-2 py-1 bg-rose-50 text-rose-700 text-[11px] font-semibold rounded-lg border border-rose-200">
+                    Perhatian Khusus
+                </span>
+            @else
+                <span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-semibold rounded-lg border border-emerald-200">
+                    Aman
+                </span>
+            @endif
+        </div>
+
+        <div class="bg-white border border-default-200 rounded-md p-5 shadow-sm flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <div class="text-xs text-default-500">Sesi Ujian Aktif Saat Ini</div>
+                    <div class="text-xl font-black text-default-800">{{ $activeSessionsCount }} Sesi</div>
+                </div>
+            </div>
+            <div class="text-right text-xs text-default-400">
+                IP Anda: <code class="font-mono text-default-600 bg-default-100 px-1.5 py-0.5 rounded">{{ $clientIp }}</code>
+            </div>
+        </div>
+    </div>
+
+    @if($isDown)
+        <!-- Current Maintenance Info Box -->
+        <x-cbt.card title="Detail Status Mode Pemeliharaan Aktif">
+            <div class="space-y-3 text-xs">
+                <div class="flex items-center justify-between py-2 border-b border-default-100">
+                    <span class="text-default-500">Waktu Diaktifkan:</span>
+                    <span class="font-mono font-semibold text-default-800">
+                        {{ isset($downData['time']) ? date('d M Y H:i:s', $downData['time']) : '-' }}
+                    </span>
+                </div>
+                <div class="flex items-center justify-between py-2 border-b border-default-100">
+                    <span class="text-default-500">Bypass Secret Token:</span>
+                    <span class="font-mono font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">
+                        {{ $downData['secret'] ?? '-' }}
+                    </span>
+                </div>
+                <div class="flex items-center justify-between py-2 border-b border-default-100">
+                    <span class="text-default-500">HTTP Status Code:</span>
+                    <span class="font-mono font-semibold text-default-800">{{ $downData['status'] ?? 503 }}</span>
+                </div>
+                @if(!empty($downData['message']))
+                <div class="flex items-center justify-between py-2 border-b border-default-100">
+                    <span class="text-default-500">Pesan Pengguna:</span>
+                    <span class="font-semibold text-default-800">{{ $downData['message'] }}</span>
+                </div>
+                @endif
+                <div class="flex items-center justify-between py-2 border-b border-default-100">
+                    <span class="text-default-500">URL Akses Bypass Manual:</span>
+                    @if(!empty($downData['secret']))
+                        <a href="{{ url('/' . $downData['secret']) }}" target="_blank" class="font-mono text-blue-600 hover:underline">
+                            {{ url('/' . $downData['secret']) }} &rarr;
+                        </a>
+                    @else
+                        <span class="text-default-400">-</span>
+                    @endif
+                </div>
+                <div class="p-3 bg-emerald-50 rounded border border-emerald-200 text-[11px] text-emerald-800 flex items-center gap-2 mt-2">
+                    <svg class="w-4 h-4 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span><strong>Pengecualian Petugas Aktif:</strong> Portal Staf & Pengawas tetap dapat diakses penuh oleh administrator sehingga Anda dapat memantau dan menonaktifkan pemeliharaan kapan saja.</span>
+                </div>
+            </div>
+        </x-cbt.card>
+    @else
+        <!-- Activation Form -->
+        <x-cbt.card title="Formulir Aktivasi Mode Pemeliharaan">
+            <form action="{{ route('staff.settings.maintenance.enable') }}" method="POST" class="space-y-4">
+                @csrf
+
+                @if($activeAttemptsCount > 0)
+                    <div class="p-4 rounded bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-3">
+                        <svg class="w-5 h-5 shrink-0 text-rose-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <div>
+                            <strong class="font-bold">PERINGATAN PERLINDUNGAN CBT:</strong>
+                            <p class="mt-0.5">Saat ini terdapat {{ $activeAttemptsCount }} pengerjaan ujian siswa yang aktif. Mengaktifkan mode pemeliharaan dapat memutuskan sesi pengerjaan ujian siswa. Centang kotak persetujuan darurat di bawah jika ini adalah perbaikan kritis.</p>
+                            <label class="mt-2.5 flex items-center gap-2 cursor-pointer font-semibold text-rose-900">
+                                <input type="checkbox" name="confirm_override" value="1" class="rounded border-rose-400 text-rose-600 focus:ring-rose-500">
+                                <span>Saya memahami risikonya dan menyetujui pemeliharaan darurat saat ujian berlangsung</span>
+                            </label>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="space-y-1.5 min-w-0">
+                        <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider">
+                            Bypass Secret Token <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" name="secret" value="{{ 'maintenance-admin-' . substr(bin2hex(random_bytes(4)), 0, 8) }}" required
+                            class="form-input font-mono">
+                        <p class="text-[11px] text-default-500 mt-1">Portal Staf (/staff/*) otomatis dikecualikan. Token ini dan cookie bypass otomatis memungkinkan pengujian portal siswa selama pemeliharaan.</p>
+                    </div>
+
+                    <div class="space-y-1.5 min-w-0">
+                        <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider">
+                            HTTP Status Code
+                        </label>
+                        <select name="status" class="form-select">
+                            <option value="503" selected>503 - Service Unavailable (Standar Maintenance)</option>
+                            <option value="403">403 - Forbidden</option>
+                        </select>
+                        <p class="text-[11px] text-default-500 mt-1">Kode status HTTP yang dikirimkan ke peramban siswa.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="space-y-1.5 min-w-0">
+                        <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider">
+                            Pesan Pemberitahuan untuk Pengguna (Opsional)
+                        </label>
+                        <input type="text" name="message" placeholder="Contoh: Sistem sedang ditingkatkan untuk pemeliharaan terjadwal."
+                            class="form-input">
+                    </div>
+
+                    <div class="space-y-1.5 min-w-0">
+                        <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider">
+                            Retry-After Header (Detik)
+                        </label>
+                        <input type="number" name="retry" value="60" min="10" max="3600"
+                            class="form-input font-mono">
+                        <p class="text-[11px] text-default-500 mt-1">Perkiraan durasi dalam detik peramban harus mencoba menyegarkan halaman.</p>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <span>Aktifkan Mode Pemeliharaan Sekarang</span>
+                    </button>
+                </div>
+            </form>
+        </x-cbt.card>
+    @endif
+</div>
+@endsection
+

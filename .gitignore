@@ -1,0 +1,149 @@
+﻿# ==========================================
+# TESLOKA CBT - Public Release .gitignore
+# Repositori Publik GitHub (Distribusi Obfuskasi)
+# ==========================================
+
+# 1. Environment & Local Credentials
+.env
+.env.backup
+.env.production
+.env.local
+.env.*.local
+.env.testing
+.env.testing.local
+!.env.example
+Homestead.json
+Homestead.yaml
+auth.json
+.npmrc.local
+
+# 2. Secret Keys, Certificates & Security Credentials
+*.key
+*.pem
+*.crt
+*.cer
+*.pfx
+*.p12
+*.der
+id_rsa*
+id_ed25519*
+oauth-private.key
+oauth-public.key
+
+# 3. Dependencies & Package Managers
+/vendor/
+/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# 4. Storage & Application Runtime (CBT Security & Isolation)
+/public/storage
+/storage/*.key
+/storage/pail/
+/storage/debugbar/
+/storage/clockwork/
+/storage/app/*
+!/storage/app/.gitignore
+!/storage/app/public/
+/storage/app/public/*
+!/storage/app/public/.gitignore
+!/storage/app/private/
+/storage/app/private/*
+!/storage/app/private/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitignore
+/storage/framework/cache/locks/*
+!/storage/framework/cache/locks/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+*.log
+
+# 5. Dev Server Artifacts
+/public/hot
+/public/fonts-manifest.dev.json
+.vite/
+
+# 6. Bootstrap Cache
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# 7. Database Dumps & Local Database Files
+*.sqlite
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+dump.rdb
+*.sql
+*.dump
+database/*.sql
+database/*.dump
+database/*.sqlite
+
+# 8. Testing Caches, Coverage & Artifacts
+.phpunit.result.cache
+/.phpunit.cache
+/phpunit.cache
+.pest/
+coverage/
+*.coverage
+.infection/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+puppeteer_temp_*
+
+# 9. IDE, Editor & Developer Tooling
+/.idea/
+/.vscode/
+/.cursor/
+/.zed/
+/.nova/
+/.fleet/
+/.codex/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.bak
+*.tmp
+*.temp
+*~
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+.phpactor.json
+.phpactor/
+
+# 10. Operating System Files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# 11. Local Server & Deployment Runtime Artifacts
+deploy/livekit/*.log
+deploy/livekit/*.pid
+deploy/livekit/recordings/
+laragon.log
+php_errors.log
+apache-error.log
+nginx-error.log

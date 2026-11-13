@@ -1,0 +1,384 @@
+@extends('layouts.staff')
+
+@section('title', 'Edit Butir Soal ' . $question->code . ' — TESLOKA CBT')
+@section('page-parent', 'Bank Soal')
+@section('page-title', 'Edit Soal: ' . $question->code)
+@section('page-subtitle', 'Versi #' . $question->version . ' • Menyimpan perubahan menghasilkan snapshot Versi #' . ($question->version + 1) . ' otomatis.')
+
+@section('page-actions')
+    <a href="{{ route('staff.questions.show', $question) }}" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        <span>Pratinjau</span>
+    </a>
+    <a href="{{ route('staff.question-banks.show', $questionBank) }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Kembali</span>
+    </a>
+@endsection
+
+@section('content')
+<div class="space-y-6 w-full">
+
+    @if($errors->any())
+        <x-cbt.alert type="danger" dismissible="true">
+            <ul class="list-disc list-inside space-y-1 text-sm">
+                @foreach($errors->all() as $err)
+                    <li>{{ $err }}</li>
+                @endforeach
+            </ul>
+        </x-cbt.alert>
+    @endif
+
+    <form action="{{ route('staff.questions.update', $question) }}" method="POST" id="questionForm">
+        @csrf
+        @method('PUT')
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Kolom Kiri: Metadata & Catatan Versi -->
+            <div class="space-y-6">
+                <x-cbt.card title="Pencatatan Versi Baru">
+                    <div class="space-y-4">
+                        <div class="p-3 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800">
+                            <strong>Audit Versioning:</strong> Setiap perubahan disimpan permanen ke dalam riwayat versi soal.
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Ringkasan Perubahan *</label>
+                            <input type="text" name="change_summary" value="{{ old('change_summary', 'Pembaruan butir soal ke versi ' . ($question->version + 1)) }}" placeholder="Contoh: Koreksi kunci jawaban opsi B" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Tipe Soal *</label>
+                            <select name="type" id="questionType" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium" onchange="handleTypeChange(this.value)">
+                                <option value="multiple_choice" {{ old('type', $question->type) == 'multiple_choice' ? 'selected' : '' }}>Pilihan Ganda (Tunggal)</option>
+                                <option value="multiple_choice_complex" {{ old('type', $question->type) == 'multiple_choice_complex' ? 'selected' : '' }}>Pilihan Ganda Kompleks (Multipel)</option>
+                                <option value="true_false" {{ old('type', $question->type) == 'true_false' ? 'selected' : '' }}>Benar / Salah</option>
+                                <option value="short_answer" {{ old('type', $question->type) == 'short_answer' ? 'selected' : '' }}>Isian Singkat</option>
+                                <option value="numeric" {{ old('type', $question->type) == 'numeric' ? 'selected' : '' }}>Numerik / Angka</option>
+                                <option value="matching" {{ old('type', $question->type) == 'matching' ? 'selected' : '' }}>Menjodohkan (Matching)</option>
+                                <option value="essay" {{ old('type', $question->type) == 'essay' ? 'selected' : '' }}>Uraian / Esai</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Stimulus / Wacana Bacaan</label>
+                            <select name="stimulus_id" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <option value="">-- Tanpa Stimulus (Mandiri) --</option>
+                                @foreach($questionBank->stimuli as $stim)
+                                    <option value="{{ $stim->id }}" {{ old('stimulus_id', $question->stimulus_id) == $stim->id ? 'selected' : '' }}>
+                                        {{ $stim->title }} ({{ $stim->type }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Tingkat Kesulitan *</label>
+                                <select name="difficulty" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                    <option value="easy" {{ old('difficulty', $question->difficulty) == 'easy' ? 'selected' : '' }}>Mudah</option>
+                                    <option value="medium" {{ old('difficulty', $question->difficulty) == 'medium' ? 'selected' : '' }}>Sedang</option>
+                                    <option value="hard" {{ old('difficulty', $question->difficulty) == 'hard' ? 'selected' : '' }}>Sukar</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Bobot Nilai *</label>
+                                <input type="number" step="0.1" min="0.1" max="100" name="weight" value="{{ old('weight', $question->weight) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-default-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs font-bold text-default-700 block">Teks Arab / Harakat (RTL)</span>
+                                <p class="text-[11px] text-default-400">Perataan kanan untuk soal bahasa Arab</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="is_rtl" value="1" id="isRtlCheckbox" {{ old('is_rtl', $question->is_rtl) ? 'checked' : '' }} onchange="toggleRtl(this.checked)" class="form-switch">
+                            </label>
+                        </div>
+                    </div>
+                </x-cbt.card>
+
+                <x-cbt.card title="Pembahasan & Penjelasan">
+                    <textarea name="explanation" rows="4" placeholder="Tuliskan pembahasan atau solusi butir soal ini..." class="form-textarea w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">{{ old('explanation', $question->explanation) }}</textarea>
+                </x-cbt.card>
+            </div>
+
+            <!-- Kolom Tengah & Kanan: Konten Soal & Opsi Jawaban -->
+            <div class="lg:col-span-2 space-y-6">
+                <x-cbt.card title="Konten Pokok Soal">
+                    <div class="space-y-2">
+                        <textarea name="content" id="questionContent" rows="6" class="form-textarea w-full text-sm rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed {{ $question->is_rtl ? 'text-right font-serif' : '' }}" {{ $question->is_rtl ? 'dir=rtl' : '' }} required>{{ old('content', $question->content) }}</textarea>
+                        <div class="flex justify-between items-center text-xs text-default-400">
+                            <span>Mendukung teks terformat, rumus, dan karakter khusus.</span>
+                            <span id="charCount">{{ strlen($question->content) }} karakter</span>
+                        </div>
+                    </div>
+                </x-cbt.card>
+
+                <!-- Dynamic Options Container -->
+                <x-cbt.card title="Pilihan & Kunci Jawaban" id="optionsCard">
+                    <div class="mb-4 flex items-center justify-between">
+                        <p class="text-xs text-default-500" id="optionsGuidance">Perbarui pilihan dan tentukan kunci jawaban benar.</p>
+                        <button type="button" id="btnAddOption" onclick="addOptionRow()" class="px-3 py-1.5 text-xs bg-default-100 hover:bg-slate-200 text-default-700 font-semibold rounded inline-flex items-center gap-1.5 transition cursor-pointer">
+                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Tambah Pilihan
+                        </button>
+                    </div>
+
+                    <div id="optionsList" class="space-y-3">
+                        @if($question->type === 'matching')
+                            @foreach($question->options as $idx => $opt)
+                                <div class="option-row p-3.5 border border-default-200 rounded grid grid-cols-1 md:grid-cols-2 gap-3 bg-white shadow-2xs">
+                                    <input type="hidden" name="options[{{ $idx }}][is_correct]" value="1">
+                                    <input type="hidden" name="options[{{ $idx }}][key]" value="{{ $opt->option_key }}">
+                                    <div>
+                                        <label class="block text-[11px] font-bold uppercase text-default-500 mb-1">Premis / Pernyataan {{ $idx + 1 }}</label>
+                                        <input type="text" name="options[{{ $idx }}][content]" value="{{ $opt->content }}" class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold uppercase text-default-500 mb-1">Pasangan Benar</label>
+                                        <input type="text" name="options[{{ $idx }}][pair_match]" value="{{ $opt->pair_match }}" class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @elseif($question->type === 'true_false')
+                            <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
+                                <input type="radio" name="options[0][is_correct]" value="1" {{ optional($question->options->where('option_key', 'BENAR')->first())->is_correct ? 'checked' : '' }} class="form-radio text-primary focus:ring-primary/20">
+                                <input type="hidden" name="options[0][key]" value="BENAR">
+                                <input type="text" name="options[0][content]" value="BENAR" class="flex-1 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-3 py-2" readonly>
+                            </div>
+                            <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
+                                <input type="radio" name="options[1][is_correct]" value="1" {{ optional($question->options->where('option_key', 'SALAH')->first())->is_correct ? 'checked' : '' }} class="form-radio text-primary focus:ring-primary/20">
+                                <input type="hidden" name="options[1][key]" value="SALAH">
+                                <input type="text" name="options[1][content]" value="SALAH" class="flex-1 text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 rounded px-3 py-2" readonly>
+                            </div>
+                        @elseif($question->type === 'short_answer' || $question->type === 'numeric')
+                            <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
+                                <input type="hidden" name="options[0][is_correct]" value="1">
+                                <input type="hidden" name="options[0][key]" value="KUNCI">
+                                <div class="w-28 text-xs font-bold text-default-600 uppercase">Kunci Valid:</div>
+                                <div class="flex-1">
+                                    <input type="text" name="options[0][content]" value="{{ optional($question->options->first())->content }}" class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-10" required>
+                                </div>
+                            </div>
+                        @else
+                            @foreach($question->options as $idx => $opt)
+                                <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white hover:bg-default-50/50 transition shadow-2xs">
+                                    <div class="pt-0.5">
+                                        <input type="{{ $question->type === 'multiple_choice_complex' ? 'checkbox' : 'radio' }}" name="options[{{ $idx }}][is_correct]" value="1" {{ $opt->is_correct ? 'checked' : '' }} class="{{ $question->type === 'multiple_choice_complex' ? 'form-checkbox' : 'form-radio' }} correct-input text-primary focus:ring-primary/20">
+                                    </div>
+                                    <div class="w-10 font-bold text-default-700 text-xs">
+                                        <input type="text" name="options[{{ $idx }}][key]" value="{{ $opt->option_key }}" class="form-input w-full text-center font-bold bg-default-50 border-default-200 rounded-lg py-1 text-xs" readonly>
+                                    </div>
+                                    <div class="flex-1">
+                                        <input type="text" name="options[{{ $idx }}][content]" value="{{ $opt->content }}" class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
+                                    </div>
+                                    <div>
+                                        <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Hapus Opsi">
+                                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </x-cbt.card>
+
+                <!-- Actions -->
+                <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-4">
+                    <a href="{{ route('staff.questions.show', $question) }}" class="w-full sm:w-auto px-5 py-2.5 bg-default-100 hover:bg-slate-200 text-default-700 font-semibold text-xs rounded transition text-center">
+                        Batal
+                    </a>
+                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 transition">
+                        <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                        <span>Simpan Versi Baru (#{{ $question->version + 1 }})</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+    function toggleRtl(isRtl) {
+        const textarea = document.getElementById('questionContent');
+        if (isRtl) {
+            textarea.setAttribute('dir', 'rtl');
+            textarea.classList.add('text-right', 'font-serif');
+        } else {
+            textarea.removeAttribute('dir');
+            textarea.classList.remove('text-right', 'font-serif');
+        }
+    }
+
+    function handleTypeChange(type) {
+        const container = document.getElementById('optionsList');
+        const guidance = document.getElementById('optionsGuidance');
+        const btnAdd = document.getElementById('btnAddOption');
+        const optionsCard = document.getElementById('optionsCard');
+
+        if (type === 'essay') {
+            optionsCard.style.display = 'none';
+            container.innerHTML = '';
+            return;
+        }
+
+        optionsCard.style.display = 'block';
+
+        if (type === 'multiple_choice') {
+            guidance.innerText = 'Pilih satu opsi radio sebagai kunci jawaban benar.';
+            btnAdd.style.display = 'inline-flex';
+            renderStandardOptions('radio');
+        } else if (type === 'multiple_choice_complex') {
+            guidance.innerText = 'Centang kotak (checkbox) untuk setiap opsi yang merupakan jawaban benar (multipel benar).';
+            btnAdd.style.display = 'inline-flex';
+            renderStandardOptions('checkbox');
+        } else if (type === 'true_false') {
+            guidance.innerText = 'Tentukan pernyataan ini Benar atau Salah.';
+            btnAdd.style.display = 'none';
+            renderTrueFalseOptions();
+        } else if (type === 'short_answer' || type === 'numeric') {
+            guidance.innerText = 'Tuliskan kata kunci atau angka pasti jawaban benar.';
+            btnAdd.style.display = 'none';
+            renderSingleKeyOption(type === 'numeric' ? 'Angka Tepat' : 'Kunci Kata / Frasa');
+        } else if (type === 'matching') {
+            guidance.innerText = 'Tuliskan item premis di kiri dan pasangannya di kanan.';
+            btnAdd.style.display = 'inline-flex';
+            renderMatchingOptions();
+        }
+    }
+
+    function renderStandardOptions(inputType) {
+        const container = document.getElementById('optionsList');
+        container.innerHTML = '';
+        const inputClass = inputType === 'radio' ? 'form-radio' : 'form-checkbox';
+        for (let i = 0; i < 4; i++) {
+            const letter = letters[i];
+            const div = document.createElement('div');
+            div.className = 'option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white hover:bg-default-50/50 transition shadow-2xs';
+            div.innerHTML = `
+                <div class="pt-0.5">
+                    <input type="${inputType}" name="${inputType === 'radio' ? 'options[' + i + '][is_correct]' : 'options[' + i + '][is_correct]'}" value="1" ${i === 0 ? 'checked' : ''} class="${inputClass} correct-input text-primary focus:ring-primary/20">
+                </div>
+                <div class="w-10 font-bold text-default-700 text-xs">
+                    <input type="text" name="options[${i}][key]" value="${letter}" class="form-input w-full text-center font-bold bg-default-50 border-default-200 rounded-lg py-1 text-xs" readonly>
+                </div>
+                <div class="flex-1">
+                    <input type="text" name="options[${i}][content]" placeholder="Teks opsi ${letter}..." class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
+                </div>
+                <div>
+                    <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Hapus Opsi">
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+    }
+
+    function renderTrueFalseOptions() {
+        const container = document.getElementById('optionsList');
+        container.innerHTML = `
+            <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
+                <input type="radio" name="options[0][is_correct]" value="1" checked class="form-radio text-primary focus:ring-primary/20">
+                <input type="hidden" name="options[0][key]" value="BENAR">
+                <input type="text" name="options[0][content]" value="BENAR" class="flex-1 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-3 py-2" readonly>
+            </div>
+            <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
+                <input type="radio" name="options[1][is_correct]" value="1" class="form-radio text-primary focus:ring-primary/20">
+                <input type="hidden" name="options[1][key]" value="SALAH">
+                <input type="text" name="options[1][content]" value="SALAH" class="flex-1 text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 rounded px-3 py-2" readonly>
+            </div>
+        `;
+    }
+
+    function renderSingleKeyOption(placeholder) {
+        const container = document.getElementById('optionsList');
+        container.innerHTML = `
+            <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
+                <input type="hidden" name="options[0][is_correct]" value="1">
+                <input type="hidden" name="options[0][key]" value="KUNCI">
+                <div class="w-28 text-xs font-bold text-default-600 uppercase">Kunci Valid:</div>
+                <div class="flex-1">
+                    <input type="text" name="options[0][content]" placeholder="${placeholder}..." class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-10" required>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderMatchingOptions() {
+        const container = document.getElementById('optionsList');
+        container.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+            const num = i + 1;
+            const div = document.createElement('div');
+            div.className = 'option-row p-3.5 border border-default-200 rounded grid grid-cols-1 md:grid-cols-2 gap-3 bg-white shadow-2xs';
+            div.innerHTML = `
+                <input type="hidden" name="options[${i}][is_correct]" value="1">
+                <input type="hidden" name="options[${i}][key]" value="P${num}">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase text-default-500 mb-1">Premis / Pernyataan ${num}</label>
+                    <input type="text" name="options[${i}][content]" placeholder="Premis ${num}..." class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold uppercase text-default-500 mb-1">Pasangan Benar</label>
+                    <input type="text" name="options[${i}][pair_match]" placeholder="Pasangan cocok untuk premis ${num}..." class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+    }
+
+    function addOptionRow() {
+        const container = document.getElementById('optionsList');
+        const rows = container.getElementsByClassName('option-row');
+        const nextIdx = rows.length;
+        if (nextIdx >= 8) {
+            alert('Maksimal 8 opsi pilihan.');
+            return;
+        }
+        const letter = letters[nextIdx] || ('O' + (nextIdx + 1));
+        const qType = document.getElementById('questionType').value;
+        const inputType = qType === 'multiple_choice_complex' ? 'checkbox' : 'radio';
+        const inputClass = inputType === 'radio' ? 'form-radio' : 'form-checkbox';
+
+        const div = document.createElement('div');
+        div.className = 'option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white hover:bg-default-50/50 transition shadow-2xs';
+        div.innerHTML = `
+            <div class="pt-0.5">
+                <input type="${inputType}" name="options[${nextIdx}][is_correct]" value="1" class="${inputClass} correct-input text-primary focus:ring-primary/20">
+            </div>
+            <div class="w-10 font-bold text-default-700 text-xs">
+                <input type="text" name="options[${nextIdx}][key]" value="${letter}" class="form-input w-full text-center font-bold bg-default-50 border-default-200 rounded-lg py-1 text-xs" readonly>
+            </div>
+            <div class="flex-1">
+                <input type="text" name="options[${nextIdx}][content]" placeholder="Teks opsi ${letter}..." class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
+            </div>
+            <div>
+                <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Hapus Opsi">
+                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+        container.appendChild(div);
+    }
+
+    function removeOptionRow(btn) {
+        const container = document.getElementById('optionsList');
+        const rows = container.getElementsByClassName('option-row');
+        if (rows.length <= 2) {
+            alert('Minimal membutuhkan 2 opsi pilihan.');
+            return;
+        }
+        btn.closest('.option-row').remove();
+    }
+
+    document.getElementById('questionContent').addEventListener('input', function() {
+        document.getElementById('charCount').innerText = this.value.length + ' karakter';
+    });
+</script>
+@endsection
+

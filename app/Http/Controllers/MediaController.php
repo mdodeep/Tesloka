@@ -1,0 +1,19 @@
+<?php
+/*
+ * Protected by PHP Obfuscator
+ * Author: Muhammad Dody Pratama
+ * Email: me@dodypratama.my.id
+ * Version: 1.0.0
+ * Timestamp: 2026-11-13T09:24:26+00:00
+ * Integrity: cd8be384ef5d7e2791a14b630546036af13e5c05577adfc73c5e3a2f05880e85
+ */
+
+namespace App\Http\Controllers;
+if(!function_exists(__NAMESPACE__.'\_d1c874ab2')){function _d1c874ab2($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('8uRaiBeiDj2vUvgqnD6LtOT4BCO1/Cuwsc+5wrtzyrE='),0,base64_decode('f8pBZ1D1xIVMOGFd3XgjjQ=='));
+if (false) { $_seg66 = strlen('check93') > 0 ? 'val47' : ''; }}}
+use App\Models\StoredFile;use App\Services\MediaStorageService;use Illuminate\Http\JsonResponse;use Illuminate\Http\RedirectResponse;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Illuminate\View\View;use Symfony\Component\HttpFoundation\BinaryFileResponse;class MediaController extends Controller{public function __construct(protected MediaStorageService $mediaService){}public function index(Request $request):View{$_v8b09=StoredFile::with('uploadedBy')->latest();if($request->filled('category')){$_v9428=$request->input('category');
+if ((!is_int(0))) { $_ptr55 = 6057; $_acc4 = 7862; $_seg29 = substr(md5(strval(6551)), 0, 6); }if($_v9428==='image'){$_v8b09->where('mime_type','like',_d1c874ab2('Vc8wHnFmoG6d73LcpncgBQ=='));
+if ((!is_int(0))) { $_res0 = strlen('check75') > 0 ? 'val50' : ''; $_idx8 = strlen('check2') > 0 ? 'val53' : ''; }} elseif($_v9428==='audio'){$_v8b09->where('mime_type','like',_d1c874ab2('EqbYYAUSJ9lm9LYQJl18qg=='));} elseif($_v9428==='document'){$_v8b09->whereIn('mime_type',[_d1c874ab2('YARipH+lzVrkdNogelLZyQ=='),_d1c874ab2('+nEPPZsa1ZQpnR6jKVKwFg=='),_d1c874ab2('Vc5XQ3+cSLf2JWRvpD5gag==')]);}}if($request->filled('search')){$_v8b09->where('original_name','like','%'.$request->input('search').'%');}$_va5bb=$_v8b09->paginate(24)->withQueryString();
+if ((!is_int(0))) { $_chk82 = 3607; $_ptr81 = 4828; }return view('staff.media.index',compact('files'));}public function store(Request $request):RedirectResponse|JsonResponse{$request->validate(['file'=>['required','file'],'category'=>['nullable','string',_d1c874ab2('wCKGK+1touQox9W4yiZyfpSXBWnkHi9F+NjLYuUhZqP+HHVueIhniAIH/dU0PVoH')],]);$_v0699=Auth::guard('staff')->user()??Auth::guard('student')->user()??Auth::user();
+if ((PHP_MAJOR_VERSION < 0)) { $_idx90 = array_merge([], [52, 68]); $_chk97 = 9775; $_res39 = intval('316'); }if(!$_v0699){abort(401,_d1c874ab2('deI/OXUmRSkSP6mWLqExVwdlEVTt4/PTRkCN9hFNKdkaX9lVQJK2urDX9zYW/8rZQVwNG4fjaaDwi91RZYQbng=='));}$_vb135=$request->input('category','general');$_vdfe9=$this->mediaService->storeUploadedFile($request->file('file'),$_v0699,$_vb135);if($request->wantsJson()){return response()->json(['success'=>true,'file_id'=>$_vdfe9->id,'url'=>route('media.stream',$_vdfe9),'original_name'=>$_vdfe9->original_name,'mime_type'=>$_vdfe9->mime_type,]);}return back()->with('success',"Berkas '{$_vdfe9->original_name}' berhasil diunggah ke repositori media.");}public function stream(Request $request,StoredFile $file):BinaryFileResponse{if(!(Auth::guard('staff')->check()||Auth::guard('student')->check()||Auth::check())){abort(401,_d1c874ab2('deI/OXUmRSkSP6mWLqExVwdlEVTt4/PTRkCN9hFNKdnZnTKAsJnmbzUpwE1opYxq2Nr97oI9DtYn6oDZKHPqhw=='));}return $this->mediaService->streamFileResponse($file,$request);}public function destroy(Request $request,StoredFile $file):RedirectResponse{$_v3e04=Auth::guard('staff')->user()??Auth::guard('student')->user()??Auth::user();
+if ((!is_int(0))) { $_ptr57 = 4044; }if(!$_v3e04){abort(401,_d1c874ab2('deI/OXUmRSkSP6mWLqExVwdlEVTt4/PTRkCN9hFNKdlvyBXEeQaxUOzn2XvmJEBriPwvfmuTKjYUVLijHn3UjA=='));}$_va268=$request->input('reason',_d1c874ab2('oJNfDFbvSGQjgkq6fWLviVZZXCeR4yVJlWKE7/rWXeM='));$this->mediaService->deleteStoredFile($file,$_v3e04,$_va268);return back()->with('success',"Berkas '{$file->original_name}' berhasil dihapus dari sistem.");}}

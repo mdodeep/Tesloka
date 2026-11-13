@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Keaslian Dokumen — TESLOKA CBT</title>
+    @php
+        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
+        $faviconUrl = $institution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
+        $instName = $institution?->name ?? 'INSTITUSI PENDIDIKAN TESLOKA CBT';
+    @endphp
+    <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
+    <style>
+        @font-face {
+            font-family: 'Sora';
+            src: url('{{ asset('assets/fonts/sora.ttf') }}') format('truetype');
+            font-display: swap;
+        }
+        body {
+            font-family: 'Sora', sans-serif;
+            background-color: #f8fafc;
+            color: #14213d;
+        }
+    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="min-h-screen bg-default-50 flex flex-col justify-between p-4 sm:p-6 antialiased">
+    <!-- Top Header Brand -->
+    <header class="w-full max-w-4xl mx-auto py-4 flex items-center justify-between border-b border-default-200 mb-6">
+        <div class="flex items-center gap-3">
+            <img src="{{ $logoUrl }}" alt="{{ $instName }}" class="h-9 max-w-[180px] object-contain">
+            <div class="hidden sm:block">
+                <div class="text-xs font-bold text-default-800 uppercase tracking-tight">{{ $instName }}</div>
+                <div class="text-[10px] text-default-400">Verifikasi Resmi Dokumen CBT</div>
+            </div>
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-primary text-xs font-bold border border-blue-200">
+            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Public Validator
+        </span>
+    </header>
+
+    <!-- Main Verification Result Container -->
+    <main class="w-full max-w-4xl mx-auto flex-1">
+        @if($isValid && $attempt)
+            <div class="bg-white border border-default-200 rounded-md shadow-sm overflow-hidden space-y-6">
+                <!-- Status Banner: VALID -->
+                <div class="p-6 sm:p-8 bg-linear-to-r from-emerald-50 via-teal-50/60 to-white border-b border-emerald-100 flex items-start sm:items-center gap-4">
+                    <div class="size-14 rounded-md bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                        <svg class="size-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black text-default-900 tracking-tight">Dokumen Asli Resmi Terverifikasi</h1>
+                        <p class="text-xs text-default-600 mt-1">
+                            Dokumen evaluasi ini sah dan tercatat permanen pada sistem penyimpanan data primer TESLOKA CBT.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Document Details Grid -->
+                <div class="px-6 sm:px-8 space-y-6 pb-8">
+                    <!-- Participant & Exam Info -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-md bg-default-50 border border-default-200 text-xs">
+                        <div>
+                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Nama Peserta Ujian:</span>
+                            <span class="text-default-900 font-bold text-sm block mt-0.5">{{ $attempt->student->name }}</span>
+                            <span class="text-default-500 font-mono text-[11px]">NIM/NISN: {{ $attempt->student->identity_number ?? $attempt->student->username }}</span>
+                        </div>
+                        <div>
+                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Lembaga Penyelenggara:</span>
+                            <span class="text-default-900 font-bold text-sm block mt-0.5">{{ $instName }}</span>
+                            <span class="text-default-500 text-[11px]">{{ $institution?->address ?? 'Jl. Swakarsa IV' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Ujian & Mata Pelajaran:</span>
+                            <span class="text-default-900 font-bold text-xs block mt-0.5">{{ $attempt->exam->title }}</span>
+                            <span class="text-default-500 text-[11px]">{{ $attempt->exam->subject->name ?? 'Evaluasi Terstandar' }} &bull; Kode: {{ $attempt->exam->code }}</span>
+                        </div>
+                        <div>
+                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Waktu Pengumpulan Sah:</span>
+                            <span class="text-default-900 font-bold text-xs block mt-0.5">{{ $attempt->submitted_at?->translatedFormat('d F Y, H:i') ?? '-' }} WIB</span>
+                            <span class="text-default-500 text-[11px]">Tipe Kumpul: {{ ucfirst($attempt->submission_type ?? 'Resmi') }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Scores & Achievement Result -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-md bg-white border border-default-200 shadow-2xs text-center">
+                            <span class="text-[11px] font-bold uppercase text-default-400">Nilai Akhir Ujian</span>
+                            <div class="text-2xl font-black text-primary mt-1">{{ number_format($breakdown['total_score'], 1) }}</div>
+                            <span class="text-[10px] text-default-500">Skala 0 - 100</span>
+                        </div>
+                        <div class="p-4 rounded-md bg-white border border-default-200 shadow-2xs text-center">
+                            <span class="text-[11px] font-bold uppercase text-default-400">Predikat Nilai</span>
+                            <div class="text-2xl font-black text-default-800 mt-1">{{ $letterGrade }}</div>
+                            <span class="text-[10px] text-default-500">{{ $gradePredicate }}</span>
+                        </div>
+                        <div class="p-4 rounded-md {{ $isPassed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} border shadow-2xs text-center">
+                            <span class="text-[11px] font-bold uppercase {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status Kelulusan</span>
+                            <div class="text-lg font-black {{ $isPassed ? 'text-emerald-800' : 'text-rose-800' }} mt-1">
+                                {{ $isPassed ? 'LULUS' : 'REMEDIAL' }}
+                            </div>
+                            <span class="text-[10px] {{ $isPassed ? 'text-emerald-600' : 'text-rose-600' }}">KKM: {{ (float) ($attempt->exam->passing_grade ?? $breakdown['passing_grade'] ?? 75) }}%</span>
+                        </div>
+                    </div>
+
+                    <!-- Cryptographic Proof Box -->
+                    <div class="p-4 rounded-md bg-slate-900 text-slate-100 font-mono text-xs space-y-2">
+                        <div class="flex items-center justify-between text-default-400 text-[10px] uppercase font-bold border-b border-slate-800 pb-2">
+                            <span>Integritas Kriptografis (SHA-256)</span>
+                            <span class="text-emerald-400">Database Record Match</span>
+                        </div>
+                        <div class="break-all">
+                            <span class="text-default-500">Receipt Token :</span> <span class="text-amber-300 font-bold">{{ $attempt->submission_receipt }}</span>
+                        </div>
+                        <div class="break-all">
+                            <span class="text-default-500">Attempt ID    :</span> #{{ $attempt->id }}
+                        </div>
+                        <div class="break-all">
+                            <span class="text-default-500">Verification Hash :</span> <span class="text-emerald-400">{{ $verificationHash }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons Bar -->
+                    <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-2 border-t border-default-200">
+                        <a href="{{ route('certificate.search') }}" class="px-4 py-2.5 bg-default-100 hover:bg-default-200 text-default-700 rounded-lg font-semibold text-xs transition inline-flex items-center justify-center gap-1.5">
+                            <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <span>Cari Dokumen Lain</span>
+                        </a>
+                        @if($isPassed)
+                            <a href="{{ route('document.certificate', $token) }}" target="_blank" class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-xs shadow-xs transition inline-flex items-center justify-center gap-1.5">
+                                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>Cetak Sertifikat A4</span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @else
+            <!-- Status Banner: INVALID -->
+            <div class="bg-white border border-default-200 rounded-md shadow-sm overflow-hidden space-y-6">
+                <div class="p-6 sm:p-8 bg-linear-to-r from-rose-50 via-red-50/60 to-white border-b border-rose-100 flex items-start sm:items-center gap-4">
+                    <div class="size-14 rounded-md bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                        <svg class="size-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black text-default-900 tracking-tight">Dokumen Tidak Ditemukan atau Tidak Valid</h1>
+                        <p class="text-xs text-default-600 mt-1">
+                            Token atau kode verifikasi resi yang Anda periksa tidak terdaftar pada basis data resmi sistem TESLOKA CBT.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 sm:px-8 space-y-6 pb-8">
+                    <div class="p-4 rounded-md bg-default-50 border border-default-200 text-xs font-mono">
+                        <span class="text-default-400">Token Diperiksa:</span> <span class="text-rose-600 font-bold">{{ $token }}</span>
+                    </div>
+
+                    <div class="p-4 rounded-md bg-amber-50 border border-amber-200 text-xs text-amber-800 leading-relaxed">
+                        <strong>Pemberitahuan Keamanan:</strong> Pastikan Anda memindai kode QR resmi yang tercetak langsung pada lembar dokumen asli (SKHU, Tanda Terima, atau Sertifikat). Jika Anda menduga terdapat pemalsuan, hubungi bagian administrasi akademik.
+                    </div>
+
+                    <div class="pt-2 border-t border-default-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
+                        <a href="{{ route('certificate.search') }}" class="px-4 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-xs shadow-xs transition inline-flex items-center justify-center gap-1.5">
+                            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <span>Coba Cari dengan Nomor Sertifikat atau Resi Lain</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl mx-auto py-6 text-center text-xs text-default-400">
+        &copy; {{ date('Y') }} {{ $instName }} &bull; Didukung oleh Sistem CBT TESLOKA
+    </footer>
+</body>
+</html>
+

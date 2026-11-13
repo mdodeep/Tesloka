@@ -1,0 +1,25 @@
+version: '3.8'
+
+# Deployment Manifest LiveKit SFU Server Terisolasi (DEC-004 & FULL-FEATURE Sec 19, 98)
+# SFU berjalan pada host terpisah atau container mandiri untuk mengisolasi resource IOPS/CPU dari server database CBT.
+services:
+  livekit:
+    image: livekit/livekit-server:latest
+    container_name: tesloka_livekit_sfu
+    restart: unless-stopped
+    command: --config /etc/livekit.yaml
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    ports:
+      - "7880:7880"         # Signaling & WebRTC HTTP/WebSocket
+      - "7881:7881"         # WebRTC TCP Fallback
+      - "7882:7882/udp"     # Primary WebRTC UDP Media Transport
+      - "50000-50200:50000-50200/udp" # WebRTC ICE Media Port Range
+    environment:
+      - LIVEKIT_CONFIG=/etc/livekit.yaml
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+

@@ -1,0 +1,504 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+@plugin "@iconify/tailwind4" {
+    prefixes: tabler, lucide, logos, ri, flat-color-icons;
+}
+
+@source "preline/dist/*.js";
+@import "../../node_modules/preline/variants.css";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@font-face {
+    font-family: "Sora";
+    src: url("/assets/fonts/sora.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@theme {
+    --font-sans:
+        "Sora", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    --font-body:
+        "Sora", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+
+    --color-primary: #2e33ff;
+    --color-primary-hover: #1e22cc;
+    --color-primary-50: #eef2ff;
+    --color-primary-100: #e0e7ff;
+    --color-primary-200: #c7d2fe;
+    --color-primary-300: #a5b4fc;
+    --color-primary-400: #818cf8;
+    --color-primary-500: #4f46e5;
+    --color-primary-600: #2e33ff;
+    --color-primary-700: #2528cc;
+    --color-primary-800: #1e2099;
+    --color-primary-900: #171966;
+    --color-primary-950: #0f1033;
+
+    --color-navy: #14213d;
+    --color-secondary: #14213d;
+    --color-teal: #14bba6;
+    --color-success: #14bba6;
+    --color-info: #0ea5e9;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-slate-custom: #64728b;
+    --color-body-bg: #f8fafc;
+    --color-body-color: #334155;
+    --color-card: #ffffff;
+
+    --color-default-50: #f8fafc;
+    --color-default-100: #f1f5f9;
+    --color-default-150: #e2e8f0;
+    --color-default-200: #e2e8f0;
+    --color-default-300: #cbd5e1;
+    --color-default-400: #94a3b8;
+    --color-default-500: #64748b;
+    --color-default-600: #475569;
+    --color-default-700: #334155;
+    --color-default-800: #1e293b;
+    --color-default-900: #0f172a;
+    --color-default-950: #020617;
+
+    --spacing-sidenav-width: 260px;
+    --spacing-sidenav-width-md: 175px;
+    --spacing-sidenav-width-sm: 70px;
+    --spacing-topbar-height: 70px;
+
+    --sidenav-link-padding-x: 12px;
+    --sidenav-link-padding-y: 8px;
+    --sidenav-item-icon-size: 18px;
+    --sidenav-item-font-size: 14px;
+    --topbar-background: #ffffff;
+}
+
+/* Light Menu Variables */
+:root {
+    --sidenav-background: #ffffff;
+    --sidenav-item-color: #475569;
+    --sidenav-item-active-color: #2e33ff;
+    --sidenav-item-active-bg: rgba(46, 51, 255, 0.08);
+    --sidenav-item-hover-color: #2e33ff;
+    --sidenav-item-hover-bg: rgba(46, 51, 255, 0.05);
+}
+
+/* Tailwick Structure */
+@import "./tailwick/structure/_general.css";
+@import "./tailwick/structure/_sidenav.css";
+@import "./tailwick/structure/_topbar.css";
+
+/* Tailwick Custom Components */
+@import "./tailwick/custom/_reboot.css";
+@import "./tailwick/custom/_helper.css";
+@import "./tailwick/custom/_buttons.css";
+@import "./tailwick/custom/_card.css";
+@import "./tailwick/custom/_dropdown.css";
+@import "./tailwick/custom/_forms.css";
+@import "./tailwick/custom/_print.css";
+@import "./tailwick/custom/_chart.css";
+@import "./tailwick/custom/_quill-editor.css";
+@import "./tailwick/custom/_choices.css";
+@import "./tailwick/custom/_sweetalert2.css";
+@import "./tailwick/custom/_gridjs.css";
+@import "./tailwick/custom/_simplebar.css";
+@import "./tailwick/custom/_calendar.css";
+
+/* Third-party vendors from Tailwick */
+@import "choices.js/public/assets/styles/choices.min.css";
+@import "simplebar/dist/simplebar.css";
+
+/* Enforce strict hidden file input */
+input[type="file"].hidden,
+input[type="file"][hidden],
+.hidden,
+[hidden] {
+    display: none !important;
+}
+
+/* Tailwick Bordered Dashed Dropzone */
+.dropzone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 0.375rem;
+    background-color: rgba(248, 250, 252, 0.6);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.dropzone:hover {
+    border-color: #2e33ff;
+    background-color: rgba(46, 51, 255, 0.03);
+}
+
+/* Form inputs & selects consistency */
+.form-input,
+.form-select,
+.form-textarea,
+select {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: 0.375rem;
+    border-color: #e2e8f0;
+    font-size: 0.8125rem;
+    color: #1e293b;
+    background-color: #ffffff;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-input,
+.form-select,
+select {
+    height: 2.375rem;
+    padding: 0.45rem 0.75rem;
+    line-height: 1.25;
+}
+
+.form-textarea {
+    padding: 0.625rem 0.75rem !important;
+    min-height: 5.5rem;
+    line-height: 1.5;
+}
+
+.form-select,
+select.form-input,
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem 1.25rem;
+    padding-right: 2.25rem !important;
+    cursor: pointer;
+}
+
+.form-switch {
+    cursor: pointer;
+}
+
+/* Accessible focus & validation rings for all form controls */
+.form-input:focus,
+.form-input:focus-visible,
+.form-select:focus,
+.form-select:focus-visible,
+.form-textarea:focus,
+.form-textarea:focus-visible,
+select:focus,
+select:focus-visible {
+    border-color: #2e33ff !important;
+    box-shadow: 0 0 0 3px rgba(46, 51, 255, 0.18) !important;
+    outline: none !important;
+}
+
+.form-input.is-invalid,
+.form-select.is-invalid,
+.form-input[aria-invalid="true"],
+.form-select[aria-invalid="true"] {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18) !important;
+}
+
+/* Sidenav Logo Switching: Expanded (Logo Utama) vs Collapsed (Favicon) */
+.logo-box .logo-sm {
+    display: none !important;
+}
+
+.logo-box .logo-lg {
+    display: block !important;
+}
+
+html[data-sidenav-size="sm"] .logo-box,
+html[data-sidenav-size="hover"] .app-menu:not(:hover) .logo-box {
+    justify-content: center !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+html[data-sidenav-size="sm"] .logo-box .logo-lg,
+html[data-sidenav-size="hover"] .app-menu:not(:hover) .logo-box .logo-lg {
+    display: none !important;
+}
+
+html[data-sidenav-size="sm"] .logo-box .logo-sm,
+html[data-sidenav-size="hover"] .app-menu:not(:hover) .logo-box .logo-sm {
+    display: block !important;
+}
+
+/* Sidebar Hover Scrollbar (Hidden by default, visible on hover only) */
+.sidebar-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox: completely hide by default */
+    -ms-overflow-style: none; /* IE / Edge legacy */
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 9999px;
+    transition: background 0.2s ease-in-out;
+}
+
+/* Show sleek thin scrollbar ONLY when mouse is over #app-menu or the scroll area */
+#app-menu:hover .sidebar-scroll,
+.sidebar-scroll:hover {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+}
+
+#app-menu:hover .sidebar-scroll::-webkit-scrollbar-thumb,
+.sidebar-scroll:hover::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.45);
+}
+
+#app-menu:hover .sidebar-scroll::-webkit-scrollbar-thumb:hover,
+.sidebar-scroll:hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.75);
+}
+
+/* Accessibility & Disability Accommodations (FULL-FEATURE Sec 11) */
+[data-font="dyslexic"],
+.font-dyslexic,
+.font-dyslexic * {
+    font-family:
+        "OpenDyslexic", "Comic Sans MS", "Comic Neue", Arial, sans-serif !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.12em !important;
+    line-height: 1.85 !important;
+}
+
+/* Accessible Text Scaling - Clean Root & Content Scaling (No Recursive Compounding) */
+html.text-scale-125,
+body.text-scale-125 {
+    font-size: 18px !important;
+}
+
+html.text-scale-150,
+body.text-scale-150 {
+    font-size: 20px !important;
+}
+
+/* Scale question reading area for students */
+body.text-scale-125 #questionContent,
+body.text-scale-125 .reading-content,
+body.text-scale-125 #stimulusContent,
+body.text-scale-125 .reading-area {
+    font-size: 1.25rem !important;
+    line-height: 1.75 !important;
+}
+
+body.text-scale-150 #questionContent,
+body.text-scale-150 .reading-content,
+body.text-scale-150 #stimulusContent,
+body.text-scale-150 .reading-area {
+    font-size: 1.45rem !important;
+    line-height: 1.85 !important;
+}
+
+/* Ensure fixed UI controls, dropdown menus, and header stay crisp and never overflow */
+.app-header,
+header,
+#studentA11yMenu,
+#studentNotifDropdown,
+#studentLangDropdown,
+#staffNotifDropdown,
+#staffLangDropdown {
+    font-size: 13px !important;
+}
+
+#studentA11yMenu {
+    width: 250px !important;
+    max-width: 90vw !important;
+}
+
+#studentA11yMenu * {
+    font-size: 12px !important;
+}
+
+#studentA11yMenu .font-bold {
+    font-size: 13px !important;
+}
+
+/* ==========================================================================
+   HIGH CONTRAST MODE (WCAG AAA - Deep Black #000000 & Vivid Yellow #ffff00 / White #ffffff)
+   ========================================================================== */
+html.high-contrast-mode,
+html[data-contrast="high"],
+body.high-contrast-mode,
+.high-contrast-mode {
+    background-color: #000000 !important;
+    background: #000000 !important;
+    color: #ffff00 !important;
+}
+
+/* Containers, cards, tables, headers, and backgrounds in High Contrast */
+.high-contrast-mode header,
+.high-contrast-mode .app-header,
+.high-contrast-mode .topbar,
+.high-contrast-mode .app-menu,
+.high-contrast-mode .card,
+.high-contrast-mode .bg-card,
+.high-contrast-mode .bg-white,
+.high-contrast-mode .bg-default-50,
+.high-contrast-mode .bg-default-100,
+.high-contrast-mode [class*="bg-default-"],
+.high-contrast-mode [class*="bg-primary"],
+.high-contrast-mode [class*="bg-emerald"],
+.high-contrast-mode [class*="bg-amber"],
+.high-contrast-mode [class*="bg-indigo"],
+.high-contrast-mode [class*="bg-slate"],
+.high-contrast-mode [class*="bg-card"],
+.high-contrast-mode #studentA11yMenu,
+.high-contrast-mode #studentNotifDropdown,
+.high-contrast-mode #studentLangDropdown,
+.high-contrast-mode #staffNotifDropdown,
+.high-contrast-mode #staffLangDropdown,
+.high-contrast-mode div.bg-white,
+.high-contrast-mode div.bg-card,
+.high-contrast-mode div[class*="rounded"],
+.high-contrast-mode section,
+.high-contrast-mode aside {
+    background-color: #0b0b0b !important;
+    background: #0b0b0b !important;
+    color: #ffff00 !important;
+    border-color: #ffff00 !important;
+}
+
+/* Typography in High Contrast */
+.high-contrast-mode h1,
+.high-contrast-mode h2,
+.high-contrast-mode h3,
+.high-contrast-mode h4,
+.high-contrast-mode h5,
+.high-contrast-mode h6,
+.high-contrast-mode strong,
+.high-contrast-mode b,
+.high-contrast-mode p,
+.high-contrast-mode span,
+.high-contrast-mode label,
+.high-contrast-mode li,
+.high-contrast-mode code,
+.high-contrast-mode a,
+.high-contrast-mode div {
+    color: #ffff00 !important;
+}
+
+/* Secondary / muted details rendered in crisp bright white */
+.high-contrast-mode .text-default-400,
+.high-contrast-mode .text-default-500,
+.high-contrast-mode .text-default-600,
+.high-contrast-mode .text-slate-500,
+.high-contrast-mode .text-muted {
+    color: #ffffff !important;
+}
+
+/* High Contrast Borders */
+.high-contrast-mode * {
+    border-color: #ffff00 !important;
+}
+
+/* Dropdown menus & buttons in High Contrast */
+.high-contrast-mode #studentA11yMenu,
+.high-contrast-mode #studentNotifDropdown,
+.high-contrast-mode #studentLangDropdown {
+    background-color: #121212 !important;
+    border: 2px solid #ffff00 !important;
+    box-shadow: 0 0 12px rgba(255, 255, 0, 0.3) !important;
+}
+
+.high-contrast-mode #studentA11yMenu button,
+.high-contrast-mode #studentA11yMenu a,
+.high-contrast-mode #studentLangDropdown a {
+    background-color: transparent !important;
+    color: #ffff00 !important;
+    border: none !important;
+}
+
+.high-contrast-mode #studentA11yMenu button:hover,
+.high-contrast-mode #studentA11yMenu a:hover,
+.high-contrast-mode #studentLangDropdown a:hover {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+}
+
+.high-contrast-mode #studentA11yMenu button:hover *,
+.high-contrast-mode #studentA11yMenu a:hover *,
+.high-contrast-mode #studentLangDropdown a:hover * {
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
+/* Buttons in High Contrast */
+.high-contrast-mode .btn,
+.high-contrast-mode
+    button:not(#studentA11yMenu button):not(#studentLangDropdown a) {
+    background-color: #141414 !important;
+    color: #ffff00 !important;
+    border: 1px solid #ffff00 !important;
+}
+
+.high-contrast-mode .btn:hover,
+.high-contrast-mode button:not(#studentA11yMenu button):hover {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+}
+
+.high-contrast-mode .btn:hover *,
+.high-contrast-mode button:not(#studentA11yMenu button):hover * {
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
+/* Icons in High Contrast */
+.high-contrast-mode svg,
+.high-contrast-mode i[data-lucide] {
+    color: #ffff00 !important;
+    stroke: #ffff00 !important;
+}
+
+.high-contrast-mode .btn:hover svg,
+.high-contrast-mode button:hover svg {
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
+/* Badges & Alert boxes in High Contrast */
+.high-contrast-mode [class*="badge"],
+.high-contrast-mode [class*="rounded-full"],
+.high-contrast-mode .p-3.bg-emerald-50,
+.high-contrast-mode .p-3.bg-amber-50 {
+    background-color: #141414 !important;
+    color: #ffff00 !important;
+    border: 1px solid #ffff00 !important;
+}
+
+/* Form inputs & selects in High Contrast */
+.high-contrast-mode input,
+.high-contrast-mode select,
+.high-contrast-mode textarea,
+.high-contrast-mode .form-input,
+.high-contrast-mode .form-select {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    border: 2px solid #ffff00 !important;
+}

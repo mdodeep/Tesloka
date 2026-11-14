@@ -486,10 +486,12 @@ Jika Anda ingin tetap menggunakan tombol GUI di dalam panel aaPanel:
    > [!WARNING]
    > **JANGAN PERNAH upgrade `setuptools` tanpa batas versi!** Mulai dari `setuptools >= 82` (seperti versi 84.x), modul `pkg_resources` telah dihapus resmi oleh pengembang Python. Jika setuptools ter-upgrade ke 82+, `supervisord` akan langsung crash dengan pesan error: `ModuleNotFoundError: No module named 'pkg_resources'`.
    
-   Jalankan perintah aman berikut (mematok `setuptools < 81`):
+   Jalankan perintah bersih berikut (membersihkan sisa cache lama dan mematok versi stabil `setuptools==68.0.0`):
    ```bash
-   /www/server/panel/pyenv/bin/pip install --upgrade pip wheel
-   /www/server/panel/pyenv/bin/pip install --force-reinstall "setuptools<81" supervisor
+   rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/setuptools*
+   rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/pkg_resources*
+   /www/server/panel/pyenv/bin/pip install setuptools==68.0.0 supervisor
+   rm -f /tmp/supervisor.sock /var/run/supervisor.sock
    systemctl restart supervisord
    ```
 3. Kembali ke **aaPanel > App Store**, cari **Supervisor Manager**, klik **Install** (atau buka **Settings** jika sudah terpasang). Status layanan kini akan berwarna hijau normal (`RUNNING`).
@@ -745,14 +747,17 @@ Jika seluruh baris berstatus **PASS [OK]**, sistem CBT TESLOKA telah 100% siap d
 
 ### 🔴 Kendala 3: Supervisor Manager di aaPanel Gagal Start / Error `ModuleNotFoundError: No module named 'pkg_resources'`
 - **Penyebab:** Pada aaPanel yang menggunakan Python 3.12 / pyenv terbaru, jika paket `setuptools` ter-upgrade ke versi 82+ (seperti 84.x), modul usang `pkg_resources` telah dihapus secara resmi oleh pengembang Python. Akibatnya daemon `supervisord` internal aaPanel crash saat dijalankan.
-- **Solusi Cepat 1 Detik (Perbaiki Plugin GUI aaPanel):**
-  Jalankan perintah berikut di SSH untuk menurunkan (pinning) versi `setuptools` ke versi di bawah 81 yang masih mendukung `pkg_resources`:
+- **Solusi Tuntas (Perbaiki Plugin GUI aaPanel):**
+  Jalankan perintah berikut di SSH untuk membersihkan file usang dan mengunci versi ke `setuptools==68.0.0`:
   ```bash
-  /www/server/panel/pyenv/bin/pip install --force-reinstall "setuptools<81"
+  rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/setuptools*
+  rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/pkg_resources*
+  /www/server/panel/pyenv/bin/pip install setuptools==68.0.0
+  rm -f /tmp/supervisor.sock /var/run/supervisor.sock
   systemctl restart supervisord
   systemctl status supervisord
   ```
-  Status akan langsung berubah hijau `active (running)` dan tombol Start di aaPanel langsung normal.
+  *(Tips: Jika masih ingin melihat log detail penyebab crash, jalankan: `journalctl -xeu supervisord.service -n 20 --no-pager` atau tes langsung via foreground: `/www/server/panel/pyenv/bin/supervisord -n -c /etc/supervisor/supervisord.conf`).*
 - **Solusi Alternatif Permanen (Gunakan Native Systemd Supervisor):**
   Jika tidak ingin bergantung pada lingkungan virtual Python internal aaPanel, gunakan supervisor native bawaan Ubuntu/Debian (Lihat panduan lengkap di **Bagian 5.7 Opsi B**):
   ```bash

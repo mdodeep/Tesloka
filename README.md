@@ -342,9 +342,12 @@ Setelah menjalankan `php artisan migrate --seed`, seluruh akun awal institusi te
 
 ### 7. Supervisor Manager aaPanel "Stopped" / Error `No module named 'pkg_resources'`
 - **Penyebab:** Versi `setuptools` di virtual environment Python aaPanel ter-upgrade ke versi 82+ (seperti 84.x) di mana modul `pkg_resources` telah dihapus resmi oleh Python.
-- **Solusi Cepat 1 Detik:**
+- **Solusi Tuntas:**
   ```bash
-  /www/server/panel/pyenv/bin/pip install --force-reinstall "setuptools<81"
+  rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/setuptools*
+  rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/pkg_resources*
+  /www/server/panel/pyenv/bin/pip install setuptools==68.0.0
+  rm -f /tmp/supervisor.sock /var/run/supervisor.sock
   systemctl restart supervisord
   ```
   Status Supervisor akan langsung kembali hijau `RUNNING`. (Atau gunakan opsi native systemd: `sudo apt install -y supervisor`).

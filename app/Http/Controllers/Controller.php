@@ -4,8 +4,8 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-14T15:02:58+00:00
- * Integrity: f94b0dde50cb65dbd2252bf4c438dd8458a9cee3bb831f17a53cae612a792a21
+ * Timestamp: 2026-11-14T15:29:48+00:00
+ * Integrity: 646ef374be848d293e083b6b2a0a820665afd85534a62a2a5b37d8f15f2e794b
  */
 
 namespace App\Http\Controllers;abstract class Controller{}

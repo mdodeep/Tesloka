@@ -1,182 +1,594 @@
 # Panduan Lengkap Instalasi & Deployment Produksi — TESLOKA CBT
+### Komprehensif: aaPanel & Linux Server (Ubuntu, Debian, AlmaLinux, Rocky Linux)
 
-Panduan ini disusun secara adaptif agar **kompatibel dengan berbagai spesifikasi server (2 GB s.d. 32 GB RAM)**, berbagai jenis domain (multi-subdomain, single-domain, maupun IP lokal LAN), serta berbagai lingkungan server Linux (baik menggunakan **aaPanel** maupun **Ubuntu/Debian Standar**).
-
----
-
-## 1. Matriks Perencanaan & Sizing Hardware Server
-
-Pilih spesifikasi yang paling sesuai dengan target jumlah peserta ujian serentak institusi Anda. Jangan paksakan parameter server besar ke server kecil agar server tidak mengalami *Out of Memory (OOM)*.
-
-| Skala Institusi | Peserta Serentak | Rekomendasi VPS / Server | PostgreSQL `shared_buffers` | PHP-FPM `pm.max_children` | Redis `maxmemory` |
-|:---|:---|:---|:---|:---|:---|
-| **Laboratorium Kecil** | 30 – 50 siswa | 1-2 vCPU, 2 GB RAM | `512MB` | `12` | `256mb` |
-| **Standar Sekolah / Lab** | 50 – 150 siswa | 2-4 vCPU, 4 GB RAM | `1GB` | `24` | `512mb` |
-| **Multi-Lab / Kampus** | 150 – 300 siswa | 4 vCPU, 8 GB RAM | `2GB` | `48` | `1024mb` |
-| **Enterprise Institusi** | 300 – 600 siswa | 4-8 vCPU, 16 GB RAM | `4GB` | `64` | `2048mb` |
-| **Ujian Akbar / Serentak** | 600 – 1.200+ siswa| 8-16 vCPU, 32 GB RAM | `8GB` | `128` | `4096mb` |
-
-> [!TIP]
-> **Penyimpanan:** Disarankan menggunakan **SSD NVMe Enterprise (RAID 10)** minimal 50–100 GB agar I/O operasi baca-tulis autosave database tetap berada di bawah 50 ms.
+Dokumen ini adalah panduan teknis resmi langkah demi langkah untuk menginstalasi, mengonfigurasi, dan mengoptimasi **TESLOKA CBT** pada server VPS/Dedicated Server Linux. Panduan ini dirancang adaptif untuk **segala spesifikasi hardware (dari server hemat 1 vCPU & 2 GB RAM hingga server enterprise 16 vCPU & 32 GB RAM)**, berbagai arsitektur domain (multi-subdomain, single domain, maupun IP lokal LAN), serta dilengkapi solusi mendalam untuk kendala umum seperti instalasi Node.js, Python, PostgreSQL, Redis, dan **Supervisor Manager yang sering mengalami galat (error)**.
 
 ---
 
-## 2. Pilihan Arsitektur Domain & Subdomain
+## DAFTAR ISI
+1. [Persiapan Awal Sistem Operasi VPS (Wajib Saat VPS Baru Online)](#1-persiapan-awal-sistem-operasi-vps)
+2. [Matriks Performa & Tuning Hardware Server (1 vCPU 2GB s.d. 16 vCPU 32GB)](#2-matriks-performa--tuning-hardware-server)
+3. [Pilihan Arsitektur Domain & Jaringan](#3-pilihan-arsitektur-domain--jaringan)
+4. [Instalasi aaPanel pada VPS Bersih](#4-instalasi-aapanel-pada-vps-bersih)
+5. [Instalasi Seluruh Komponen Stack di aaPanel](#5-instalasi-seluruh-komponen-stack-di-aapanel)
+   - 5.1 [Nginx Web Server](#51-nginx-web-server)
+   - 5.2 [Node.js (Node Version Manager)](#52-nodejs-node-version-manager)
+   - 5.3 [Python Environment](#53-python-environment)
+   - 5.4 [PHP & Seluruh Ekstensi Wajib](#54-php--seluruh-ekstensi-wajib)
+   - 5.5 [PostgreSQL Manager & Basis Data](#55-postgresql-manager--basis-data)
+   - 5.6 [Redis Server & Cache Policy](#56-redis-server--cache-policy)
+   - 5.7 [Supervisor Manager (Solusi Error & Opsi Native Systemd)](#57-supervisor-manager-solusi-error--opsi-native-systemd)
+6. [Penempatan Kode & Konfigurasi Laravel](#6-penempatan-kode--konfigurasi-laravel)
+7. [Konfigurasi Nginx Virtual Host (Kritis: Anti-404 & Anti-403)](#7-konfigurasi-nginx-virtual-host-kritis-anti-404--anti-403)
+8. [Konfigurasi Background Queue Worker & Cron Scheduler](#8-konfigurasi-background-queue-worker--cron-scheduler)
+9. [Verifikasi Kesiapan Sistem (Automated Health Check)](#9-verifikasi-kesiapan-sistem-automated-health-check)
+10. [Panduan Pemecahan Masalah Lengkap (Troubleshooting A s.d. Z)](#10-panduan-pemecahan-masalah-lengkap-troubleshooting-a-sd-z)
 
-TESLOKA mendukung dua model routing domain secara native:
+---
 
-### Opsi A: Model Tiga Subdomain (Sangat Direkomendasikan)
-Institusi mengarahkan tiga DNS record A/CNAME ke IP server yang sama:
-1. `staff.domainanda.ac.id`  → Portal Admin, Pengawas, & Dosen/Guru
-2. `ujian.domainanda.ac.id`  → Portal Pengerjaan Ujian Siswa
-3. `sertifikat.domainanda.ac.id` → Portal Verifikasi Ijazah/Sertifikat Publik (Tanpa Login)
+## 1. Persiapan Awal Sistem Operasi VPS
 
-*Ketiga subdomain diarahkan ke satu folder root yang sama (`public/`). Router TESLOKA secara otomatis mendeteksi subdomain yang diakses.*
+Segera setelah VPS Anda aktif (online) dan Anda dapat login melalui SSH sebagai `root` atau pengguna dengan hak akses `sudo`, lakukan langkah persiapan sistem berikut sebelum memasang panel atau software apa pun:
+
+### 1.1 Update & Upgrade Repository Sistem Operasi
+
+Pilih perintah sesuai dengan distro Linux VPS Anda:
+
+#### Opsi A: Ubuntu / Debian (Sangat Direkomendasikan)
+```bash
+# Perbarui daftar paket dan perbarui seluruh sistem ke versi patch terbaru
+sudo apt update && sudo apt upgrade -y
+
+# Bersihkan dependensi lama yang tidak lagi digunakan
+sudo apt autoremove -y && sudo apt clean
+
+# Pasang utilitas dasar server yang esensial
+sudo apt install -y curl wget git unzip htop software-properties-common build-essential ufw
+```
+
+#### Opsi B: AlmaLinux / Rocky Linux / RHEL / CentOS Stream
+```bash
+# Perbarui seluruh paket sistem
+sudo dnf update -y
+
+# Pasang repositori EPEL dan utilitas dasar
+sudo dnf install -y epel-release
+sudo dnf install -y curl wget git unzip htop tar gcc make
+```
+
+---
+
+### 1.2 Konfigurasi Virtual Memory (Swap File) — Sangat Krusial untuk RAM 2 GB & 4 GB
+
+> [!IMPORTANT]
+> **MENGAPA SWAP FILE SANGAT KRUSIAL?**
+> Pada server berkapasitas 1-2 vCPU dan 2 GB RAM, proses instalasi dependensi (`composer install`), kompilasi aset frontend (`npm run build`), atau lonjakan request ujian dapat menyebabkan memori fisik terisi penuh. Tanpa Swap File, kernel Linux akan memicu mekanisme **OOM Killer (Out of Memory)** yang mematikan proses PHP-FPM atau PostgreSQL secara paksa (`Killed: process terminated`).
+> Membuat Swap File 2 GB s.d. 4 GB menjamin server tetap stabil 100% dan bebas dari error crash.
+
+Jalankan perintah berikut untuk membuat Swap File (contoh: **2 GB Swap** untuk server RAM 2 GB, atau **4 GB Swap** untuk server RAM 4 GB+):
+
+```bash
+# 1. Periksa apakah swap sudah ada (jika kosong, lanjutkan langkah berikutnya)
+swapon --show
+
+# 2. Alokasikan file swap sebesar 2 GB (Ganti '2G' dengan '4G' jika server memiliki storage leluasa)
+sudo fallocate -l 2G /swapfile
+
+# 3. Kunci hak akses berkas agar hanya bisa diakses root (keamanan)
+sudo chmod 600 /swapfile
+
+# 4. Inisialisasi area swap Linux
+sudo mkswap /swapfile
+
+# 5. Aktifkan swap secara langsung
+sudo swapon /swapfile
+
+# 6. Jadikan permanen agar swap tetap aktif setelah VPS direboot
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+# 7. Optimalkan parameter swappiness (nilai 10-20 ideal untuk database server)
+sudo sysctl vm.swappiness=15
+echo 'vm.swappiness=15' | sudo tee -a /etc/sysctl.conf
+
+# 8. Verifikasi bahwa swap sudah aktif:
+free -h
+```
+
+---
+
+### 1.3 Pengaturan Zona Waktu Server (NTP Server Time)
+
+CBT TESLOKA menggunakan **waktu server absolut** untuk timer hitung mundur lembar ujian peserta, rilis token otomatis, dan audit log proctoring. Pastikan zona waktu VPS Anda telah disetel ke zona waktu institusi Anda (contoh: WIB / Jakarta):
+
+```bash
+# Set zona waktu ke Asia/Jakarta (WIB)
+sudo timedatectl set-timezone Asia/Jakarta
+
+# Verifikasi waktu dan tanggal server saat ini:
+timedatectl
+```
+*(Gunakan `Asia/Makassar` untuk WITA atau `Asia/Jayapura` untuk WIT).*
+
+---
+
+## 2. Matriks Performa & Tuning Hardware Server
+
+Pilihlah tier konfigurasi yang paling sesuai dengan hardware VPS Anda. **Jangan memasukkan konfigurasi server 16 GB ke dalam VPS 2 GB**, dan sebaliknya **jangan biarkan server 16 GB memakai konfigurasi bawaan yang terlalu rendah**.
+
+### Ringkasan Matriks Konfigurasi Berdasarkan Kapasitas
+
+| Tier & Spesifikasi | Target Siswa Serentak | Rekomendasi Swap | PHP `memory_limit` | PHP-FPM `pm.max_children` | PostgreSQL `shared_buffers` | Redis `maxmemory` | Worker Queue |
+|:---|:---|:---|:---|:---|:---|:---|:---|
+| **Tier 1: 1 vCPU, 2 GB RAM** | 30 – 50 siswa (1 Lab) | `2 GB` | `256M` | `12` | `256MB` | `256mb` | 1 worker |
+| **Tier 2: 2-4 vCPU, 4 GB RAM**| 50 – 150 siswa (Sekolah) | `2 GB` | `256M` | `24` | `1GB` | `512mb` | 2 worker |
+| **Tier 3: 4 vCPU, 8 GB RAM** | 150 – 300 siswa (Kampus) | `4 GB` | `512M` | `48` | `2GB` | `1024mb` | 4 worker |
+| **Tier 4: 4-8 vCPU, 16 GB RAM**| 300 – 600 siswa (Enterprise) | `4 GB` | `512M` | `64` | `4GB` | `2048mb` | 6 worker |
+| **Tier 5: 8-16 vCPU, 32 GB RAM**| 600 – 1.200+ (Akbar) | `8 GB` | `1024M` | `128` | `8GB` | `4096mb` | 8 worker |
+
+---
+
+### Detail Konfigurasi Spesifik per Tier Hardware
+
+#### 🟢 TIER 1: Minimalis / Lab Kecil (1 vCPU, 2 GB RAM — 30 s.d. 50 Siswa)
+- **`php.ini` Settings:**
+  ```ini
+  memory_limit = 256M
+  upload_max_filesize = 50M
+  post_max_size = 50M
+  max_execution_time = 120
+  max_input_vars = 3000
+  ```
+- **PHP-FPM Settings (`/www/server/php/8x/etc/php-fpm.d/www.conf` atau via aaPanel GUI):**
+  ```ini
+  pm = dynamic
+  pm.max_children = 12
+  pm.start_servers = 3
+  pm.min_spare_servers = 2
+  pm.max_spare_servers = 5
+  pm.max_requests = 500
+  ```
+- **PostgreSQL Settings (`postgresql.conf`):**
+  ```ini
+  shared_buffers = 256MB
+  effective_cache_size = 768MB
+  work_mem = 16MB
+  maintenance_work_mem = 64MB
+  max_connections = 60
+  ```
+- **Redis Settings (`redis.conf`):**
+  ```ini
+  maxmemory 256mb
+  maxmemory-policy allkeys-lru
+  ```
+- **Supervisor Workers:** `1` process (`--timeout=90`).
+
+---
+
+#### 🟢 TIER 2: Standar Sekolah / Laboratorium (2-4 vCPU, 4 GB RAM — 50 s.d. 150 Siswa)
+- **`php.ini` Settings:**
+  ```ini
+  memory_limit = 256M
+  upload_max_filesize = 50M
+  post_max_size = 50M
+  max_execution_time = 180
+  max_input_vars = 5000
+  ```
+- **PHP-FPM Settings:**
+  ```ini
+  pm = dynamic
+  pm.max_children = 24
+  pm.start_servers = 6
+  pm.min_spare_servers = 4
+  pm.max_spare_servers = 10
+  pm.max_requests = 1000
+  ```
+- **PostgreSQL Settings (`postgresql.conf`):**
+  ```ini
+  shared_buffers = 1GB
+  effective_cache_size = 3GB
+  work_mem = 32MB
+  maintenance_work_mem = 256MB
+  max_connections = 120
+  ```
+- **Redis Settings (`redis.conf`):**
+  ```ini
+  maxmemory 512mb
+  maxmemory-policy allkeys-lru
+  ```
+- **Supervisor Workers:** `2` processes (`--timeout=120`).
+
+---
+
+#### 🟢 TIER 3: Multi-Lab / Kampus (4 vCPU, 8 GB RAM — 150 s.d. 300 Siswa)
+- **`php.ini` Settings:**
+  ```ini
+  memory_limit = 512M
+  upload_max_filesize = 50M
+  post_max_size = 50M
+  max_execution_time = 180
+  max_input_vars = 5000
+  ```
+- **PHP-FPM Settings:**
+  ```ini
+  pm = dynamic
+  pm.max_children = 48
+  pm.start_servers = 12
+  pm.min_spare_servers = 8
+  pm.max_spare_servers = 20
+  pm.max_requests = 1000
+  ```
+- **PostgreSQL Settings (`postgresql.conf`):**
+  ```ini
+  shared_buffers = 2GB
+  effective_cache_size = 6GB
+  work_mem = 64MB
+  maintenance_work_mem = 512MB
+  max_connections = 200
+  ```
+- **Redis Settings (`redis.conf`):**
+  ```ini
+  maxmemory 1024mb
+  maxmemory-policy allkeys-lru
+  ```
+- **Supervisor Workers:** `4` processes (`--timeout=120`).
+
+---
+
+#### 🟢 TIER 4: Enterprise Institusi (4-8 vCPU, 16 GB RAM — 300 s.d. 600 Siswa)
+- **`php.ini` Settings:**
+  ```ini
+  memory_limit = 512M
+  upload_max_filesize = 50M
+  post_max_size = 50M
+  max_execution_time = 240
+  max_input_vars = 10000
+  ```
+- **PHP-FPM Settings:**
+  ```ini
+  pm = dynamic
+  pm.max_children = 64
+  pm.start_servers = 16
+  pm.min_spare_servers = 10
+  pm.max_spare_servers = 30
+  pm.max_requests = 2000
+  ```
+- **PostgreSQL Settings (`postgresql.conf`):**
+  ```ini
+  shared_buffers = 4GB
+  effective_cache_size = 12GB
+  work_mem = 64MB
+  maintenance_work_mem = 1GB
+  max_connections = 300
+  ```
+- **Redis Settings (`redis.conf`):**
+  ```ini
+  maxmemory 2048mb
+  maxmemory-policy allkeys-lru
+  ```
+- **Supervisor Workers:** `6` processes (`--timeout=180`).
+
+---
+
+#### 🟢 TIER 5: Ujian Akbar / Skala Nasional (8-16 vCPU, 32 GB RAM — 600 s.d. 1.200+ Siswa)
+- **`php.ini` Settings:**
+  ```ini
+  memory_limit = 1024M
+  upload_max_filesize = 100M
+  post_max_size = 100M
+  max_execution_time = 300
+  max_input_vars = 10000
+  ```
+- **PHP-FPM Settings:**
+  ```ini
+  pm = dynamic
+  pm.max_children = 128
+  pm.start_servers = 32
+  pm.min_spare_servers = 16
+  pm.max_spare_servers = 48
+  pm.max_requests = 3000
+  ```
+- **PostgreSQL Settings (`postgresql.conf`):**
+  ```ini
+  shared_buffers = 8GB
+  effective_cache_size = 24GB
+  work_mem = 128MB
+  maintenance_work_mem = 2GB
+  max_connections = 500
+  ```
+- **Redis Settings (`redis.conf`):**
+  ```ini
+  maxmemory 4096mb
+  maxmemory-policy allkeys-lru
+  ```
+- **Supervisor Workers:** `8` processes (`--timeout=240`).
+
+---
+
+## 3. Pilihan Arsitektur Domain & Jaringan
+
+TESLOKA CBT mendukung 3 pilihan arsitektur domain:
+
+### Opsi A: Model Tiga Subdomain (Paling Direkomendasikan untuk Institusi)
+Mengarahkan 3 DNS A-Record ke IP publik VPS Anda:
+1. `staff.domainanda.ac.id`  → Portal Staf, Dosen/Guru, dan Pengawas Ruangan
+2. `ujian.domainanda.ac.id`  → Portal Siswa Mengerjakan Ujian
+3. `sertifikat.domainanda.ac.id` → Portal Publik Verifikasi Ijazah / SKHU (Tanpa Login)
+
+*Ketiga domain ini dimasukkan bersamaan ke dalam satu Virtual Host situs aaPanel yang sama.*
 
 ### Opsi B: Model Single-Domain (1 Domain Saja)
-Jika institusi hanya memiliki 1 domain (misal: `cbt.sekolah.sch.id`):
-- Portal Staf: `https://cbt.sekolah.sch.id/staff/login`
-- Portal Ujian: `https://cbt.sekolah.sch.id/ujian/login`
-- Verifikasi: `https://cbt.sekolah.sch.id/verifikasi-sertifikat`
+Jika institusi hanya memiliki 1 domain (misal: `cbt.institusi.ac.id`):
+- Portal Staf: `https://cbt.institusi.ac.id/staff/login`
+- Portal Siswa: `https://cbt.institusi.ac.id/ujian/login`
+- Portal Sertifikat: `https://cbt.institusi.ac.id/verifikasi-sertifikat`
 
-### Opsi C: Model IP Lokal (Offline LAN Lab Tanpa Internet)
-Jika dioperasikan murni di laboratorium komputer sekolah tanpa internet:
-- Cukup gunakan IP server lokal, misalnya: `http://192.168.1.100/staff/login` dan `http://192.168.1.100/ujian/login`.
+### Opsi C: Model IP Lokal (Offline LAN Laboratorium Tanpa Internet)
+Jika komputer laboratorium tidak terhubung ke internet:
+- Akses via IP lokal server: `http://192.168.1.100/staff/login` dan `http://192.168.1.100/ujian/login`.
 
 ---
 
-## 3. Langkah Instalasi Melalui aaPanel
+## 4. Instalasi aaPanel pada VPS Bersih
 
-### Langkah 3.1: Pasang aaPanel pada VPS Bersih
-Jalankan perintah resmi instalasi aaPanel pada VPS Linux Anda:
+Jalankan perintah instalasi resmi aaPanel pada terminal SSH VPS Anda:
+
+### Untuk Ubuntu / Debian:
 ```bash
-# Untuk Ubuntu / Debian:
 wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && sudo bash install.sh aapanel
 ```
-Setelah instalasi selesai, simpan URL panel, username, dan password yang muncul di terminal.
 
-### Langkah 3.2: Instal Paket Melalui App Store aaPanel
-Login ke dashboard aaPanel, lalu masuk ke menu **App Store** dan instal:
-1. **Nginx** (Pilih versi `1.24` atau `1.26+`).
-2. **PHP** (Pilih **PHP 8.3**, **8.4**, atau **8.5** — TESLOKA mendukung PHP ^8.3).
-3. **PostgreSQL Manager** (Versi 15, 16, atau 17).
-4. **Redis** (Versi 7.x atau 8.x).
-5. **Supervisor Manager** (Untuk manajemen background worker antrean ujian).
+### Untuk AlmaLinux / Rocky Linux / CentOS:
+```bash
+yum install -y wget && wget -O install.sh http://www.aapanel.com/script/install_6.0.sh && sh install.sh aapanel
+```
 
-### Langkah 3.3: Konfigurasi Ekstensi PHP di aaPanel
-Buka **App Store > PHP-8.x > Settings**:
-1. Masuk ke tab **Install Extensions**, pasang ekstensi wajib berikut:
-   - `pdo_pgsql` & `pgsql` (Koneksi database PostgreSQL)
-   - `redis` (Cache & queue berkecepatan tinggi)
-   - `opcache` (Optimalisasi eksekusi bytecode PHP)
-   - `fileinfo` & `exif` (Validasi media soal)
-   - `gd` (Manipulasi gambar & watermark sertifikat)
-   - `zip` (Ekspor/impor butir soal Excel)
-   - `bcmath` (Kalkulasi rumus presisi tinggi)
-2. Masuk ke tab **Configuration (php.ini)**, perbarui parameter berikut:
+Saat proses instalasi selesai, terminal akan menampilkan:
+- **aaPanel Internet Address:** (contoh: `http://217.x.x.x:8888/aapanel`)
+- **Username:** `xxxxxxxx`
+- **Password:** `xxxxxxxx`
+
+Buka alamat tersebut di browser Anda dan login ke dashboard aaPanel.
+
+---
+
+## 5. Instalasi Seluruh Komponen Stack di aaPanel
+
+Setelah berhasil login ke aaPanel, masuk ke menu **App Store** di bilah kiri. Lakukan instalasi software berikut secara berurutan:
+
+---
+
+### 5.1 Nginx Web Server
+1. Cari **Nginx** di App Store.
+2. Pilih versi **Nginx 1.24** atau **Nginx 1.26+**.
+3. Pilih metode instalasi: **Fast (Official package)** untuk instalasi cepat dalam 1-2 menit, atau **Compiled** jika menginginkan kompilasi modul kustom.
+
+---
+
+### 5.2 Node.js (Node Version Manager)
+Node.js diperlukan untuk mengelola pustaka frontend dan kompilasi aset jika Anda menjalankan build langsung di server:
+1. Di **aaPanel > App Store**, cari **Node.js Version Manager** lalu klik **Install**.
+2. Setelah terpasang, klik **Settings** pada Node.js Version Manager.
+3. Pada tab **Node version list**, instal versi LTS:
+   - Pilih **v20.x.x (LTS)** atau **v22.x.x (LTS)**.
+   - Klik **Install**, lalu setel versi tersebut sebagai versi default (*Set to command-line version*).
+4. Verifikasi di terminal SSH:
+   ```bash
+   node -v
+   npm -v
+   ```
+
+---
+
+### 5.3 Python Environment (Penting untuk Supervisor & Scripting)
+Python adalah dependensi dasar manajemen background process di server Linux:
+1. Di **aaPanel > App Store**, cari **Python Version Manager** lalu pasang.
+2. Pada tab version list, Anda dapat memasang **Python 3.10** atau **3.11**.
+3. Pastikan juga paket Python native OS telah terpasang melalui terminal SSH:
+   ```bash
+   sudo apt install -y python3 python3-pip python3-venv python3-setuptools
+   ```
+
+---
+
+### 5.4 PHP & Seluruh Ekstensi Wajib
+
+TESLOKA berjalan optimal pada **PHP 8.3, 8.4, atau 8.5**.
+1. Di **aaPanel > App Store**, cari **PHP** dan pasang versi **PHP 8.3** (atau 8.4/8.5).
+2. Setelah PHP selesai terpasang, klik **Settings** pada PHP tersebut:
+3. **Tab "Install Extensions" — PASANG EKSTENSI WAJIB BERIKUT:**
+   - [x] **`pdo_pgsql`** *(Wajib: Koneksi database PostgreSQL)*
+   - [x] **`pgsql`** *(Wajib: Driver PostgreSQL)*
+   - [x] **`redis`** *(Wajib: Cache telemetri & antrean queue)*
+   - [x] **`opcache`** *(Wajib: Caching bytecode PHP untuk respon instan < 50ms)*
+   - [x] **`fileinfo`** *(Wajib: Validasi berkas upload soal & media)*
+   - [x] **`exif`** *(Wajib: Metadata foto profil & identitas peserta)*
+   - [x] **`gd`** *(Wajib: Pembuatan QR Code, watermark, & sertifikat kelulusan)*
+   - [x] **`zip`** *(Wajib: Ekspor/impor butir soal zip & backup sistem)*
+   - [x] **`bcmath`** *(Wajib: Kalkulasi rumus psikometri & pembobotan presisi tinggi)*
+4. **Tab "Configuration (php.ini)":**
+   Perbarui parameter sesuai Tier hardware Anda pada Bagian 2 (contoh Tier 2 / Standar):
    ```ini
    upload_max_filesize = 50M
    post_max_size = 50M
-   memory_limit = 256M        ; (Gunakan 512M jika server memiliki 16GB+ RAM)
+   memory_limit = 256M
    max_execution_time = 180
    max_input_vars = 5000
    ```
-3. Masuk ke tab **Performance Tuning**:
-   - Sesuaikan nilai **Max children** sesuai tabel Sizing RAM di atas (contoh: 24 untuk 4GB RAM, 64 untuk 16GB RAM).
-4. Klik **Restart Service** pada PHP-FPM.
+5. **Tab "Performance Tuning":**
+   Sesuaikan parameter `pm.max_children` sesuai Tier hardware Anda (contoh: `12` untuk RAM 2GB, `24` untuk RAM 4GB, `64` untuk RAM 16GB).
+6. Klik **Restart Service** pada PHP-FPM.
 
 ---
 
-## 4. Konfigurasi Basis Data PostgreSQL
+### 5.5 PostgreSQL Manager & Basis Data
 
-1. Buka **aaPanel > Database > PostgreSQL** (atau via PostgreSQL Manager):
+PostgreSQL adalah **Single Source of Truth** permanen seluruh data ujian TESLOKA CBT.
+1. Di **aaPanel > App Store**, cari dan pasang **PostgreSQL Manager** (Versi 15, 16, atau 17).
+2. Setelah terpasang, buka **aaPanel > Database > PostgreSQL**:
    - Klik **Add Database**.
    - **Database Name:** `tesloka_cbt`
    - **Username:** `tesloka_user`
-   - **Password:** *Buat password yang kuat dan aman*
+   - **Password:** *Buat password yang kuat dan aman (misal: `RahasiaCBT_2026!`)*
    - **Encoding:** `UTF8`
-2. **Tuning `postgresql.conf` (Sesuai RAM Server Anda):**
-   Lokasi file konfigurasi biasanya berada di `/www/server/pgsql/data/postgresql.conf` atau `/etc/postgresql/<version>/main/postgresql.conf`.
-   Sesuaikan parameter berikut berdasarkan RAM VPS Anda:
+   - Klik **Submit**.
+3. **Tuning `postgresql.conf`:**
+   Buka file konfigurasi di `/www/server/pgsql/data/postgresql.conf` (atau `/etc/postgresql/<version>/main/postgresql.conf`), lalu sesuaikan parameter memori sesuai Tier hardware Anda:
    ```ini
-   # Contoh untuk VPS 4 GB RAM:
+   # Contoh untuk Tier 2 (VPS 4 GB RAM):
    shared_buffers = 1GB
    effective_cache_size = 3GB
    work_mem = 32MB
    maintenance_work_mem = 256MB
-   max_connections = 150
-
-   # Contoh untuk VPS 16 GB RAM:
-   # shared_buffers = 4GB
-   # effective_cache_size = 10GB
-   # work_mem = 64MB
-   # maintenance_work_mem = 512MB
-   # max_connections = 300
+   max_connections = 120
    ```
-3. Restart layanan PostgreSQL:
+4. **Konfigurasi Autentikasi `pg_hba.conf` (Anti-Error "Ident Authentication Failed"):**
+   Buka file `pg_hba.conf` di folder data PostgreSQL yang sama, pastikan baris koneksi lokal IPv4 disetel ke `scram-sha-256` atau `md5`:
+   ```text
+   # TYPE  DATABASE        USER            ADDRESS                 METHOD
+   host    all             all             127.0.0.1/32            scram-sha-256
+   host    all             all             ::1/128                 scram-sha-256
+   ```
+5. Restart layanan PostgreSQL:
    ```bash
-   systemctl restart postgresql
-   # atau via tombol restart di aaPanel
+   sudo systemctl restart postgresql
    ```
 
 ---
 
-## 5. Konfigurasi Redis
+### 5.6 Redis Server & Cache Policy
 
-1. Buka **aaPanel > App Store > Redis > Settings**:
-2. Di tab **Performance Tuning**:
-   - **Max Memory:** Atur sesuai tabel RAM (contoh: `512` MB untuk server 4GB, `2048` MB untuk server 16GB).
-3. Di tab **Configuration File**:
-   - Pastikan baris `maxmemory-policy` disetel ke:
+Redis digunakan khusus untuk cache sesi aktif, antrean queue background, dan telemetri pengawas.
+1. Di **aaPanel > App Store**, cari dan pasang **Redis** (Versi 7.x atau 8.x).
+2. Klik **Settings** pada Redis:
+   - **Tab "Performance Tuning":** Atur `maxmemory` sesuai Tier hardware (misal `256mb` untuk RAM 2GB, `512mb` untuk RAM 4GB, `2048mb` untuk RAM 16GB).
+   - **Tab "Configuration File":** Pastikan baris policy eviction disetel ke:
      ```ini
      maxmemory-policy allkeys-lru
      ```
      > [!WARNING]
-     > **JANGAN gunakan `noeviction`!** Jika disetel `noeviction`, ketika memori Redis penuh, aplikasi akan mengalami error 500 (*OOM command not allowed*). Kebijakan `allkeys-lru` memastikan cache lama dibersihkan secara aman saat memori penuh.
-4. Klik **Save** dan **Restart** Redis.
+     > **JANGAN gunakan `noeviction`!** Jika disetel `noeviction`, ketika memori Redis penuh, aplikasi akan mengalami error 500 (*OOM command not allowed*). Kebijakan `allkeys-lru` menjamin memori Redis selalu stabil dan cache kadaluarsa dibersihkan otomatis.
+3. Klik **Save** dan **Restart** Redis.
+
+---
+
+### 5.7 Supervisor Manager (Solusi Error & Opsi Native Systemd)
+
+> [!CAUTION]
+> **ANALISIS MENDALAM: KENAPA SUPERVISOR MANAGER DI AAPANEL SERING ERROR?**
+> Plugin GUI *Supervisor Manager* di App Store aaPanel menginstal dependensi supervisor ke dalam virtual environment internal Python aaPanel (`/www/server/panel/pyenv`). Pada sistem operasi Linux modern (seperti Ubuntu 22.04 LTS atau 24.04 LTS), kebijakan proteksi paket pip (PEP 668 *externally-managed-environment*) atau inkonsistensi versi Python sering menyebabkan instalasi plugin gagal, menu Supervisor tidak muncul, atau daemon supervisor tidak bisa *start* di panel.
+
+Berikut adalah 2 opsi solusi tuntas:
+
+#### 🔹 OPSI A: Memperbaiki Instalasi Plugin aaPanel "Supervisor Manager"
+Jika Anda ingin tetap menggunakan tombol GUI di dalam panel aaPanel:
+1. Sebelum menginstal Supervisor Manager, pastikan Anda telah memasang **Python Version Manager** di App Store dengan versi **Python 3.10**.
+2. Masuk ke terminal SSH dan perbarui dependensi pip di pyenv aaPanel:
+   ```bash
+   /www/server/panel/pyenv/bin/pip install --upgrade pip setuptools wheel
+   /www/server/panel/pyenv/bin/pip install supervisor
+   ```
+3. Kembali ke **aaPanel > App Store**, cari **Supervisor Manager**, klik **Install**.
+4. Buka **Supervisor Manager > Settings > Add Daemon**:
+   - **Name:** `tesloka-worker`
+   - **Run User:** `www`
+   - **Run Dir:** `/www/wwwroot/<nama-folder-situs>`
+   - **Command:** `php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120`
+   - **Processes:** Sesuaikan tabel Tier (misal: `2`).
+
+---
+
+#### 🔹 OPSI B: Menggunakan Native Linux Systemd Supervisor (SANGAT DIREKOMENDASIKAN / 100% BEBAS BUG)
+Metode ini **jauh lebih stabil, tidak pernah error**, terintegrasi langsung dengan kernel Linux, dan otomatis berjalan saat VPS reboot:
+
+1. Pasang package supervisor bawaan distro Linux melalui terminal SSH:
+   ```bash
+   # Ubuntu / Debian:
+   sudo apt install -y supervisor
+
+   # AlmaLinux / Rocky Linux:
+   sudo dnf install -y supervisor
+   ```
+2. Pastikan layanan supervisor aktif di systemd:
+   ```bash
+   sudo systemctl enable supervisor
+   sudo systemctl start supervisor
+   ```
+3. Buat file konfigurasi worker antrean TESLOKA:
+   ```bash
+   sudo nano /etc/supervisor/conf.d/tesloka-worker.conf
+   ```
+4. Masukkan konfigurasi berikut (sesuaikan path folder situs Anda):
+   ```ini
+   [program:tesloka-worker]
+   process_name=%(program_name)s_%(process_num)02d
+   command=php /www/wwwroot/cbt.institusi.ac.id/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120
+   autostart=true
+   autorestart=true
+   stopasgroup=true
+   killasgroup=true
+   user=www
+   numprocs=2
+   redirect_stderr=true
+   stdout_logfile=/www/wwwroot/cbt.institusi.ac.id/storage/logs/worker.log
+   stopwaitsecs=3600
+   ```
+   *(Ubah `numprocs=2` sesuai tier hardware Anda: `1` untuk RAM 2GB, `4` untuk RAM 8GB, `6` untuk RAM 16GB).*
+5. Terapkan konfigurasi baru:
+   ```bash
+   sudo supervisorctl reread
+   sudo supervisorctl update
+   sudo supervisorctl start tesloka-worker:*
+   ```
+6. Cek status worker (harus berwarna hijau `RUNNING`):
+   ```bash
+   sudo supervisorctl status
+   ```
 
 ---
 
 ## 6. Penempatan Kode & Konfigurasi Laravel
 
-### Langkah 6.1: Menyiapkan Folder Situs di aaPanel
+### 6.1 Membuat Folder Situs di aaPanel
 1. Buka **aaPanel > Website > Add Site**:
-   - **Domain:** Masukkan domain Anda, misalnya: `cbt.institusi.ac.id` (jika menggunakan multi-subdomain, masukkan seluruh subdomain: `cbt.institusi.ac.id`, `staff.institusi.ac.id`, `ujian.institusi.ac.id`, `sertifikat.institusi.ac.id`).
-   - **Root Path:** `/www/wwwroot/cbt.institusi.ac.id`
-   - **PHP Version:** Pilih versi PHP yang telah diinstal (`PHP-83`, `PHP-84`, atau `PHP-85`).
-2. Masuk ke direktori situs via terminal:
+   - **Domain:** Masukkan domain institusi Anda (contoh: `cbt.institusi.ac.id` atau jika multi-subdomain masukkan seluruhnya: `cbt.institusi.ac.id`, `staff.institusi.ac.id`, `ujian.institusi.ac.id`, `sertifikat.institusi.ac.id`).
+   - **Root Path:** Biarkan default (`/www/wwwroot/cbt.institusi.ac.id`).
+   - **PHP Version:** Pilih PHP yang telah diinstal (`PHP-83`, `PHP-84`, atau `PHP-85`).
+   - Klik **Submit**.
+2. Masuk ke folder situs via terminal SSH:
    ```bash
    cd /www/wwwroot/cbt.institusi.ac.id
    ```
 
-### Langkah 6.2: Mengunduh / Clone Kode TESLOKA
-```bash
-# Clone dari repositori GitHub resmi pengembang:
-git clone https://github.com/mdodeep/Tesloka.git .
+---
 
-# Atau jika Anda mengunggah berkas zip hasil release:
-# unzip tesloka-release.zip && rm tesloka-release.zip
+### 6.2 Mengunduh Kode Rilis Resmi TESLOKA
+Unduh kode rilis distribusi publik terbaru dari GitHub:
+```bash
+# Clone rilis publik langsung ke folder saat ini:
+git clone https://github.com/mdodeep/Tesloka.git .
 ```
 
-### Langkah 6.3: Konfigurasi File Lingkungan (.env)
-Salin contoh konfigurasi:
+---
+
+### 6.3 Menyiapkan Berkas Environment (`.env`)
+Salin file konfigurasi contoh:
 ```bash
 cp .env.example .env
 nano .env
 ```
-Sesuaikan bagian-bagian penting berikut:
+Sesuaikan bagian-bagian kunci berikut:
 ```ini
 APP_NAME="TESLOKA CBT"
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://cbt.institusi.ac.id
 
-# LOGGING
+# LOGGING PRODUKSI
 LOG_CHANNEL=daily
 LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=error
 
-# POSTGRESQL PRODUCTION
+# POSTGRESQL (SESUAIKAN DENGAN DATABASE AAPANEL)
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
 DB_PORT=5432
@@ -184,42 +596,42 @@ DB_DATABASE=tesloka_cbt
 DB_USERNAME=tesloka_user
 DB_PASSWORD=PasswordDatabaseAndaYangAman
 
-# CACHE & QUEUE VIA REDIS
+# REDIS CACHE & ANTRIAN
 CACHE_STORE=redis
 QUEUE_CONNECTION=redis
 SESSION_DRIVER=redis
 
-# REDIS CONNECTION
 REDIS_CLIENT=phpredis
 REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null    # Isi password jika Redis diberi password
+REDIS_PASSWORD=null
 REDIS_PORT=6379
 REDIS_DB=0
 REDIS_CACHE_DB=1
 ```
 
-### Langkah 6.4: Instalasi Dependensi & Inisialisasi Database
-Jalankan rangkaian perintah berikut di terminal server:
+---
+
+### 6.4 Inisialisasi Dependensi, Kunci, & Database
+Jalankan rangkaian perintah instalasi resmi di terminal:
 ```bash
-# 1. Instal dependensi Composer (mode produksi tanpa paket dev):
+# 1. Pasang dependensi PHP (mode produksi tanpa dev packages):
 composer install --no-dev --optimize-autoloader
 
-# 2. Buat kunci enkripsi aplikasi:
+# 2. Buat kunci enkripsi 32-byte aplikasi:
 php artisan key:generate --force
 
-# 3. Jalankan migrasi tabel PostgreSQL dan data awal (seeder):
+# 3. Jalankan migrasi tabel database dan data seeder institusi:
 php artisan migrate --force
 php artisan db:seed --force
 
-# 4. Buat symbolic link storage berkas publik:
+# 4. Hubungkan symlink storage publik:
 php artisan storage:link
 
-# 5. Atur kepemilikan dan hak akses berkas:
-# (Untuk aaPanel, web user adalah 'www'):
+# 5. Berikan hak akses penuh ke user web server aaPanel ('www'):
 chown -R www:www /www/wwwroot/cbt.institusi.ac.id
 chmod -R 775 storage bootstrap/cache
 
-# 6. Kompilasi cache Laravel untuk kecepatan maksimal:
+# 6. Kompilasi cache Laravel untuk performa maksimal:
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
@@ -227,142 +639,150 @@ php artisan view:cache
 
 ---
 
-## 7. Konfigurasi Nginx Virtual Host (Wajib Dilakukan di aaPanel)
+## 7. Konfigurasi Nginx Virtual Host (Kritis: Anti-404 & Anti-403)
 
 > [!IMPORTANT]
-> **DUA LANGKAH KRITIS DI AAPANEL AGAR TIDAK ERROR 404 NOT FOUND ATAU 403 FORBIDDEN:**
+> **DUA LANGKAH PALING KRITIS DI AAPANEL AGAR TIDAK MENGALAMI 404 NOT FOUND ATAU 403 FORBIDDEN:**
 >
 > 1. **Running Directory Wajib `/public`:**
->    - Buka **aaPanel > Website > Klik Nama Situs Anda > Site Directory**.
->    - Pada kolom **Running directory**, ubah dari `/` menjadi `/public`.
->    - Klik tombol **Save**! *(Wajib agar Nginx mengeksekusi `public/index.php` Laravel, bukan folder root proyek)*.
+>    - Buka **aaPanel > Website > Klik Nama Domain Anda > Site Directory**.
+>    - Pada dropdown **Running directory**, ubah dari `/` menjadi `/public`.
+>    - Klik tombol **Save**! *(Langkah ini mutlak agar web server melayani folder `public/index.php`, bukan root proyek).*
 >
 > 2. **URL Rewrite Wajib Preset `laravel 5`:**
->    - Masih di jendela pengaturan situs, klik tab **URL rewrite**.
->    - Pada dropdown pilihan framework, pilih **laravel 5** (atau pastikan isi kodenya memiliki `try_files $uri $uri/ /index.php?$query_string;`).
->    - Klik tombol **Save**! *(Wajib agar seluruh sub-halaman seperti `/ujian/login`, `/staff/login`, dan API autosave tidak 404 Not Found)*.
+>    - Masih di jendela yang sama, klik tab **URL rewrite**.
+>    - Pilih preset **laravel 5** dari daftar dropdown.
+>    - Pastikan isinya memuat aturan redirect rute:
+>      ```nginx
+>      location / {
+>          try_files $uri $uri/ /index.php?$query_string;
+>      }
+>      ```
+>    - Klik tombol **Save**! *(Tanpa ini, setiap rute dinamis seperti `/ujian/login` atau `/staff/login` akan gagal dengan status 404).*
 
-3. Buka tab **Configuration**:
-   - Anda dapat meninjau template resmi dari `deploy/nginx/tesloka.conf` untuk tuning buffer, batas upload 50MB, dan caching aset statis.
-4. **Memasang SSL / HTTPS (Let's Encrypt):**
-   - Masuk ke tab **SSL > Let's Encrypt**.
-   - Pilih seluruh domain/subdomain yang diarahkan ke situs ini.
-   - Klik **Apply** untuk menerbitkan sertifikat otomatis.
-   - Aktifkan opsi **Force HTTPS** setelah SSL berhasil dipasang.
-
----
-
-## 8. Konfigurasi Background Worker & Scheduler (Supervisor)
-
-Tugas-tugas berat seperti impor soal dari Excel, regrade nilai massal, pengiriman email notifikasi, dan pemantauan timer otomatis dijalankan di latar belakang oleh Worker dan Scheduler.
-
-### Opsi A: Melalui Plugin 'Supervisor Manager' di aaPanel (Paling Mudah)
-1. Buka **aaPanel > App Store > Supervisor Manager > Settings**.
-2. Klik **Add Daemon**:
-   - **Name:** `tesloka-worker`
-   - **Run User:** `www`
-   - **Run Dir:** `/www/wwwroot/cbt.institusi.ac.id`
-   - **Command:** `php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120`
-   - **Processes:** `2` (untuk VPS 2-4GB) atau `4` (untuk VPS 8-16GB).
-   - Klik **Confirm**.
-3. Pastikan status `tesloka-worker` berubah menjadi warna hijau (**Running**).
-
-### Konfigurasi Scheduler (Pemantau Ujian Otomatis Tiap Menit):
-Gunakan **aaPanel > Cron**:
-- **Type of Task:** `Shell Script`
-- **Name of Task:** `TESLOKA Scheduler`
-- **Period:** `N Minutes` -> isi `1` Minute.
-- **Script content:**
-  ```bash
-  cd /www/wwwroot/cbt.institusi.ac.id && php artisan schedule:run >> /dev/null 2>&1
-  ```
-- Klik **Add Task**.
+### 7.3 Memasang Sertifikat SSL Gratis (Let's Encrypt HTTPS)
+1. Buka tab **SSL > Let's Encrypt**.
+2. Centang seluruh domain dan subdomain yang mengarah ke VPS.
+3. Klik **Apply**.
+4. Setelah SSL aktif, hidupkan saklar **Force HTTPS**.
 
 ---
 
-## 9. Verifikasi Kesiapan Sistem (Health Check)
+## 8. Konfigurasi Background Queue Worker & Cron Scheduler
 
-Setelah seluruh langkah selesai, buka terminal server dan jalankan perintah verifikasi bawaan:
+### 8.1 Menjadwalkan Task Scheduler Otomatis (Tiap 1 Menit)
+Scheduler Laravel bertugas memantau batas waktu sesi ujian secara otomatis, menutup ujian siswa yang habis waktu, dan memelihara token.
+1. Buka **aaPanel > Cron**:
+   - **Type of Task:** `Shell Script`
+   - **Name of Task:** `TESLOKA Scheduler`
+   - **Period:** `N Minutes` -> isi `1` Minute.
+   - **Script Content:**
+     ```bash
+     cd /www/wwwroot/cbt.institusi.ac.id && php artisan schedule:run >> /dev/null 2>&1
+     ```
+   - Klik **Add Task**.
+
+---
+
+## 9. Verifikasi Kesiapan Sistem (Automated Health Check)
+
+Buka terminal SSH VPS dan jalankan perintah diagnosa resmi bawaan TESLOKA:
 
 ```bash
 php artisan tesloka:production-check
 ```
 
-Perintah ini akan menguji secara riil:
-1. Status koneksi database PostgreSQL (baca/tulis ACID).
-2. Status koneksi cache & antrean Redis.
-3. Ketersediaan ruang penyimpanan (Disk Storage).
-4. Izin tulis direktori `storage/` dan `bootstrap/cache/`.
-5. Integritas link berkas publik (`public/storage`).
-6. Status queue worker yang sedang berjalan.
+Sistem akan menguji secara otomatis:
+- Versi PHP (>= 8.3)
+- Ekstensi PHP wajib (pdo_pgsql, redis, gd, zip, bcmath, fileinfo, dll.)
+- Koneksi database PostgreSQL & jumlah tabel aktif
+- Latensi dan integritas Redis Server
+- Status izin tulis direktori `storage/` dan `bootstrap/cache/`
+- Integritas symlink `public/storage`
+- Status `APP_KEY` dan profil institusi
 
-Jika seluruh indikator berstatus **PASS [OK]**, sistem siap digunakan untuk operasional ujian digital institusi secara penuh.
+Jika seluruh baris berstatus **PASS [OK]**, sistem CBT TESLOKA telah 100% siap digunakan untuk ujian digital nyata!
 
 ---
 
-## 10. Panduan Pemecahan Masalah (Troubleshooting)
+## 10. Panduan Pemecahan Masalah Lengkap (Troubleshooting A s.d. Z)
 
-### Kendala 1: Error 404 Not Found atau 403 Forbidden Saat Membuka Website
-- **Penyebab Utama di aaPanel:**
-  1. Pengaturan **Running directory** di aaPanel masih mengarah ke root `/` alih-alih `/public`.
-  2. Aturan **URL Rewrite** belum diaktifkan sehingga rute dinamis Laravel dicari sebagai file fisik yang tidak ada di disk.
-- **Solusi Cepat 10 Detik di aaPanel:**
-  1. Buka **aaPanel > Website > Klik Nama Situs Anda**.
-  2. Buka tab **Site Directory**, ubah **Running directory** menjadi `/public` lalu klik **Save**!
-  3. Buka tab **URL rewrite**, pilih preset **laravel 5** lalu klik **Save**!
-  4. Bersihkan cache browser atau buka via incognito tab.
+### 🔴 Kendala 1: Error 404 Not Found Saat Mengakses Halaman Login / Sub-Route
+- **Penyebab:** Running directory di aaPanel masih mengarah ke root `/` atau URL Rewrite belum aktif.
+- **Solusi 10 Detik:**
+  1. Masuk ke **aaPanel > Website > Klik Domain Anda > Site Directory**.
+  2. Ubah **Running directory** ke `/public`, klik **Save**.
+  3. Buka tab **URL rewrite**, pilih preset **laravel 5**, klik **Save**.
 
-### Kendala 2: Error 502 Bad Gateway
-- **Penyebab:** Nginx tidak dapat tersambung ke socket PHP-FPM.
-- **Solusi:**
-  1. Periksa apakah PHP-FPM sedang berjalan: `systemctl status php-fpm` (atau cek tombol start di aaPanel).
-  2. Periksa path socket di konfigurasi vhost Nginx:
-     Jalankan di terminal: `ls -la /tmp/php-cgi*.sock` (pada aaPanel) atau `ls -la /run/php/*.sock` (pada Ubuntu standar).
-     Pastikan baris `fastcgi_pass` di Nginx sama persis dengan socket yang aktif.
+---
 
-### Kendala 3: Error 500 Internal Server Error
-- **Penyebab:** `APP_KEY` belum dibuat, izin direktori `storage` belum diatur, atau cache framework usang.
-- **Langkah Diagnosa Cepat:**
-  1. Jalankan perintah diagnosa resmi:
-     ```bash
-     php artisan tesloka:production-check
-     ```
-  2. Lihat error detail di log Laravel:
+### 🔴 Kendala 2: Error 500 Internal Server Error & Layar Putih (Blank)
+- **Langkah Diagnosa:**
+  1. Cek baris error riil di file log:
      ```bash
      tail -n 50 storage/logs/laravel.log
      ```
-- **Solusi Perbaikan:**
+  2. Jalankan: `php artisan tesloka:production-check`
+- **Solusi Cepat:**
   ```bash
+  # Pastikan APP_KEY terbuat:
   php artisan key:generate --force
+
+  # Perbaiki izin folder:
   chown -R www:www storage bootstrap/cache
   chmod -R 775 storage bootstrap/cache
+
+  # Bersihkan cache lama:
   php artisan optimize:clear
   ```
 
-### Kendala 4: Gagal `php artisan storage:link` (The "public/storage" link already exists)
-- **Penyebab:** Symlink lama masih tertinggal.
+---
+
+### 🔴 Kendala 3: Supervisor Manager di aaPanel Gagal Start / Error Python
+- **Penyebab:** Versi Python di OS terlalu baru atau dependensi pyenv aaPanel bermasalah.
+- **Solusi Permanen (Gunakan Native Systemd Supervisor):**
+  Tinggalkan plugin GUI aaPanel dan gunakan supervisor native OS (Lihat panduan lengkap di **Bagian 5.7 Opsi B**):
+  ```bash
+  sudo apt install -y supervisor
+  sudo systemctl enable supervisor && sudo systemctl start supervisor
+  ```
+  Lalu buat konfigurasi di `/etc/supervisor/conf.d/tesloka-worker.conf`.
+
+---
+
+### 🔴 Kendala 4: Composer Install Gagal / Muncul Pesan "Killed" (Out of Memory)
+- **Penyebab:** Server kekurangan memori RAM fisik dan tidak memiliki Swap File.
+- **Solusi:**
+  Buat Swap File 2 GB sesuai panduan di **Bagian 1.2**, lalu ulangi:
+  ```bash
+  composer install --no-dev --optimize-autoloader
+  ```
+
+---
+
+### 🔴 Kendala 5: Gagal `php artisan storage:link` (Link Already Exists)
+- **Penyebab:** Symlink lama masih tertinggal saat deploy ulang.
 - **Solusi:**
   ```bash
   rm -f public/storage
   php artisan storage:link
   ```
 
-### Kendala 5: Database Error "Ident authentication failed" atau "Connection refused"
-- **Penyebab:** Password database salah atau PostgreSQL belum mengizinkan koneksi lokal md5/scram.
-- **Solusi:**
-  1. Pastikan `DB_HOST=127.0.0.1` (gunakan IP, hindari `localhost` jika socket lokal bermasalah).
-  2. Periksa file `pg_hba.conf` di PostgreSQL, pastikan baris IPv4 local connections disetel ke `scram-sha-256` atau `md5`:
-     ```
-     host    all             all             127.0.0.1/32            scram-sha-256
-     ```
-  3. Uji login database via terminal:
-     `psql -h 127.0.0.1 -U tesloka_user -d tesloka_cbt`
+---
 
-### Kendala 5: Redis Error "OOM command not allowed"
+### 🔴 Kendala 6: Database Error "Ident authentication failed" atau "Connection refused"
+- **Solusi:**
+  1. Pastikan di `.env` tertulis `DB_HOST=127.0.0.1` (gunakan IP, jangan `localhost`).
+  2. Periksa `pg_hba.conf`, pastikan baris koneksi lokal IPv4 disetel ke `scram-sha-256` atau `md5`.
+  3. Restart PostgreSQL: `sudo systemctl restart postgresql`.
+
+---
+
+### 🔴 Kendala 7: Redis Error "OOM command not allowed when used memory > 'maxmemory'"
 - **Penyebab:** Memori Redis penuh dan policy disetel ke `noeviction`.
 - **Solusi:**
-  Buka konfigurasi Redis, ubah baris `maxmemory-policy` menjadi:
+  Buka konfigurasi Redis, ubah:
   ```ini
   maxmemory-policy allkeys-lru
   ```
-  Lalu restart Redis: `systemctl restart redis` (atau restart via aaPanel).
+  Lalu restart Redis: `sudo systemctl restart redis`.

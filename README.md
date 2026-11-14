@@ -78,17 +78,20 @@ flowchart TD
 
 ---
 
-## Matriks Sizing & Spesifikasi Server
+## Matriks Sizing & Spesifikasi Server (1 vCPU 2GB s.d. 16 vCPU 32GB)
 
-Sistem TESLOKA dapat dijalankan mulai dari VPS hemat 2 GB RAM hingga server fisik multi-core 32 GB RAM. Sesuaikan konfigurasi PostgreSQL, PHP-FPM, dan Redis agar tidak terjadi lonjakan memori (*OOM*):
+Sistem TESLOKA dapat dijalankan mulai dari VPS hemat 1-2 vCPU dengan 2 GB RAM hingga server fisik multi-core 32 GB RAM. Sesuaikan alokasi memori PostgreSQL, PHP-FPM, dan Redis agar performa ujian tetap berada di bawah 50 ms dan tidak terjadi *Out of Memory (OOM)*:
 
-| Kapasitas Siswa Serentak | Spesifikasi Hardware | PostgreSQL `shared_buffers` | PHP-FPM `pm.max_children` | Redis `maxmemory` |
-|:---|:---|:---|:---|:---|
-| **30 – 50 siswa (1 Lab Kecil)** | 1-2 vCPU, 2 GB RAM, 30 GB SSD | `512MB` | `12` | `256mb` |
-| **50 – 150 siswa (Standar Sekolah)** | 2-4 vCPU, 4 GB RAM, 50 GB SSD | `1GB` | `24` | `512mb` |
-| **150 – 300 siswa (Multi-Lab)** | 4 vCPU, 8 GB RAM, 80 GB NVMe | `2GB` | `48` | `1024mb` (1 GB) |
-| **300 – 600 siswa (Enterprise Institusi)** | 4-8 vCPU, 16 GB RAM, 100 GB NVMe RAID 10 | `4GB` | `64` | `2048mb` (2 GB) |
-| **600 – 1.200+ siswa (Ujian Akbar)** | 8-16 vCPU, 32 GB RAM, 200 GB NVMe | `8GB` | `128` | `4096mb` (4 GB) |
+| Tier & Spesifikasi Server | Kapasitas Peserta Serentak | Rekomendasi Swap | PHP `memory_limit` | PHP-FPM `pm.max_children` | PostgreSQL `shared_buffers` | Redis `maxmemory` | Worker Queue |
+|:---|:---|:---|:---|:---|:---|:---|:---|
+| **Tier 1: 1 vCPU, 2 GB RAM** | 30 – 50 siswa (1 Lab Kecil) | `2 GB` | `256M` | `12` | `256MB` | `256mb` | 1 worker |
+| **Tier 2: 2-4 vCPU, 4 GB RAM**| 50 – 150 siswa (Standar Sekolah) | `2 GB` | `256M` | `24` | `1GB` | `512mb` | 2 worker |
+| **Tier 3: 4 vCPU, 8 GB RAM** | 150 – 300 siswa (Multi-Lab Kampus) | `4 GB` | `512M` | `48` | `2GB` | `1024mb` (1 GB) | 4 worker |
+| **Tier 4: 4-8 vCPU, 16 GB RAM**| 300 – 600 siswa (Enterprise Institusi) | `4 GB` | `512M` | `64` | `4GB` | `2048mb` (2 GB) | 6 worker |
+| **Tier 5: 8-16 vCPU, 32 GB RAM**| 600 – 1.200+ siswa (Ujian Akbar) | `8 GB` | `1024M` | `128` | `8GB` | `4096mb` (4 GB) | 8 worker |
+
+> [!TIP]
+> Detail parameter `postgresql.conf`, `php.ini`, dan tuning PHP-FPM baris-demi-baris yang siap di-*copy-paste* untuk tiap tier dapat dibaca pada dokumen resmi: **[`deploy/INSTALL-AAPANEL.md`](deploy/INSTALL-AAPANEL.md)**.
 
 ---
 
@@ -167,10 +170,39 @@ Panduan instalasi produksi langkah-demi-langkah yang lengkap untuk server Linux 
 👉 **[PANDUAN LENGKAP DEPLOYMENT AAPANEL & LINUX (deploy/INSTALL-AAPANEL.md)](deploy/INSTALL-AAPANEL.md)**
 
 ### Ringkasan Langkah Cepat di aaPanel:
-1. **Instal Paket di App Store aaPanel:** Nginx (1.24+), PHP (PHP 8.3 / 8.4 / 8.5), PostgreSQL Manager, Redis, dan Supervisor Manager.
-2. **Pasang Ekstensi PHP Wajib:** `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `fileinfo`, `exif`, `gd`, `zip`, `bcmath`.
-3. **Buat Database PostgreSQL:** Database `tesloka_cbt`, user `tesloka_user`, encoding `UTF8`.
-4. **Deploy Kode & Konfigurasi:**
+
+0. **Persiapan OS (Wajib Saat VPS Baru Online):**
+   ```bash
+   # Ubuntu / Debian:
+   sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+   sudo apt install -y curl wget git unzip htop build-essential
+
+   # Buat Swap File 2 GB (Mencegah error 'Killed' / Out of Memory saat install dependensi):
+   sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
+   sudo mkswap /swapfile && sudo swapon /swapfile
+   echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+   # Set zona waktu server ke WIB:
+   sudo timedatectl set-timezone Asia/Jakarta
+   ```
+
+1. **Instal Paket di App Store aaPanel:**
+   - **Nginx** (v1.24 atau 1.26+)
+   - **Node.js** (Pasang via *Node.js Version Manager*, pilih Node.js v20 LTS)
+   - **Python** (Pasang via *Python Version Manager*, pilih Python 3.10)
+   - **PHP** (PHP 8.3 / 8.4 / 8.5)
+   - **PostgreSQL Manager** (v15, 16, atau 17)
+   - **Redis** (v7.x atau 8.x)
+   - **Supervisor Manager** *(Jika plugin aaPanel ini error karena isu Python di Ubuntu baru, gunakan opsi native systemd: `sudo apt install -y supervisor`)*.
+
+2. **Pasang Ekstensi PHP Wajib:**
+   Buka **PHP Settings > Install Extensions**, centang dan pasang:
+   `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `fileinfo`, `exif`, `gd`, `zip`, `bcmath`.
+
+3. **Buat Database PostgreSQL di aaPanel:**
+   Masuk ke **Database > PostgreSQL**: Database `tesloka_cbt`, user `tesloka_user`, encoding `UTF8`.
+
+4. **Deploy Kode & Inisialisasi Database:**
    ```bash
    cd /www/wwwroot/cbt.institusi.ac.id
    git clone https://github.com/mdodeep/Tesloka.git .
@@ -187,20 +219,26 @@ Panduan instalasi produksi langkah-demi-langkah yang lengkap untuk server Linux 
    php artisan route:cache
    php artisan view:cache
    ```
+
 5. **Konfigurasi Site Directory & URL Rewrite (PENTING ANTI-404):**
    > [!IMPORTANT]
    > **Langkah Kritis aaPanel agar tidak 404/403:**
    > - Masuk ke **aaPanel > Website > Klik Nama Domain Anda**.
    > - Tab **Site Directory**: Ubah **Running directory** dari `/` menjadi `/public` lalu klik **Save**! *(Ini mengarahkan Nginx ke `public/index.php` Laravel)*.
    > - Tab **URL rewrite**: Pilih preset **laravel 5** lalu klik **Save**! *(Ini mengaktifkan `try_files $uri $uri/ /index.php?$query_string;` sehingga routing halaman ujian & login tidak 404)*.
-6. **Supervisor Background Worker:** Tambahkan daemon di aaPanel Supervisor Manager:
-   - Command: `php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120`
-   - User: `www`
-   - Direktori: `/www/wwwroot/cbt.institusi.ac.id`
+
+6. **Supervisor Background Worker (Pilih Salah Satu):**
+   - **Opsi GUI aaPanel:** Tambahkan daemon di Supervisor Manager:
+     - Command: `php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120`
+     - User: `www`, Run Dir: `/www/wwwroot/cbt.institusi.ac.id`
+   - **Opsi Native Linux (Paling Stabil & Bebas Bug):**
+     `sudo apt install -y supervisor` dan buat file `/etc/supervisor/conf.d/tesloka-worker.conf` (Lihat panduan lengkap di [`deploy/INSTALL-AAPANEL.md`](deploy/INSTALL-AAPANEL.md)).
+
 7. **Jadwalkan Task Scheduler:** Tambahkan cron di menu aaPanel Cron tiap 1 menit:
    ```bash
    cd /www/wwwroot/cbt.institusi.ac.id && php artisan schedule:run >> /dev/null 2>&1
    ```
+
 8. **Verifikasi Kesiapan Produksi:**
    ```bash
    php artisan tesloka:production-check

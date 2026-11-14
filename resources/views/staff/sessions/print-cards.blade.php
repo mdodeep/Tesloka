@@ -252,9 +252,23 @@
                             </tr>
                         </table>
 
+                        @php
+                            $cardIdent = $ptc->student->identity_number ?? $ptc->student->username;
+                            $scheme = request()->getScheme() ?: 'https';
+                            $studentHost = config('cbt.student_domain', 'ujian.tesloka.test');
+                            $cardQrUrl = $scheme . '://' . $studentHost . '/ujian/login?u=' . urlencode($cardIdent);
+                            if (!empty($session->token)) {
+                                $cardQrUrl .= '&token=' . urlencode($session->token);
+                            }
+                        @endphp
                         <div class="footer">
-                            <span>Login: <strong>{{ $ptc->student->username }}</strong></span>
-                            <span>Wajib Membawa Kartu Saat Ujian</span>
+                            <div>
+                                <div>Login: <strong>{{ $ptc->student->username }}</strong></div>
+                                <div style="font-size: 8px; color: #94a3b8;">Wajib Membawa Kartu Saat Ujian</div>
+                            </div>
+                            <div style="width: 36px; height: 36px; border: 1px solid #cbd5e1; border-radius: 3px; padding: 1px; background: #ffffff; display: flex; align-items: center; justify-content: center;" title="Scan QR Verifikasi Peserta">
+                                {!! \App\Services\QrCodeService::svg($cardQrUrl, 34) !!}
+                            </div>
                         </div>
                     </div>
                 @empty

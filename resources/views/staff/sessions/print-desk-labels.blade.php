@@ -138,19 +138,23 @@
             font-size: 8pt;
             color: #64748b;
         }
-        .qr-placeholder {
-            width: 42px;
-            height: 42px;
-            border: 1px solid #94a3b8;
+        .qr-box {
+            width: 48px;
+            height: 48px;
+            border: 1px solid #cbd5e1;
             padding: 2px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: monospace;
-            font-size: 7pt;
-            text-align: center;
-            background: #f8fafc;
+            background: #ffffff;
             border-radius: 4px;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        .qr-box svg {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
         .doc-viewport-container {
             width: 100%;
@@ -262,13 +266,22 @@
                             </table>
                         </div>
 
+                        @php
+                            $studentIdent = $participant->student->identity_number ?? $participant->student->username;
+                            $scheme = request()->getScheme() ?: 'https';
+                            $studentHost = config('cbt.student_domain', 'ujian.tesloka.test');
+                            $qrPayload = $scheme . '://' . $studentHost . '/ujian/login?u=' . urlencode($studentIdent);
+                            if (!empty($session->token)) {
+                                $qrPayload .= '&token=' . urlencode($session->token);
+                            }
+                        @endphp
                         <div class="card-footer">
                             <div>
                                 <strong>Token Rilis:</strong> <span style="font-family: monospace; font-size: 10pt; font-weight: bold; color: #2e33ff;">{{ $session->token ?? 'L00123' }}</span><br>
-                                Tempelkan pada sudut kanan atas meja peserta.
+                                <span style="font-size: 7.5pt; color: #64748b;">Tempelkan pada sudut meja peserta.</span>
                             </div>
-                            <div class="qr-placeholder">
-                                QR<br>VERIF
+                            <div class="qr-box" title="Scan QR Verifikasi & Login: {{ $studentIdent }}">
+                                {!! \App\Services\QrCodeService::svg($qrPayload, 44) !!}
                             </div>
                         </div>
                     </div>

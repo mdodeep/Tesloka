@@ -262,8 +262,6 @@
                 </div>
             </div>
         @endif
-            </div>
-        </div>
 
         <!-- JUDUL & NOMOR SURAT -->
         <div class="doc-title">

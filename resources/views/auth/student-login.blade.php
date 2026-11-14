@@ -15,7 +15,7 @@
             <label for="login" class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1.5">
                 NIM / Nomor Peserta
             </label>
-            <input type="text" id="login" name="login" value="{{ old('login') }}" required autofocus
+            <input type="text" id="login" name="login" value="{{ old('login', request('u', request('login', ''))) }}" required autofocus
                 placeholder="Contoh: NIM20260001"
                 class="form-input">
         </div>

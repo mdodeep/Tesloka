@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -89,7 +90,7 @@ class User extends Authenticatable
     /**
      * Relasi ke seluruh notifikasi sistem in-app (FULL-FEATURE 40.7).
      */
-    public function systemNotifications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function systemNotifications(): HasMany
     {
         return $this->hasMany(SystemNotification::class)->latest();
     }
@@ -97,7 +98,7 @@ class User extends Authenticatable
     /**
      * Relasi ke notifikasi sistem in-app yang belum dibaca (FULL-FEATURE 40.7).
      */
-    public function unreadSystemNotifications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function unreadSystemNotifications(): HasMany
     {
         return $this->hasMany(SystemNotification::class)->where('is_read', false)->latest();
     }
@@ -328,8 +329,8 @@ class User extends Authenticatable
      */
     public function getPhotoUrlAttribute(): string
     {
-        if (! empty($this->photo_path) && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->photo_path)) {
-            return asset('storage/' . $this->photo_path);
+        if (! empty($this->photo_path) && Storage::disk('public')->exists($this->photo_path)) {
+            return asset('storage/'.$this->photo_path);
         }
 
         return asset('assets/images/tesloka-default-profile.webp');
@@ -340,6 +341,6 @@ class User extends Authenticatable
      */
     public function hasCustomPhoto(): bool
     {
-        return ! empty($this->photo_path) && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->photo_path);
+        return ! empty($this->photo_path) && Storage::disk('public')->exists($this->photo_path);
     }
 }

@@ -9,4 +9,3 @@ Route::prefix('v1')->middleware(['auth.apikey'])->group(function () {
     Route::get('/exams/{exam}/grades/{student}', [ExamGraduationApiController::class, 'getStudentExamGrade']);
     Route::get('/students/{studentNumber}/results', [ExamGraduationApiController::class, 'getStudentHistoricalResults']);
 });
-

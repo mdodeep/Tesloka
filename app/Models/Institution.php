@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Institution extends Model
 {
@@ -41,8 +42,8 @@ class Institution extends Model
      */
     public function getLogoUrlAttribute(): string
     {
-        if ($this->logo_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->logo_path)) {
-            return \Illuminate\Support\Facades\Storage::disk('public')->url($this->logo_path);
+        if ($this->logo_path && Storage::disk('public')->exists($this->logo_path)) {
+            return Storage::disk('public')->url($this->logo_path);
         }
 
         return asset('assets/images/logo-tesloka-cbt.webp');
@@ -53,8 +54,8 @@ class Institution extends Model
      */
     public function getFaviconUrlAttribute(): string
     {
-        if ($this->favicon_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->favicon_path)) {
-            return \Illuminate\Support\Facades\Storage::disk('public')->url($this->favicon_path);
+        if ($this->favicon_path && Storage::disk('public')->exists($this->favicon_path)) {
+            return Storage::disk('public')->url($this->favicon_path);
         }
 
         return asset('assets/images/favicon-tesloka-bg-putih.webp');

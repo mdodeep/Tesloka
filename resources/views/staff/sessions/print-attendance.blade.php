@@ -281,9 +281,9 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($session->participants as $idx => $ptc)
+            @forelse($session->participants as $ptc)
                 <tr>
-                    <td style="text-align: center;">{{ $idx + 1 }}</td>
+                    <td style="text-align: center;">{{ $loop->iteration }}</td>
                     <td style="text-align: center; font-weight: bold;">{{ $ptc->seat_number ?? '-' }}</td>
                     <td style="font-family: monospace;">{{ $ptc->student->identity_number ?? $ptc->student->username }}</td>
                     <td>{{ $ptc->student->name }}</td>
@@ -292,7 +292,7 @@
                         {{ $ptc->status === 'checked_in' ? 'HADIR' : ($ptc->status === 'absent' ? 'ABSEN' : 'TERDAFTAR') }}
                     </td>
                     <td style="height: 32px; vertical-align: bottom; padding-left: 8px; font-size: 8pt; color: #64748b;">
-                        {{ $idx + 1 }}. ....................
+                        {{ $loop->iteration }}. ....................
                     </td>
                 </tr>
             @empty

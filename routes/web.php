@@ -42,6 +42,7 @@ Route::get('login', function (Request $request) {
     if (str_starts_with($host, 'staff.')) {
         return redirect()->route('staff.login');
     }
+
     return redirect()->route('student.login');
 })->name('login');
 

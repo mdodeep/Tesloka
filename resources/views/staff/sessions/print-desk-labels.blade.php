@@ -68,8 +68,10 @@
             padding-bottom: 6px;
         }
         .card-logo {
-            width: 36px;
-            height: 36px;
+            max-height: 38px;
+            max-width: 90px;
+            width: auto;
+            height: auto;
             object-fit: contain;
         }
         .header-title {
@@ -225,7 +227,7 @@
     <div class="doc-viewport-container">
         <div class="document-wrapper">
             <div class="grid-container">
-                @forelse($participants as $idx => $participant)
+                @forelse($participants as $participant)
                     <div class="desk-card">
                         <div class="card-header">
                             <img src="{{ $logoUrl }}" alt="Logo" class="card-logo">
@@ -234,7 +236,7 @@
                                 <div class="header-doc">TEMPELAN MEJA UJIAN</div>
                             </div>
                             <div class="seat-badge">
-                                NO: {{ str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}
+                                NO: {{ $participant->seat_number ? $participant->seat_number : str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
                             </div>
                         </div>
 

@@ -38,4 +38,3 @@ class WebhookDelivery extends Model
         return $this->belongsTo(WebhookSubscription::class, 'webhook_subscription_id');
     }
 }
-

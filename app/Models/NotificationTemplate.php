@@ -58,7 +58,7 @@ class NotificationTemplate extends Model
         $body = $customBody ?? $this->body_template;
 
         foreach ($data as $key => $val) {
-            $placeholder = '{{' . $key . '}}';
+            $placeholder = '{{'.$key.'}}';
             $subject = str_replace($placeholder, (string) $val, $subject);
             $body = str_replace($placeholder, (string) $val, $body);
         }
@@ -74,4 +74,3 @@ class NotificationTemplate extends Model
         ];
     }
 }
-

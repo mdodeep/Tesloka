@@ -52,7 +52,14 @@
                             Stimulus / Wacana: {{ $question->stimulus->title }}
                         </div>
                         <div class="prose prose-sm max-w-none text-default-700 leading-relaxed">
-                            {!! nl2br(e($question->stimulus->content)) !!}
+                            @php
+                                $allowedTags = '<p><br><strong><b><em><i><u><s><ul><ol><li><table><thead><tbody><tr><th><td><img><span><sub><sup><div>';
+                                $stimContent = strip_tags($question->stimulus->content, $allowedTags);
+                                if (!str_contains($stimContent, '<p>') && !str_contains($stimContent, '<br>')) {
+                                    $stimContent = nl2br($stimContent);
+                                }
+                            @endphp
+                            {!! $stimContent !!}
                         </div>
                         @if($question->stimulus->media_url)
                             <div class="mt-3">
@@ -69,7 +76,13 @@
                 <div class="mb-6">
                     <div class="text-xs font-bold text-default-400 uppercase tracking-wide mb-2">Pertanyaan / Soal</div>
                     <div class="text-base text-default-900 leading-relaxed font-sans {{ $question->is_rtl ? 'text-right font-serif text-xl' : '' }}" {{ $question->is_rtl ? 'dir=rtl' : '' }}>
-                        {!! nl2br(e($question->content)) !!}
+                        @php
+                            $qContent = strip_tags($question->content, $allowedTags);
+                            if (!str_contains($qContent, '<p>') && !str_contains($qContent, '<br>')) {
+                                $qContent = nl2br($qContent);
+                            }
+                        @endphp
+                        {!! $qContent !!}
                     </div>
                 </div>
 
@@ -89,7 +102,7 @@
                         <div class="space-y-2">
                             @foreach($question->options as $opt)
                                 <div class="p-3 border border-default-200 rounded bg-white grid grid-cols-2 gap-4 items-center">
-                                    <div class="text-sm font-medium text-default-800">{{ $opt->content }}</div>
+                                    <div class="text-sm font-medium text-default-800">{!! strip_tags($opt->content, '<br><strong><b><em><i><u><s><sub><sup><img><span>') !!}</div>
                                     <div class="p-2 border border-dashed border-default-200 rounded-lg bg-default-50 text-xs text-default-500">
                                         Pilih pasangan...
                                     </div>
@@ -102,7 +115,7 @@
                                 <span class="size-7 rounded-full border border-default-200 flex items-center justify-center font-bold text-xs text-default-700 bg-default-50">
                                     {{ $opt->option_key }}
                                 </span>
-                                <span class="text-sm text-default-800">{{ $opt->content }}</span>
+                                <span class="text-sm text-default-800">{!! strip_tags($opt->content, '<br><strong><b><em><i><u><s><sub><sup><img><span>') !!}</span>
                             </div>
                         @endforeach
                     @endif
@@ -118,13 +131,13 @@
                     @elseif($question->type === 'short_answer' || $question->type === 'numeric')
                         <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-3">
                             <span class="text-xs font-bold text-emerald-800 uppercase">Kunci Valid:</span>
-                            <span class="text-sm font-semibold text-emerald-900">{{ optional($question->options->first())->content }}</span>
+                            <span class="text-sm font-semibold text-emerald-900">{!! strip_tags(optional($question->options->first())->content ?? '', '<br><strong><b><em><i><u><s><sub><sup><img><span>') !!}</span>
                         </div>
                     @elseif($question->type === 'matching')
                         <div class="space-y-2">
                             @foreach($question->options as $opt)
                                 <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg grid grid-cols-2 gap-4 items-center">
-                                    <div class="text-sm font-medium text-default-800">{{ $opt->content }}</div>
+                                    <div class="text-sm font-medium text-default-800">{!! strip_tags($opt->content, '<br><strong><b><em><i><u><s><sub><sup><img><span>') !!}</div>
                                     <div class="text-sm font-semibold text-emerald-800 flex items-center gap-1.5">
                                         <svg class="size-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                                         {{ $opt->pair_match }}
@@ -139,7 +152,7 @@
                                     <span class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs {{ $opt->is_correct ? 'bg-emerald-600 text-white' : 'bg-default-100 text-default-700' }}">
                                         {{ $opt->option_key }}
                                     </span>
-                                    <span class="text-sm {{ $opt->is_correct ? 'font-semibold text-emerald-900' : 'text-default-700' }}">{{ $opt->content }}</span>
+                                    <span class="text-sm {{ $opt->is_correct ? 'font-semibold text-emerald-900' : 'text-default-700' }}">{!! strip_tags($opt->content, '<br><strong><b><em><i><u><s><sub><sup><img><span>') !!}</span>
                                 </div>
                                 @if($opt->is_correct)
                                     <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">

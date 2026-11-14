@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\StudentAuthController;
+use App\Http\Controllers\InAppNotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ExamCameraController;
 use App\Http\Controllers\Staff\ExamSebConfigController;
@@ -36,7 +37,7 @@ Route::prefix('ujian')->name('student.')->group(function () {
             Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
             // Diagnostic Ping Endpoint (FULL-FEATURE 13.3)
-            Route::get('ping', fn() => response()->json(['status' => 'ok', 'time' => now()->toIso8601String()]))->name('ping');
+            Route::get('ping', fn () => response()->json(['status' => 'ok', 'time' => now()->toIso8601String()]))->name('ping');
 
             // Exam Execution Engine (FULL-FEATURE Sec 13, 14, 15, 16, 18, 39.1)
             Route::prefix('exams')->name('exam.')->group(function () {
@@ -64,9 +65,9 @@ Route::prefix('ujian')->name('student.')->group(function () {
 
             // In-App Notification Center (FULL-FEATURE 40.7)
             Route::prefix('notifications')->name('notifications.')->group(function () {
-                Route::get('/', [\App\Http\Controllers\InAppNotificationController::class, 'index'])->name('index');
-                Route::post('{notification}/read', [\App\Http\Controllers\InAppNotificationController::class, 'markAsRead'])->name('read');
-                Route::post('read-all', [\App\Http\Controllers\InAppNotificationController::class, 'markAllRead'])->name('read-all');
+                Route::get('/', [InAppNotificationController::class, 'index'])->name('index');
+                Route::post('{notification}/read', [InAppNotificationController::class, 'markAsRead'])->name('read');
+                Route::post('read-all', [InAppNotificationController::class, 'markAllRead'])->name('read-all');
             });
         });
     });

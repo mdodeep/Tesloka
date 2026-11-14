@@ -67,7 +67,7 @@
 
     <!-- Table of Sessions -->
     <x-cbt.card>
-        <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
+        <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4 min-h-[240px]">
             <table class="w-full min-w-[700px] text-left text-xs border-collapse">
                 <thead class="bg-default-50 text-[11px] uppercase font-bold text-default-600 border-b border-default-200">
                     <tr>
@@ -127,11 +127,11 @@
                                     </a>
 
                                     <div class="relative inline-block text-left" id="sessionMenuContainer-{{ $session->id }}">
-                                        <button type="button" onclick="toggleSessionActionMenu({{ $session->id }})" class="p-1.5 bg-white hover:bg-default-50 text-default-600 border border-default-200 rounded text-xs font-semibold inline-flex items-center shadow-2xs transition cursor-pointer" title="Cetak Dokumen Sesi">
+                                        <button type="button" onclick="toggleSessionActionMenu(this, {{ $session->id }})" class="p-1.5 bg-white hover:bg-default-50 text-default-600 border border-default-200 rounded text-xs font-semibold inline-flex items-center shadow-2xs transition cursor-pointer" title="Cetak Dokumen Sesi">
                                             <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                         </button>
 
-                                        <div id="sessionActionMenu-{{ $session->id }}" class="hidden absolute right-0 mt-1.5 w-52 bg-white border border-default-200 rounded-md shadow-lg z-50 py-1 divide-y divide-default-100 text-left">
+                                        <div id="sessionActionMenu-{{ $session->id }}" class="hidden fixed w-52 bg-white border border-default-200 rounded-md shadow-xl z-50 py-1 divide-y divide-default-100 text-left">
                                             <div class="py-1">
                                                 <a href="{{ route('staff.sessions.print-cards', $session) }}" target="_blank" class="flex items-center gap-2 px-3 py-1.5 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                                                     <svg class="size-3.5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
@@ -197,18 +197,31 @@
 </div>
 
 <script>
-    function toggleSessionActionMenu(sessionId) {
+    function toggleSessionActionMenu(btn, sessionId) {
         const menu = document.getElementById('sessionActionMenu-' + sessionId);
-        document.querySelectorAll('[id^="sessionActionMenu-"]').forEach(el => {
-            if (el !== menu) el.classList.add('hidden');
-        });
-        if (menu) menu.classList.toggle('hidden');
+        const isHidden = menu ? menu.classList.contains('hidden') : true;
+        document.querySelectorAll('[id^="sessionActionMenu-"]').forEach(el => el.classList.add('hidden'));
+        if (isHidden && menu && btn) {
+            const rect = btn.getBoundingClientRect();
+            menu.style.top = (rect.bottom + 4) + 'px';
+            menu.style.left = Math.max(10, rect.right - 208) + 'px';
+            menu.style.right = 'auto';
+            menu.classList.remove('hidden');
+        }
     }
 
     document.addEventListener('click', function(e) {
         if (!e.target.closest('[id^="sessionMenuContainer-"]')) {
             document.querySelectorAll('[id^="sessionActionMenu-"]').forEach(el => el.classList.add('hidden'));
         }
+    });
+
+    window.addEventListener('scroll', function() {
+        document.querySelectorAll('[id^="sessionActionMenu-"]').forEach(el => el.classList.add('hidden'));
+    }, true);
+
+    window.addEventListener('resize', function() {
+        document.querySelectorAll('[id^="sessionActionMenu-"]').forEach(el => el.classList.add('hidden'));
     });
 </script>
 @endsection

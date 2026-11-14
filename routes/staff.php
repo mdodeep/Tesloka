@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\StaffAuthController;
+use App\Http\Controllers\InAppNotificationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\AcademicStructureController;
@@ -60,7 +61,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
         // Academic Structure Management (Admin Only)
         Route::prefix('academic')->middleware('role:admin,super_admin')->name('academic.')->group(function () {
             Route::get('/', [AcademicStructureController::class, 'index'])->name('index');
-            
+
             // Tahun Ajaran
             Route::post('years', [AcademicStructureController::class, 'storeYear'])->name('years.store');
             Route::put('years/{year}', [AcademicStructureController::class, 'updateYear'])->name('years.update');
@@ -355,9 +356,9 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
         // In-App Notification Center (FULL-FEATURE 40.7)
         Route::prefix('notifications')->name('notifications.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\InAppNotificationController::class, 'index'])->name('index');
-            Route::post('{notification}/read', [\App\Http\Controllers\InAppNotificationController::class, 'markAsRead'])->name('read');
-            Route::post('read-all', [\App\Http\Controllers\InAppNotificationController::class, 'markAllRead'])->name('read-all');
+            Route::get('/', [InAppNotificationController::class, 'index'])->name('index');
+            Route::post('{notification}/read', [InAppNotificationController::class, 'markAsRead'])->name('read');
+            Route::post('read-all', [InAppNotificationController::class, 'markAllRead'])->name('read-all');
         });
     });
 });

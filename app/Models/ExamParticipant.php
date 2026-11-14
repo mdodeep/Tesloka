@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ExamParticipant extends Model
 {
@@ -54,7 +55,7 @@ class ExamParticipant extends Model
         return $this->belongsTo(ExamPackage::class, 'exam_package_id');
     }
 
-    public function attempts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function attempts(): HasMany
     {
         return $this->hasMany(ExamAttempt::class, 'exam_participant_id');
     }

@@ -93,8 +93,10 @@
             gap: 8px;
         }
         .card-logo {
-            width: 28px;
-            height: 28px;
+            max-height: 28px;
+            max-width: 64px;
+            width: auto;
+            height: auto;
             object-fit: contain;
         }
         .title {

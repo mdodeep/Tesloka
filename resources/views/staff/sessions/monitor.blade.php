@@ -188,6 +188,9 @@
                 <!-- Intervention Actions Menu -->
                 @if($part['attempt_id'] && $part['attempt_status'] === 'in_progress')
                     <div class="mt-4 pt-3 border-t border-default-100 flex items-center justify-between gap-1 flex-wrap">
+                        <button type="button" onclick="openStudentWarningModal({{ $part['student_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 rounded transition" title="Kirim Peringatan Langsung ke Peserta Ini">
+                            Peringatkan
+                        </button>
                         <button type="button" onclick="openAddTimeModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-primary hover:bg-blue-50 rounded transition" title="Tambah Waktu">
                             +15 Mnt
                         </button>
@@ -197,7 +200,7 @@
                         <button type="button" onclick="openForceLogoutModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-amber-600 hover:bg-amber-50 rounded transition" title="Logout Paksa Sesi Perangkat (Jawaban Aman)">
                             Reset Sesi
                         </button>
-                        <button type="button" onclick="openForceStopModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 rounded transition" title="Hentikan Ujian Permanen">
+                        <button type="button" onclick="openForceStopModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-rose-700 hover:bg-rose-50 rounded transition" title="Hentikan Ujian Permanen">
                             Stop
                         </button>
                     </div>
@@ -303,6 +306,66 @@
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-default-100">
                 <button type="button" onclick="closeAnnouncementModal()" class="w-full sm:w-auto px-4 py-2.5 border border-default-200 rounded text-xs font-semibold text-default-700 hover:bg-default-50 transition cursor-pointer">Batal</button>
                 <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition cursor-pointer">Siarkan Sekarang</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Peringatan Khusus Peserta (Targeted Proctor Warning - FULL-FEATURE 20.8, 22) -->
+<div id="modal-student-warning" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-rose-200 overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-rose-100 pb-3">
+            <div class="flex items-center gap-2">
+                <span class="size-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold">!</span>
+                <div>
+                    <h3 class="font-bold text-default-900 text-base">Kirim Peringatan Khusus Peserta</h3>
+                    <p class="text-[11px] text-default-500">Peringatan langsung ke layar peserta dengan konfirmasi wajib (satu arah)</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeStudentWarningModal()" class="text-default-400 hover:text-default-600 cursor-pointer text-lg leading-none">&times;</button>
+        </div>
+
+        <form action="{{ route('staff.sessions.monitor.announcements.store', $session) }}" method="POST" class="space-y-4">
+            @csrf
+            <input type="hidden" name="target_type" value="student">
+            <input type="hidden" name="target_id" id="warning_target_id" value="">
+            <input type="hidden" name="priority" value="urgent">
+            <input type="hidden" name="requires_acknowledgement" value="1">
+            <input type="hidden" name="title" value="Peringatan Pengawas Ruang Ujian">
+
+            <div class="p-3 bg-rose-50 border border-rose-200 rounded text-xs text-rose-900">
+                Peringatan akan dikirimkan kepada: <strong id="warning_student_name" class="font-bold"></strong>. Layar ujian siswa akan terblokir sampai siswa menekan tombol konfirmasi.
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">Pilihan Cepat Pesan Peringatan:</label>
+                <div class="grid grid-cols-1 gap-1.5 text-[11px]">
+                    <button type="button" onclick="setWarningPreset('Harap fokus pandangan ke layar monitor Anda dan jangan menoleh ke arah lain.')" class="text-left px-2.5 py-1.5 rounded bg-default-50 hover:bg-rose-50 hover:text-rose-700 border border-default-200 transition cursor-pointer">
+                        &bull; Fokus pandangan ke layar monitor
+                    </button>
+                    <button type="button" onclick="setWarningPreset('Posisikan wajah Anda tepat di depan kamera pengawas dan jangan tinggalkan tempat duduk.')" class="text-left px-2.5 py-1.5 rounded bg-default-50 hover:bg-rose-50 hover:text-rose-700 border border-default-200 transition cursor-pointer">
+                        &bull; Posisikan wajah tepat di depan kamera pengawas
+                    </button>
+                    <button type="button" onclick="setWarningPreset('Dilarang keras membuka tab, jendela browser lain, atau aplikasi tambahan selama ujian berlangsung!')" class="text-left px-2.5 py-1.5 rounded bg-default-50 hover:bg-rose-50 hover:text-rose-700 border border-default-200 transition cursor-pointer">
+                        &bull; Larangan membuka tab atau aplikasi lain
+                    </button>
+                    <button type="button" onclick="setWarningPreset('Dilarang berbicara atau berkomunikasi dengan siapapun di dalam ruang ujian!')" class="text-left px-2.5 py-1.5 rounded bg-default-50 hover:bg-rose-50 hover:text-rose-700 border border-default-200 transition cursor-pointer">
+                        &bull; Larangan berbicara / berkomunikasi
+                    </button>
+                    <button type="button" onclick="setWarningPreset('Peringatan integritas: aktivitas mencurigakan terdeteksi oleh pengawas. Harap patuhi tata tertib ujian.')" class="text-left px-2.5 py-1.5 rounded bg-default-50 hover:bg-rose-50 hover:text-rose-700 border border-default-200 transition cursor-pointer">
+                        &bull; Peringatan integritas &amp; tata tertib ujian
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1">Isi Pesan Peringatan</label>
+                <textarea name="message" id="warning_message" rows="3" required placeholder="Pilih preset di atas atau ketik pesan peringatan kustom..." class="form-textarea w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"></textarea>
+            </div>
+
+            <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-default-100">
+                <button type="button" onclick="closeStudentWarningModal()" class="w-full sm:w-auto px-4 py-2.5 border border-default-200 rounded text-xs font-semibold text-default-700 hover:bg-default-50 transition cursor-pointer">Batal</button>
+                <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold shadow-xs transition cursor-pointer">Kirim Peringatan Tegas</button>
             </div>
         </form>
     </div>
@@ -483,6 +546,18 @@
 
     function openAnnouncementModal() { document.getElementById('modal-announcement').classList.remove('hidden'); }
     function closeAnnouncementModal() { document.getElementById('modal-announcement').classList.add('hidden'); }
+
+    function openStudentWarningModal(studentId, studentName) {
+        document.getElementById('warning_target_id').value = studentId;
+        document.getElementById('warning_student_name').textContent = studentName;
+        document.getElementById('modal-student-warning').classList.remove('hidden');
+    }
+    function closeStudentWarningModal() {
+        document.getElementById('modal-student-warning').classList.add('hidden');
+    }
+    function setWarningPreset(text) {
+        document.getElementById('warning_message').value = text;
+    }
 
     function openIncidentModal() { document.getElementById('modal-incident').classList.remove('hidden'); }
     function closeIncidentModal() { document.getElementById('modal-incident').classList.add('hidden'); }

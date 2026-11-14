@@ -42,6 +42,15 @@
             Masuk ke Portal Ujian
         </button>
 
+        @if(\App\Models\SystemSetting::get('cbt.allow_student_self_registration', false))
+            <div class="text-center pt-2">
+                <span class="text-xs text-default-500">Belum punya akun?</span>
+                <a href="{{ route('student.register') }}" class="text-xs font-semibold text-teal-600 hover:text-teal-700 hover:underline ml-1">
+                    Daftar sebagai Peserta Baru &rarr;
+                </a>
+            </div>
+        @endif
+
         <div class="pt-4 border-t border-default-100 text-center text-xs text-default-500">
             Dosen, Pengawas, atau Staf? <a href="{{ route('staff.login') }}" class="text-primary font-semibold hover:underline">Masuk ke Portal Staf &rarr;</a>
         </div>

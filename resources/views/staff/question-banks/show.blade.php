@@ -11,6 +11,11 @@
         <span>Ekspor Word (.docx)</span>
     </a>
 
+    <a href="{{ route('staff.question-banks.export-zip', $questionBank) }}" class="px-3 py-2 rounded border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all" title="Ekspor Paket Media Bundle ZIP (Soal + Lampiran Gambar/Audio)">
+        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+        <span>Ekspor ZIP Bundle</span>
+    </a>
+
     <a href="{{ route('staff.question-banks.export-csv', $questionBank) }}" class="px-3 py-2 rounded border border-default-200 bg-white hover:bg-default-50 text-default-700 text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all">
         <svg class="w-4 h-4 text-default-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
         <span>Ekspor CSV</span>
@@ -18,7 +23,7 @@
 
     <button onclick="document.getElementById('modal-import-csv').classList.toggle('hidden')" class="px-3 py-2 rounded bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-        <span>Impor CSV</span>
+        <span>Impor Soal</span>
     </button>
 
     <button onclick="document.getElementById('modal-stimulus').classList.toggle('hidden')" class="px-3 py-2 rounded bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
@@ -220,13 +225,13 @@
     </div>
 </div>
 
-<!-- Modal Impor Soal (CSV, Aiken, GIFT) -->
+<!-- Modal Impor Soal (CSV, XLSX, Aiken, GIFT, ZIP) -->
 <div id="modal-import-csv" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 space-y-4 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <div>
                 <h3 class="text-base font-bold text-default-900">Impor Soal ke Bank</h3>
-                <p class="text-[11px] text-default-500">Mendukung format CSV, Aiken (.txt), dan Moodle GIFT (.txt)</p>
+                <p class="text-[11px] text-default-500">Mendukung format Excel (.xlsx), CSV, Media Bundle ZIP, Aiken, dan Moodle GIFT</p>
             </div>
             <button onclick="document.getElementById('modal-import-csv').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 text-lg cursor-pointer leading-none">&times;</button>
         </div>
@@ -236,19 +241,39 @@
             <div>
                 <label class="block font-bold text-default-800 mb-1">Pilih Format Berkas Impor:</label>
                 <select name="format" id="importFormatSelector" onchange="switchImportGuide(this.value)" class="form-select w-full rounded border-default-200 text-xs">
-                    <option value="csv" selected>CSV Tabular Standar TESLOKA (.csv)</option>
+                    <option value="xlsx" selected>Excel Spreadsheet Standar TESLOKA (.xlsx)</option>
+                    <option value="csv">CSV Tabular Standar TESLOKA (.csv)</option>
+                    <option value="zip">Paket Media Bundle (.zip) - Soal + Lampiran Media</option>
                     <option value="aiken">Format Teks Aiken (.txt) - Pilihan Ganda Ringkas</option>
                     <option value="gift">Format Moodle GIFT (.txt) - Multi-tipe Soal</option>
                 </select>
             </div>
 
+            <!-- Guide XLSX -->
+            <div id="guide-xlsx" class="p-3 bg-emerald-50 border border-emerald-200 rounded text-emerald-950 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-emerald-900">Format Excel (.xlsx) Standar:</span>
+                    <a href="{{ route('staff.question-banks.template-xlsx') }}" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-[10px] inline-flex items-center gap-1 shadow-2xs">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>Unduh Template Excel</span>
+                    </a>
+                </div>
+                <p class="text-[11px] text-emerald-800">Gunakan berkas template resmi dengan 13 kolom baku (Kode, Tipe, Konten, Kesulitan, Bobot, RTL, Stimulus, Opsi A-E, dan Kunci).</p>
+            </div>
+
             <!-- Guide CSV -->
-            <div id="guide-csv" class="p-3 bg-indigo-50 border border-indigo-100 rounded text-indigo-900 space-y-1">
+            <div id="guide-csv" class="hidden p-3 bg-indigo-50 border border-indigo-100 rounded text-indigo-900 space-y-1">
                 <div class="font-bold">Format Kolom CSV:</div>
                 <div class="font-mono text-[10px] bg-white p-2 rounded-lg border border-indigo-200/50 break-all">
                     kode,tipe,konten,kesulitan,bobot,is_rtl,stimulus,opsi_a,opsi_b,opsi_c,opsi_d,opsi_e,kunci
                 </div>
                 <p class="text-[11px] text-indigo-700">Contoh kunci: <code>A</code> (tunggal) atau <code>A,C</code> (kompleks).</p>
+            </div>
+
+            <!-- Guide ZIP -->
+            <div id="guide-zip" class="hidden p-3 bg-purple-50 border border-purple-200 rounded text-purple-950 space-y-1">
+                <div class="font-bold text-purple-900">Paket Media Bundle (.zip):</div>
+                <p class="text-[11px] text-purple-800 leading-relaxed">Arsip ZIP yang berisi <code>manifest.json</code> atau <code>questions.json</code> beserta folder <code>media/</code> berisi gambar/audio listening stimulus.</p>
             </div>
 
             <!-- Guide Aiken -->
@@ -276,10 +301,10 @@ Sebutkan fungsi mitokondria! {}</pre>
                 name="file"
                 id="csv_question_dropzone"
                 label="Pilih Berkas Soal"
-                accept=".csv,.txt,text/csv,text/plain"
-                maxSize="10MB"
+                accept=".xlsx,.zip,.csv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,text/csv,text/plain"
+                maxSize="20MB"
                 :required="true"
-                hint="Unggah berkas (.csv atau .txt) sesuai format yang dipilih."
+                hint="Unggah berkas (.xlsx, .zip, .csv, atau .txt) sesuai format yang dipilih."
             />
 
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-2.5 pt-3 border-t border-default-100">
@@ -296,7 +321,9 @@ Sebutkan fungsi mitokondria! {}</pre>
 
 <script>
 function switchImportGuide(format) {
+    document.getElementById('guide-xlsx').classList.add('hidden');
     document.getElementById('guide-csv').classList.add('hidden');
+    document.getElementById('guide-zip').classList.add('hidden');
     document.getElementById('guide-aiken').classList.add('hidden');
     document.getElementById('guide-gift').classList.add('hidden');
     const target = document.getElementById('guide-' + format);

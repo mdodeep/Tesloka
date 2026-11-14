@@ -14,6 +14,8 @@ Route::prefix('ujian')->name('student.')->group(function () {
     Route::middleware('guest:student')->group(function () {
         Route::get('login', [StudentAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [StudentAuthController::class, 'login'])->name('login.post');
+        Route::get('register', [StudentAuthController::class, 'showRegisterForm'])->name('register');
+        Route::post('register', [StudentAuthController::class, 'register'])->name('register.post');
     });
 
     // Authenticated Student Routes

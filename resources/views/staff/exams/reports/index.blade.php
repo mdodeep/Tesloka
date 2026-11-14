@@ -100,6 +100,8 @@
                             <th class="py-3 px-3.5 text-center whitespace-nowrap">Bobot</th>
                             <th class="py-3 px-3.5 text-center whitespace-nowrap">Indeks Kesukaran (P)</th>
                             <th class="py-3 px-3.5 text-center whitespace-nowrap">Tingkat Kesukaran</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Rasch Logit (b)</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Model Fit (MNSQ)</th>
                             <th class="py-3 px-3.5 text-center whitespace-nowrap">Daya Pembeda (D)</th>
                             <th class="py-3 px-3.5 text-center whitespace-nowrap">Kategori Pembeda</th>
                             <th class="py-3 px-3.5 text-center whitespace-nowrap">Benar / Total</th>
@@ -118,6 +120,16 @@
                                         {{ $item['difficulty_category'] }}
                                     </span>
                                 </td>
+                                <td class="py-3 px-3.5 text-center font-mono font-bold whitespace-nowrap">
+                                    <span class="{{ $item['rasch_difficulty_logit'] > 0 ? 'text-rose-600' : 'text-emerald-600' }}">
+                                        {{ ($item['rasch_difficulty_logit'] > 0 ? '+' : '') . number_format($item['rasch_difficulty_logit'], 3) }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-3.5 text-center whitespace-nowrap">
+                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap {{ $item['rasch_fit_color'] === 'emerald' ? 'bg-emerald-100 text-emerald-800' : ($item['rasch_fit_color'] === 'blue' ? 'bg-blue-100 text-blue-800' : ($item['rasch_fit_color'] === 'amber' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800')) }}" title="Outfit MNSQ: {{ number_format($item['rasch_outfit_mnsq'], 3) }}">
+                                        {{ number_format($item['rasch_outfit_mnsq'], 2) }} ({{ $item['rasch_fit_category'] }})
+                                    </span>
+                                </td>
                                 <td class="py-3 px-3.5 text-center font-mono font-bold whitespace-nowrap">{{ number_format($item['discrimination_index'], 3) }}</td>
                                 <td class="py-3 px-3.5 text-center whitespace-nowrap">
                                     <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap {{ $item['discrimination_category'] === 'Sangat Baik' ? 'bg-emerald-100 text-emerald-800' : ($item['discrimination_category'] === 'Baik' ? 'bg-blue-100 text-blue-800' : ($item['discrimination_category'] === 'Cukup' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800')) }}">
@@ -130,7 +142,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="text-center py-8 text-default-400 whitespace-nowrap">
+                                <td colspan="11" class="text-center py-8 text-default-400 whitespace-nowrap">
                                     Belum ada data pengerjaan peserta yang mencukupi untuk analisis butir soal.
                                 </td>
                             </tr>

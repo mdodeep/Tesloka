@@ -40,6 +40,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::middleware('guest:staff')->group(function () {
         Route::get('login', [StaffAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [StaffAuthController::class, 'login'])->name('login.post');
+        Route::get('2fa/challenge', [StaffAuthController::class, 'showTwoFactorChallenge'])->name('2fa.challenge');
+        Route::post('2fa/challenge', [StaffAuthController::class, 'verifyTwoFactorChallenge'])->name('2fa.challenge.verify');
     });
 
     // Authenticated Staff Routes
@@ -107,10 +109,12 @@ Route::prefix('staff')->name('staff.')->group(function () {
         Route::prefix('question-banks')->name('question-banks.')->group(function () {
             Route::get('/', [QuestionBankController::class, 'index'])->name('index');
             Route::post('/', [QuestionBankController::class, 'store'])->name('store');
+            Route::get('template-xlsx', [QuestionBankController::class, 'downloadTemplateXlsx'])->name('template-xlsx');
             Route::get('{questionBank}', [QuestionBankController::class, 'show'])->name('show');
             Route::post('{questionBank}/duplicate', [QuestionBankController::class, 'duplicate'])->name('duplicate');
             Route::get('{questionBank}/export-csv', [QuestionBankController::class, 'exportCsv'])->name('export-csv');
             Route::get('{questionBank}/export-docx', [QuestionBankController::class, 'exportDocx'])->name('export-docx');
+            Route::get('{questionBank}/export-zip', [QuestionBankController::class, 'exportZip'])->name('export-zip');
             Route::post('{questionBank}/import-csv', [QuestionBankController::class, 'importCsv'])->name('import-csv');
             Route::post('{questionBank}/stimuli', [QuestionStimulusController::class, 'store'])->name('stimuli.store');
             Route::get('{questionBank}/questions/create', [QuestionController::class, 'create'])->name('questions.create');

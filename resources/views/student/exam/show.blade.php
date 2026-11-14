@@ -219,6 +219,29 @@
         </div>
     </main>
 
+    <!-- Modal Peringatan Khusus Pengawas (Urgent Proctor Warning - FULL-FEATURE 20.8, 22) -->
+    <div id="urgentWarningModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-xs hidden p-3 sm:p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 text-center shadow-2xl border-2 border-rose-500 space-y-4 max-h-[90vh] flex flex-col">
+            <div class="size-14 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center shrink-0">
+                <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <div class="shrink-0">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-200">
+                    Pemberitahuan Khusus Pengawas
+                </span>
+                <h3 id="urgentWarningTitle" class="text-base font-bold text-default-900 mt-2">PERINGATAN PENGAWAS</h3>
+            </div>
+            <div class="overflow-y-auto p-4 bg-rose-50/60 rounded-lg border border-rose-200 text-xs text-rose-950 font-medium leading-relaxed text-left">
+                <p id="urgentWarningMessage" class="whitespace-pre-wrap"></p>
+            </div>
+            <div class="pt-2 shrink-0">
+                <button type="button" onclick="acknowledgeUrgentWarning()" class="w-full py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow transition cursor-pointer">
+                    Saya Mengerti &amp; Siap Melanjutkan Ujian
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Konfirmasi Pengumpulan Ujian -->
     <div id="finishModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs hidden p-3 sm:p-4">
         <div class="bg-white rounded-md max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
@@ -413,6 +436,7 @@
             document.getElementById('btnPrev').disabled = (idx === 0);
             document.getElementById('btnNext').innerText = (idx === total - 1) ? 'Soal Terakhir' : 'Soal Berikutnya';
 
+            initAudioListeningLimiter();
             updatePaletteCurrent();
         }
 
@@ -666,6 +690,20 @@
         }
 
         function displayAnnouncement(ann) {
+            const isUrgent = (ann.priority === 'urgent' || ann.priority === 'emergency' || ann.requires_acknowledgement);
+            if (isUrgent) {
+                const urgentModal = document.getElementById('urgentWarningModal');
+                const urgentTitle = document.getElementById('urgentWarningTitle');
+                const urgentMsg = document.getElementById('urgentWarningMessage');
+                if (urgentModal && urgentTitle && urgentMsg) {
+                    urgentTitle.textContent = ann.title || 'PERINGATAN PENGAWAS';
+                    urgentMsg.textContent = ann.message;
+                    urgentModal.dataset.announcementId = ann.id;
+                    urgentModal.classList.remove('hidden');
+                    return;
+                }
+            }
+
             const banner = document.getElementById('announcementBanner');
             const titleEl = document.getElementById('announcementTitle');
             const msgEl = document.getElementById('announcementMessage');
@@ -675,6 +713,25 @@
                 banner.dataset.announcementId = ann.id;
                 banner.classList.remove('hidden');
             }
+        }
+
+        function acknowledgeUrgentWarning() {
+            const urgentModal = document.getElementById('urgentWarningModal');
+            const annId = urgentModal ? urgentModal.dataset.announcementId : null;
+            if (!annId) {
+                if (urgentModal) urgentModal.classList.add('hidden');
+                return;
+            }
+
+            fetch(`/ujian/attempts/${window.CBT_DATA.attemptId}/announcements/${annId}/acknowledge`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': window.CBT_DATA.csrfToken
+                }
+            }).then(() => {
+                if (urgentModal) urgentModal.classList.add('hidden');
+            }).catch(console.error);
         }
 
         function acknowledgeCurrentAnnouncement() {
@@ -691,6 +748,80 @@
             }).then(() => {
                 banner.classList.add('hidden');
             }).catch(console.error);
+        }
+
+        /**
+         * Pengontrol Batas Pemutaran Audio Listening Comprehension (FULL-FEATURE 15.3, GAP-07).
+         * Mencegah peserta memutar ulang audio soal melebihi batas maksimal (default 2x).
+         */
+        function initAudioListeningLimiter() {
+            const containers = [document.getElementById('stimulusContent'), document.getElementById('questionContent')];
+            containers.forEach(container => {
+                if (!container) return;
+                const audios = container.querySelectorAll('audio');
+                audios.forEach((audio, aIdx) => {
+                    const audioSrc = audio.currentSrc || audio.src || audio.querySelector('source')?.src || `audio_${currentIndex}_${aIdx}`;
+                    const storageKey = `audio_play_count_${window.CBT_DATA.attemptId}_${btoa(audioSrc).slice(0, 24)}`;
+                    const maxPlays = parseInt(audio.dataset.maxPlays || '2', 10);
+                    let playedCount = parseInt(sessionStorage.getItem(storageKey) || '0', 10);
+
+                    // Buat wrapper UI jika belum ada
+                    let wrapper = audio.closest('.cbt-audio-wrapper');
+                    if (!wrapper) {
+                        wrapper = document.createElement('div');
+                        wrapper.className = 'cbt-audio-wrapper my-3 p-3.5 bg-slate-50 border border-default-200 rounded-lg space-y-2';
+                        audio.parentNode.insertBefore(wrapper, audio);
+
+                        const header = document.createElement('div');
+                        header.className = 'flex items-center justify-between text-xs font-semibold';
+                        header.innerHTML = `
+                            <span class="flex items-center gap-1.5 text-primary">
+                                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                                <span>Audio Listening Comprehension</span>
+                            </span>
+                            <span class="audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] ${playedCount >= maxPlays ? 'bg-rose-100 text-rose-800' : 'bg-primary/10 text-primary'}">
+                                Sisa Putar: ${Math.max(0, maxPlays - playedCount)}x (Maks. ${maxPlays}x)
+                            </span>
+                        `;
+                        wrapper.appendChild(header);
+                        wrapper.appendChild(audio);
+                    }
+
+                    const counterEl = wrapper.querySelector('.audio-play-counter');
+
+                    if (playedCount >= maxPlays) {
+                        audio.pause();
+                        audio.controls = false;
+                        if (counterEl) {
+                            counterEl.className = 'audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] bg-rose-100 text-rose-800 font-bold';
+                            counterEl.textContent = 'Batas Putar Habis (0x)';
+                        }
+                        return;
+                    }
+
+                    audio.onplay = () => {
+                        playedCount = parseInt(sessionStorage.getItem(storageKey) || '0', 10);
+                        if (playedCount >= maxPlays) {
+                            audio.pause();
+                            audio.controls = false;
+                            return;
+                        }
+                        playedCount++;
+                        sessionStorage.setItem(storageKey, playedCount);
+                        if (counterEl) {
+                            const remaining = Math.max(0, maxPlays - playedCount);
+                            counterEl.textContent = `Sisa Putar: ${remaining}x (Maks. ${maxPlays}x)`;
+                            if (remaining === 0) {
+                                counterEl.className = 'audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] bg-rose-100 text-rose-800 font-bold';
+                                counterEl.textContent = 'Batas Putar Habis (0x)';
+                                audio.onended = () => {
+                                    audio.controls = false;
+                                };
+                            }
+                        }
+                    };
+                });
+            });
         }
 
         function startServerSyncHeartbeat() {

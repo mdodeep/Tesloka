@@ -670,6 +670,21 @@
                             <option value="h:i A" {{ old('time_format', $settings['time_format']) === 'h:i A' ? 'selected' : '' }}>12 Jam AM/PM (02:30 PM)</option>
                         </select>
                     </div>
+
+                    <div class="sm:col-span-2 p-4 bg-default-50 border border-default-200 rounded-lg flex items-center justify-between gap-4">
+                        <div>
+                            <label for="allow_student_self_registration" class="text-xs font-bold text-default-800 uppercase tracking-wider block cursor-pointer">
+                                Pendaftaran Mandiri Peserta Baru (SPMB / Registrasi Publik)
+                            </label>
+                            <p class="text-xs text-default-500 mt-0.5">
+                                Jika diaktifkan, calon peserta ujian atau siswa baru dapat mendaftarkan akun secara mandiri melalui URL <code>https://ujian.tesloka.test/register</code>.
+                            </p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                            <input type="checkbox" id="allow_student_self_registration" name="allow_student_self_registration" value="1" {{ old('allow_student_self_registration', $settings['allow_student_self_registration'] ?? false) ? 'checked' : '' }} class="sr-only peer">
+                            <div class="w-11 h-6 bg-default-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-default-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
                 </div>
             </x-cbt.card>
         </div>

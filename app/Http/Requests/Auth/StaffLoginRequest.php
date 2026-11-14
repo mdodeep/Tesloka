@@ -30,6 +30,11 @@ class StaffLoginRequest extends FormRequest
 
     public function authenticate(): void
     {
+        $this->authenticateStaff();
+    }
+
+    public function authenticateStaff(): ?User
+    {
         $this->ensureIsNotRateLimited();
 
         $login = $this->input('login');
@@ -87,6 +92,23 @@ class StaffLoginRequest extends FormRequest
             ]);
         }
 
+        // Cek Two-Factor Authentication (2FA) (FULL-FEATURE 44.3)
+        if ($user->hasEnabledTwoFactorAuthentication()) {
+            RateLimiter::clear($this->throttleKey());
+            $this->session()->put('staff_2fa_pending_user_id', $user->id);
+            $this->session()->put('staff_2fa_remember', $this->boolean('remember'));
+
+            AuditLog::record(
+                'auth.staff_2fa_challenge_issued',
+                $user,
+                null,
+                ['guard' => 'staff'],
+                'Kredensial staf valid; dialihkan ke tantangan Two-Factor Authentication (2FA).'
+            );
+
+            return null;
+        }
+
         Auth::guard('staff')->login($user, $this->boolean('remember'));
         RateLimiter::clear($this->throttleKey());
 
@@ -102,6 +124,8 @@ class StaffLoginRequest extends FormRequest
             ['guard' => 'staff'],
             'Login staf berhasil'
         );
+
+        return $user;
     }
 
     public function ensureIsNotRateLimited(): void

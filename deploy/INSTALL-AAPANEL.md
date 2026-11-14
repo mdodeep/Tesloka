@@ -486,13 +486,24 @@ Jika Anda ingin tetap menggunakan tombol GUI di dalam panel aaPanel:
    > [!WARNING]
    > **JANGAN PERNAH upgrade `setuptools` tanpa batas versi!** Mulai dari `setuptools >= 82` (seperti versi 84.x), modul `pkg_resources` telah dihapus resmi oleh pengembang Python. Jika setuptools ter-upgrade ke 82+, `supervisord` akan langsung crash dengan pesan error: `ModuleNotFoundError: No module named 'pkg_resources'`.
    
-   Jalankan perintah bersih berikut (membersihkan sisa cache lama dan mematok versi stabil `setuptools==68.0.0`):
+   Jalankan perintah bersih berikut (membersihkan sisa cache, mematok versi stabil `setuptools==68.0.0`, dan membuat template konfigurasi `/etc/supervisor/supervisord.conf`):
    ```bash
+   # 1. Bersihkan modul & pasang versi stabil
    rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/setuptools*
    rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/pkg_resources*
    /www/server/panel/pyenv/bin/pip install setuptools==68.0.0 supervisor
+
+   # 2. Buat file konfigurasi /etc/supervisor/supervisord.conf jika belum ada
+   mkdir -p /etc/supervisor/conf.d /www/server/panel/plugin/supervisor/profile /www/server/panel/plugin/supervisor/log
+   if [ ! -f /etc/supervisor/supervisord.conf ]; then
+       /www/server/panel/pyenv/bin/echo_supervisord_conf > /etc/supervisor/supervisord.conf
+       printf "\n[include]\nfiles = /etc/supervisor/conf.d/*.conf /www/server/panel/plugin/supervisor/profile/*.ini\n" >> /etc/supervisor/supervisord.conf
+   fi
+
+   # 3. Bersihkan socket lama dan restart service
    rm -f /tmp/supervisor.sock /var/run/supervisor.sock
    systemctl restart supervisord
+   systemctl status supervisord
    ```
 3. Kembali ke **aaPanel > App Store**, cari **Supervisor Manager**, klik **Install** (atau buka **Settings** jika sudah terpasang). Status layanan kini akan berwarna hijau normal (`RUNNING`).
 4. Buka **Supervisor Manager > Settings > Add Daemon**:
@@ -745,14 +756,19 @@ Jika seluruh baris berstatus **PASS [OK]**, sistem CBT TESLOKA telah 100% siap d
 
 ---
 
-### 🔴 Kendala 3: Supervisor Manager di aaPanel Gagal Start / Error `ModuleNotFoundError: No module named 'pkg_resources'`
-- **Penyebab:** Pada aaPanel yang menggunakan Python 3.12 / pyenv terbaru, jika paket `setuptools` ter-upgrade ke versi 82+ (seperti 84.x), modul usang `pkg_resources` telah dihapus secara resmi oleh pengembang Python. Akibatnya daemon `supervisord` internal aaPanel crash saat dijalankan.
+### 🔴 Kendala 3: Supervisor Manager di aaPanel Gagal Start / `could not find config file /etc/supervisor/supervisord.conf`
+- **Penyebab:** Pada aaPanel yang menggunakan Python 3.12 / pyenv terbaru, jika paket `setuptools` ter-upgrade ke versi 82+ (seperti 84.x), modul usang `pkg_resources` telah dihapus secara resmi oleh pengembang Python. Selain itu, file konfigurasi `/etc/supervisor/supervisord.conf` sering kali belum digenerate saat instalasi baru.
 - **Solusi Tuntas (Perbaiki Plugin GUI aaPanel):**
-  Jalankan perintah berikut di SSH untuk membersihkan file usang dan mengunci versi ke `setuptools==68.0.0`:
+  Jalankan perintah berikut di SSH untuk membersihkan file usang, mengunci `setuptools==68.0.0`, dan membuat file konfigurasi `/etc/supervisor/supervisord.conf`:
   ```bash
   rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/setuptools*
   rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/pkg_resources*
-  /www/server/panel/pyenv/bin/pip install setuptools==68.0.0
+  /www/server/panel/pyenv/bin/pip install setuptools==68.0.0 supervisor
+  mkdir -p /etc/supervisor/conf.d /www/server/panel/plugin/supervisor/profile /www/server/panel/plugin/supervisor/log
+  if [ ! -f /etc/supervisor/supervisord.conf ]; then
+      /www/server/panel/pyenv/bin/echo_supervisord_conf > /etc/supervisor/supervisord.conf
+      printf "\n[include]\nfiles = /etc/supervisor/conf.d/*.conf /www/server/panel/plugin/supervisor/profile/*.ini\n" >> /etc/supervisor/supervisord.conf
+  fi
   rm -f /tmp/supervisor.sock /var/run/supervisor.sock
   systemctl restart supervisord
   systemctl status supervisord

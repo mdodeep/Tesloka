@@ -335,6 +335,11 @@
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
+                                        <a href="{{ route('staff.academic.classes.print-cards', $c) }}" target="_blank"
+                                           class="size-7 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 flex items-center justify-center transition cursor-pointer"
+                                           title="Cetak Kartu Ujian Massal Siswa Kelas Ini (A4)">
+                                            <i data-lucide="printer" class="size-3.5"></i>
+                                        </a>
                                         <button type="button" 
                                                 onclick="openEditClassModal('{{ $c->id }}', '{{ $c->academic_year_id }}', '{{ $c->department_id }}', '{{ addslashes($c->name) }}', '{{ $c->code }}', '{{ $c->capacity }}', {{ $c->is_active ? 'true' : 'false' }})"
                                                 class="size-7 rounded bg-default-100 hover:bg-default-200 text-default-700 flex items-center justify-center transition cursor-pointer"

@@ -6,6 +6,11 @@
 @section('page-subtitle', 'Kode: ' . $questionBank->code . ' • Mapel: ' . ($questionBank->subject?->name ?? 'Umum') . ' • Penyusun: ' . ($questionBank->author?->name ?? 'Staf'))
 
 @section('page-actions')
+    <a href="{{ route('staff.question-banks.export-docx', $questionBank) }}" class="px-3 py-2 rounded border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all" title="Ekspor Naskah Soal Lengkap ke Format Microsoft Word (.docx)">
+        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <span>Ekspor Word (.docx)</span>
+    </a>
+
     <a href="{{ route('staff.question-banks.export-csv', $questionBank) }}" class="px-3 py-2 rounded border border-default-200 bg-white hover:bg-default-50 text-default-700 text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all">
         <svg class="w-4 h-4 text-default-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
         <span>Ekspor CSV</span>

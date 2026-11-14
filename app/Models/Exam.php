@@ -38,6 +38,7 @@ class Exam extends Model
         'seb_config_key',
         'seb_quit_password',
         'max_attempts',
+        'is_simulation',
         'rules_config',
         'parent_exam_id',
         'published_by_id',
@@ -58,6 +59,7 @@ class Exam extends Model
             'camera_proctoring_enabled' => 'boolean',
             'fullscreen_lock_enabled' => 'boolean',
             'seb_required' => 'boolean',
+            'is_simulation' => 'boolean',
             'max_attempts' => 'integer',
             'rules_config' => 'array',
         ];

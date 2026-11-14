@@ -151,6 +151,17 @@
                             <input type="checkbox" name="show_result_on_finish" value="1" {{ old('show_result_on_finish', $exam->show_result_on_finish) ? 'checked' : '' }} class="form-switch">
                         </label>
 
+                        <label class="flex items-center justify-between p-2.5 rounded bg-amber-50/60 border border-amber-200/70 hover:bg-amber-50 transition cursor-pointer">
+                            <div>
+                                <span class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                                    <i data-lucide="sparkles" class="size-3.5 text-amber-600"></i>
+                                    <span>Mode Ujian Simulasi / Try Out</span>
+                                </span>
+                                <p class="text-[11px] text-amber-700">Ujian latihan mandiri. Nilai tidak dimasukkan ke dalam penentuan kelulusan resmi / SKL.</p>
+                            </div>
+                            <input type="checkbox" name="is_simulation" value="1" {{ old('is_simulation', $exam->is_simulation) ? 'checked' : '' }} class="form-switch text-amber-500">
+                        </label>
+
                         <div class="pt-2 border-t border-default-100">
                             <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Maksimal Percobaan (Attempts) *</label>
                             <input type="number" min="1" max="5" name="max_attempts" value="{{ old('max_attempts', $exam->max_attempts) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>

@@ -188,6 +188,12 @@
                                 <span class="menu-text">Autentikasi 2FA</span>
                             </a>
                         </li>
+                        <li class="menu-item">
+                            <a href="{{ route('staff.security.password') }}" class="menu-link {{ request()->routeIs('staff.security.password*') ? 'active !bg-primary !text-white' : '' }}">
+                                <span class="menu-icon"><i data-lucide="lock" class="size-4.5"></i></span>
+                                <span class="menu-text">Ganti Password</span>
+                            </a>
+                        </li>
 
                         @if(auth('staff')->user()->hasRole('admin') || auth('staff')->user()->hasRole('super_admin') || auth('staff')->user()->hasRole('institution_admin'))
                             <li class="menu-title">
@@ -301,25 +307,50 @@
 
                         <div class="h-6 w-px bg-default-200 hidden sm:block"></div>
 
-                        <!-- User Profile Info -->
-                        <div class="flex items-center gap-3">
-                            <a href="{{ route('staff.profile') }}" class="flex items-center gap-2.5 hover:opacity-90 transition" title="Profil Pengguna">
+                        <!-- User Profile Dropdown -->
+                        <div class="relative" id="userProfileMenuContainer">
+                            <button type="button" onclick="toggleUserProfileMenu()" class="flex items-center gap-2.5 hover:opacity-90 transition cursor-pointer text-left" title="Menu Pengguna">
                                 <img src="{{ auth('staff')->user()->photo_url }}" alt="{{ auth('staff')->user()->name }}" class="size-9 rounded-full object-cover border border-default-200 shadow-xs">
                                 <div class="text-left hidden sm:block">
-                                    <div class="text-xs font-semibold text-default-800 leading-tight">{{ auth('staff')->user()->name }}</div>
+                                    <div class="text-xs font-semibold text-default-800 leading-tight flex items-center gap-1">
+                                        <span>{{ auth('staff')->user()->name }}</span>
+                                        <i data-lucide="chevron-down" class="size-3 text-default-400"></i>
+                                    </div>
                                     <div class="text-[11px] text-default-400 font-medium">
                                         {{ auth('staff')->user()->roles->pluck('display_name')->first() ?? 'Staf' }}
                                     </div>
                                 </div>
-                            </a>
+                            </button>
 
-                            <form method="POST" action="{{ route('staff.logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="btn btn-sm bg-danger/10 text-danger hover:bg-danger hover:text-white rounded" title="Keluar">
-                                    <i data-lucide="log-out" class="size-3.5"></i>
-                                    <span class="hidden sm:inline">Keluar</span>
-                                </button>
-                            </form>
+                            <div id="userProfileDropdown" class="hidden absolute right-0 mt-2 w-52 bg-white border border-default-200 rounded-md shadow-lg z-50 py-1 divide-y divide-default-100">
+                                <div class="px-3.5 py-2.5 bg-default-50">
+                                    <p class="text-xs font-bold text-default-900 truncate">{{ auth('staff')->user()->name }}</p>
+                                    <p class="text-[10px] text-default-400 truncate">{{ auth('staff')->user()->email }}</p>
+                                </div>
+                                <div class="py-1">
+                                    <a href="{{ route('staff.profile') }}" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                                        <i data-lucide="user" class="size-4 text-default-400"></i>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                    <a href="{{ route('staff.security.password') }}" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                                        <i data-lucide="lock" class="size-4 text-default-400"></i>
+                                        <span>Ganti Password</span>
+                                    </a>
+                                    <a href="{{ route('staff.security.two-factor') }}" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                                        <i data-lucide="key" class="size-4 text-default-400"></i>
+                                        <span>Keamanan 2FA</span>
+                                    </a>
+                                </div>
+                                <div class="py-1">
+                                    <form method="POST" action="{{ route('staff.logout') }}">
+                                        @csrf
+                                        <button type="submit" class="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs text-danger hover:bg-danger/10 transition text-left cursor-pointer">
+                                            <i data-lucide="log-out" class="size-4 text-danger"></i>
+                                            <span>Keluar Sistem</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -731,6 +762,19 @@
                 });
             }
         }
+
+        function toggleUserProfileMenu() {
+            const dropdown = document.getElementById('userProfileDropdown');
+            if (dropdown) dropdown.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function(e) {
+            const container = document.getElementById('userProfileMenuContainer');
+            const dropdown = document.getElementById('userProfileDropdown');
+            if (container && dropdown && !container.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initSidebarScrollManagement);

@@ -2,10 +2,25 @@
 
 @section('title', 'Detail & Kelola Ujian — ' . $exam->title)
 @section('page-parent', 'Konten & Ujian')
-@section('page-title', $exam->title)
+@section('page-title')
+    <div class="flex items-center gap-2 flex-wrap">
+        <span>{{ $exam->title }}</span>
+        @if($exam->is_simulation)
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                <i data-lucide="sparkles" class="size-3 text-amber-600"></i>
+                SIMULASI / TRY OUT
+            </span>
+        @endif
+    </div>
+@endsection
 @section('page-subtitle', 'Kode: ' . $exam->code . ' • Mapel: ' . ($exam->subject->name ?? '-') . ' • Durasi: ' . $exam->duration_minutes . ' Menit • KKM: ' . $exam->passing_grade)
 
 @section('page-actions')
+    <a href="{{ route('staff.exams.remedial', $exam) }}" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        <span>Buat Remedial</span>
+    </a>
+
     <a href="{{ route('staff.exams.grading.index', $exam) }}" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
         <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
         <span>Penilaian &amp; Hasil</span>

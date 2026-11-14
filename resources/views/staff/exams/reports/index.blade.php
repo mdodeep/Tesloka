@@ -31,6 +31,13 @@
                 <span>Ekspor CSV Nilai</span>
             </a>
 
+            <a href="{{ route('staff.exams.reports.export-pdf', $exam) }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-semibold transition inline-flex items-center justify-center gap-1.5 shadow-sm w-full sm:w-auto" title="Unduh Berkas PDF Asli Laporan Resmi">
+                <svg class="w-4 h-4 text-indigo-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                <span>Unduh PDF Asli</span>
+            </a>
+
             <a href="{{ route('staff.exams.reports.print-official', $exam) }}" target="_blank" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold transition inline-flex items-center justify-center gap-1.5 border border-slate-700 w-full sm:w-auto">
                 <svg class="w-4 h-4 text-slate-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
@@ -132,6 +139,96 @@
                 </table>
             </div>
         </x-cbt.card>
+
+        <!-- Matriks Efektivitas Pengecoh / Distraktor (FULL-FEATURE 35.4) -->
+        <x-cbt.card title="Matriks Analisis Efektivitas Pengecoh / Distraktor (Distractor Analysis)" subtitle="Evaluasi pilihan ganda: Pola sebaran pilihan Kelompok Atas (Upper 27%) vs Kelompok Bawah (Lower 27%)">
+            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
+                <table class="w-full min-w-[850px] text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
+                            <th class="py-3 px-3.5 w-12 text-center whitespace-nowrap">No</th>
+                            <th class="py-3 px-3.5 whitespace-nowrap">Kode &amp; Cuplikan Soal</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Opsi</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Kel. Atas (27%)</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Kel. Bawah (27%)</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Total Pemilih</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Persentase</th>
+                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Status Keberfungsian Pengecoh</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @php $hasDistractors = false; @endphp
+                        @foreach($itemAnalysis as $idx => $item)
+                            @if(!empty($item['distractors']))
+                                @php $hasDistractors = true; @endphp
+                                @foreach($item['distractors'] as $optIdx => $dist)
+                                    <tr class="hover:bg-default-50 transition {{ $dist['is_correct'] ? 'bg-emerald-50/30' : '' }}">
+                                        @if($optIdx === 0)
+                                            <td rowspan="{{ count($item['distractors']) }}" class="py-3 px-3.5 text-center font-bold text-default-700 align-top border-r border-default-100 whitespace-nowrap">
+                                                {{ $idx + 1 }}
+                                            </td>
+                                            <td rowspan="{{ count($item['distractors']) }}" class="py-3 px-3.5 align-top border-r border-default-100">
+                                                <div class="font-mono font-bold text-default-900">{{ $item['question_code'] }}</div>
+                                                <p class="text-[11px] text-default-500 line-clamp-2 mt-0.5">{{ strip_tags($item['question_content']) }}</p>
+                                            </td>
+                                        @endif
+                                        <td class="py-2.5 px-3 text-center whitespace-nowrap font-mono font-bold {{ $dist['is_correct'] ? 'text-emerald-700' : 'text-default-700' }}">
+                                            {{ $dist['option_key'] }}
+                                            @if($dist['is_correct'])
+                                                <span class="text-[10px] text-emerald-600 font-sans font-bold">✓</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-2.5 px-3 text-center font-mono font-semibold text-default-700 whitespace-nowrap">
+                                            {{ $dist['upper_count'] }}
+                                        </td>
+                                        <td class="py-2.5 px-3 text-center font-mono font-semibold text-default-700 whitespace-nowrap">
+                                            {{ $dist['lower_count'] }}
+                                        </td>
+                                        <td class="py-2.5 px-3 text-center font-mono font-bold text-default-900 whitespace-nowrap">
+                                            {{ $dist['selected_count'] }}
+                                        </td>
+                                        <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                                            <div class="inline-flex items-center gap-1.5">
+                                                <span class="font-mono text-xs">{{ $dist['percentage'] }}%</span>
+                                                <div class="w-12 bg-default-100 h-1.5 rounded-full overflow-hidden hidden sm:block">
+                                                    <div class="h-1.5 rounded-full {{ $dist['is_correct'] ? 'bg-emerald-500' : 'bg-primary' }}" style="width: {{ min(100, $dist['percentage']) }}%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-2.5 px-3.5 text-center whitespace-nowrap">
+                                            @if($dist['status_color'] === 'emerald')
+                                                <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                                    Kunci Jawaban
+                                                </span>
+                                            @elseif($dist['status_color'] === 'indigo')
+                                                <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                                    Pengecoh Efektif
+                                                </span>
+                                            @elseif($dist['status_color'] === 'rose')
+                                                <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200" title="Lebih banyak mengecoh siswa kelompok atas daripada kelompok bawah">
+                                                    Menyesatkan (Revisi)
+                                                </span>
+                                            @else
+                                                <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" title="Pemilih kurang dari 5% peserta">
+                                                    Kurang Berfungsi (&lt; 5%)
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        @endforeach
+                        @if(!$hasDistractors)
+                            <tr>
+                                <td colspan="8" class="text-center py-8 text-default-400 whitespace-nowrap">
+                                    Belum ada data pengerjaan pilihan ganda untuk matriks analisis pengecoh.
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </x-cbt.card>
     </div>
 
     <!-- Tab 2: Statistics & Distribution -->
@@ -205,6 +302,14 @@
     <!-- Tab 3: Remedial Students -->
     <div id="tab-remedial" class="tab-content hidden space-y-4">
         <x-cbt.card title="Daftar Siswa Rekomendasi Program Remedial (Di Bawah KKM {{ $exam->passing_grade ?? 75 }})">
+            @slot('actions')
+                @if($remedialStudents->isNotEmpty())
+                    <a href="{{ route('staff.exams.remedial', $exam) }}" class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        <span>Jadwalkan Ujian Remedial ({{ $remedialStudents->count() }} Siswa)</span>
+                    </a>
+                @endif
+            @endslot
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] text-left text-xs border-collapse">
                     <thead>

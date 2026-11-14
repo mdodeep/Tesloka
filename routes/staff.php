@@ -79,6 +79,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::put('classes/{class}', [AcademicStructureController::class, 'updateClass'])->name('classes.update');
             Route::delete('classes/{class}', [AcademicStructureController::class, 'destroyClass'])->name('classes.destroy');
             Route::patch('classes/{class}/toggle', [AcademicStructureController::class, 'toggleClassStatus'])->name('classes.toggle');
+            Route::get('classes/{class}/print-cards', [AcademicStructureController::class, 'printClassCards'])->name('classes.print-cards');
+            Route::get('classes/{class}/pdf/cards', [AcademicStructureController::class, 'downloadClassCardsPdf'])->name('classes.pdf.cards');
 
             // Mata Pelajaran / Kuliah
             Route::post('subjects', [AcademicStructureController::class, 'storeSubject'])->name('subjects.store');
@@ -108,6 +110,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('{questionBank}', [QuestionBankController::class, 'show'])->name('show');
             Route::post('{questionBank}/duplicate', [QuestionBankController::class, 'duplicate'])->name('duplicate');
             Route::get('{questionBank}/export-csv', [QuestionBankController::class, 'exportCsv'])->name('export-csv');
+            Route::get('{questionBank}/export-docx', [QuestionBankController::class, 'exportDocx'])->name('export-docx');
             Route::post('{questionBank}/import-csv', [QuestionBankController::class, 'importCsv'])->name('import-csv');
             Route::post('{questionBank}/stimuli', [QuestionStimulusController::class, 'store'])->name('stimuli.store');
             Route::get('{questionBank}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
@@ -176,6 +179,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             // Reports, Psychometrics, Item Analysis, & Export (FULL-FEATURE Sec 30, 31, 32, 33, 34)
             Route::get('{exam}/reports', [ExamReportController::class, 'index'])->name('reports.index');
             Route::get('{exam}/reports/export-csv', [ExamReportController::class, 'exportCsv'])->name('reports.export-csv');
+            Route::get('{exam}/reports/export-pdf', [ExamReportController::class, 'downloadOfficialReportPdf'])->name('reports.export-pdf');
             Route::get('{exam}/reports/print-official', [ExamReportController::class, 'printOfficialReport'])->name('reports.print-official');
         });
 
@@ -221,6 +225,10 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('{session}/print-desk-labels', [ExamSessionController::class, 'printDeskLabels'])->name('print-desk-labels');
             Route::get('{session}/print-proctor-duties', [ExamSessionController::class, 'printProctorDuties'])->name('print-proctor-duties');
             Route::get('{session}/print-proctoring-summary', [ExamSessionController::class, 'printProctoringSummary'])->name('print-proctoring-summary');
+            Route::get('{session}/print-integrity-pledge', [ExamSessionController::class, 'printProctorIntegrityPledge'])->name('print-integrity-pledge');
+            Route::get('{session}/pdf/cards', [ExamSessionController::class, 'downloadCardsPdf'])->name('pdf.cards');
+            Route::get('{session}/pdf/attendance', [ExamSessionController::class, 'downloadAttendancePdf'])->name('pdf.attendance');
+            Route::get('{session}/pdf/minutes', [ExamSessionController::class, 'downloadMinutesPdf'])->name('pdf.minutes');
 
             // Proctor Live Monitoring & Incident Management (FULL-FEATURE Sec 20, 21, 22, 23)
             Route::get('{session}/monitor', [ExamProctorMonitoringController::class, 'show'])->name('monitor');

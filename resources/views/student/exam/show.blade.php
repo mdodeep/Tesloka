@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $attempt->exam->title }} - TESLOKA CBT</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <x-cbt.branding-styles />
     <style>
         [v-cloak] { display: none; }
         .no-select { user-select: none; -webkit-user-select: none; }

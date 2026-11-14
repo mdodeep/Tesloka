@@ -7,7 +7,7 @@
         $systemInstitution = \App\Models\Institution::first();
         $systemLogoUrl = $systemInstitution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
         $systemFaviconUrl = $systemInstitution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $systemInstName = $systemInstitution?->name ?? 'TESLOKA CBT';
+        $systemInstName = \App\Models\SystemSetting::get('app.name', $systemInstitution?->name ?? 'TESLOKA CBT');
     @endphp
     <title>@yield('title', 'Portal Ujian') — {{ $systemInstName }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $systemFaviconUrl }}">
@@ -24,6 +24,7 @@
         }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <x-cbt.branding-styles />
 </head>
 <body class="min-h-screen bg-default-50 flex flex-col text-default-800 antialiased font-body text-sm">
     <!-- Student Header (Tailwick Topbar Style) -->

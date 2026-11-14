@@ -24,6 +24,7 @@
         }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <x-cbt.branding-styles />
 </head>
 <body class="min-h-screen bg-default-50 flex flex-col justify-between p-4 sm:p-6 antialiased">
     <!-- Top Header Brand -->

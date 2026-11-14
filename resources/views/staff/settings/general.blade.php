@@ -45,6 +45,7 @@
     <!-- Form Pengaturan Umum & Branding (Tabs 1-4) -->
     <form action="{{ route('staff.settings.general.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="generalSettingsForm">
         @csrf
+        <input type="hidden" name="active_tab" id="active_tab" value="{{ old('active_tab', 'profile') }}">
 
         <!-- ========================================== -->
         <!-- TAB 1: PROFIL RESMI INSTITUSI              -->
@@ -88,6 +89,37 @@
         <div id="tab-pane-branding" class="tab-pane hidden space-y-6">
             <!-- Sub 1: Identitas Visual & Warna -->
             <x-cbt.card title="Identitas Visual & Skema Warna Aplikasi" subtitle="Nama portal publik, tagline, serta palet warna primer dan sekunder sistem CBT.">
+                <!-- Preset Skema Warna Identitas -->
+                <div class="mb-5">
+                    <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-2">Preset Skema Warna Identitas Siap Pakai</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+                        <button type="button" onclick="setBrandingColors('#2e33ff', '#14213d')" class="flex items-center gap-2 p-2 rounded-lg border border-default-200 hover:border-primary hover:bg-primary-50/30 transition text-left cursor-pointer">
+                            <span class="size-4 rounded-full border border-black/10 shrink-0" style="background: linear-gradient(135deg, #2e33ff 50%, #14213d 50%);"></span>
+                            <span class="text-xs font-medium text-default-700 truncate">Tesloka Classic</span>
+                        </button>
+                        <button type="button" onclick="setBrandingColors('#059669', '#064e3b')" class="flex items-center gap-2 p-2 rounded-lg border border-default-200 hover:border-primary hover:bg-primary-50/30 transition text-left cursor-pointer">
+                            <span class="size-4 rounded-full border border-black/10 shrink-0" style="background: linear-gradient(135deg, #059669 50%, #064e3b 50%);"></span>
+                            <span class="text-xs font-medium text-default-700 truncate">Emerald Green</span>
+                        </button>
+                        <button type="button" onclick="setBrandingColors('#4f46e5', '#1e1b4b')" class="flex items-center gap-2 p-2 rounded-lg border border-default-200 hover:border-primary hover:bg-primary-50/30 transition text-left cursor-pointer">
+                            <span class="size-4 rounded-full border border-black/10 shrink-0" style="background: linear-gradient(135deg, #4f46e5 50%, #1e1b4b 50%);"></span>
+                            <span class="text-xs font-medium text-default-700 truncate">Royal Indigo</span>
+                        </button>
+                        <button type="button" onclick="setBrandingColors('#dc2626', '#450a0a')" class="flex items-center gap-2 p-2 rounded-lg border border-default-200 hover:border-primary hover:bg-primary-50/30 transition text-left cursor-pointer">
+                            <span class="size-4 rounded-full border border-black/10 shrink-0" style="background: linear-gradient(135deg, #dc2626 50%, #450a0a 50%);"></span>
+                            <span class="text-xs font-medium text-default-700 truncate">Crimson Prestige</span>
+                        </button>
+                        <button type="button" onclick="setBrandingColors('#0891b2', '#164e63')" class="flex items-center gap-2 p-2 rounded-lg border border-default-200 hover:border-primary hover:bg-primary-50/30 transition text-left cursor-pointer">
+                            <span class="size-4 rounded-full border border-black/10 shrink-0" style="background: linear-gradient(135deg, #0891b2 50%, #164e63 50%);"></span>
+                            <span class="text-xs font-medium text-default-700 truncate">Ocean Cyan</span>
+                        </button>
+                        <button type="button" onclick="setBrandingColors('#7c3aed', '#2e1065')" class="flex items-center gap-2 p-2 rounded-lg border border-default-200 hover:border-primary hover:bg-primary-50/30 transition text-left cursor-pointer">
+                            <span class="size-4 rounded-full border border-black/10 shrink-0" style="background: linear-gradient(135deg, #7c3aed 50%, #2e1065 50%);"></span>
+                            <span class="text-xs font-medium text-default-700 truncate">Violet Majestic</span>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div class="space-y-1.5 min-w-0">
                         <label for="app_name" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Nama Aplikasi Publik *</label>
@@ -104,8 +136,8 @@
                     <div class="space-y-1.5 min-w-0">
                         <label for="primary_color" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Warna Primer Identitas (Hex) *</label>
                         <div class="flex items-center gap-2">
-                            <input type="color" id="primary_color_picker" value="{{ old('primary_color', $settings['primary_color']) }}" class="size-9 rounded border border-default-200 cursor-pointer p-0.5 bg-card" onchange="document.getElementById('primary_color').value = this.value">
-                            <input type="text" id="primary_color" name="primary_color" value="{{ old('primary_color', $settings['primary_color']) }}" required class="form-input flex-1 font-mono uppercase" oninput="document.getElementById('primary_color_picker').value = this.value">
+                            <input type="color" id="primary_color_picker" value="{{ old('primary_color', $settings['primary_color']) }}" class="size-9 rounded border border-default-200 cursor-pointer p-0.5 bg-card" onchange="document.getElementById('primary_color').value = this.value; updateColorPreviews();">
+                            <input type="text" id="primary_color" name="primary_color" value="{{ old('primary_color', $settings['primary_color']) }}" required class="form-input flex-1 font-mono uppercase" oninput="document.getElementById('primary_color_picker').value = this.value; updateColorPreviews();">
                         </div>
                         <p class="text-xs text-default-500 mt-1">Warna tombol utama, aksen aktif, dan badge CBT (Standar: #2e33ff).</p>
                     </div>
@@ -113,10 +145,54 @@
                     <div class="space-y-1.5 min-w-0">
                         <label for="secondary_color" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Warna Sekunder Identitas (Hex)</label>
                         <div class="flex items-center gap-2">
-                            <input type="color" id="secondary_color_picker" value="{{ old('secondary_color', $settings['secondary_color']) }}" class="size-9 rounded border border-default-200 cursor-pointer p-0.5 bg-card" onchange="document.getElementById('secondary_color').value = this.value">
-                            <input type="text" id="secondary_color" name="secondary_color" value="{{ old('secondary_color', $settings['secondary_color']) }}" class="form-input flex-1 font-mono uppercase" oninput="document.getElementById('secondary_color_picker').value = this.value">
+                            <input type="color" id="secondary_color_picker" value="{{ old('secondary_color', $settings['secondary_color']) }}" class="size-9 rounded border border-default-200 cursor-pointer p-0.5 bg-card" onchange="document.getElementById('secondary_color').value = this.value; updateColorPreviews();">
+                            <input type="text" id="secondary_color" name="secondary_color" value="{{ old('secondary_color', $settings['secondary_color']) }}" class="form-input flex-1 font-mono uppercase" oninput="document.getElementById('secondary_color_picker').value = this.value; updateColorPreviews();">
                         </div>
                         <p class="text-xs text-default-500 mt-1">Warna kontras gelap untuk sidebar dan kartu header (Standar: #14213d).</p>
+                    </div>
+                </div>
+
+                <!-- Live Interactive Color Preview Box -->
+                <div class="mt-5 p-4 rounded-xl border border-default-200 bg-default-50/60">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
+                        <h5 class="text-xs font-bold text-default-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="eye" class="size-4 text-primary"></i>
+                            <span>Pratinjau Langsung (Live Preview) Skema Warna</span>
+                        </h5>
+                        <span class="text-[11px] text-default-500">Berubah seketika saat warna primer/sekunder dipilih</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="p-3 rounded-lg bg-card border border-default-200 flex flex-col justify-between">
+                            <span class="text-[11px] font-semibold text-default-500 uppercase tracking-wider mb-2">Tombol Primer</span>
+                            <button type="button" id="preview_primary_btn" class="w-full py-2 px-3 text-xs font-semibold text-white rounded-md shadow-xs transition" style="background-color: {{ old('primary_color', $settings['primary_color']) }};">
+                                Mulai Ujian CBT
+                            </button>
+                        </div>
+                        <div class="p-3 rounded-lg bg-card border border-default-200 flex flex-col justify-between">
+                            <span class="text-[11px] font-semibold text-default-500 uppercase tracking-wider mb-2">Badge & Teks Aksen</span>
+                            <div class="space-y-1.5">
+                                <span id="preview_primary_badge" class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold" style="background-color: {{ old('primary_color', $settings['primary_color']) }}20; color: {{ old('primary_color', $settings['primary_color']) }};">
+                                    Sesi Aktif
+                                </span>
+                                <p id="preview_primary_text" class="text-xs font-semibold" style="color: {{ old('primary_color', $settings['primary_color']) }};">
+                                    Tautan & Status Aksen
+                                </p>
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-lg border border-default-200 flex flex-col justify-between" id="preview_secondary_box" style="background-color: {{ old('secondary_color', $settings['secondary_color']) }}; color: #ffffff;">
+                            <span class="text-[11px] font-semibold uppercase tracking-wider opacity-80 mb-2">Sidebar / Kontras Sekunder</span>
+                            <div class="flex items-center justify-between text-xs font-bold">
+                                <span>Navigasi Menu</span>
+                                <span class="size-2 rounded-full bg-emerald-400"></span>
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-card border border-default-200 flex flex-col justify-between">
+                            <span class="text-[11px] font-semibold text-default-500 uppercase tracking-wider mb-2">Item Aktif Sidebar</span>
+                            <div id="preview_active_nav" class="flex items-center gap-2 p-2 rounded-md text-xs font-bold text-white shadow-xs" style="background-color: {{ old('primary_color', $settings['primary_color']) }};">
+                                <i data-lucide="layers" class="size-3.5"></i>
+                                <span>Bank Soal CBT</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </x-cbt.card>
@@ -124,17 +200,37 @@
             <!-- Sub 2: Upload Logo & Favicon -->
             <x-cbt.card title="Logo Resmi Institusi & Favicon Browser" subtitle="Unggah aset grafis resmi lembaga dalam format transparan dan resolusi tinggi.">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <x-cbt.dropzone
-                        name="logo"
-                        id="logo_dropzone"
-                        label="Logo Resmi Institusi / Aplikasi"
-                        accept="image/png,image/jpeg,image/webp,image/svg+xml"
-                        maxSize="2MB"
-                        :currentUrl="$settings['logo_url']"
-                        hint="PNG, SVG, WEBP, atau JPG. Tampil di header portal, kartu ujian &amp; SKHU."
-                    />
+                    <div>
+                        @if($settings['logo_url'])
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-default-500">Logo institusi aktif</span>
+                                <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
+                                    <input type="checkbox" name="remove_logo" value="1" class="rounded border-default-300 text-danger focus:ring-danger">
+                                    <span>Hapus Logo (Gunakan Teks Default)</span>
+                                </label>
+                            </div>
+                        @endif
+                        <x-cbt.dropzone
+                            name="logo"
+                            id="logo_dropzone"
+                            label="Logo Resmi Institusi / Aplikasi"
+                            accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                            maxSize="2MB"
+                            :currentUrl="$settings['logo_url']"
+                            hint="PNG, SVG, WEBP, atau JPG. Tampil di header portal, kartu ujian &amp; SKHU."
+                        />
+                    </div>
 
                     <div>
+                        @if($settings['favicon_url'])
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-default-500">Favicon browser aktif</span>
+                                <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
+                                    <input type="checkbox" name="remove_favicon" value="1" class="rounded border-default-300 text-danger focus:ring-danger">
+                                    <span>Hapus Favicon (Gunakan Default)</span>
+                                </label>
+                            </div>
+                        @endif
                         <x-cbt.dropzone
                             name="favicon"
                             id="favicon_dropzone"
@@ -167,25 +263,47 @@
                         <p class="text-xs text-default-500 mt-1">Pesan bantuan yang ditampilkan di portal staf (staff.tesloka.test).</p>
                     </div>
 
-                    <x-cbt.dropzone
-                        name="student_login_bg"
-                        id="student_login_bg_dropzone"
-                        label="Gambar Latar Login Siswa (Opsional)"
-                        accept="image/png,image/jpeg,image/webp"
-                        maxSize="4MB"
-                        :currentUrl="$settings['student_login_bg']"
-                        hint="Gambar pemandangan kampus/institusi (Maks. 4MB)."
-                    />
+                    <div>
+                        @if($settings['student_login_bg'])
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-default-500">Latar portal siswa aktif</span>
+                                <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
+                                    <input type="checkbox" name="remove_student_login_bg" value="1" class="rounded border-default-300 text-danger focus:ring-danger">
+                                    <span>Hapus Gambar Latar</span>
+                                </label>
+                            </div>
+                        @endif
+                        <x-cbt.dropzone
+                            name="student_login_bg"
+                            id="student_login_bg_dropzone"
+                            label="Gambar Latar Login Siswa (Opsional)"
+                            accept="image/png,image/jpeg,image/webp"
+                            maxSize="4MB"
+                            :currentUrl="$settings['student_login_bg']"
+                            hint="Gambar pemandangan kampus/institusi (Maks. 4MB)."
+                        />
+                    </div>
 
-                    <x-cbt.dropzone
-                        name="staff_login_bg"
-                        id="staff_login_bg_dropzone"
-                        label="Gambar Latar Login Staf (Opsional)"
-                        accept="image/png,image/jpeg,image/webp"
-                        maxSize="4MB"
-                        :currentUrl="$settings['staff_login_bg']"
-                        hint="Gambar arsitektur atau simbol institusi (Maks. 4MB)."
-                    />
+                    <div>
+                        @if($settings['staff_login_bg'])
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-default-500">Latar portal staf aktif</span>
+                                <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
+                                    <input type="checkbox" name="remove_staff_login_bg" value="1" class="rounded border-default-300 text-danger focus:ring-danger">
+                                    <span>Hapus Gambar Latar</span>
+                                </label>
+                            </div>
+                        @endif
+                        <x-cbt.dropzone
+                            name="staff_login_bg"
+                            id="staff_login_bg_dropzone"
+                            label="Gambar Latar Login Staf (Opsional)"
+                            accept="image/png,image/jpeg,image/webp"
+                            maxSize="4MB"
+                            :currentUrl="$settings['staff_login_bg']"
+                            hint="Gambar arsitektur atau simbol institusi (Maks. 4MB)."
+                        />
+                    </div>
                 </div>
             </x-cbt.card>
         </div>
@@ -1180,6 +1298,12 @@
             activeBtn.classList.add('border-primary', 'text-primary');
         }
 
+        // Update hidden active_tab input in form
+        const activeTabInput = document.getElementById('active_tab');
+        if (activeTabInput) {
+            activeTabInput.value = tabId;
+        }
+
         // Adjust visibility of submit bar for general settings
         const submitBar = document.getElementById('settingsSubmitBar');
         if (submitBar) {
@@ -1201,6 +1325,46 @@
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
+    }
+
+    function setBrandingColors(primary, secondary) {
+        const primInput = document.getElementById('primary_color');
+        const primPicker = document.getElementById('primary_color_picker');
+        const secInput = document.getElementById('secondary_color');
+        const secPicker = document.getElementById('secondary_color_picker');
+
+        if (primInput) primInput.value = primary;
+        if (primPicker) primPicker.value = primary;
+        if (secInput) secInput.value = secondary;
+        if (secPicker) secPicker.value = secondary;
+
+        updateColorPreviews();
+    }
+
+    function updateColorPreviews() {
+        const primInput = document.getElementById('primary_color');
+        const secInput = document.getElementById('secondary_color');
+
+        const primary = (primInput && primInput.value ? primInput.value.trim() : '#2e33ff');
+        const secondary = (secInput && secInput.value ? secInput.value.trim() : '#14213d');
+
+        const btn = document.getElementById('preview_primary_btn');
+        if (btn) btn.style.backgroundColor = primary;
+
+        const badge = document.getElementById('preview_primary_badge');
+        if (badge) {
+            badge.style.backgroundColor = primary + '20';
+            badge.style.color = primary;
+        }
+
+        const text = document.getElementById('preview_primary_text');
+        if (text) text.style.color = primary;
+
+        const activeNav = document.getElementById('preview_active_nav');
+        if (activeNav) activeNav.style.backgroundColor = primary;
+
+        const secBox = document.getElementById('preview_secondary_box');
+        if (secBox) secBox.style.backgroundColor = secondary;
     }
 
     function setCertColors(primary, accent) {
@@ -1228,6 +1392,8 @@
         if (validTabs.includes(hash)) {
             switchSettingsTab(hash);
         }
+
+        updateColorPreviews();
 
         // Re-initialize lucide icons if needed
         if (typeof lucide !== 'undefined') {

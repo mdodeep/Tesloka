@@ -7,7 +7,7 @@
         $systemInstitution = \App\Models\Institution::first();
         $systemLogoUrl = $systemInstitution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
         $systemFaviconUrl = $systemInstitution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $systemInstName = $systemInstitution?->name ?? 'TESLOKA CBT';
+        $systemInstName = \App\Models\SystemSetting::get('app.name', $systemInstitution?->name ?? 'TESLOKA CBT');
     @endphp
     <title>@yield('title', 'Portal Staf') — {{ $systemInstName }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $systemFaviconUrl }}">
@@ -24,6 +24,7 @@
         }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <x-cbt.branding-styles />
     <script>
         (function() {
             try {
@@ -361,6 +362,27 @@
                             <button type="button" onclick="this.closest('.bg-success\\/10').remove()" class="text-success/70 hover:text-success transition" title="Tutup">
                                 <i data-lucide="x" class="size-4"></i>
                             </button>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="mb-5 p-4 rounded bg-danger/10 border border-danger/30 text-danger text-sm">
+                            <div class="flex items-start justify-between gap-2.5">
+                                <div class="flex items-start gap-2.5">
+                                    <i data-lucide="alert-octagon" class="size-5 shrink-0 text-danger mt-0.5"></i>
+                                    <div>
+                                        <h5 class="font-bold text-sm text-danger mb-1">Terdapat kesalahan pada isian formulir:</h5>
+                                        <ul class="list-disc list-inside space-y-0.5 text-xs text-danger/90">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="this.closest('.bg-danger\\/10').remove()" class="text-danger/70 hover:text-danger transition shrink-0" title="Tutup">
+                                    <i data-lucide="x" class="size-4"></i>
+                                </button>
+                            </div>
                         </div>
                     @endif
 

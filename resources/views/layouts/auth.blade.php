@@ -7,7 +7,8 @@
         $systemInstitution = \App\Models\Institution::first();
         $systemLogoUrl = $systemInstitution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
         $systemFaviconUrl = $systemInstitution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $systemInstName = $systemInstitution?->name ?? 'TESLOKA CBT';
+        $systemInstName = \App\Models\SystemSetting::get('app.name', $systemInstitution?->name ?? 'TESLOKA CBT');
+        $systemTagline = \App\Models\SystemSetting::get('app.tagline', 'Sistem Evaluasi & Ujian Berbasis Komputer On-Premise');
         $isStaff = request()->is('staff*') || request()->routeIs('staff.*');
         $bgFile = $isStaff
             ? \App\Models\SystemSetting::get('branding.staff_login_bg')
@@ -37,6 +38,7 @@
         }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <x-cbt.branding-styles />
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 {{ $bgFile ? 'bg-default-900/60 backdrop-blur-xs' : 'bg-default-50' }}">
     <div class="w-full max-w-md z-10 mx-auto">
@@ -46,6 +48,9 @@
                 <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-9 mx-auto mb-2 object-contain max-w-[220px]">
             </a>
             <p class="text-xs font-semibold text-default-500 uppercase tracking-widest">{{ $systemInstName }}</p>
+            @if($systemTagline)
+                <p class="text-[11px] text-default-400 mt-0.5">{{ $systemTagline }}</p>
+            @endif
         </div>
 
         @if($customInstructions)

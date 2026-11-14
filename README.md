@@ -340,6 +340,15 @@ Setelah menjalankan `php artisan migrate --seed`, seluruh akun awal institusi te
   - Ubuntu Standar: `/usr/bin/php artisan queue:work redis ...`
   Lalu jalankan: `supervisorctl reread && supervisorctl update`.
 
+### 7. Supervisor Manager aaPanel "Stopped" / Error `No module named 'pkg_resources'`
+- **Penyebab:** Versi `setuptools` di virtual environment Python aaPanel ter-upgrade ke versi 82+ (seperti 84.x) di mana modul `pkg_resources` telah dihapus resmi oleh Python.
+- **Solusi Cepat 1 Detik:**
+  ```bash
+  /www/server/panel/pyenv/bin/pip install --force-reinstall "setuptools<81"
+  systemctl restart supervisord
+  ```
+  Status Supervisor akan langsung kembali hijau `RUNNING`. (Atau gunakan opsi native systemd: `sudo apt install -y supervisor`).
+
 ---
 
 ## Perintah Artisan Bawaan

@@ -481,13 +481,18 @@ Berikut adalah 2 opsi solusi tuntas:
 
 #### 🔹 OPSI A: Memperbaiki Instalasi Plugin aaPanel "Supervisor Manager"
 Jika Anda ingin tetap menggunakan tombol GUI di dalam panel aaPanel:
-1. Sebelum menginstal Supervisor Manager, pastikan Anda telah memasang **Python Version Manager** di App Store dengan versi **Python 3.10**.
-2. Masuk ke terminal SSH dan perbarui dependensi pip di pyenv aaPanel:
+1. Sebelum menginstal Supervisor Manager, pastikan Anda telah memasang **Python Version Manager** di App Store dengan versi **Python 3.10** (atau Python bawaan aaPanel).
+2. Masuk ke terminal SSH dan perbaiki dependensi pip di pyenv aaPanel:
+   > [!WARNING]
+   > **JANGAN PERNAH upgrade `setuptools` tanpa batas versi!** Mulai dari `setuptools >= 82` (seperti versi 84.x), modul `pkg_resources` telah dihapus resmi oleh pengembang Python. Jika setuptools ter-upgrade ke 82+, `supervisord` akan langsung crash dengan pesan error: `ModuleNotFoundError: No module named 'pkg_resources'`.
+   
+   Jalankan perintah aman berikut (mematok `setuptools < 81`):
    ```bash
-   /www/server/panel/pyenv/bin/pip install --upgrade pip setuptools wheel
-   /www/server/panel/pyenv/bin/pip install supervisor
+   /www/server/panel/pyenv/bin/pip install --upgrade pip wheel
+   /www/server/panel/pyenv/bin/pip install --force-reinstall "setuptools<81" supervisor
+   systemctl restart supervisord
    ```
-3. Kembali ke **aaPanel > App Store**, cari **Supervisor Manager**, klik **Install**.
+3. Kembali ke **aaPanel > App Store**, cari **Supervisor Manager**, klik **Install** (atau buka **Settings** jika sudah terpasang). Status layanan kini akan berwarna hijau normal (`RUNNING`).
 4. Buka **Supervisor Manager > Settings > Add Daemon**:
    - **Name:** `tesloka-worker`
    - **Run User:** `www`
@@ -738,10 +743,18 @@ Jika seluruh baris berstatus **PASS [OK]**, sistem CBT TESLOKA telah 100% siap d
 
 ---
 
-### 🔴 Kendala 3: Supervisor Manager di aaPanel Gagal Start / Error Python
-- **Penyebab:** Versi Python di OS terlalu baru atau dependensi pyenv aaPanel bermasalah.
-- **Solusi Permanen (Gunakan Native Systemd Supervisor):**
-  Tinggalkan plugin GUI aaPanel dan gunakan supervisor native OS (Lihat panduan lengkap di **Bagian 5.7 Opsi B**):
+### 🔴 Kendala 3: Supervisor Manager di aaPanel Gagal Start / Error `ModuleNotFoundError: No module named 'pkg_resources'`
+- **Penyebab:** Pada aaPanel yang menggunakan Python 3.12 / pyenv terbaru, jika paket `setuptools` ter-upgrade ke versi 82+ (seperti 84.x), modul usang `pkg_resources` telah dihapus secara resmi oleh pengembang Python. Akibatnya daemon `supervisord` internal aaPanel crash saat dijalankan.
+- **Solusi Cepat 1 Detik (Perbaiki Plugin GUI aaPanel):**
+  Jalankan perintah berikut di SSH untuk menurunkan (pinning) versi `setuptools` ke versi di bawah 81 yang masih mendukung `pkg_resources`:
+  ```bash
+  /www/server/panel/pyenv/bin/pip install --force-reinstall "setuptools<81"
+  systemctl restart supervisord
+  systemctl status supervisord
+  ```
+  Status akan langsung berubah hijau `active (running)` dan tombol Start di aaPanel langsung normal.
+- **Solusi Alternatif Permanen (Gunakan Native Systemd Supervisor):**
+  Jika tidak ingin bergantung pada lingkungan virtual Python internal aaPanel, gunakan supervisor native bawaan Ubuntu/Debian (Lihat panduan lengkap di **Bagian 5.7 Opsi B**):
   ```bash
   sudo apt install -y supervisor
   sudo systemctl enable supervisor && sudo systemctl start supervisor

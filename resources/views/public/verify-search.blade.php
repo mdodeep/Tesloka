@@ -40,8 +40,8 @@
             <a href="{{ route('student.login') }}" class="px-3 py-1.5 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">
                 Portal Siswa
             </a>
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
-                <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                <i data-lucide="shield-check" class="size-3.5"></i>
                 Publik Sah
             </span>
         </div>
@@ -52,7 +52,7 @@
         <div class="bg-white border border-default-200 rounded-xl shadow-xs p-6 sm:p-10 space-y-6">
             <div class="text-center space-y-2">
                 <div class="size-16 rounded-2xl bg-primary/10 text-primary mx-auto flex items-center justify-center shadow-xs">
-                    <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    <i data-lucide="award" class="size-8"></i>
                 </div>
                 <h1 class="text-2xl font-black text-default-900 tracking-tight">Verifikasi Keaslian Sertifikat CBT</h1>
                 <p class="text-xs text-default-500 max-w-md mx-auto leading-relaxed">
@@ -61,7 +61,7 @@
             </div>
 
             <!-- Form Pencarian Publik -->
-            <form action="{{ route('certificate.search.post') }}" method="POST" class="space-y-4">
+            <form action="{{ route('certificate.search.post') }}" method="POST" class="space-y-4" onsubmit="this.querySelector('button[type=submit]').disabled=true; this.querySelector('button[type=submit] span').innerText='Memverifikasi...'; this.querySelector('#btn-spinner').classList.remove('hidden'); this.querySelector('#btn-icon').classList.add('hidden');">
                 @csrf
                 <div class="space-y-1.5">
                     <label for="token" class="block text-xs font-bold text-default-700 uppercase tracking-wider">
@@ -85,16 +85,17 @@
                 </div>
 
                 <button type="submit" class="w-full py-3 px-4 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
-                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <span>Cari & Verifikasi Sertifikat Sekarang</span>
+                    <div id="btn-spinner" class="hidden inline-block border-2 rounded-full size-4 animate-spin border-s-transparent border-white"></div>
+                    <i id="btn-icon" data-lucide="search" class="size-4"></i>
+                    <span>Cari &amp; Verifikasi Sertifikat Sekarang</span>
                 </button>
             </form>
 
             <!-- Informasi Keamanan & Isolasi Beban Server -->
             <div class="p-4 rounded-lg bg-emerald-50/60 border border-emerald-200 text-emerald-900 text-xs space-y-1.5">
                 <div class="flex items-center gap-2 font-bold text-emerald-800">
-                    <svg class="size-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    <span>Layanan Verifikasi Cepat & Terisolasi Penuh</span>
+                    <i data-lucide="zap" class="size-4 text-emerald-600 shrink-0"></i>
+                    <span>Layanan Verifikasi Cepat &amp; Terisolasi Penuh</span>
                 </div>
                 <p class="text-[11px] text-emerald-700 leading-relaxed">
                     Sistem verifikasi ini dilengkapi perlindungan cache Redis in-memory dan pembatasan laju request. Ratusan mahasiswa atau pihak ketiga yang melakukan pengecekan sertifikat secara bersamaan tidak akan mempengaruhi atau memperlambat sesi ujian CBT yang sedang aktif.

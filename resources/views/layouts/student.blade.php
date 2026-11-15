@@ -38,26 +38,29 @@
 
             <!-- Student Profile, Notifications & Status -->
             <div class="flex items-center gap-2 sm:gap-3">
-                <!-- In-App Notification Center -->
+                <!-- In-App Notification Center (Tailwick Topbar Notification Dropdown) -->
                 <div class="relative" id="studentNotifContainer">
-                    <button type="button" id="studentNotifBtn" onclick="toggleStudentNotifDropdown()" class="btn btn-icon size-9 bg-default-100 hover:bg-default-200 rounded text-default-600 relative cursor-pointer" title="{{ __('Notifikasi Peserta') }}">
-                        <i data-lucide="bell" class="size-4.5"></i>
-                        <span id="studentNotifBadge" class="hidden absolute -top-1 -right-1 size-4 bg-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">0</span>
+                    <button type="button" id="studentNotifBtn" onclick="toggleStudentNotifDropdown()" class="btn btn-icon size-8 hover:bg-default-150 rounded-full relative cursor-pointer" aria-haspopup="menu" aria-expanded="false" aria-label="{{ __('Notifikasi Peserta') }}" title="{{ __('Notifikasi Peserta') }}">
+                        <i data-lucide="bell-ring" class="size-4.5 text-default-600"></i>
+                        <span id="studentNotifBadge" class="hidden absolute -top-1 -end-1 min-w-4 h-4 px-1 bg-orange-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">0</span>
                     </button>
 
                     <!-- Popover Dropdown -->
-                    <div id="studentNotifDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-card border border-default-200 rounded-md shadow-lg z-50 overflow-hidden divide-y divide-default-100">
-                        <div class="p-3.5 bg-default-50 flex items-center justify-between">
+                    <div id="studentNotifDropdown" class="hidden absolute end-0 mt-2 w-84 sm:w-96 bg-card border border-default-200 rounded-md shadow-xl z-50 overflow-hidden divide-y divide-default-100" role="menu">
+                        <div class="p-3.5 sm:p-4 bg-card border-b border-default-200 flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span class="font-semibold text-xs text-default-800">{{ __('Notifikasi Peserta') }}</span>
-                                <span id="studentNotifUnreadCount" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary">0 belum dibaca</span>
+                                <span class="font-semibold text-sm sm:text-base text-default-800">{{ __('Notifikasi Peserta') }}</span>
+                                <span id="studentNotifHeaderBadge" class="min-w-5 h-5 px-1.5 font-semibold bg-orange-500 rounded text-white flex items-center justify-center text-xs">0</span>
                             </div>
                             <button type="button" onclick="markAllStudentNotifsRead()" class="text-xs text-primary hover:underline font-semibold cursor-pointer">
                                 {{ __('Tandai Semua Dibaca') }}
                             </button>
                         </div>
-                        <div id="studentNotifList" class="max-h-80 overflow-y-auto divide-y divide-default-50 text-xs">
-                            <div class="p-6 text-center text-default-400">{{ __('Memuat notifikasi...') }}</div>
+                        <div id="studentNotifList" class="h-80 max-h-80 overflow-y-auto divide-y divide-default-100 text-xs">
+                            <div class="p-8 text-center text-default-400">
+                                <div class="inline-block border-2 rounded-full size-6 animate-spin border-s-transparent border-primary mb-2"></div>
+                                <p class="text-xs">{{ __('Memuat notifikasi...') }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -229,7 +232,7 @@
 
         function renderStudentNotifs(items, unreadCount) {
             const badge = document.getElementById('studentNotifBadge');
-            const countText = document.getElementById('studentNotifUnreadCount');
+            const headerBadge = document.getElementById('studentNotifHeaderBadge');
             const list = document.getElementById('studentNotifList');
             if (badge) {
                 if (unreadCount > 0) {
@@ -239,23 +242,40 @@
                     badge.classList.add('hidden');
                 }
             }
-            if (countText) countText.textContent = unreadCount + ' belum dibaca';
+            if (headerBadge) {
+                headerBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+            }
             if (!list) return;
 
             if (!items || items.length === 0) {
-                list.innerHTML = '<div class="p-6 text-center text-default-400">Tidak ada notifikasi saat ini.</div>';
+                list.innerHTML = `
+                    <div class="p-8 text-center text-default-400">
+                        <i data-lucide="bell-off" class="size-8 mx-auto text-default-300 mb-2"></i>
+                        <p class="font-medium text-xs">Tidak ada notifikasi saat ini.</p>
+                    </div>
+                `;
+                if (window.lucide) window.lucide.createIcons();
                 return;
             }
 
             list.innerHTML = items.map(n => `
-                <div class="p-3.5 hover:bg-default-50 transition cursor-pointer ${n.read_at ? 'opacity-70' : 'bg-primary/5'}" onclick="markStudentNotifRead('${n.id}', '${n.action_url || ''}')">
-                    <div class="flex items-start justify-between gap-2">
-                        <div class="font-semibold text-xs text-default-800">${escapeHtml(n.title)}</div>
-                        <span class="text-[10px] text-default-400 shrink-0">${n.created_at}</span>
+                <div class="p-3.5 hover:bg-default-50 transition flex items-start gap-3 cursor-pointer ${n.read_at ? 'opacity-75' : 'bg-primary/5'}" onclick="markStudentNotifRead('${n.id}', '${n.action_url || ''}')">
+                    <div class="size-10 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        <i data-lucide="bell" class="size-5"></i>
                     </div>
-                    <div class="text-[11px] text-default-600 mt-1 leading-relaxed">${escapeHtml(n.message)}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="font-semibold text-xs text-default-800 truncate"><b>${escapeHtml(n.title)}</b></div>
+                            <div class="flex items-center gap-1.5 text-[11px] text-default-400 shrink-0">
+                                ${!n.read_at ? '<span class="size-1.5 bg-primary rounded-full shrink-0"></span>' : ''}
+                                <span>${n.created_at}</span>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-default-600 mt-1 leading-relaxed line-clamp-2">${escapeHtml(n.message)}</div>
+                    </div>
                 </div>
             `).join('');
+            if (window.lucide) window.lucide.createIcons();
         }
 
         async function markStudentNotifRead(id, url) {

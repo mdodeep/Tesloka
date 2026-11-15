@@ -280,30 +280,60 @@
 
                     <!-- Right: Notifications & User Profile -->
                     <div class="flex items-center gap-3">
-                        <!-- In-App Notification Center -->
+                        <!-- In-App Notification Center (Tailwick Topbar Notification Dropdown) -->
                         <div class="relative" id="staffNotifContainer">
-                            <button type="button" id="staffNotifBtn" onclick="toggleStaffNotifDropdown()" class="btn btn-icon size-9 bg-default-100 hover:bg-default-200 rounded text-default-600 relative" title="Pusat Notifikasi">
-                                <i data-lucide="bell" class="size-4.5"></i>
-                                <span id="staffNotifBadge" class="hidden absolute -top-1 -right-1 size-4 bg-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">0</span>
+                            <button type="button" id="staffNotifBtn" onclick="toggleStaffNotifDropdown()" class="btn btn-icon size-8 hover:bg-default-150 rounded-full relative cursor-pointer" aria-haspopup="menu" aria-expanded="false" aria-label="Notifikasi" title="Pusat Notifikasi">
+                                <i data-lucide="bell-ring" class="size-4.5 text-default-600"></i>
+                                <span id="staffNotifBadge" class="hidden absolute -top-1 -end-1 min-w-4 h-4 px-1 bg-orange-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">0</span>
                             </button>
 
                             <!-- Notification Dropdown -->
-                            <div id="staffNotifDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-card border border-default-200 rounded-md shadow-lg z-50 overflow-hidden divide-y divide-default-100">
-                                <div class="p-3.5 bg-default-50 flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-semibold text-xs text-default-800">Notifikasi</span>
-                                        <span id="staffNotifUnreadCount" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary">0 belum dibaca</span>
+                            <div id="staffNotifDropdown" class="hidden absolute end-0 mt-2 w-84 sm:w-96 bg-card border border-default-200 rounded-md shadow-xl z-50 overflow-hidden divide-y divide-default-100" role="menu">
+                                <!-- Header -->
+                                <div class="p-3.5 sm:p-4 border-b border-default-200 bg-card">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="text-sm sm:text-base font-semibold text-default-800">Notifikasi</h3>
+                                            <span id="staffNotifHeaderBadge" class="min-w-5 h-5 px-1.5 font-semibold bg-orange-500 rounded text-white flex items-center justify-center text-xs">0</span>
+                                        </div>
+                                        <button type="button" onclick="markAllStaffNotifsRead()" class="text-xs text-primary hover:underline font-semibold cursor-pointer">
+                                            Tandai Semua Dibaca
+                                        </button>
                                     </div>
-                                    <button type="button" onclick="markAllStaffNotifsRead()" class="text-xs text-primary hover:underline font-semibold cursor-pointer">
-                                        Tandai Semua Dibaca
+                                </div>
+
+                                <!-- Filter Tabs (Tailwick Tabs) -->
+                                <nav class="flex gap-x-1 bg-default-150 p-2 border-b border-default-200" aria-label="Tabs" role="tablist">
+                                    <button type="button" onclick="filterStaffNotifs('all')" id="tab-notif-all" class="py-1 px-3 rounded font-semibold inline-flex items-center text-xs whitespace-nowrap bg-card text-primary shadow-xs transition cursor-pointer">
+                                        Semua
                                     </button>
+                                    <button type="button" onclick="filterStaffNotifs('unread')" id="tab-notif-unread" class="py-1 px-3 rounded font-semibold inline-flex items-center text-xs whitespace-nowrap text-default-500 hover:text-default-700 transition cursor-pointer">
+                                        Belum Dibaca
+                                    </button>
+                                    <button type="button" onclick="filterStaffNotifs('exam')" id="tab-notif-exam" class="py-1 px-3 rounded font-semibold inline-flex items-center text-xs whitespace-nowrap text-default-500 hover:text-default-700 transition cursor-pointer">
+                                        Ujian &amp; Sesi
+                                    </button>
+                                    <button type="button" onclick="filterStaffNotifs('security')" id="tab-notif-security" class="py-1 px-3 rounded font-semibold inline-flex items-center text-xs whitespace-nowrap text-default-500 hover:text-default-700 transition cursor-pointer">
+                                        Keamanan
+                                    </button>
+                                </nav>
+
+                                <!-- Content List -->
+                                <div id="staffNotifList" class="h-80 max-h-80 overflow-y-auto divide-y divide-default-100 text-xs">
+                                    <div class="p-8 text-center text-default-400">
+                                        <div class="inline-block border-2 rounded-full size-6 animate-spin border-s-transparent border-primary mb-2"></div>
+                                        <p class="text-xs">Memuat notifikasi...</p>
+                                    </div>
                                 </div>
-                                <div id="staffNotifList" class="max-h-80 overflow-y-auto divide-y divide-default-50 text-xs">
-                                    <div class="p-6 text-center text-default-400">Memuat notifikasi...</div>
-                                </div>
-                                <div class="p-2.5 bg-default-50 text-center">
-                                    <a href="{{ route('staff.settings.notification-logs.index') }}" class="text-xs font-semibold text-default-600 hover:text-primary">
-                                        Lihat Riwayat Pengiriman Lengkap &rarr;
+
+                                <!-- Footer (Tailwick Style) -->
+                                <div class="flex items-center justify-between p-3.5 border-t border-default-200 bg-default-50/50">
+                                    <a href="{{ route('staff.settings.notification-logs.index') }}" class="text-xs font-semibold text-default-700 hover:text-primary transition">
+                                        Log Pengiriman
+                                    </a>
+                                    <a href="{{ route('staff.notifications.index') }}" class="btn btn-sm text-white bg-primary hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
+                                        <span>Lihat Semua</span>
+                                        <i data-lucide="move-right" class="size-3.5"></i>
                                     </a>
                                 </div>
                             </div>
@@ -629,6 +659,9 @@
             }
         });
 
+        let staffNotificationsCache = [];
+        let currentStaffNotifFilter = 'all';
+
         function fetchStaffNotifications() {
             fetch("{{ route('staff.notifications.index') }}", {
                 credentials: 'same-origin',
@@ -640,55 +673,130 @@
                 .then(res => res.json())
                 .then(data => {
                     const badge = document.getElementById('staffNotifBadge');
-                    const unreadText = document.getElementById('staffNotifUnreadCount');
-                    const list = document.getElementById('staffNotifList');
+                    const headerBadge = document.getElementById('staffNotifHeaderBadge');
 
-                    if (data.unread_count > 0) {
-                        badge.textContent = data.unread_count > 99 ? '99+' : data.unread_count;
-                        badge.classList.remove('hidden');
-                        unreadText.textContent = `${data.unread_count} belum dibaca`;
-                    } else {
-                        badge.classList.add('hidden');
-                        unreadText.textContent = '0 belum dibaca';
+                    const count = data.unread_count || 0;
+                    if (badge) {
+                        if (count > 0) {
+                            badge.textContent = count > 99 ? '99+' : count;
+                            badge.classList.remove('hidden');
+                        } else {
+                            badge.classList.add('hidden');
+                        }
+                    }
+                    if (headerBadge) {
+                        headerBadge.textContent = count > 99 ? '99+' : count;
                     }
 
-                    if (!data.notifications || data.notifications.length === 0) {
-                        list.innerHTML = `
-                            <div class="p-6 text-center text-default-400">
-                                <i data-lucide="bell-off" class="size-8 mx-auto text-default-300 mb-2"></i>
-                                <p>Belum ada notifikasi baru.</p>
-                            </div>
-                        `;
-                        if (window.lucide) window.lucide.createIcons();
-                        return;
-                    }
-
-                    let html = '';
-                    data.notifications.forEach(n => {
-                        html += `
-                            <div class="p-3.5 hover:bg-default-50 transition flex items-start gap-3 ${!n.is_read ? 'bg-primary/5' : ''}">
-                                <div class="size-2 rounded-full mt-1.5 shrink-0 ${!n.is_read ? 'bg-primary' : 'bg-transparent'}"></div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="font-semibold text-default-800 text-xs">${n.title}</div>
-                                    <p class="text-default-500 text-xs mt-0.5 line-clamp-2">${n.message}</p>
-                                    <div class="flex items-center gap-2 mt-1.5 text-xs text-default-400">
-                                        <span>${n.time_ago}</span>
-                                        ${!n.is_read ? `
-                                            <button type="button" onclick="markStaffNotifRead(${n.id})" class="text-primary hover:underline font-semibold cursor-pointer">
-                                                Tandai dibaca
-                                            </button>
-                                        ` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    list.innerHTML = html;
-                    if (window.lucide) window.lucide.createIcons();
+                    staffNotificationsCache = data.notifications || [];
+                    renderStaffNotificationList();
                 })
                 .catch(() => {
-                    document.getElementById('staffNotifList').innerHTML = '<div class="p-4 text-center text-xs text-danger">Gagal memuat notifikasi.</div>';
+                    const list = document.getElementById('staffNotifList');
+                    if (list) {
+                        list.innerHTML = '<div class="p-6 text-center text-xs text-danger">Gagal memuat notifikasi.</div>';
+                    }
                 });
+        }
+
+        function filterStaffNotifs(filterType) {
+            currentStaffNotifFilter = filterType;
+            const tabs = ['all', 'unread', 'exam', 'security'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-notif-${t}`);
+                if (!btn) return;
+                if (t === filterType) {
+                    btn.className = 'py-1 px-3 rounded font-semibold inline-flex items-center text-xs whitespace-nowrap bg-card text-primary shadow-xs transition cursor-pointer';
+                } else {
+                    btn.className = 'py-1 px-3 rounded font-semibold inline-flex items-center text-xs whitespace-nowrap text-default-500 hover:text-default-700 transition cursor-pointer';
+                }
+            });
+            renderStaffNotificationList();
+        }
+
+        function renderStaffNotificationList() {
+            const list = document.getElementById('staffNotifList');
+            if (!list) return;
+
+            let filtered = staffNotificationsCache;
+            if (currentStaffNotifFilter === 'unread') {
+                filtered = staffNotificationsCache.filter(n => !n.is_read);
+            } else if (currentStaffNotifFilter === 'exam') {
+                filtered = staffNotificationsCache.filter(n => {
+                    const t = (n.type || '').toLowerCase();
+                    const title = (n.title || '').toLowerCase();
+                    return t.includes('exam') || t.includes('session') || title.includes('ujian') || title.includes('sesi');
+                });
+            } else if (currentStaffNotifFilter === 'security') {
+                filtered = staffNotificationsCache.filter(n => {
+                    const t = (n.type || '').toLowerCase();
+                    const title = (n.title || '').toLowerCase();
+                    return t.includes('security') || t.includes('auth') || title.includes('keamanan') || title.includes('password') || title.includes('login') || title.includes('2fa');
+                });
+            }
+
+            if (!filtered || filtered.length === 0) {
+                list.innerHTML = `
+                    <div class="p-8 text-center text-default-400">
+                        <i data-lucide="bell-off" class="size-8 mx-auto text-default-300 mb-2"></i>
+                        <p class="font-medium text-xs">Belum ada notifikasi pada kategori ini.</p>
+                    </div>
+                `;
+                if (window.lucide) window.lucide.createIcons();
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(n => {
+                let iconName = 'bell';
+                let iconBg = 'bg-default-100 text-default-600';
+
+                const t = (n.type || '').toLowerCase();
+                const title = (n.title || '').toLowerCase();
+
+                if (t.includes('exam') || t.includes('session') || title.includes('ujian') || title.includes('sesi')) {
+                    iconName = 'file-text';
+                    iconBg = 'bg-primary/10 text-primary';
+                } else if (t.includes('security') || t.includes('auth') || title.includes('keamanan') || title.includes('password') || title.includes('2fa')) {
+                    iconName = 'shield-alert';
+                    iconBg = 'bg-warning/10 text-warning';
+                } else if (t.includes('error') || t.includes('danger') || title.includes('gagal') || title.includes('peringatan')) {
+                    iconName = 'alert-circle';
+                    iconBg = 'bg-danger/10 text-danger';
+                } else if (t.includes('success') || t.includes('cert') || title.includes('sukses') || title.includes('sertifikat')) {
+                    iconName = 'award';
+                    iconBg = 'bg-success/10 text-success';
+                }
+
+                html += `
+                    <div class="p-3.5 hover:bg-default-50 transition flex items-start gap-3 ${!n.is_read ? 'bg-primary/5' : ''}">
+                        <div class="size-10 rounded-md ${iconBg} flex items-center justify-center shrink-0">
+                            <i data-lucide="${iconName}" class="size-5"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="font-semibold text-default-800 text-xs truncate"><b>${n.title}</b></div>
+                                <div class="flex items-center gap-1.5 text-[11px] text-default-400 shrink-0">
+                                    ${!n.is_read ? '<span class="size-1.5 bg-primary rounded-full shrink-0"></span>' : ''}
+                                    <span>${n.time_ago}</span>
+                                </div>
+                            </div>
+                            <p class="text-default-500 text-xs mt-1 line-clamp-2 leading-relaxed">${n.message}</p>
+                            <div class="flex items-center justify-between gap-2 mt-2 pt-1 border-t border-default-50">
+                                ${n.action_url ? `<a href="${n.action_url}" class="text-[11px] font-semibold text-primary hover:underline inline-flex items-center gap-1">Buka Tautan &rarr;</a>` : '<span></span>'}
+                                ${!n.is_read ? `
+                                    <button type="button" onclick="markStaffNotifRead(${n.id})" class="text-[11px] text-default-400 hover:text-primary font-medium cursor-pointer">
+                                        Tandai Dibaca
+                                    </button>
+                                ` : '<span class="text-[10px] text-default-300 font-medium">Dibaca</span>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            list.innerHTML = html;
+            if (window.lucide) window.lucide.createIcons();
         }
 
         function markStaffNotifRead(id) {

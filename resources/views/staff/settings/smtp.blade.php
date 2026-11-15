@@ -215,7 +215,7 @@ function executeSmtpTest() {
     }
 
     btn.disabled = true;
-    btn.innerHTML = '<span class="inline-flex items-center gap-1.5"><svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg> Mengirim...</span>';
+    btn.innerHTML = '<span class="inline-flex items-center gap-1.5"><div class="inline-block border-2 rounded-full size-4 animate-spin border-s-transparent border-white"></div> Mengirim...</span>';
     box.className = 'p-3 rounded text-xs font-medium border bg-blue-50 text-blue-800 border-blue-200 block';
     box.innerHTML = 'Menghubungkan ke server SMTP dan mengirimkan pesan...';
 

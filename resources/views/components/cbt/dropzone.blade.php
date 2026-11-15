@@ -66,10 +66,7 @@
         <div class="border border-default-200 rounded-lg bg-white p-3.5 shadow-2xs transition-all hover:border-primary/40">
             <!-- Loading Indicator Konversi WebP 60% -->
             <div id="converting_{{ $inputId }}" class="hidden flex items-center gap-2.5 p-2.5 bg-primary/5 rounded-md border border-primary/20 text-xs text-primary mb-3">
-                <svg class="size-4 animate-spin shrink-0 text-primary" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                </svg>
+                <div class="inline-block border-2 rounded-full size-4 animate-spin border-s-transparent border-primary shrink-0"></div>
                 <div class="flex-1 min-w-0">
                     <strong class="font-semibold block text-primary">Mengompresi ke WebP 60%...</strong>
                     <span class="text-[11px] text-primary/80">Mengoptimalkan efisiensi ukuran gambar dengan visual jernih</span>

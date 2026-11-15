@@ -640,7 +640,10 @@ php artisan key:generate --force
 
 # 3. Jalankan migrasi tabel database dan data seeder institusi:
 php artisan migrate --force
-php artisan db:seed --force
+
+# Pada server produksi (APP_ENV=production), jalankan ProductionSeeder (hanya 1 akun admin, 0 dummy data):
+php artisan db:seed --class=ProductionSeeder --force
+# (Kredensial awal Administrator: username 'admin', password 'Tesloka2026!')
 
 # 4. Hubungkan symlink storage publik:
 php artisan storage:link

@@ -14,8 +14,10 @@
   <img src="https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel 13">
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
-  <img src="https://img.shields.io/badge/Redis-7%2B%20Cache-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-248%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="248 Tests Passed">
+  <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
+  <img src="https://img.shields.io/badge/Tests-284%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="284 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-2.105%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.105 Assertions">
+  <img src="https://img.shields.io/badge/UI_Kit-Tailwick%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwick Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
 </p>
@@ -24,80 +26,177 @@
 
 ## Daftar Isi
 - [Apa Itu TESLOKA?](#apa-itu-tesloka)
-- [Arsitektur Domain & Tiga Portal](#arsitektur-domain--tiga-portal)
-- [Fitur Utama](#fitur-utama)
-- [Matriks Sizing & Spesifikasi Server](#matriks-sizing--spesifikasi-server)
-- [Panduan Instalasi Lokal (Development)](#panduan-instalasi-lokal-development)
-- [Panduan Deployment Produksi (VPS / aaPanel / Linux)](#panduan-deployment-produksi-vps--aapanel--linux)
-- [Akun Demo & Kredensial Default](#akun-demo--kredensial-default)
+- [Arsitektur Tiga Portal Mandiri](#arsitektur-tiga-portal-mandiri)
+- [16 Modul Utama Portal Staf & Administrasi](#16-modul-utama-portal-staf--administrasi)
+- [Fitur Utama & Keunggulan Sistem](#fitur-utama--keunggulan-sistem)
+- [Integrasi Asesmen PTIQ English Proficiency Test (140 Butir)](#integrasi-asesmen-ptiq-english-proficiency-test-140-butir)
+- [Standardisasi Antarmuka Tailwick & Multi-Device 12 Viewport](#standardisasi-antarmuka-tailwick--multi-device-12-viewport)
+- [Matriks Sizing & Spesifikasi Server VPS](#matriks-sizing--spesifikasi-server-vps)
+- [Panduan Instalasi Lingkungan Lokal (Development)](#panduan-instalasi-lingkungan-lokal-development)
+- [Pemisahan Seeder: Produksi Bersih vs Simulasi Lokal](#pemisahan-seeder-produksi-bersih-vs-simulasi-lokal)
+- [Akun Demo & Kredensial Bawaan Seeder](#akun-demo--kredensial-bawaan-seeder)
+- [Panduan Deployment Produksi (Linux Ubuntu / aaPanel)](#panduan-deployment-produksi-linux-ubuntu--aapanel)
 - [Panduan Pemecahan Masalah (Troubleshooting)](#panduan-pemecahan-masalah-troubleshooting)
-- [Perintah Artisan Bawaan](#perintah-artisan-bawaan)
-- [Struktur Direktori](#struktur-direktori)
-- [Lisensi](#lisensi)
+- [Perintah CLI Artisan Bawaan](#perintah-cli-artisan-bawaan)
+- [Automated Testing & Jaminan QA/QC](#automated-testing--jaminan-qaqc)
+- [Struktur Direktori Proyek](#struktur-direktori-proyek)
+- [Lisensi & Hak Cipta](#lisensi--hak-cipta)
 
 ---
 
 ## Apa Itu TESLOKA?
 
-**TESLOKA** adalah sistem Computer-Based Test (CBT) komprehensif tingkat institusi berbasis Laravel 13 dan PostgreSQL 16 ACID. Dirancang untuk diinstal secara mandiri di server milik institusi (*on-premise single-tenant*) — bukan model SaaS cloud bersama. Satu instalasi melayani satu sekolah, madrasah, perguruan tinggi, dinas pendidikan, atau lembaga sertifikasi.
+**TESLOKA** adalah platform Computer-Based Test (CBT) tingkat institusi berbasis Laravel 13 dan PostgreSQL 16+ ACID yang dirancang untuk dioperasikan secara mandiri di server milik institusi (*on-premise single-tenant*). Satu instalasi didedikasikan penuh untuk satu sekolah, madrasah, perguruan tinggi, ma'had aly, pondok pesantren, dinas pendidikan, atau lembaga sertifikasi kejuruan.
 
-Aplikasi ini mencakup siklus evaluasi akademik lengkap:
-1. **Penyusunan Bank Soal & Blueprint:** 6 format butir soal (Pilihan Ganda, PG Kompleks/Multi-Jawaban, Menjodohkan, Esai Rubrik, Skala/Likert, Benar/Salah) dengan dukungan rumus LaTeX KaTeX, stimulus teks wacana, audio listening, dan video.
-2. **Pelaksanaan Ujian Aman:** Timer server-side absolut, autosave transaksional terenkripsi, submit ber-hash SHA-256 anti-sengketa, proteksi Safe Exam Browser (SEB), dan snapshot kamera pengawas.
-3. **Pengawasan Real-Time:** Dasbor pengawas ruang, deteksi tab-switch/blur, penyesuaian waktu, pause sesi, rilis token dinamis, dan reset sesi perangkat macet.
-4. **Penilaian & Psikometri:** Penilaian otomatis, koreksi esai berbasis kriteria rubrik, regrade massal, dan kalkulasi psikometri butir soal (Tingkat Kesukaran $P$, Daya Beda $D$, Efektivitas Distraktor, dan Koefisien Reliabilitas Cronbach's Alpha / KR-20).
-5. **Kelulusan & Sertifikat Publik:** Penetapan kelulusan, penerbitan sertifikat digital berstandar cetak A4 fisik, QR Code verifikasi publik instan tanpa membebani server ujian aktif.
+Aplikasi ini menolak ketergantungan pada model SaaS *multi-tenant* bersama untuk memastikan:
+1. **Kedaulatan Data Penuh (Data Sovereignty):** Naskah bank soal rahasia, data pribadi siswa (NIK/NISN), rekaman pengawasan, dan riwayat nilai tidak pernah dikirimkan ke cloud pihak ketiga.
+2. **PostgreSQL Sebagai Satu-Satunya Sumber Kebenaran (Single Source of Truth):** Seluruh jawaban peserta, lembar tanda terima submit (*digital receipt*), log heartbeat proctoring, dan riwayat revisi disimpan langsung secara transaksional ke PostgreSQL dengan penguncian baris (`SELECT ... FOR UPDATE`), bukan menggantungkan integritas pada LocalStorage atau RAM yang rentan hilang saat listrik padam.
+3. **Ketahanan Jaringan Ekstrem (Zero Data Loss):** Algoritma *Monotonic Revision Sequence* mencegah request autosave lama menimpa revisi baru pada koneksi WiFi yang mengalami *jitter* atau *packet reordering*.
 
 ---
 
-## Arsitektur Domain & Tiga Portal
+## Arsitektur Tiga Portal Mandiri
 
-TESLOKA memisahkan antarmuka operasional menjadi tiga portal terisolasi:
+TESLOKA membagi antarmuka operasional menjadi tiga portal yang terisolasi secara komputasi dan hak akses:
 
 ```mermaid
 flowchart TD
-    DNS["Permintaan Domain Pengguna"] --> Router{"Router Domain TESLOKA"}
-    Router -->|"staff.institusi.ac.id"| StaffPortal["Portal Staf & Administrasi\n(Admin, Dosen, Pengawas)"]
-    Router -->|"ujian.institusi.ac.id"| ExamPortal["Portal Ujian Siswa\n(Pengerjaan Soal & Autosave)"]
-    Router -->|"sertifikat.institusi.ac.id"| CertPortal["Portal Verifikasi Publik\n(Cek Ijazah / Scan QR Tanpa Login)"]
-    Router -->|"cbt.institusi.ac.id (Single-Domain)"| SingleRoute["Routing Otomatis Berdasarkan Path\n(/staff, /ujian, /verifikasi-sertifikat)"]
+    User["Permintaan Domain Pengguna"] --> Router{"Router Domain TESLOKA"}
+    Router -->|"staff.tesloka.test / staff.*"| StaffPortal["Portal Staf & Administrasi\n(Admin, Dosen/Guru, Pengawas, Auditor)"]
+    Router -->|"ujian.tesloka.test / ujian.*"| StudentPortal["Portal Ujian Peserta (Siswa)\n(Pengerjaan Soal, Timer Server, Autosave)"]
+    Router -->|"sertifikat.tesloka.test / sertifikat.*"| CertPortal["Portal Verifikasi Sertifikat Publik\n(Pencarian Resi & QR Code Tanpa Login)"]
+    Router -->|"cbt.institusi.ac.id (Single-Domain)"| SingleDomain["Routing Otomatis Berdasarkan Path\n(/staff/..., /ujian/..., /verifikasi-sertifikat)"]
 ```
 
-### Fleksibilitas Penamaan Domain:
-- **Mode Multi-Subdomain (Rekomendasi Resmi):**
-  - `staff.domain.ac.id`  → Portal Staf, Dosen, & Pengawas
-  - `ujian.domain.ac.id`  → Portal Siswa/Mahasiswa
-  - `sertifikat.domain.ac.id` → Portal Publik Verifikasi Sertifikat
-- **Mode Single-Domain (1 Domain Saja):**
-  - Admin/Staf: `https://cbt.domain.ac.id/staff/login`
-  - Siswa: `https://cbt.domain.ac.id/ujian/login`
-  - Verifikasi: `https://cbt.domain.ac.id/verifikasi-sertifikat`
-- **Mode Offline LAN Lab (Tanpa Internet):**
-  - Staf: `http://IP_SERVER/staff/login`
-  - Siswa: `http://IP_SERVER/ujian/login`
+### Opsi Konfigurasi Domain:
+1. **Mode Multi-Subdomain (Rekomendasi Produksi Resmi):**
+   - Portal Staf: `https://staff.institusi.ac.id/`
+   - Portal Siswa: `https://ujian.institusi.ac.id/`
+   - Portal Sertifikat Publik: `https://sertifikat.institusi.ac.id/`
+2. **Mode Single-Domain (1 Alamat Domain Saja):**
+   - Portal Staf: `https://cbt.institusi.ac.id/staff/login`
+   - Portal Siswa: `https://cbt.institusi.ac.id/ujian/login`
+   - Verifikasi Publik: `https://cbt.institusi.ac.id/verifikasi-sertifikat`
+3. **Mode Offline LAN Laboratorium (Tanpa Sambungan Internet):**
+   - Staf: `http://192.168.1.10/staff/login`
+   - Siswa: `http://192.168.1.10/ujian/login`
+   - Seluruh aset font Sora lokal, ikon Lucide, dan logo institusi termuat 100% lokal tanpa CDN eksternal.
 
 ---
 
-## Matriks Sizing & Spesifikasi Server (1 vCPU 2GB s.d. 16 vCPU 32GB)
+## 16 Modul Utama Portal Staf & Administrasi
 
-Sistem TESLOKA dapat dijalankan mulai dari VPS hemat 1-2 vCPU dengan 2 GB RAM hingga server fisik multi-core 32 GB RAM. Sesuaikan alokasi memori PostgreSQL, PHP-FPM, dan Redis agar performa ujian tetap berada di bawah 50 ms dan tidak terjadi *Out of Memory (OOM)*:
+Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang telah distandardisasi dengan komponen native Tailwick:
+
+| No | Modul Staf | URL Rute | Deskripsi Fungsional & Kapabilitas |
+|:---:|:---|:---|:---|
+| **1** | **Dashboard Eksekutif** | `/staff/dashboard` | Statistik real-time, chart Apex area/bar aktivitas ujian, indikator server, dan ringkasan sesi aktif. |
+| **2** | **Manajemen Pengguna** | `/staff/users` | Pengelolaan multi-peran (Admin, Guru, Pengawas, Siswa), impor Excel massal, reset password, dan bilah aksi massal (*bulk action*). |
+| **3** | **Struktur Akademik** | `/staff/academic` | 5 tab data master: Tahun Ajaran, Semester, Jurusan, Kelas/Rombel, dan Mata Pelajaran beserta cetak kartu rombel massal. |
+| **4** | **Bank Soal & Konten** | `/staff/question-banks` | Bank soal 7 format butir, stimulus wacana, rumus KaTeX, ekspor Word (.docx) OpenXML, dan impor multi-format (Aiken, GIFT, CSV, XLSX, Media Bundle ZIP). |
+| **5** | **Perancangan Ujian** | `/staff/exams` | Konfigurasi paket ujian, cetak biru (*blueprint*), bobot, durasi, KKM, jadwal aktif, dan toggle mode simulasi (*try out*). |
+| **6** | **Ruang Ujian** | `/staff/rooms` | Manajemen laboratorium komputer fisik, kapasitas kursi, denah nomor meja, dan status ketersediaan ruang. |
+| **7** | **Sesi & Penjadwalan** | `/staff/sessions` | Penjadwalan sesi lab, rilis token dinamis, alokasi pengawas, serta pencetakan 7 dokumen legalitas sesi (A4). |
+| **8** | **Penilaian & Koreksi** | `/staff/grading` | Rekapitulasi skor objektif otomatis, pusat koreksi esai berbasis kriteria rubrik dengan fitur *Blind Marking*, dan regrade massal. |
+| **9** | **Hasil & Kelulusan** | `/staff/graduation` | Yudisium nilai, penetapan ambang KKM, penerbitan sertifikat digital berstempel resmi, dan Surat Keterangan Lulus (SKL). |
+| **10** | **Grafik & Analitik** | `/staff/reports` | Analisis psikometri butir soal klasik: Tingkat Kesukaran ($P$), Daya Beda ($D$), matriks efektivitas distraktor (Upper/Lower 27%), dan Cronbach's Alpha / KR-20. |
+| **11** | **Delegasi & Wewenang**| `/staff/delegations` | Manajemen pendelegasian mandat administratif sementara antar-staf dengan batas waktu (*expiry date*) dan audit trail. |
+| **12** | **Four-Eyes Approval** | `/staff/approvals` | Mekanisme persetujuan ganda (*maker-checker*) untuk aksi kritis: penghapusan paket soal, ralat nilai kelulusan, dan restore basis data. |
+| **13** | **Jejak Audit Sistem** | `/staff/security/audit-logs` | Pencatatan permanen (*immutable audit trail*) seluruh aktivitas operasional: alamat IP, user agent, event, perubahan data lama vs baru. |
+| **14** | **Kesehatan Sistem** | `/staff/system/health` | Metrik kesehatan sistem: utilisasi CPU, memori RAM, koneksi PostgreSQL, latensi Redis, antrean queue worker, dan ruang disk. |
+| **15** | **Cadangan & Arsip** | `/staff/backups` | Manajemen backup snapshot basis data PostgreSQL manual/otomatis, pengunduhan berkas `.sql.gz`, dan arsip data historis ujian. |
+| **16** | **Integrasi API & Webhook** | `/staff/integrations` | Manajemen kunci API (*API Keys*), konfigurasi webhook event transaksi nilai, serta pengaturan Safe Exam Browser (SEB) & Browser Exam Key (BEK). |
+
+> Dilengkapi pula modul pendukung: **Log Pengiriman Email** (`/staff/settings/notification-logs`), **Pustaka Media Stimulus** (`/staff/media`), **Pengaturan & Branding Institusi** (`/staff/settings/general`), **Konfigurasi SMTP** (`/staff/settings/smtp`), dan **Profil Staf Terpadu** (`/staff/profile`).
+
+---
+
+## Fitur Utama & Keunggulan Sistem
+
+1. **7 Ragam Tipe Butir Soal Terstandar:**
+   - Pilihan Ganda Tunggal (1 opsi benar dari A/B/C/D/E)
+   - Pilihan Ganda Kompleks (multi-jawaban benar dengan skor parsial proporsional)
+   - Benar / Salah (evaluasi premis pernyataan akademik)
+   - Menjodohkan / Matching (menghubungkan pasangan premis kiri dan respons kanan)
+   - Isian Singkat / Short Answer (pencocokan kata kunci toleran *case-insensitive*)
+   - Esai Terstruktur Berbasis Rubrik (koreksi bertingkat dengan kriteria bobot dan opsi *Blind Marking*)
+   - Skala Likert (survei afektif, kepribadian, dan evaluasi pengajaran 1–5)
+2. **Rumus Matematika LaTeX & Simbol Sains:**
+   Rendering rumus matematika, matriks, pecahan kalkulus, rumus kimia, serta aksara Arab berharakat secara lokal via KaTeX tanpa membutuhkan koneksi internet.
+3. **Timer Server-Side Absolut:**
+   Sisa waktu ujian dihitung murni mengacu pada jam NTP server institusi. Memanipulasi jam di komputer siswa tidak berpengaruh pada waktu pengerjaan.
+4. **Proteksi IDOR & Isolasi Sesi Perangkat:**
+   Penegakan otorisasi tingkat server secara ketat. Siswa A dilarang keras mengakses pengerjaan milik siswa B (otomatis membalas `HTTP 403 Forbidden`). Satu akun siswa hanya dapat aktif di satu perangkat dalam satu waktu.
+5. **Tanda Terima Digital Ber-Hash SHA-256:**
+   Setiap penyerahan lembar ujian menghasilkan digital receipt unik ber-hash SHA-256 yang memuat stempel waktu detik, rincian butir terjawab, dan tanda tangan kriptografis anti-sengketa.
+6. **Ekspor Word (.DOCX) OpenXML Murni & PDF Server-Side:**
+   Pembuatan berkas Microsoft Word `.docx` asli tanpa library eksternal berat menggunakan `ZipArchive` bawaan PHP, serta perenderan dokumen cetak resmi PDF biner di server via `dompdf`.
+7. **Portal Verifikasi Publik Berpagar KKM:**
+   Publik dapat memverifikasi nomor resi kelulusan atau memindai QR Code sertifikat secara instan pada `https://sertifikat.tesloka.test/` dengan caching Redis ber-TTL 1 jam, di mana peserta yang belum lulus KKM secara tegas ditolak penerbitan sertifikatnya.
+
+---
+
+## Integrasi Asesmen PTIQ English Proficiency Test (140 Butir)
+
+Aplikasi telah dilengkapi secara bawaan dengan paket asesmen berspesifikasi TOEFL ITP® Level 1 Style berkonteks studi keislaman Universitas PTIQ Jakarta pada direktori [`Soal/`](Soal/):
+
+- **Section 1: Listening Comprehension (50 Soal)** — Terbagi menjadi Part A (30 percakapan pendek), Part B (2 percakapan panjang akademik), dan Part C (3 ceramah kuliah filologi Al-Qur'an).
+- **Section 2: Structure & Written Expression (40 Soal)** — 15 butir Structure dan 25 butir Written Expression dengan format deteksi kesalahan kata bergaris bawah `(A)`, `(B)`, `(C)`, `(D)`.
+- **Section 3: Reading Comprehension (50 Soal)** — 5 teks wacana akademik (Reading Manuscripts as Evidence, Qira'at Variation, Tafsir Scholarship, Coherence in Qur'anic Discourse, dan Digital Tools in Research).
+
+### Pilihan Format Impor Siap Pakai di Folder `Soal/`:
+1. **Master Excel (.xlsx):** [`Soal/PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx`](Soal/PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx) (140 soal lengkap) dan berkas per-seksi.
+2. **Media Bundle Archive ZIP:** [`Soal/PTIQ_EPT_Paket_A_Media_Bundle.zip`](Soal/PTIQ_EPT_Paket_A_Media_Bundle.zip) memuat `manifest.json`, 10 wacana stimulus lengkap, opsi jawaban, dan kunci resmi.
+3. **Format Standar Internasional:** Format Aiken (`.aiken.txt`), Moodle GIFT (`.gift.txt`), dan CSV UTF-8 BOM.
+4. **Dokumentasi & Master Kunci Jawaban:** [`Soal/PANDUAN-DAN-KUNCI-JAWABAN.md`](Soal/PANDUAN-DAN-KUNCI-JAWABAN.md) (cetak biru tes, tabel kunci jawaban 1–140, dan transkrip audio lengkap).
+
+---
+
+## Standardisasi Antarmuka Tailwick & Multi-Device 12 Viewport
+
+Seluruh tampilan antarmuka dibangun di atas fondasi Tailwick UI Kit dari `template-envato` dengan penyesuaian khusus CBT:
+
+1. **Standar Baku Tabel Data (Native Tailwick - Zero Third-Party Bloat):**
+   - Menghindari library bloated seperti Grid.js atau DataTables lama demi kecepatan render maksimal dan nol konflik DOM JavaScript.
+   - Seluruh tabel dibungkus container responsif `<div class="overflow-x-auto -mx-3.5 sm:mx-0">`.
+   - Diberikan batas lebar minimum eksplisit (`min-w-[700px]` s.d. `min-w-[850px]`) agar kolom tidak gepeng di layar ponsel.
+   - Seluruh header `<th>` dan data `<td>` menggunakan kelas `whitespace-nowrap`.
+   - Bilah aksi massal (*bulk action bar*) menggunakan layout `inline-flex` rapi dengan tombol "Hapus Terpilih" satu baris.
+2. **Standar Baku Dialog Modal (Anti-Clipping & Scrollable):**
+   - Struktur `max-h-[90vh] flex flex-col` dengan container isi `overflow-y-auto`.
+   - Tombol aksi footer responsif: bertumpuk vertikal di layar ponsel (`flex flex-col-reverse sm:flex-row`).
+3. **Palet Navigasi Soal Layar Ponsel:**
+   - Palet daftar nomor soal pada layar ujian siswa berubah otomatis menjadi modal drawer popup di tengah layar (`fixed inset-0 lg:static z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center`) agar siswa dapat melompat antar-nomor soal tanpa scroll panjang.
+4. **13 Template Dokumen Cetak A4 Fisik (Normalisasi Box-Sizing):**
+   - Container `.doc-viewport-container` menerapkan `box-sizing: border-box` universal untuk mengeliminasi 100% horizontal overflow di layar tablet dan desktop.
+   - Presisi fisik A4 tanpa margin peramban bawaan (`print-color-adjust: exact`).
+5. **Audit 12 Resolusi Multi-Device (100% PASS - 0 Overflow, 0 Console Error):**
+   - Mobile: 320×568 (iPhone SE), 360×640 (Android), 375×667 (iPhone 8), 390×844 (iPhone 14), 414×896 (iPhone XR), 430×932 (iPhone 15 Pro Max).
+   - Tablet: 768×1024 (iPad Portrait), 1024×768 (iPad Landscape).
+   - Laptop / Desktop: 1280×720 (HD), 1366×768 (WXGA), 1440×900 (MacBook), 1920×1080 (FHD).
+
+---
+
+## Matriks Sizing & Spesifikasi Server VPS
+
+TESLOKA dapat beroperasi mulai dari VPS 1 vCPU 2 GB RAM hingga server fisik multi-core 32 GB RAM. Sesuaikan tuning memori PostgreSQL, PHP-FPM, dan Redis agar respon tetap di bawah 100 ms:
 
 | Tier & Spesifikasi Server | Kapasitas Peserta Serentak | Rekomendasi Swap | PHP `memory_limit` | PHP-FPM `pm.max_children` | PostgreSQL `shared_buffers` | Redis `maxmemory` | Worker Queue |
 |:---|:---|:---|:---|:---|:---|:---|:---|
 | **Tier 1: 1 vCPU, 2 GB RAM** | 30 – 50 siswa (1 Lab Kecil) | `2 GB` | `256M` | `12` | `256MB` | `256mb` | 1 worker |
 | **Tier 2: 2-4 vCPU, 4 GB RAM**| 50 – 150 siswa (Standar Sekolah) | `2 GB` | `256M` | `24` | `1GB` | `512mb` | 2 worker |
 | **Tier 3: 4 vCPU, 8 GB RAM** | 150 – 300 siswa (Multi-Lab Kampus) | `4 GB` | `512M` | `48` | `2GB` | `1024mb` (1 GB) | 4 worker |
-| **Tier 4: 4-8 vCPU, 16 GB RAM**| 300 – 600 siswa (Enterprise Institusi) | `4 GB` | `512M` | `64` | `4GB` | `2048mb` (2 GB) | 6 worker |
+| **Tier 4: 4-8 vCPU, 16 GB RAM**<br>*(Baseline Produksi Resmi)*| **300 – 600 siswa (Enterprise Institusi)** | `4 GB` | `512M` | `64` | `4GB` | `2048mb` (2 GB) | 6 worker |
 | **Tier 5: 8-16 vCPU, 32 GB RAM**| 600 – 1.200+ siswa (Ujian Akbar) | `8 GB` | `1024M` | `128` | `8GB` | `4096mb` (4 GB) | 8 worker |
 
-> [!TIP]
-> Detail parameter `postgresql.conf`, `php.ini`, dan tuning PHP-FPM baris-demi-baris yang siap di-*copy-paste* untuk tiap tier dapat dibaca pada dokumen resmi: **[`deploy/INSTALL-AAPANEL.md`](deploy/INSTALL-AAPANEL.md)**.
+> [!NOTE]
+> **Spesifikasi VPS Produksi Acuan Resmi:** 4 vCPU, 16 GB RAM, 100 GB SSD Enterprise RAID 10, Dedicated IPv4, Data Center Jakarta.
 
 ---
 
-## Panduan Instalasi Lokal (Development)
+## Panduan Instalasi Lingkungan Lokal (Development)
 
-Lingkungan pengembangan yang direkomendasikan adalah **Windows dengan Laragon**, atau Linux / macOS dengan stack lokal.
+Lingkungan pengembangan yang direkomendasikan adalah **Windows dengan Laragon**, atau Linux / macOS dengan stack PHP 8.3–8.5, PostgreSQL 16+, dan Redis 7+.
 
 ### 1. Clone Repositori
 ```bash
@@ -105,20 +204,26 @@ git clone https://github.com/mdodeep/Tesloka.git
 cd Tesloka
 ```
 
-### 2. Instal Dependensi PHP & Node.js
+### 2. Pasang Dependensi PHP & Node.js
 ```bash
 composer install
 npm install
 ```
 
-### 3. Konfigurasi Environment (`.env`)
+### 3. Konfigurasi Lingkungan (`.env`)
+Salin file `.env.example` ke `.env` lalu generate application key:
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-Buka `.env` dan pastikan konfigurasi database PostgreSQL dan Redis lokal Anda sesuai:
+Sesuaikan parameter basis data PostgreSQL dan Redis di `.env`:
 ```ini
+APP_NAME=TESLOKA
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=https://cbt.tesloka.test
+
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
 DB_PORT=5432
@@ -135,252 +240,191 @@ REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 ```
 
-### 4. Siapkan Basis Data & Data Awal (Seeder)
+### 4. Eksekusi Migrasi & Seeder Simulasi
 Buat database bernama `tesloka` di PostgreSQL, lalu jalankan:
 ```bash
 php artisan migrate --seed
 ```
 
-### 5. Hubungkan Berkas Publik (Storage Link)
+### 5. Hubungkan Berkas Simpanan Publik (Storage Link)
 ```bash
 php artisan storage:link
 ```
 
 ### 6. Kompilasi Aset Frontend
 ```bash
-# Untuk mode development (hot-reload):
+# Mode pengembangan (HMR):
 npm run dev
 
-# Untuk mode build produksi:
+# Mode build produksi bersih:
 npm run build
 ```
 
-### 7. Pengaturan Virtual Host Lokal (Laragon)
-Jika menggunakan Laragon, arahkan subdomain berikut ke folder `public/`:
+### 7. Virtual Host Lokal (Laragon / Apache / Nginx)
+Tambahkan virtual host lokal yang mengarah ke direktori `public/`:
 - `https://staff.tesloka.test`
 - `https://ujian.tesloka.test`
 - `https://sertifikat.tesloka.test`
 
 ---
 
-## Panduan Deployment Produksi (VPS / aaPanel / Linux)
+## Pemisahan Seeder: Produksi Bersih vs Simulasi Lokal
 
-Panduan instalasi produksi langkah-demi-langkah yang lengkap untuk server Linux dan panel aaPanel tersedia pada dokumen resmi:
+Sistem menerapkan arsitektur pemisahan seeder yang ketat untuk menjaga keamanan dan kebersihan data:
 
-👉 **[PANDUAN LENGKAP DEPLOYMENT AAPANEL & LINUX (deploy/INSTALL-AAPANEL.md)](deploy/INSTALL-AAPANEL.md)**
+1. **Seeder Khusus Lingkungan Produksi (`ProductionSeeder.php`):**
+   - Dijalankan saat `APP_ENV=production` atau `php artisan db:seed --class=ProductionSeeder`.
+   - **HANYA** memuat profil dasar institusi (`InstitutionSeeder`), matriks RBAC 14 roles (`RolePermissionSeeder`), template notifikasi standar (`NotificationTemplateSeeder`), dan **TEPAT SATU** akun Administrator Utama (`admin`).
+   - Database bersih 100% dari data dummy. Tabel siswa, rombel, bank soal, dan rekaman ujian dipastikan kosong (`0 records`).
+2. **Seeder Khusus Lingkungan Lokal / Development (`RealisticExamSimulationSeeder.php`):**
+   - Dijalankan saat `APP_ENV=local` via `php artisan db:seed`.
+   - Memuat ekosistem CBT nyata: 2 ruang lab komputer, 12 siswa aktif ber-NIK/NIM, struktur akademik lengkap, bank soal komprehensif, perancangan ujian aktif, rekaman ujian tersubmit (Fatimah lulus, Ali remedial), sesi ujian aktif pengerjaan (Siswa01 in progress), dan paket 140 soal PTIQ English Proficiency Test.
 
-### Ringkasan Langkah Cepat di aaPanel:
+---
 
-0. **Persiapan OS (Wajib Saat VPS Baru Online):**
+## Akun Demo & Kredensial Bawaan Seeder
+
+Setelah menjalankan `php artisan migrate --seed` pada lingkungan lokal, seluruh akun demo berikut siap digunakan:
+
+> **Kata Sandi Universal Seluruh Akun Demo Seeder:** `Tesloka2026!`
+
+| Peran | Username | Portal Akses | Skenario Pengujian |
+|:---|:---|:---|:---|
+| **Administrator Utama** | `admin` | `staff.tesloka.test` | Akses penuh ke-16 modul staf, backup database, branding, audit logs. |
+| **Dosen / Guru Pengampu**| `ahmad_guru` | `staff.tesloka.test` | Bank soal PTIQ 140 butir, blueprint ujian, koreksi esai rubrik, psikometri. |
+| **Pengawas Ruangan** | `pengawas1` | `staff.tesloka.test` | Bilah kendali proctoring real-time, rilis token sesi, reset sesi perangkat. |
+| **Siswa Lulus (Sertifikat)**| `fatimah_peserta` | `ujian.tesloka.test` | Ujian tersubmit, skor 92.50, tanda terima `RCP-FWUL-WQII-R0ZH` sah verifikasi. |
+| **Siswa Remedial (KKM)** | `ali_peserta` | `ujian.tesloka.test` | Ujian tersubmit, skor 65.00, tanda terima `RCP-NU6Z-B7JT-O1OO` remedial. |
+| **Siswa Pengerjaan Aktif**| `siswa01` | `ujian.tesloka.test` | Pengerjaan aktif (*in progress*), timer 75 menit, autosave transaksional. |
+| **Siswa Rombel 02 s.d. 10**| `siswa02` s.d. `siswa10` | `ujian.tesloka.test` | Rombongan belajar kelas TIQ-1A untuk simulasi ujian serentak. |
+
+---
+
+## Panduan Deployment Produksi (Linux Ubuntu / aaPanel)
+
+Panduan instalasi langkah-demi-langkah lengkap untuk server Linux Ubuntu dan panel aaPanel tersedia pada:
+👉 **[`deploy/INSTALL-AAPANEL.md`](deploy/INSTALL-AAPANEL.md)**
+
+### Ringkasan Langkah Cepat Produksi:
+1. **Persiapan OS Linux & Swap File 2–4 GB:**
    ```bash
-   # Ubuntu / Debian:
-   sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
-   sudo apt install -y curl wget git unzip htop build-essential
-
-   # Buat Swap File 2 GB (Mencegah error 'Killed' / Out of Memory saat install dependensi):
-   sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
+   sudo apt update && sudo apt upgrade -y
+   sudo apt install -y curl wget git unzip htop build-essential supervisor
+   sudo fallocate -l 4G /swapfile && sudo chmod 600 /swapfile
    sudo mkswap /swapfile && sudo swapon /swapfile
    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-
-   # Set zona waktu server ke WIB:
    sudo timedatectl set-timezone Asia/Jakarta
    ```
-
-1. **Instal Paket di App Store aaPanel:**
-   - **Nginx** (v1.24 atau 1.26+)
-   - **Node.js** (Pasang via *Node.js Version Manager*, pilih Node.js v20 LTS)
-   - **Python** (Pasang via *Python Version Manager*, pilih Python 3.10)
-   - **PHP** (PHP 8.3 / 8.4 / 8.5)
-   - **PostgreSQL Manager** (v15, 16, atau 17)
-   - **Redis** (v7.x atau 8.x)
-   - **Supervisor Manager** *(Jika plugin aaPanel ini error karena isu Python di Ubuntu baru, gunakan opsi native systemd: `sudo apt install -y supervisor`)*.
-
-2. **Pasang Ekstensi PHP Wajib:**
-   Buka **PHP Settings > Install Extensions**, centang dan pasang:
-   `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `fileinfo`, `exif`, `gd`, `zip`, `bcmath`.
-
-3. **Buat Database PostgreSQL di aaPanel:**
-   Masuk ke **Database > PostgreSQL**: Database `tesloka_cbt`, user `tesloka_user`, encoding `UTF8`.
-
-4. **Deploy Kode & Inisialisasi Database:**
+2. **Pasang Paket Stack di App Store aaPanel:**
+   - Nginx (1.24 atau 1.26+)
+   - PHP (PHP 8.3 / 8.4 / 8.5) beserta ekstensi: `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `fileinfo`, `exif`, `gd`, `zip`, `bcmath`.
+   - PostgreSQL (v16 atau 17) & Redis (v7 atau 8).
+   - Node.js LTS v20.
+3. **Inisialisasi Proyek di `/www/wwwroot/cbt.institusi.ac.id`:**
    ```bash
    cd /www/wwwroot/cbt.institusi.ac.id
    git clone https://github.com/mdodeep/Tesloka.git .
    cp .env.example .env
-   # Edit .env dengan kredensial database & Redis produksi
+   # Edit .env dengan APP_ENV=production, kredensial DB PostgreSQL, & Redis
    composer install --no-dev --optimize-autoloader
+   npm install && npm run build
    php artisan key:generate --force
    php artisan migrate --force
-   php artisan db:seed --force
+   php artisan db:seed --class=ProductionSeeder --force
    php artisan storage:link
    chown -R www:www /www/wwwroot/cbt.institusi.ac.id
    chmod -R 775 storage bootstrap/cache
-   php artisan config:cache
-   php artisan route:cache
-   php artisan view:cache
+   php artisan optimize
    ```
-
-5. **Konfigurasi Site Directory & URL Rewrite (PENTING ANTI-404):**
-   > [!IMPORTANT]
-   > **Langkah Kritis aaPanel agar tidak 404/403:**
-   > - Masuk ke **aaPanel > Website > Klik Nama Domain Anda**.
-   > - Tab **Site Directory**: Ubah **Running directory** dari `/` menjadi `/public` lalu klik **Save**! *(Ini mengarahkan Nginx ke `public/index.php` Laravel)*.
-   > - Tab **URL rewrite**: Pilih preset **laravel 5** lalu klik **Save**! *(Ini mengaktifkan `try_files $uri $uri/ /index.php?$query_string;` sehingga routing halaman ujian & login tidak 404)*.
-
-6. **Supervisor Background Worker (Pilih Salah Satu):**
-   - **Opsi GUI aaPanel:** Tambahkan daemon di Supervisor Manager:
-     - Command: `php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120`
-     - User: `www`, Run Dir: `/www/wwwroot/cbt.institusi.ac.id`
-   - **Opsi Native Linux (Paling Stabil & Bebas Bug):**
-     `sudo apt install -y supervisor` dan buat file `/etc/supervisor/conf.d/tesloka-worker.conf` (Lihat panduan lengkap di [`deploy/INSTALL-AAPANEL.md`](deploy/INSTALL-AAPANEL.md)).
-
-7. **Jadwalkan Task Scheduler:** Tambahkan cron di menu aaPanel Cron tiap 1 menit:
-   ```bash
-   cd /www/wwwroot/cbt.institusi.ac.id && php artisan schedule:run >> /dev/null 2>&1
-   ```
-
-8. **Verifikasi Kesiapan Produksi:**
-   ```bash
-   php artisan tesloka:production-check
-   ```
-
----
-
-## Akun Demo & Kredensial Default
-
-Setelah menjalankan `php artisan migrate --seed`, seluruh akun awal institusi telah siap digunakan dengan kata sandi bawaan yang sama:
-
-> **Kata Sandi Default Seluruh Akun Seeder:** `Tesloka2026!`
-
-| Peran | Username | Portal Akses | Deskripsi Wewenang |
-|:---|:---|:---|:---|
-| **Administrator Sistem** | `admin` | `staff.<domain>` | Akses penuh: manajemen akademik, akun, branding, backup, dan audit log. |
-| **Dosen / Guru Pengampu** | `budi_dosen` | `staff.<domain>` | Bank soal mata pelajaran, blueprint ujian, rubrik esai, dan psikometri. |
-| **Pengawas Ruangan** | `pengawas1` | `staff.<domain>` | Rilis token ujian, monitoring siswa real-time, perpanjang waktu, reset sesi. |
-| **Peserta Ujian 01** | `siswa01` | `ujian.<domain>` | Lembar ujian, navigasi soal, autosave, tanda terima SHA-256. |
-| **Peserta Ujian 02 s.d. 10** | `siswa02` s.d. `siswa10` | `ujian.<domain>` | Peserta rombel kelas untuk simulasi ujian serentak. |
+4. **Konfigurasi Site Directory & URL Rewrite (PENTING ANTI-404):**
+   - Tab **Site Directory**: Ubah **Running directory** dari `/` menjadi `/public` lalu simpan.
+   - Tab **URL rewrite**: Pilih preset **laravel 5** (`try_files $uri $uri/ /index.php?$query_string;`) lalu simpan.
+5. **Supervisor Background Worker & Scheduler:**
+   - Buat file konfigurasi Supervisor di `/etc/supervisor/conf.d/tesloka-worker.conf`:
+     ```ini
+     [program:tesloka-worker]
+     process_name=%(program_name)s_%(process_num)02d
+     command=php /www/wwwroot/cbt.institusi.ac.id/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120
+     autostart=true
+     autorestart=true
+     user=www
+     numprocs=4
+     redirect_stderr=true
+     stdout_logfile=/www/wwwroot/cbt.institusi.ac.id/storage/logs/worker.log
+     ```
+   - Tambahkan Cron tiap 1 menit untuk scheduler:
+     ```bash
+     * * * * * cd /www/wwwroot/cbt.institusi.ac.id && php artisan schedule:run >> /dev/null 2>&1
+     ```
 
 ---
 
 ## Panduan Pemecahan Masalah (Troubleshooting)
 
-### 1. Error 404 Not Found Saat Mengakses Halaman / Sub-Route (Login, Dashboard, dsb.)
-- **Penyebab Utama di aaPanel:** Pengaturan **Running directory** di aaPanel masih mengarah ke `/` (bukan `/public`), atau **URL Rewrite** belum diaktifkan sehingga Nginx mencari folder fisik yang tidak ada dan menolak request.
-- **Solusi Cepat 10 Detik di aaPanel:**
-  1. Buka **aaPanel > Website > Klik Nama Domain Anda**.
-  2. Klik tab **Site Directory**, ubah **Running directory** dari `/` menjadi `/public`, lalu klik tombol **Save**!
-  3. Klik tab **URL rewrite**, pilih preset **laravel 5** (atau pastikan ada `try_files $uri $uri/ /index.php?$query_string;`), lalu klik tombol **Save**!
-  4. Buka kembali browser dan refresh halaman.
+### 1. Error 404 Not Found Saat Mengakses Rute / Login
+- **Penyebab:** Running directory Nginx belum mengarah ke `/public` atau URL Rewrite belum aktif.
+- **Solusi:** Di aaPanel Website Settings, pastikan **Running Directory** = `/public` dan tab **URL Rewrite** menerapkan preset `laravel 5`.
 
-### 2. Error 502 Bad Gateway pada Nginx
-- **Penyebab:** Nginx salah menunjuk socket PHP-FPM atau service PHP-FPM mati.
-- **Solusi:**
-  1. Cek status PHP-FPM: `systemctl status php8.3-fpm` (atau via aaPanel App Store).
-  2. Cari socket PHP-FPM yang aktif di server:
-     - aaPanel: `ls -la /tmp/php-cgi*.sock`
-     - Ubuntu Standar: `ls -la /run/php/*.sock`
-  3. Sesuaikan baris `fastcgi_pass` di konfigurasi Nginx vhost agar sama persis dengan socket yang aktif.
+### 2. Error 502 Bad Gateway
+- **Penyebab:** Layanan PHP-FPM tidak berjalan atau salah menunjuk socket path (`/tmp/php-cgi-85.sock` vs `/run/php/php8.5-fpm.sock`).
+- **Solusi:** Cek status `systemctl status php8.5-fpm` dan pastikan konfigurasi `fastcgi_pass` Nginx sesuai dengan file socket yang aktif.
 
 ### 3. Error 500 Internal Server Error & Blank White Screen
-- **Penyebab Umum:** Kunci enkripsi aplikasi (`APP_KEY`) belum dibuat, izin folder `storage/` belum diberikan ke user web server (`www`), atau cache framework usang.
-- **Langkah Diagnosa Cepat:**
-  1. Jalankan perintah diagnosa resmi:
-     ```bash
-     php artisan tesloka:production-check
-     ```
-  2. Periksa baris error terakhir di log Laravel:
-     ```bash
-     tail -n 50 storage/logs/laravel.log
-     ```
-- **Solusi Perbaikan:**
+- **Penyebab:** Izin folder `storage/` belum diberikan ke user web server (`www`), `APP_KEY` belum terpasang, atau cache usang.
+- **Solusi:**
   ```bash
-  # 1. Pastikan kunci enkripsi aktif:
   php artisan key:generate --force
-
-  # 2. Atur izin tulis folder storage & cache (untuk user aaPanel 'www'):
   chown -R www:www storage bootstrap/cache
   chmod -R 775 storage bootstrap/cache
-
-  # 3. Bersihkan seluruh cache konfigurasi & view yang usang:
   php artisan optimize:clear
   ```
 
-### 4. Gagal Menjalankan `php artisan storage:link`
-- **Pesan Error:** `The "public/storage" link already exists.`
-- **Solusi:**
-  ```bash
-  rm -f public/storage
-  php artisan storage:link
-  ```
+### 4. Database Connection Refused / Ident Authentication Failed
+- **Penyebab:** Konfigurasi host database di `.env` masih `localhost` atau PostgreSQL menolak autentikasi kata sandi.
+- **Solusi:** Ubah `DB_HOST=127.0.0.1` di `.env`, dan pastikan `/etc/postgresql/16/main/pg_hba.conf` mengizinkan metode `scram-sha-256` untuk `127.0.0.1/32`.
 
-### 5. Database Error "Connection Refused" atau "Ident authentication failed"
-- **Solusi:**
-  1. Di `.env`, ubah `DB_HOST=localhost` menjadi `DB_HOST=127.0.0.1` (memaksa TCP stack IPv4).
-  2. Pastikan file `/etc/postgresql/<version>/main/pg_hba.conf` mengizinkan metode autentikasi `scram-sha-256` atau `md5` untuk koneksi lokal:
-     ```
-     host    all             all             127.0.0.1/32            scram-sha-256
-     ```
-  3. Restart PostgreSQL: `sudo systemctl restart postgresql`.
-
-### 6. Redis Error "OOM command not allowed when used memory > 'maxmemory'"
+### 5. Redis Error OOM (Out Of Memory)
 - **Penyebab:** Memori Redis penuh dan policy disetel ke `noeviction`.
-- **Solusi:**
-  Buka konfigurasi Redis, ubah baris `maxmemory-policy` menjadi:
-  ```ini
-  maxmemory-policy allkeys-lru
-  ```
-  Lalu restart Redis: `systemctl restart redis` (atau via tombol restart di aaPanel).
-- **Solusi:** Buka konfigurasi Redis (`redis.conf`), pastikan `maxmemory-policy` disetel ke `allkeys-lru` agar Redis otomatis mendaur ulang cache lama. Lalu restart Redis.
-
-### 6. Supervisor Daemon "FATAL / Exited too quickly"
-- **Penyebab:** Path perintah `php` tidak dikenali oleh Supervisor atau path direktori salah.
-- **Solusi:**
-  Gunakan path biner PHP absolut pada file config Supervisor:
-  - aaPanel: `/www/server/php/85/bin/php artisan queue:work redis ...`
-  - Ubuntu Standar: `/usr/bin/php artisan queue:work redis ...`
-  Lalu jalankan: `supervisorctl reread && supervisorctl update`.
-
-### 7. Supervisor Manager aaPanel "Stopped" / Config Missing / `pkg_resources`
-- **Penyebab:** Modul `pkg_resources` hilang karena setuptools versi 82+, atau file `/etc/supervisor/supervisord.conf` belum dibuat oleh aaPanel.
-- **Solusi Tuntas:**
-  ```bash
-  rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/setuptools*
-  rm -rf /www/server/panel/pyenv/lib/python3.12/site-packages/pkg_resources*
-  /www/server/panel/pyenv/bin/pip install setuptools==68.0.0 supervisor
-  mkdir -p /etc/supervisor/conf.d /www/server/panel/plugin/supervisor/profile
-  if [ ! -f /etc/supervisor/supervisord.conf ]; then
-      /www/server/panel/pyenv/bin/echo_supervisord_conf > /etc/supervisor/supervisord.conf
-      printf "\n[include]\nfiles = /etc/supervisor/conf.d/*.conf /www/server/panel/plugin/supervisor/profile/*.ini\n" >> /etc/supervisor/supervisord.conf
-  fi
-  rm -f /tmp/supervisor.sock /var/run/supervisor.sock
-  systemctl restart supervisord
-  ```
-  Status Supervisor akan langsung kembali hijau `RUNNING`. (Atau gunakan opsi native systemd: `sudo apt install -y supervisor`).
+- **Solusi:** Buka `redis.conf`, atur `maxmemory-policy allkeys-lru` agar Redis mendaur ulang cache lama otomatis, lalu restart Redis.
 
 ---
 
-## Perintah Artisan Bawaan
+## Perintah CLI Artisan Bawaan
 
 ```bash
-# Uji Kesiapan Produksi (Memverifikasi 8 Indikator Kritis Sistem):
+# 1. Uji Kesiapan Produksi (Memeriksa 8 Indikator Kritis Sistem):
 php artisan tesloka:production-check
 
-# Simulasi Uji Beban Autosave Konkurensi:
-php artisan tesloka:simulate-load --students=30 --answers=5
-
-# Membersihkan Seluruh Cache Laravel:
-php artisan optimize:clear
-
-# Menjalankan Rangkaian Pengujian Otomatis (248 Tests):
+# 2. Menjalankan Seluruh Automated Test Suite (284 Tests, 2.105 Assertions):
 php artisan test
 
-# Menjalankan Worker Antrean secara Manual:
+# 3. Simulasi Beban Pengerjaan & Autosave Bersamaan:
+php artisan tesloka:simulate-load --students=50 --answers=10
+
+# 4. Membersihkan Seluruh Cache Laravel:
+php artisan optimize:clear
+
+# 5. Menjalankan Antrean Queue Worker secara Manual:
 php artisan queue:work redis --tries=3
 ```
 
 ---
 
-## Struktur Direktori
+## Automated Testing & Jaminan QA/QC
+
+Sistem TESLOKA dibangun dengan standar pengujian mutlak berbasis bukti eksekusi (*evidence-based quality assurance*):
+
+- **Backend Automated Test Suite:** **284 tests, 2.105 assertions — 100% PASS** (0 errors, 0 failures).
+- **Headless Browser Multi-Device Testing:** **420 pengujian interaksi peramban** pada 35 halaman di 3 portal lintas 12 ukuran layar (320px hingga 1920px) menghasilkan **0 horizontal overflow** dan **0 runtime console errors**.
+- **Code Style Linting:** 100% lulus standar PSR-12 via Laravel Pint.
+- **Frontend Asset Compilation:** 2.045 modul terkompilasi bersih via Vite & Rollup dalam ~2.5 detik.
+
+Dokumentasi lengkap hasil pengujian dan matriks keterlacakan fitur tersedia di:
+👉 **[`docs/HASIL-PENGUJIAN.md`](docs/HASIL-PENGUJIAN.md)** dan **[`docs/PROGRESS.md`](docs/PROGRESS.md)**.
+
+---
+
+## Struktur Direktori Proyek
 
 ```
 tesloka/
@@ -392,7 +436,7 @@ tesloka/
 │   └── Services/             # Logika bisnis (psikometri, grading, integrasi SEB)
 ├── database/
 │   ├── migrations/           # 27 Berkas migrasi skema tabel PostgreSQL
-│   └── seeders/              # Seeder institusi, akun demo, & struktur akademik
+│   └── seeders/              # Seeder produksi (bersih) & seeder simulasi lokal
 ├── deploy/                   # Konfigurasi deployment produksi siap pakai
 │   ├── nginx/                # Template virtual host Nginx (HTTP & HTTPS)
 │   ├── php-fpm/              # Konfigurasi pool PHP-FPM & sizing table
@@ -400,19 +444,23 @@ tesloka/
 │   ├── supervisor/           # Konfigurasi daemon worker & scheduler
 │   ├── livekit/              # Docker compose server kamera proctoring
 │   └── INSTALL-AAPANEL.md    # Panduan resmi instalasi produksi lengkap
+├── docs/                     # Dokumentasi teknis, arsitektur, & register pengujian
+├── Landing/                  # Website publik, demo sandbox, & dokumentasi teknis
 ├── public/
-│   ├── assets/images/        # Logo institusi resmi, favicon, default avatar
+│   ├── assets/fonts/         # Font lokal Sora resmi (bebas CDN eksternal)
+│   ├── assets/images/        # Logo institusi resmi, favicon WebP, avatar
 │   └── build/                # Aset frontend Vite terkompilasi
 ├── resources/
-│   ├── css/                  # Stylesheet Tailwick UI Kit & Tailwind CSS 4
-│   ├── js/                   # Skrip interaktif & handler formulir
-│   └── views/                # 84 Template Blade (staff, student, public, errors)
+│   ├── css/tailwick/         # Stylesheet Tailwick UI Kit & Tailwind CSS 4
+│   ├── js/                   # Skrip interaktif, timer, autosave handler
+│   └── views/                # 91 Template Blade (staff, student, public, errors)
 ├── routes/
-│   ├── staff.php             # Rute portal staf & administrasi
+│   ├── staff.php             # Rute 16 modul staf & administrasi
 │   ├── student.php           # Rute portal ujian peserta
 │   ├── api.php               # API endpoint transaksional (autosave, heartbeat)
 │   └── web.php               # Router domain & portal verifikasi sertifikat publik
-└── tests/                    # 35 Berkas pengujian fitur & unit (PHPUnit 12)
+├── Soal/                     # Berkas asesmen siap upload PTIQ EPT 140 butir (XLSX, ZIP, Aiken, GIFT)
+└── tests/                    # 36 Berkas pengujian fitur & unit (PHPUnit / Pest)
 ```
 
 ---

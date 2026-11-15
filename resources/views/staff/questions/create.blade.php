@@ -107,12 +107,32 @@
                 </x-cbt.card>
 
                 <x-cbt.card title="Konten Pokok Soal">
-                    <div class="space-y-2">
-                        <textarea name="content" id="questionContent" rows="6" placeholder="Tuliskan teks pertanyaan atau instruksi soal di sini..." class="form-textarea w-full text-sm rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed" required>{{ old('content') }}</textarea>
+                    <div class="space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-default-100">
+                            <span class="text-xs text-default-500 font-medium" id="editorModeLabel">
+                                Mode Editor: <strong class="text-default-700">Visual (WYSIWYG)</strong>
+                            </span>
+                            <button type="button" onclick="toggleEditorMode()" id="btnToggleEditorMode" class="btn btn-xs bg-default-100 hover:bg-default-200 text-default-700 font-semibold inline-flex items-center gap-1.5 transition cursor-pointer">
+                                <i data-lucide="code-2" id="toggleModeIcon" class="size-3.5"></i>
+                                <span id="toggleModeText">Beralih ke Teks Kode / Raw</span>
+                            </button>
+                        </div>
+
+                        <!-- WYSIWYG Quill Snow Editor Container -->
+                        <div id="quillWrapper" class="space-y-1">
+                            <div id="quillEditor" style="min-height: 180px;" class="bg-white rounded-b border border-default-200 text-sm leading-relaxed"></div>
+                        </div>
+
+                        <!-- Raw Textarea (Fallback / Kode HTML / KaTeX Raw) -->
+                        <textarea name="content" id="questionContent" rows="6" placeholder="Tuliskan teks pertanyaan atau instruksi soal di sini..." class="hidden form-textarea w-full text-sm rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed font-mono" required>{{ old('content') }}</textarea>
+
                         <div class="flex justify-between items-center text-xs text-default-400">
-                            <span>Mendukung teks terformat, rumus, dan karakter khusus.</span>
+                            <span>Mendukung teks terformat, rumus KaTeX/LaTeX, dan karakter khusus.</span>
                             <span id="charCount">0 karakter</span>
                         </div>
+
+                        <!-- Collapsible Panduan KaTeX, Formula Kimia & Simbol Khusus -->
+                        @include('staff.questions.partials.math-guide')
                     </div>
                 </x-cbt.card>
 
@@ -131,7 +151,8 @@
                         @foreach(['A', 'B', 'C', 'D'] as $idx => $optKey)
                         <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white hover:bg-default-50/50 transition shadow-2xs">
                             <div class="pt-0.5">
-                                <input type="radio" name="options[{{ $idx }}][is_correct]" value="1" {{ $idx === 0 ? 'checked' : '' }} class="form-radio correct-input text-primary focus:ring-primary/20">
+                                <input type="radio" name="correct_option" value="{{ $optKey }}" {{ $idx === 0 ? 'checked' : '' }} onchange="syncRadioSelection(this)" class="form-radio correct-input text-primary focus:ring-primary/20 cursor-pointer">
+                                <input type="hidden" name="options[{{ $idx }}][is_correct]" class="option-is-correct" value="{{ $idx === 0 ? '1' : '0' }}">
                             </div>
                             <div class="w-10 font-bold text-default-700 text-xs">
                                 <input type="text" name="options[{{ $idx }}][key]" value="{{ $optKey }}" class="form-input w-full text-center font-bold bg-default-50 border-default-200 rounded-lg py-1 text-xs" readonly>
@@ -166,15 +187,195 @@
 
 <script>
     const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    let isRawMode = false;
+
+    // Inisialisasi Quill Editor (Tailwick Snow WYSIWYG)
+    function initQuillEditor() {
+        const QuillClass = window.Quill || (typeof Quill !== 'undefined' ? Quill : null);
+        if (!QuillClass) {
+            setTimeout(initQuillEditor, 50);
+            return;
+        }
+
+        if (window.questionQuill) return;
+
+        const toolbarOptions = [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'direction': 'rtl' }, { 'align': [] }],
+            ['blockquote', 'code-block'],
+            ['link', 'clean']
+        ];
+
+        window.questionQuill = new QuillClass('#quillEditor', {
+            theme: 'snow',
+            placeholder: 'Tuliskan teks pertanyaan atau instruksi soal di sini...',
+            modules: {
+                toolbar: toolbarOptions
+            }
+        });
+
+        const initialContent = document.getElementById('questionContent').value;
+        if (initialContent) {
+            window.questionQuill.root.innerHTML = initialContent;
+        }
+
+        window.questionQuill.on('text-change', function() {
+            syncQuillToTextarea();
+        });
+
+        // Set initial RTL if needed
+        const isRtl = document.getElementById('isRtlCheckbox')?.checked;
+        if (isRtl) {
+            toggleRtl(true);
+        }
+
+        syncQuillToTextarea();
+    }
+
+    function syncQuillToTextarea() {
+        if (!window.questionQuill) return;
+        const textarea = document.getElementById('questionContent');
+        const charCount = document.getElementById('charCount');
+        const html = window.questionQuill.root.innerHTML;
+        const cleanHtml = (html === '<p><br></p>' || html.trim() === '') ? '' : html;
+        textarea.value = cleanHtml;
+        const plainText = window.questionQuill.getText().trim();
+        if (charCount) charCount.innerText = plainText.length + ' karakter';
+    }
+
+    function syncTextareaToQuill() {
+        if (!window.questionQuill) return;
+        const textarea = document.getElementById('questionContent');
+        const charCount = document.getElementById('charCount');
+        window.questionQuill.root.innerHTML = textarea.value || '';
+        const plainText = window.questionQuill.getText().trim();
+        if (charCount) charCount.innerText = plainText.length + ' karakter';
+    }
+
+    function toggleEditorMode() {
+        const quillWrapper = document.getElementById('quillWrapper');
+        const textarea = document.getElementById('questionContent');
+        const label = document.getElementById('editorModeLabel');
+        const btnText = document.getElementById('toggleModeText');
+        const btnIcon = document.getElementById('toggleModeIcon');
+
+        if (!isRawMode) {
+            // Switch to Raw Mode
+            syncQuillToTextarea();
+            quillWrapper.classList.add('hidden');
+            textarea.classList.remove('hidden');
+            label.innerHTML = 'Mode Editor: <strong class="text-amber-600">Teks Kode (Raw)</strong>';
+            btnText.innerText = 'Beralih ke Mode Visual';
+            if (btnIcon) btnIcon.setAttribute('data-lucide', 'eye');
+            isRawMode = true;
+        } else {
+            // Switch to Visual Mode
+            syncTextareaToQuill();
+            textarea.classList.add('hidden');
+            quillWrapper.classList.remove('hidden');
+            label.innerHTML = 'Mode Editor: <strong class="text-default-700">Visual (WYSIWYG)</strong>';
+            btnText.innerText = 'Beralih ke Teks Kode / Raw';
+            if (btnIcon) btnIcon.setAttribute('data-lucide', 'code-2');
+            isRawMode = false;
+        }
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
 
     function toggleRtl(isRtl) {
         const textarea = document.getElementById('questionContent');
-        if (isRtl) {
-            textarea.setAttribute('dir', 'rtl');
-            textarea.classList.add('text-right', 'font-serif');
-        } else {
-            textarea.removeAttribute('dir');
-            textarea.classList.remove('text-right', 'font-serif');
+        if (textarea) {
+            if (isRtl) {
+                textarea.setAttribute('dir', 'rtl');
+                textarea.classList.add('text-right', 'font-serif');
+            } else {
+                textarea.removeAttribute('dir');
+                textarea.classList.remove('text-right', 'font-serif');
+            }
+        }
+        if (window.questionQuill && window.questionQuill.root) {
+            window.questionQuill.root.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+            window.questionQuill.root.classList.toggle('text-right', isRtl);
+            window.questionQuill.root.classList.toggle('font-serif', isRtl);
+            window.questionQuill.format('direction', isRtl ? 'rtl' : false);
+            window.questionQuill.format('align', isRtl ? 'right' : false);
+        }
+    }
+
+    // Mutual exclusivity handler for Single Choice radio buttons
+    function syncRadioSelection(radioEl) {
+        document.querySelectorAll('#optionsList .option-is-correct').forEach(hidden => {
+            hidden.value = '0';
+        });
+        const row = radioEl.closest('.option-row');
+        if (row) {
+            const hidden = row.querySelector('.option-is-correct');
+            if (hidden) hidden.value = '1';
+        }
+    }
+
+    function reindexOptions() {
+        const container = document.getElementById('optionsList');
+        const rows = container.querySelectorAll('.option-row');
+        const qType = document.getElementById('questionType').value;
+        const isSingle = (qType === 'multiple_choice' || qType === 'true_false');
+
+        let hasChecked = false;
+
+        rows.forEach((row, i) => {
+            const letter = letters[i] || ('O' + (i + 1));
+            // Key input
+            const keyInput = row.querySelector('input[name*="[key]"]');
+            if (keyInput) {
+                keyInput.name = `options[${i}][key]`;
+                if (qType !== 'true_false' && qType !== 'matching' && qType !== 'short_answer' && qType !== 'numeric') {
+                    keyInput.value = letter;
+                }
+            }
+            // Content input
+            const contentInput = row.querySelector('input[name*="[content]"]');
+            if (contentInput) {
+                contentInput.name = `options[${i}][content]`;
+                if (qType !== 'true_false' && qType !== 'matching' && qType !== 'short_answer' && qType !== 'numeric') {
+                    contentInput.placeholder = `Teks opsi ${letter}...`;
+                }
+            }
+            // Pair match for matching
+            const pairInput = row.querySelector('input[name*="[pair_match]"]');
+            if (pairInput) {
+                pairInput.name = `options[${i}][pair_match]`;
+            }
+            // Correct input
+            const correctInput = row.querySelector('.correct-input');
+            const hiddenCorrect = row.querySelector('.option-is-correct');
+            if (correctInput) {
+                if (isSingle) {
+                    correctInput.name = 'correct_option';
+                    correctInput.value = keyInput ? keyInput.value : letter;
+                    if (hiddenCorrect) {
+                        hiddenCorrect.name = `options[${i}][is_correct]`;
+                        if (correctInput.checked) {
+                            hiddenCorrect.value = '1';
+                            hasChecked = true;
+                        } else {
+                            hiddenCorrect.value = '0';
+                        }
+                    }
+                } else {
+                    correctInput.name = `options[${i}][is_correct]`;
+                }
+            }
+        });
+
+        // Jika single choice dan tidak ada yang terpilih, pilih baris pertama otomatis
+        if (isSingle && !hasChecked && rows.length > 0) {
+            const firstRadio = rows[0].querySelector('.correct-input');
+            const firstHidden = rows[0].querySelector('.option-is-correct');
+            if (firstRadio) firstRadio.checked = true;
+            if (firstHidden) firstHidden.value = '1';
         }
     }
 
@@ -218,14 +419,29 @@
     function renderStandardOptions(inputType) {
         const container = document.getElementById('optionsList');
         container.innerHTML = '';
-        const inputClass = inputType === 'radio' ? 'form-radio' : 'form-checkbox';
+        const isRadio = inputType === 'radio';
+        const inputClass = isRadio ? 'form-radio' : 'form-checkbox';
+
         for (let i = 0; i < 4; i++) {
             const letter = letters[i];
             const div = document.createElement('div');
             div.className = 'option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white hover:bg-default-50/50 transition shadow-2xs';
+
+            let inputHtml = '';
+            if (isRadio) {
+                inputHtml = `
+                    <input type="radio" name="correct_option" value="${letter}" ${i === 0 ? 'checked' : ''} onchange="syncRadioSelection(this)" class="form-radio correct-input text-primary focus:ring-primary/20 cursor-pointer">
+                    <input type="hidden" name="options[${i}][is_correct]" class="option-is-correct" value="${i === 0 ? '1' : '0'}">
+                `;
+            } else {
+                inputHtml = `
+                    <input type="checkbox" name="options[${i}][is_correct]" value="1" ${i === 0 ? 'checked' : ''} class="form-checkbox correct-input text-primary focus:ring-primary/20 cursor-pointer">
+                `;
+            }
+
             div.innerHTML = `
                 <div class="pt-0.5">
-                    <input type="${inputType}" name="${inputType === 'radio' ? 'options[' + i + '][is_correct]' : 'options[' + i + '][is_correct]'}" value="1" ${i === 0 ? 'checked' : ''} class="${inputClass} correct-input text-primary focus:ring-primary/20">
+                    ${inputHtml}
                 </div>
                 <div class="w-10 font-bold text-default-700 text-xs">
                     <input type="text" name="options[${i}][key]" value="${letter}" class="form-input w-full text-center font-bold bg-default-50 border-default-200 rounded-lg py-1 text-xs" readonly>
@@ -248,12 +464,14 @@
         const container = document.getElementById('optionsList');
         container.innerHTML = `
             <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
-                <input type="radio" name="options[0][is_correct]" value="1" checked class="form-radio text-primary focus:ring-primary/20">
+                <input type="radio" name="correct_option" value="BENAR" checked onchange="syncRadioSelection(this)" class="form-radio text-primary focus:ring-primary/20 cursor-pointer">
+                <input type="hidden" name="options[0][is_correct]" class="option-is-correct" value="1">
                 <input type="hidden" name="options[0][key]" value="BENAR">
                 <input type="text" name="options[0][content]" value="BENAR" class="flex-1 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-3 py-2" readonly>
             </div>
             <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white shadow-2xs">
-                <input type="radio" name="options[1][is_correct]" value="1" class="form-radio text-primary focus:ring-primary/20">
+                <input type="radio" name="correct_option" value="SALAH" onchange="syncRadioSelection(this)" class="form-radio text-primary focus:ring-primary/20 cursor-pointer">
+                <input type="hidden" name="options[1][is_correct]" class="option-is-correct" value="0">
                 <input type="hidden" name="options[1][key]" value="SALAH">
                 <input type="text" name="options[1][content]" value="SALAH" class="flex-1 text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 rounded px-3 py-2" readonly>
             </div>
@@ -307,14 +525,26 @@
         }
         const letter = letters[nextIdx] || ('O' + (nextIdx + 1));
         const qType = document.getElementById('questionType').value;
-        const inputType = qType === 'multiple_choice_complex' ? 'checkbox' : 'radio';
-        const inputClass = inputType === 'radio' ? 'form-radio' : 'form-checkbox';
+        const isRadio = qType === 'multiple_choice';
 
         const div = document.createElement('div');
         div.className = 'option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white hover:bg-default-50/50 transition shadow-2xs';
+
+        let inputHtml = '';
+        if (isRadio) {
+            inputHtml = `
+                <input type="radio" name="correct_option" value="${letter}" onchange="syncRadioSelection(this)" class="form-radio correct-input text-primary focus:ring-primary/20 cursor-pointer">
+                <input type="hidden" name="options[${nextIdx}][is_correct]" class="option-is-correct" value="0">
+            `;
+        } else {
+            inputHtml = `
+                <input type="checkbox" name="options[${nextIdx}][is_correct]" value="1" class="form-checkbox correct-input text-primary focus:ring-primary/20 cursor-pointer">
+            `;
+        }
+
         div.innerHTML = `
             <div class="pt-0.5">
-                <input type="${inputType}" name="options[${nextIdx}][is_correct]" value="1" class="${inputClass} correct-input text-primary focus:ring-primary/20">
+                ${inputHtml}
             </div>
             <div class="w-10 font-bold text-default-700 text-xs">
                 <input type="text" name="options[${nextIdx}][key]" value="${letter}" class="form-input w-full text-center font-bold bg-default-50 border-default-200 rounded-lg py-1 text-xs" readonly>
@@ -340,11 +570,30 @@
             return;
         }
         btn.closest('.option-row').remove();
+        reindexOptions();
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
     }
 
     document.getElementById('questionContent').addEventListener('input', function() {
         document.getElementById('charCount').innerText = this.value.length + ' karakter';
     });
+
+    // Form submit listener to ensure latest content is in textarea
+    const questionForm = document.querySelector('form');
+    if (questionForm) {
+        questionForm.addEventListener('submit', function() {
+            if (!isRawMode && window.questionQuill) {
+                syncQuillToTextarea();
+            }
+        });
+    }
+
+    // Auto initialize Quill editor
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initQuillEditor);
+    } else {
+        initQuillEditor();
+    }
 </script>
 @endsection
 

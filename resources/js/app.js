@@ -2,8 +2,11 @@ import ApexCharts from "apexcharts";
 import "preline";
 import { createIcons, icons } from "lucide";
 import { TailwickApp, TailwickLayout } from "./tailwick.js";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
 window.ApexCharts = ApexCharts;
+window.Quill = Quill;
 
 document.addEventListener("DOMContentLoaded", () => {
     createIcons({ icons });

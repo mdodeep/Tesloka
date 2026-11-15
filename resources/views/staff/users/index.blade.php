@@ -90,6 +90,44 @@
         title="Daftar Pengguna Sistem ({{ $currentTab === 'staff' ? 'Staf & Pengawas' : ($currentTab === 'student' ? 'Peserta Ujian' : 'Seluruh Pengguna') }})" 
         subtitle="Kelola data akun, informasi identitas (NIM/NIK), serta lakukan aksi massal terintegrasi.">
         
+        <!-- Bilah Aksi Massal Terintegrasi Langsung di Atas Tabel (Tanpa Pop-up Mengambang) -->
+        <div id="batchActionBar" class="mb-4 p-3 rounded-md border transition-all duration-200 bg-default-50 border-default-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-2.5">
+                    <span class="inline-flex size-6 rounded-full bg-default-200 text-default-700 font-bold text-xs items-center justify-center transition-colors" id="selectedCountBadge">0</span>
+                    <span class="font-medium text-default-700">
+                        <span id="selectedCountText">0</span> pengguna dipilih
+                    </span>
+                    <button type="button" id="clearSelectionBtn" onclick="clearAllSelections()" class="hidden ml-1 text-default-500 hover:text-danger underline cursor-pointer text-[11px] transition">
+                        Batal Pilih
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                    <span class="text-default-500 font-medium text-[11px] hidden md:inline">Aksi Massal:</span>
+                    
+                    <!-- Dropdown Ubah Status Massal -->
+                    <select id="bulkStatusSelect" disabled class="form-select text-xs py-1.5 px-3 rounded bg-white border border-default-300 text-default-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <option value="">-- Ubah Status --</option>
+                        <option value="active">Jadikan Aktif</option>
+                        <option value="inactive">Jadikan Nonaktif</option>
+                        <option value="locked">Kunci Akun</option>
+                    </select>
+
+                    <button type="button" id="applyStatusBtn" disabled onclick="executeBulkStatus()" class="btn btn-sm bg-primary text-white hover:bg-primary-hover font-semibold shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition inline-flex items-center gap-1.5">
+                        <i data-lucide="check" class="size-3.5"></i>
+                        <span>Terapkan</span>
+                    </button>
+
+                    <!-- Hapus Terpilih -->
+                    <button type="button" id="bulkDeleteBtn" disabled onclick="openBulkDeleteModal()" class="btn btn-sm bg-danger text-white hover:bg-danger/90 font-semibold inline-flex items-center gap-1.5 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition">
+                        <i data-lucide="trash-2" class="size-3.5"></i>
+                        <span>Hapus Terpilih</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[850px] text-left text-xs">
                 <thead>
@@ -267,37 +305,6 @@
             </div>
         @endif
     </x-cbt.card>
-</div>
-
-<!-- Floating Sticky Batch Action Bar (Tailwick Design System) -->
-<div id="batchActionBar" class="fixed bottom-6 inset-x-0 mx-auto max-w-2xl bg-default-900 text-white shadow-2xl rounded-xl p-3.5 flex items-center justify-between z-40 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300">
-    <div class="flex items-center gap-2.5">
-        <span class="flex size-7 rounded-full bg-primary text-white font-bold text-xs items-center justify-center" id="selectedCountBadge">0</span>
-        <span class="text-xs font-medium">Pengguna terpilih</span>
-    </div>
-    
-    <div class="flex items-center gap-2">
-        <!-- Form Ubah Status Massal -->
-        <select id="bulkStatusSelect" class="form-select text-xs bg-default-800 border-default-700 text-white rounded py-1 px-2.5 focus:ring-0">
-            <option value="">-- Ubah Status --</option>
-            <option value="active">Jadikan Aktif</option>
-            <option value="inactive">Jadikan Nonaktif</option>
-            <option value="locked">Kunci Akun</option>
-        </select>
-        <button type="button" onclick="executeBulkStatus()" class="px-3 py-1.5 rounded bg-default-700 hover:bg-default-600 text-xs font-semibold cursor-pointer transition">
-            Terapkan
-        </button>
-
-        <!-- Hapus Terpilih -->
-        <button type="button" onclick="openBulkDeleteModal()" class="px-3 py-1.5 rounded bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs transition">
-            <i data-lucide="trash-2" class="size-3.5"></i>
-            <span>Hapus Terpilih</span>
-        </button>
-
-        <button type="button" onclick="clearAllSelections()" class="p-1.5 rounded text-default-400 hover:text-white transition cursor-pointer" title="Batal Pilih">
-            <i data-lucide="x" class="size-4"></i>
-        </button>
-    </div>
 </div>
 
 <!-- Modal Konfirmasi Hapus Massal -->
@@ -772,14 +779,44 @@
         const count = checkedBoxes.length;
         const bar = document.getElementById('batchActionBar');
         const badge = document.getElementById('selectedCountBadge');
+        const countText = document.getElementById('selectedCountText');
+        const clearBtn = document.getElementById('clearSelectionBtn');
+        const statusSelect = document.getElementById('bulkStatusSelect');
+        const applyBtn = document.getElementById('applyStatusBtn');
+        const deleteBtn = document.getElementById('bulkDeleteBtn');
+
+        if (badge) badge.textContent = count;
+        if (countText) countText.textContent = count;
 
         if (count > 0) {
-            badge.textContent = count;
-            bar.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
-            bar.classList.add('translate-y-0', 'opacity-100');
+            if (bar) {
+                bar.classList.remove('bg-default-50', 'border-default-200');
+                bar.classList.add('bg-primary/5', 'border-primary/30', 'ring-1', 'ring-primary/20');
+            }
+            if (badge) {
+                badge.classList.remove('bg-default-200', 'text-default-700');
+                badge.classList.add('bg-primary', 'text-white');
+            }
+            if (clearBtn) clearBtn.classList.remove('hidden');
+            if (statusSelect) statusSelect.disabled = false;
+            if (applyBtn) applyBtn.disabled = false;
+            if (deleteBtn) deleteBtn.disabled = false;
         } else {
-            bar.classList.remove('translate-y-0', 'opacity-100');
-            bar.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+            if (bar) {
+                bar.classList.remove('bg-primary/5', 'border-primary/30', 'ring-1', 'ring-primary/20');
+                bar.classList.add('bg-default-50', 'border-default-200');
+            }
+            if (badge) {
+                badge.classList.remove('bg-primary', 'text-white');
+                badge.classList.add('bg-default-200', 'text-default-700');
+            }
+            if (clearBtn) clearBtn.classList.add('hidden');
+            if (statusSelect) {
+                statusSelect.value = '';
+                statusSelect.disabled = true;
+            }
+            if (applyBtn) applyBtn.disabled = true;
+            if (deleteBtn) deleteBtn.disabled = true;
         }
     }
 

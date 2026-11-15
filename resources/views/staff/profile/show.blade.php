@@ -129,40 +129,71 @@
             </form>
         </x-cbt.card>
 
-        <!-- Kartu Ganti Kata Sandi -->
-        <x-cbt.card title="Ganti Kata Sandi" subtitle="Pastikan kata sandi baru Anda kuat dan sulit ditebak.">
-            <form method="POST" action="{{ route('staff.password.update') }}" class="space-y-4">
-                @csrf
-                @method('PUT')
-
-                <div>
-                    <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">Kata Sandi Saat Ini</label>
-                    <input type="password" name="current_password" required
-                        class="form-input" placeholder="Masukkan kata sandi lama Anda">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">Kata Sandi Baru</label>
-                        <input type="password" name="password" required
-                            class="form-input" placeholder="Minimal 8 karakter & angka">
-                    </div>
+        <!-- Kartu Ganti Kata Sandi Terintegrasi -->
+        <div id="change-password">
+            <x-cbt.card title="Ganti Kata Sandi" subtitle="Pastikan kata sandi baru Anda kuat dan sulit ditebak untuk melindungi akun institusi.">
+                <form method="POST" action="{{ route('staff.password.update') }}" class="space-y-4">
+                    @csrf
+                    @method('PUT')
 
                     <div>
-                        <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">Konfirmasi Kata Sandi Baru</label>
-                        <input type="password" name="password_confirmation" required
-                            class="form-input" placeholder="Ulangi kata sandi baru">
+                        <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">
+                            Kata Sandi Saat Ini <span class="text-danger">*</span>
+                        </label>
+                        <input type="password" name="current_password" required
+                            class="form-input @error('current_password') border-danger @enderror" placeholder="Masukkan kata sandi lama Anda">
+                        @error('current_password')
+                            <p class="mt-1 text-xs text-danger font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
-                </div>
 
-                <div class="flex justify-end pt-3 border-t border-default-100">
-                    <button type="submit" class="h-10 px-5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-md shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer">
-                        <svg class="size-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        <span>Perbarui Kata Sandi</span>
-                    </button>
-                </div>
-            </form>
-        </x-cbt.card>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">
+                                Kata Sandi Baru <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" name="password" required
+                                class="form-input @error('password') border-danger @enderror" placeholder="Minimal 8 karakter & angka">
+                            @error('password')
+                                <p class="mt-1 text-xs text-danger font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">
+                                Konfirmasi Kata Sandi Baru <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" name="password_confirmation" required
+                                class="form-input" placeholder="Ulangi kata sandi baru">
+                        </div>
+                    </div>
+
+                    <!-- Checklist Kebijakan Keamanan Password -->
+                    <div class="bg-default-50 rounded p-3.5 border border-default-200 text-xs text-default-600 space-y-1.5">
+                        <div class="font-bold text-default-800 mb-1">Standar Keamanan Kata Sandi TESLOKA:</div>
+                        <div class="flex items-center gap-2">
+                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                            <span>Minimal terdiri dari 8 karakter</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                            <span>Kombinasi huruf dan angka</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                            <span>Pembaruan kata sandi otomatis mencabut seluruh sesi aktif lain di perangkat luar demi keamanan</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-3 border-t border-default-100">
+                        <button type="submit" class="h-10 px-5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-md shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer">
+                            <i data-lucide="lock" class="size-4"></i>
+                            <span>Perbarui Kata Sandi</span>
+                        </button>
+                    </div>
+                </form>
+            </x-cbt.card>
+        </div>
     </div>
 </div>
 @endsection

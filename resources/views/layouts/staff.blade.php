@@ -235,13 +235,7 @@
                         <li class="menu-item">
                             <a href="{{ route('staff.profile') }}" class="menu-link {{ request()->routeIs('staff.profile') ? 'active !bg-primary !text-white' : '' }}">
                                 <span class="menu-icon"><i data-lucide="user" class="size-4.5"></i></span>
-                                <span class="menu-text">Profil Saya</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.security.password') }}" class="menu-link {{ request()->routeIs('staff.security.password*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="lock" class="size-4.5"></i></span>
-                                <span class="menu-text">Ganti Password</span>
+                                <span class="menu-text">Profil &amp; Kata Sandi</span>
                             </a>
                         </li>
                         <li class="menu-item">
@@ -340,15 +334,15 @@
                                 <div class="py-1">
                                     <a href="{{ route('staff.profile') }}" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                                         <i data-lucide="user" class="size-4 text-default-400"></i>
-                                        <span>Profil Saya</span>
-                                    </a>
-                                    <a href="{{ route('staff.security.password') }}" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                                        <i data-lucide="lock" class="size-4 text-default-400"></i>
-                                        <span>Ganti Password</span>
+                                        <span>Profil &amp; Kata Sandi</span>
                                     </a>
                                     <a href="{{ route('staff.security.two-factor') }}" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                                         <i data-lucide="key" class="size-4 text-default-400"></i>
                                         <span>Keamanan 2FA</span>
+                                    </a>
+                                    <a href="{{ route('staff.security.sessions') }}" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                                        <i data-lucide="monitor" class="size-4 text-default-400"></i>
+                                        <span>Sesi &amp; Perangkat</span>
                                     </a>
                                 </div>
                                 <div class="py-1">

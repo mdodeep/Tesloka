@@ -18,24 +18,24 @@
 <body class="bg-default-100 text-default-800 font-sans min-h-screen flex flex-col no-select">
     <!-- Top Bar Navigation (Fixed) -->
     <header class="sticky top-0 z-40 bg-white border-b border-default-200 shadow-xs">
-        <div class="w-full px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div class="w-full px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
             <!-- Left: Exam & Student Meta -->
-            <div class="flex items-center gap-3">
-                <span class="w-9 h-9 rounded bg-primary text-white font-extrabold flex items-center justify-center text-sm shadow-xs">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                <span class="w-8 sm:w-9 h-8 sm:h-9 rounded bg-primary text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-xs shrink-0">
                     T
                 </span>
-                <div>
-                    <h1 class="text-sm font-bold text-default-900 leading-tight truncate max-w-xs sm:max-w-md">
+                <div class="min-w-0 flex-1">
+                    <h1 class="text-xs sm:text-sm font-bold text-default-900 leading-tight truncate">
                         {{ $attempt->exam->title }}
                     </h1>
-                    <div class="text-[11px] text-default-500 font-mono">
+                    <div class="text-[10px] sm:text-[11px] text-default-500 font-mono truncate">
                         {{ $attempt->student->name }} &bull; Kursi: <strong>{{ $attempt->participant->seat_number ?? '-' }}</strong>
                     </div>
                 </div>
             </div>
 
             <!-- Center: Real-time Autosave Sync Status -->
-            <div class="hidden md:flex items-center gap-2 text-xs">
+            <div class="hidden md:flex items-center gap-2 text-xs shrink-0">
                 <span id="saveStatusIndicator" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200">
                     <i data-lucide="check-circle" class="size-4 text-emerald-600"></i>
                     <span id="saveStatusText">Tersimpan di Server</span>
@@ -43,9 +43,9 @@
             </div>
 
             <!-- Right: Server Timer & Palette Trigger -->
-            <div class="flex items-center gap-3">
-                <div class="bg-slate-900 text-white px-3.5 py-1.5 rounded font-mono text-sm font-bold tracking-wider flex items-center gap-2 shadow-xs">
-                    <i data-lucide="clock" class="size-4 text-amber-400"></i>
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+                <div class="bg-slate-900 text-white px-2 sm:px-3.5 py-1 sm:py-1.5 rounded font-mono text-xs sm:text-sm font-bold tracking-wider flex items-center gap-1 sm:gap-2 shadow-xs shrink-0">
+                    <i data-lucide="clock" class="size-3.5 sm:size-4 text-amber-400"></i>
                     <span id="cbtTimerDisplay">00:00:00</span>
                 </div>
 
@@ -66,7 +66,7 @@
                     <i data-lucide="maximize" class="size-4"></i>
                 </button>
 
-                <button type="button" onclick="document.getElementById('paletteSidebar').classList.toggle('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-700 lg:hidden" title="Daftar Soal">
+                <button type="button" onclick="document.getElementById('paletteSidebar').classList.toggle('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-700 lg:hidden shrink-0" title="Daftar Soal">
                     <i data-lucide="layout-grid" class="size-4"></i>
                 </button>
             </div>
@@ -103,7 +103,7 @@
                     <p id="announcementMessage" class="text-xs text-amber-800 leading-relaxed"></p>
                 </div>
 
-                <div class="bg-white border border-default-200 rounded-md p-6 sm:p-8 shadow-xs min-h-[500px] flex flex-col justify-between">
+                <div class="bg-white border border-default-200 rounded-md p-4 sm:p-6 lg:p-8 shadow-xs min-h-[500px] flex flex-col justify-between">
                     <!-- Top Question Meta -->
                     <div>
                         <div class="flex items-center justify-between pb-4 border-b border-default-100 mb-6">

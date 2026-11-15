@@ -18,19 +18,19 @@
     <!-- Tabel Arsip Ujian -->
     <x-cbt.card title="Daftar Arsip Ujian Resmi (Total {{ $archives->total() }})">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider">
-                        <th class="py-3 px-4 whitespace-nowrap">Kode Arsip</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Judul Ujian</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Waktu Diarsipkan</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Peserta</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Rata-rata Skor</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Status Legal Hold</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Checksum Manifest</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-backup-archives">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode Arsip</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Judul Ujian</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Waktu Diarsipkan</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Peserta</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Rata-rata Skor</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status Legal Hold</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Checksum Manifest</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($archives as $arc)
                         <tr class="hover:bg-default-50 transition">
                             <td class="py-3 px-4 font-mono font-bold text-primary-600 whitespace-nowrap">
@@ -76,8 +76,13 @@
         </div>
 
         @if($archives->hasPages())
-            <div class="p-4 border-t border-default-100">
-                {{ $archives->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $archives->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $archives->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $archives->total() }}</span> data
+                </p>
+                <div>
+                    {{ $archives->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

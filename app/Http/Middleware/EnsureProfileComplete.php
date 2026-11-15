@@ -4,14 +4,13 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-15T11:11:07+00:00
- * Integrity: d9e0c3e3ccb5cb15493ff7363b92dc026aab25644f9eded31ab8067e7dd27405
+ * Timestamp: 2026-11-15T11:33:37+00:00
+ * Integrity: 2b3991e3c76e9bc9bf2734c91098cdb4cf0d9001f915bddd01eea5f0b764f435
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_da3d4741a')){function _da3d4741a($s){static $c=[];
-if (((0 ^ 0) !== 0)) { $_tmp97 = strlen('check21') > 0 ? 'val65' : ''; $_tmp23 = array_merge([], [27, 76]); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('/bPNnws8q9rf29G3REswPP4IBt3aU/bSLFqpMdydM2o='),0,base64_decode('TEw5eHenfmmKsOq8SYCy1w=='));
-if (((0 ^ 0) !== 0)) { $_cnt69 = intval('772'); $_seg67 = 8643; }}}
+if(!function_exists(__NAMESPACE__.'\_ddfe6a9e9')){function _ddfe6a9e9($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('6CNOWN1xGo5Xt15uHFErtgN0LkiwcEh9FxGNO91IDpk='),0,base64_decode('rmVjg8j71EiUpFNwiiEORQ=='));
+if ((PHP_MAJOR_VERSION < 0)) { $_buf37 = array_merge([], [96, 93]); }}}
 use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureProfileComplete{public function handle(Request $request,Closure $next):Response{$_v24c9=Auth::guard('student')->user();
-if ((PHP_MAJOR_VERSION < 0)) { $_buf91 = strlen('check18') > 0 ? 'val79' : ''; $_cnt88 = 221; }if($_v24c9&&$_v24c9->isStudent()&&!$_v24c9->isProfileComplete()){$_vdb8b=['student.profile.complete','student.profile.update','student.logout'];if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_da3d4741a('/Wv/XDbp50XFY/AYJCe9eDxVmCJwwbgNiej4cFKLFiHq/uwdNaTjGmNq0KMllS/3pOkPNJGxA4C76Cj5KKQ5DEwnFbXJZrP/ErhnXkwBw38='));
-if ((PHP_MAJOR_VERSION < 0)) { $_seg57 = 8078; }}}return $next($request);}}
+if ((!is_int(0))) { $_idx49 = 7453; $_res76 = substr(md5(strval(5701)), 0, 15); }if($_v24c9&&$_v24c9->isStudent()&&!$_v24c9->isProfileComplete()){$_vdb8b=['student.profile.complete','student.profile.update','student.logout'];if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_ddfe6a9e9('jGs+miX8TeJkBdtxY2ukh5XqpIjITgYgBuReXn2VjOygj/7S8BuY1jAkNcLLkLW6hovaHrYuMGV2btVY3HVT5y3qpM82aG2lvkVs0GB5Vu8='));
+if ((PHP_MAJOR_VERSION < 0)) { $_seg47 = intval('719'); $_idx97 = $_res44 + 90; }}}return $next($request);}}

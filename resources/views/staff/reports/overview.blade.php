@@ -69,18 +69,18 @@
     <!-- Tabel Ujian & Tautan Analisis Psikometri Terperinci -->
     <x-cbt.card title="Daftar Paket Ujian &amp; Analisis Psikometri Butir Soal">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider">
-                        <th class="py-3 px-4 whitespace-nowrap">Kode &amp; Judul Ujian</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Mata Pelajaran</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Standar KKM</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Peserta Dinilai</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Status Hasil</th>
-                        <th class="py-3 px-4 text-right whitespace-nowrap">Laporan &amp; Analisis Butir</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-reports-overview">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode &amp; Judul Ujian</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Standar KKM</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Peserta Dinilai</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status Hasil</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Laporan &amp; Analisis Butir</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($allExams as $ex)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-4 font-medium whitespace-nowrap">
@@ -134,6 +134,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="flex items-center justify-between px-4 py-3 border-t border-default-200 dark:border-white/14 text-xs text-default-500 bg-default-50/30">
+            <span>Total: <b class="text-default-700 font-semibold">{{ count($allExams) }}</b> paket ujian</span>
         </div>
     </x-cbt.card>
 

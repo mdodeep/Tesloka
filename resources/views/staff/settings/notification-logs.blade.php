@@ -65,18 +65,18 @@
     <!-- Table Logs -->
     <x-cbt.card title="Riwayat Pengiriman Pesan">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs text-default-600" data-gridjs="true" data-gridjs-page-size="10">
-                <thead class="bg-default-50 text-default-700 font-bold uppercase text-[11px] border-b border-default-200">
-                    <tr>
-                        <th class="py-3 px-4 whitespace-nowrap">Waktu</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Email Tujuan</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Subjek</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Status</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Catatan / Error</th>
-                        <th class="py-3 px-4 text-right whitespace-nowrap">Aksi</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs text-default-600" id="table-notification-logs">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Waktu</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Email Tujuan</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Subjek</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Catatan / Error</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($logs as $log)
                         <tr class="hover:bg-default-50/80 transition-colors">
                             <td class="py-3 px-4 font-mono text-[11px] text-default-500 whitespace-nowrap">
@@ -125,8 +125,13 @@
         </div>
 
         @if($logs->hasPages())
-            <div class="pt-4 border-t border-default-100">
-                {{ $logs->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $logs->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $logs->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $logs->total() }}</span> data
+                </p>
+                <div>
+                    {{ $logs->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

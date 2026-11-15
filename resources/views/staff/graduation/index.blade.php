@@ -109,21 +109,21 @@
     <!-- Results Table -->
     <x-cbt.card title="Rekapitulasi Hasil Kelulusan &amp; Yudisium Peserta">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[850px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider">
-                        <th class="py-3 px-4 text-center w-12 whitespace-nowrap">No</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Nama Siswa / Peserta</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Ujian &amp; Mata Pelajaran</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Skor Akhir</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Capaian (%)</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">KKM</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Predikat</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Status Kelulusan</th>
-                        <th class="py-3 px-4 text-right whitespace-nowrap">Dokumen Kelulusan</th>
+            <table class="w-full min-w-[850px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-graduation">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 text-center w-12 whitespace-nowrap">No</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama Siswa / Peserta</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Ujian &amp; Mata Pelajaran</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Skor Akhir</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Capaian (%)</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">KKM</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Predikat</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status Kelulusan</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Dokumen Kelulusan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($results as $index => $res)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3 px-4 text-center text-default-500 font-medium whitespace-nowrap">
@@ -197,8 +197,13 @@
         </div>
 
         @if($results->hasPages())
-            <div class="pt-4 border-t border-default-100">
-                {{ $results->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $results->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $results->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $results->total() }}</span> data
+                </p>
+                <div>
+                    {{ $results->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

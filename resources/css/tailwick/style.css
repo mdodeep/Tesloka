@@ -15,7 +15,6 @@ Contact: themesdesign.in@gmail.com
 @import '@simonwep/pickr/dist/themes/monolith.min.css';
 @import '@simonwep/pickr/dist/themes/nano.min.css';
 @import "dropzone/dist/dropzone.css";
-@import "gridjs/dist/theme/mermaid.css";
 
 @import 'datatables.net-dt/css/dataTables.dataTables.css';
 @import 'datatables.net-responsive-dt/css/responsive.dataTables.css';
@@ -73,7 +72,6 @@ Contact: themesdesign.in@gmail.com
 @import "./custom/_quill-editor.css";
 @import "./custom/_choices.css";
 @import "./custom/_sweetalert2.css";
-@import "./custom/_gridjs.css";
 
 /* Simplebar */
 @import "./custom/_simplebar.css";

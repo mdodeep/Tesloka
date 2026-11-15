@@ -85,23 +85,23 @@
 
         <x-cbt.card title="Karakteristik Psikometrik Butir Soal Ujian">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[780px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                            <th class="py-3 px-3.5 w-12 text-center whitespace-nowrap">No</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">Kode Soal</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">Tipe Soal</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Bobot</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Indeks Kesukaran (P)</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Tingkat Kesukaran</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Rasch Logit (b)</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Model Fit (MNSQ)</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Daya Pembeda (D)</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Kategori Pembeda</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Benar / Total</th>
+                <table class="w-full min-w-[780px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-exam-psychometrics">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="py-3 px-3.5 border-b border-default-200 w-12 text-center whitespace-nowrap">No</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Kode Soal</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Tipe Soal</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Bobot</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Indeks Kesukaran (P)</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Tingkat Kesukaran</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Rasch Logit (b)</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Model Fit (MNSQ)</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Daya Pembeda (D)</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Kategori Pembeda</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Benar / Total</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse($itemAnalysis as $idx => $item)
                             <tr class="hover:bg-default-50 transition">
                                 <td class="py-3 px-3.5 text-center font-bold text-default-500 whitespace-nowrap">{{ $idx + 1 }}</td>
@@ -149,20 +149,20 @@
         <!-- Matriks Efektivitas Pengecoh / Distraktor (FULL-FEATURE 35.4) -->
         <x-cbt.card title="Matriks Analisis Efektivitas Pengecoh / Distraktor (Distractor Analysis)" subtitle="Evaluasi pilihan ganda: Pola sebaran pilihan Kelompok Atas (Upper 27%) vs Kelompok Bawah (Lower 27%)">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[850px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                            <th class="py-3 px-3.5 w-12 text-center whitespace-nowrap">No</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">Kode &amp; Cuplikan Soal</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Opsi</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Kel. Atas (27%)</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Kel. Bawah (27%)</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Total Pemilih</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Persentase</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Status Keberfungsian Pengecoh</th>
+                <table class="w-full min-w-[850px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-exam-distractors">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="py-3 px-3.5 border-b border-default-200 w-12 text-center whitespace-nowrap">No</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Kode &amp; Cuplikan Soal</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Opsi</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Kel. Atas (27%)</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Kel. Bawah (27%)</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Total Pemilih</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Persentase</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Status Keberfungsian Pengecoh</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @php $hasDistractors = false; @endphp
                         @foreach($itemAnalysis as $idx => $item)
                             @if(!empty($item['distractors']))
@@ -317,19 +317,19 @@
                 @endif
             @endslot
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                            <th class="py-3 px-3.5 w-12 text-center whitespace-nowrap">No</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">Nama Peserta</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">NISN</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Skor Diperoleh</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Persentase</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Selisih ke KKM</th>
-                            <th class="py-3 px-3.5 text-center whitespace-nowrap">Status</th>
+                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-exam-remedials">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="py-3 px-3.5 border-b border-default-200 w-12 text-center whitespace-nowrap">No</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Nama Peserta</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">NISN</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Skor Diperoleh</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Persentase</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Selisih ke KKM</th>
+                            <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse($remedialStudents as $idx => $rem)
                             @php
                                 $diff = ($exam->passing_grade ?? 75) - $rem->percentage;

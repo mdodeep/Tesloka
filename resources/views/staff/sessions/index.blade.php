@@ -68,18 +68,18 @@
     <!-- Table of Sessions -->
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0 -my-3.5 sm:-my-5">
-            <table class="w-full text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead class="bg-default-50 text-[11px] uppercase font-bold text-default-600 border-b border-default-200">
-                    <tr>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Kode & Nama Sesi</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Ujian & Mapel</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Ruang & Kapasitas</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Jadwal Waktu</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 px-4 text-right whitespace-nowrap">Aksi</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-sessions">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Kode & Nama Sesi</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Ujian & Mapel</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Ruang & Kapasitas</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Jadwal Waktu</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($sessions as $session)
                         <tr class="hover:bg-default-50/80 transition-colors">
                             <td class="py-3.5 px-4 min-w-[160px] max-w-[220px]">
@@ -150,8 +150,13 @@
         </div>
 
         @if($sessions->hasPages())
-            <div class="mt-4 pt-3 border-t border-default-100">
-                {{ $sessions->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $sessions->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $sessions->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $sessions->total() }}</span> data
+                </p>
+                <div>
+                    {{ $sessions->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

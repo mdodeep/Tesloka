@@ -95,18 +95,18 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50">
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama Tahun Ajaran</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Rentang Periode</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Kelas Terkait</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Semester</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-years">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Tahun Ajaran</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Rentang Periode</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kelas Terkait</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Semester</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse ($years as $y)
                             <tr class="hover:bg-default-50 transition">
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-800 whitespace-nowrap">{{ $y->name }}</td>
@@ -162,18 +162,18 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50">
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama Semester</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Periode</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-terms">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Semester</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Periode</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse ($terms as $t)
                             <tr class="hover:bg-default-50 transition">
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $t->code }}</td>
@@ -233,19 +233,19 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50">
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama Jurusan / Prodi</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Jenjang</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Kelas</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Mata Pelajaran</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Deskripsi</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-departments">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Jurusan / Prodi</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jenjang</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kelas</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Mata Pelajaran</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Deskripsi</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse ($departments as $d)
                             <tr class="hover:bg-default-50 transition">
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $d->code }}</td>
@@ -300,20 +300,20 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50">
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama Kelas</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Jurusan</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Kapasitas</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Peserta</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-classes">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Kelas</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jurusan</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kapasitas</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Peserta</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse ($classes as $c)
                             <tr class="hover:bg-default-50 transition">
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $c->code }}</td>
@@ -400,19 +400,19 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50">
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama Mata Pelajaran</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Jurusan</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Bank Soal</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Ujian</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-subjects">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Mata Pelajaran</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jurusan</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Bank Soal</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Ujian</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse ($subjects as $s)
                             <tr class="hover:bg-default-50 transition">
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $s->code }}</td>

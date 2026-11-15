@@ -62,17 +62,17 @@
             </div>
 
             <div class="overflow-x-auto flex-1">
-                <table class="w-full min-w-[700px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                            <th class="py-3 px-4 whitespace-nowrap">Nama & Prefix</th>
-                            <th class="py-3 px-4 whitespace-nowrap">Cakupan (Abilities)</th>
-                            <th class="py-3 px-4 whitespace-nowrap">Status / Kadaluwarsa</th>
-                            <th class="py-3 px-4 whitespace-nowrap">Penggunaan Terakhir</th>
-                            <th class="py-3 px-4 text-right whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-api-keys">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama & Prefix</th>
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Abilities)</th>
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status / Kadaluwarsa</th>
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Penggunaan Terakhir</th>
+                            <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse($apiKeys as $key)
                             <tr class="hover:bg-default-50/80 transition">
                                 <td class="py-3.5 px-4">
@@ -154,17 +154,17 @@
             </div>
 
             <div class="overflow-x-auto flex-1">
-                <table class="w-full min-w-[700px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                            <th class="py-3 px-4 whitespace-nowrap">Nama & URL Endpoint</th>
-                            <th class="py-3 px-4 whitespace-nowrap">Peristiwa</th>
-                            <th class="py-3 px-4 whitespace-nowrap">Status</th>
-                            <th class="py-3 px-4 whitespace-nowrap">Riwayat</th>
-                            <th class="py-3 px-4 text-right whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-webhooks">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama & URL Endpoint</th>
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Peristiwa</th>
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status</th>
+                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Riwayat</th>
+                            <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse($webhooks as $wh)
                             <tr class="hover:bg-default-50/80 transition">
                                 <td class="py-3.5 px-4">
@@ -251,19 +251,19 @@
         </div>
 
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr class="bg-default-50 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                        <th class="py-3 px-4 whitespace-nowrap">Waktu</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Pelanggan</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Jenis Peristiwa</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Status HTTP</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Percobaan</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Pesan / Respons</th>
-                        <th class="py-3 px-4 text-right whitespace-nowrap">Aksi</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-webhook-deliveries">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Waktu</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Pelanggan</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Jenis Peristiwa</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status HTTP</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Percobaan</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Pesan / Respons</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($recentDeliveries as $deliv)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-4 text-default-500 font-mono text-[11px]">{{ $deliv->created_at->format('d/m/Y H:i:s') }}</td>

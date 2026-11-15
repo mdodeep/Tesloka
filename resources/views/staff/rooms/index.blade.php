@@ -25,18 +25,18 @@
     <!-- Table of Rooms -->
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[720px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode &amp; Nama Ruang</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Lokasi Fisik / Gedung</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Kapasitas Maksimal</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Total Sesi Terjadwal</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+            <table class="w-full min-w-[720px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-rooms">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode &amp; Nama Ruang</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Lokasi Fisik / Gedung</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kapasitas Maksimal</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Total Sesi Terjadwal</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($rooms as $room)
                         <tr class="hover:bg-default-50 transition-colors">
                             <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
@@ -83,8 +83,13 @@
         </div>
 
         @if($rooms->hasPages())
-            <div class="mt-4 pt-3 border-t border-default-200">
-                {{ $rooms->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $rooms->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $rooms->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $rooms->total() }}</span> data
+                </p>
+                <div>
+                    {{ $rooms->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

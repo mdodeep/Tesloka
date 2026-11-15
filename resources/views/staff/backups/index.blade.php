@@ -88,18 +88,18 @@ Manajemen Cadangan & Pemulihan Sistem
     <!-- Tabel Daftar Cadangan -->
     <x-cbt.card title="Riwayat Berkas Cadangan Sistem">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama Berkas</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Tipe</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Ukuran</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Checksum SHA-256</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Status Integritas</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center w-48 whitespace-nowrap">Aksi</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-backups">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Berkas</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Tipe</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Ukuran</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Checksum SHA-256</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status Integritas</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center w-48 whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($backups as $b)
                         <tr class="hover:bg-default-50 transition">
                             <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-semibold text-default-800 whitespace-nowrap">
@@ -166,8 +166,13 @@ Manajemen Cadangan & Pemulihan Sistem
         </div>
 
         @if($backups->hasPages())
-            <div class="p-4 border-t border-default-200 mt-4">
-                {{ $backups->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $backups->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $backups->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $backups->total() }}</span> data
+                </p>
+                <div>
+                    {{ $backups->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

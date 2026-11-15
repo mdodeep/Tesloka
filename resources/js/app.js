@@ -2,19 +2,30 @@ import ApexCharts from "apexcharts";
 import "preline";
 import { createIcons, icons } from "lucide";
 import { TailwickApp, TailwickLayout } from "./tailwick.js";
-import { initTailwickGrid, initTailwickGridTables } from "./tailwick-gridjs.js";
-import { Grid, html } from "gridjs";
 
 window.ApexCharts = ApexCharts;
-window.gridjs = { Grid, html };
-window.initTailwickGrid = initTailwickGrid;
-window.initTailwickGridTables = initTailwickGridTables;
 
 document.addEventListener("DOMContentLoaded", () => {
     createIcons({ icons });
     new TailwickApp().init();
     new TailwickLayout().init();
-    initTailwickGridTables();
+
+    // Native Tailwick Instant Table Filter (Zero-Dependency & Fast)
+    document.addEventListener("input", (e) => {
+        const input = e.target.closest("[data-table-filter]");
+        if (!input) return;
+        const targetSelector = input.getAttribute("data-table-filter");
+        const table = document.querySelector(targetSelector);
+        if (!table) return;
+        const tbody = table.querySelector("tbody");
+        if (!tbody) return;
+        const query = input.value.toLowerCase().trim();
+        const rows = tbody.querySelectorAll("tr:not(.no-filter)");
+        rows.forEach((row) => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(query) ? "" : "none";
+        });
+    });
 });
 
 // Register Service Worker for Offline Resilience

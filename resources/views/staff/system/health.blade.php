@@ -96,16 +96,16 @@
     <!-- Pre-Flight Checklist Table -->
     <x-cbt.card title="Audit Kesiapan Sistem Sebelum Production">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[700px] text-left border-collapse text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr class="border-b border-default-200 bg-default-50/75">
-                        <th class="py-3 px-4 font-bold text-default-700 whitespace-nowrap">Komponen Diperiksa</th>
-                        <th class="py-3 px-4 font-bold text-default-700 whitespace-nowrap">Kategori</th>
-                        <th class="py-3 px-4 font-bold text-default-700 whitespace-nowrap">Detail & Hasil Diagnosis</th>
-                        <th class="py-3 px-4 font-bold text-default-700 text-right whitespace-nowrap">Status Kesiapan</th>
+            <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-system-health">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Komponen Diperiksa</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kategori</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Detail & Hasil Diagnosis</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Status Kesiapan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @foreach($health['preflight'] as $item)
                         <tr class="hover:bg-default-50/50 transition">
                             <td class="py-3 px-4 font-semibold text-default-900 whitespace-nowrap">
@@ -141,6 +141,9 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="flex items-center justify-between px-4 py-3 border-t border-default-200 dark:border-white/14 text-xs text-default-500 bg-default-50/30">
+            <span>Total: <b class="text-default-700 font-semibold">{{ count($health['preflight']) }}</b> komponen kesiapan diperiksa</span>
         </div>
     </x-cbt.card>
 

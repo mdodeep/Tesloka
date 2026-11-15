@@ -129,14 +129,14 @@
         </div>
 
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[850px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr>
-                        <th class="w-10 px-3.5 py-2.5 border-b border-default-200 text-center whitespace-nowrap">
+            <table class="w-full min-w-[850px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-users">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="w-10 px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">
                             <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="form-checkbox size-4 rounded text-primary cursor-pointer" title="Pilih Semua di Halaman Ini">
                         </th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama &amp; Username</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama &amp; Username</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">
                             @if($currentTab === 'student')
                                 NIM / NIK
                             @elseif($currentTab === 'staff')
@@ -145,20 +145,20 @@
                                 Identitas (NIM / NIP / NIK)
                             @endif
                         </th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Email &amp; Kontak</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Email &amp; Kontak</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">
                             @if($currentTab === 'student')
                                 Rombel / Kelas
                             @else
                                 Peran &amp; Akses
                             @endif
                         </th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Profil</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Profil</th>
+                        <th class="px-3.5 py-3 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse ($users as $u)
                         <tr class="hover:bg-default-50 transition" id="user-row-{{ $u->id }}">
                             <td class="w-10 px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
@@ -300,8 +300,13 @@
             </table>
         </div>
         @if($users->hasPages())
-            <div class="mt-4 pt-3 border-t border-default-200">
-                {{ $users->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $users->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $users->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $users->total() }}</span> data
+                </p>
+                <div>
+                    {{ $users->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

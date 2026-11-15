@@ -17,18 +17,18 @@
     <!-- Delegasi yang Diberikan -->
     <x-cbt.card title="Delegasi yang Anda Berikan" subtitle="Daftar wewenang yang Anda limpahkan kepada rekan sejawat">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                    <tr>
-                        <th class="py-3.5 px-6 whitespace-nowrap">Penerima Wewenang</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Cakupan (Scope)</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Masa Berlaku</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Alasan</th>
-                        <th class="py-3.5 px-6 text-right whitespace-nowrap">Tindakan</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-delegations-given">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Penerima Wewenang</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Scope)</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Masa Berlaku</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Alasan</th>
+                        <th class="py-3.5 px-6 border-b border-default-200 text-right whitespace-nowrap">Tindakan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse ($delegationsGiven as $del)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-6 font-semibold text-default-900 whitespace-nowrap">{{ $del->delegatee?->name ?? 'User #'.$del->delegatee_id }}</td>
@@ -77,17 +77,17 @@
     <!-- Delegasi yang Diterima -->
     <x-cbt.card title="Delegasi yang Anda Terima dari Staf Lain" subtitle="Kewenangan tambahan yang dilimpahkan rekan sejawat kepada Anda">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                    <tr>
-                        <th class="py-3.5 px-6 whitespace-nowrap">Pemberi Wewenang</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Cakupan (Scope)</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Masa Berlaku</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 px-6 whitespace-nowrap">Alasan</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-delegations-received">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Pemberi Wewenang</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Scope)</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Masa Berlaku</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Status</th>
+                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Alasan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse ($delegationsReceived as $del)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-6 font-semibold text-default-900 whitespace-nowrap">{{ $del->delegator?->name ?? 'User #'.$del->delegator_id }}</td>

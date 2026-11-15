@@ -70,19 +70,19 @@
     <!-- Daftar Ujian untuk Penilaian -->
     <x-cbt.card title="Daftar Ujian &amp; Status Penilaian" id="tabel-ujian">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider">
-                        <th class="py-3 px-4 whitespace-nowrap">Kode &amp; Judul Ujian</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Mata Pelajaran</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">KKM</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Pengumpulan</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Peserta Dinilai</th>
-                        <th class="py-3 px-4 text-center whitespace-nowrap">Status Publikasi</th>
-                        <th class="py-3 px-4 text-right whitespace-nowrap">Aksi Penilaian</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-grading-overview">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode &amp; Judul Ujian</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">KKM</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Pengumpulan</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Peserta Dinilai</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status Publikasi</th>
+                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi Penilaian</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($exams as $exam)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-4 font-medium whitespace-nowrap">
@@ -140,8 +140,13 @@
         </div>
 
         @if($exams->hasPages())
-            <div class="pt-4 border-t border-default-100">
-                {{ $exams->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $exams->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $exams->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $exams->total() }}</span> data
+                </p>
+                <div>
+                    {{ $exams->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

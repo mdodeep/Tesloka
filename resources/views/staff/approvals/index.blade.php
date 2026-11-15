@@ -16,17 +16,17 @@
         </x-slot:actions>
 
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                    <tr>
-                        <th class="py-3.5 px-6 whitespace-nowrap">Tindakan Kritis</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Pemohon</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Waktu Pengajuan</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Alasan / Catatan</th>
-                        <th class="py-3.5 px-6 text-right whitespace-nowrap">Tindakan Penyetuju</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-approvals-pending">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Tindakan Kritis</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Pemohon</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Waktu Pengajuan</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Alasan / Catatan</th>
+                        <th class="py-3.5 px-6 border-b border-default-200 text-right whitespace-nowrap">Tindakan Penyetuju</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse ($pendingRequests as $req)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-6 whitespace-nowrap">
@@ -75,18 +75,18 @@
     <!-- History Requests -->
     <x-cbt.card title="Riwayat Keputusan Four-Eyes" subtitle="Catatan keputusan permohonan kritis terdahulu">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
-                    <tr>
-                        <th class="py-3.5 px-6 whitespace-nowrap">Tindakan</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Pemohon</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Penyetuju</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Keputusan</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Waktu</th>
-                        <th class="py-3.5 px-6 whitespace-nowrap">Catatan / Alasan</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-approvals-history">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Tindakan</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Pemohon</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Penyetuju</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Keputusan</th>
+                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Waktu</th>
+                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Catatan / Alasan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse ($historyRequests as $hist)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-6 font-mono font-bold text-default-800 whitespace-nowrap">{{ $hist->action_type }}</td>

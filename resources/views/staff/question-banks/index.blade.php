@@ -122,19 +122,19 @@
     <div id="view-table" class="space-y-4">
         <x-cbt.card title="Daftar Bank Soal Terdaftar" subtitle="Kelola butir soal, stimulus bacaan/audio, dan ekspor duplikasi bank soal">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs text-default-600" data-gridjs="true" data-gridjs-page-size="10">
-                    <thead>
-                        <tr class="bg-default-50 border-b border-default-200 text-default-700">
-                            <th class="px-4 py-3 font-semibold w-36 whitespace-nowrap">Kode Bank</th>
-                            <th class="px-4 py-3 font-semibold whitespace-nowrap">Nama Bank Soal &amp; Deskripsi</th>
-                            <th class="px-4 py-3 font-semibold whitespace-nowrap">Mata Pelajaran</th>
-                            <th class="px-4 py-3 font-semibold text-center w-28 whitespace-nowrap">Butir Soal</th>
-                            <th class="px-4 py-3 font-semibold text-center w-28 whitespace-nowrap">Stimulus</th>
-                            <th class="px-4 py-3 font-semibold text-center w-24 whitespace-nowrap">Status</th>
-                            <th class="px-4 py-3 font-semibold text-center w-36 whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs text-default-600" id="table-question-banks">
+                    <thead class="bg-default-150">
+                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                            <th class="px-4 py-3 border-b border-default-200 w-36 whitespace-nowrap">Kode Bank</th>
+                            <th class="px-4 py-3 border-b border-default-200 whitespace-nowrap">Nama Bank Soal &amp; Deskripsi</th>
+                            <th class="px-4 py-3 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>
+                            <th class="px-4 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Butir Soal</th>
+                            <th class="px-4 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Stimulus</th>
+                            <th class="px-4 py-3 border-b border-default-200 text-center w-24 whitespace-nowrap">Status</th>
+                            <th class="px-4 py-3 border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200">
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
                         @forelse ($banks as $bank)
                             <tr class="hover:bg-default-50/70 transition">
                                 <td class="px-4 py-3 font-mono font-bold whitespace-nowrap">
@@ -214,6 +214,9 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            <div class="flex items-center justify-between px-4 py-3 border-t border-default-200 dark:border-white/14 text-xs text-default-500 bg-default-50/30">
+                <span>Total: <b class="text-default-700 font-semibold">{{ count($banks) }}</b> bank soal</span>
             </div>
         </x-cbt.card>
     </div>

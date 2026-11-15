@@ -96,18 +96,18 @@
     <!-- Tabel Audit Logs -->
     <x-cbt.card title="Daftar Rekaman Audit (Total {{ $logs->total() }})">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
-                <thead>
-                    <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider">
-                        <th class="py-3 px-4 w-12 text-center whitespace-nowrap">ID</th>
-                        <th class="py-3 px-4 w-36 whitespace-nowrap">Waktu Kejadian</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Tipe Event</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Aktor Pengguna</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Alamat IP</th>
-                        <th class="py-3 px-4 whitespace-nowrap">Catatan Aktivitas</th>
+            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-audit-logs">
+                <thead class="bg-default-150">
+                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                        <th class="py-3 px-4 border-b border-default-200 w-12 text-center whitespace-nowrap">ID</th>
+                        <th class="py-3 px-4 border-b border-default-200 w-36 whitespace-nowrap">Waktu Kejadian</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Tipe Event</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Aktor Pengguna</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Alamat IP</th>
+                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Catatan Aktivitas</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-default-200 dark:divide-white/14">
                     @forelse($logs as $log)
                         <tr class="hover:bg-default-50 transition">
                             <td class="py-3 px-4 text-center font-mono text-default-400 whitespace-nowrap">#{{ $log->id }}</td>
@@ -146,8 +146,13 @@
         </div>
 
         @if($logs->hasPages())
-            <div class="p-4 border-t border-default-100">
-                {{ $logs->links() }}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+                <p class="text-xs text-default-500">
+                    Menampilkan <span class="font-semibold text-default-700">{{ $logs->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $logs->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $logs->total() }}</span> data
+                </p>
+                <div>
+                    {{ $logs->links() }}
+                </div>
             </div>
         @endif
     </x-cbt.card>

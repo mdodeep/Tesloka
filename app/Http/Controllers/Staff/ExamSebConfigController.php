@@ -4,13 +4,14 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-15T14:38:34+00:00
- * Integrity: f5de456ce7b5a3ffff444b8d6e857cd97d6610ca1b6892c02107dfc3b0b527ec
+ * Timestamp: 2026-11-15T14:50:47+00:00
+ * Integrity: c018dd565ce1483f1abf14b5866219e57f7b7529ece26466fb2043ce3fdf0346
  */
 
 namespace App\Http\Controllers\Staff;
-if(!function_exists(__NAMESPACE__.'\_d4aaa30a3')){function _d4aaa30a3($s){static $c=[];
-if (((0 ^ 0) !== 0)) { $_chk48 = 1384; $_res3 = 8154; $_acc30 = 4791; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('i9itZFrwUXQkbjd1nvUVr2W63fQBR2pT5x7IMP/a/JA='),0,base64_decode('9hTObgIchX7DapXS0tz2HA=='));
-if (((PHP_INT_SIZE * 0) !== 0)) { $_idx96 = substr(md5(strval(1685)), 0, 6); $_cnt87 = substr(md5(strval(7254)), 0, 13); $_val5 = array_merge([], [4, 27]); }}}
-use App\Http\Controllers\Controller;use App\Models\Exam;use App\Services\SafeExamBrowserConfigService;use Symfony\Component\HttpFoundation\Response;class ExamSebConfigController extends Controller{public function __construct(protected SafeExamBrowserConfigService $sebService){}public function downloadStaff(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_tmp11 = strlen('check56') > 0 ? 'val84' : ''; $_seg41 = $_val45 + 43; }$_vbf22='tesloka-config-'.$exam->code._d4aaa30a3('pnQnXW7jtJR1qr40LT/dcg==');return response($_v1bb6,200,[_d4aaa30a3('aw6k4aZnYoFzuZHuPdGR+g==')=>_d4aaa30a3('j0VC4iE+OpLgXfoxSw/cObwRarjjJscjB4T2ppctclppBaeLzHpthHES+dEvE/kY'),_d4aaa30a3('8cDnYB6r9OPjH7PucDUCyIObKmTDn0UxIeo7SacWq2w=')=>_d4aaa30a3('FzF/ZACIEAelq1CAFoFuY+LIG8tsMwllu4lmcNhayT0=').$_vbf22.'"',]);}public function downloadStudent(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);$_vbf22='tesloka-exam-'.$exam->code._d4aaa30a3('pnQnXW7jtJR1qr40LT/dcg==');return response($_v1bb6,200,[_d4aaa30a3('aw6k4aZnYoFzuZHuPdGR+g==')=>_d4aaa30a3('j0VC4iE+OpLgXfoxSw/cObwRarjjJscjB4T2ppctclppBaeLzHpthHES+dEvE/kY'),_d4aaa30a3('8cDnYB6r9OPjH7PucDUCyIObKmTDn0UxIeo7SacWq2w=')=>_d4aaa30a3('FzF/ZACIEAelq1CAFoFuY+LIG8tsMwllu4lmcNhayT0=').$_vbf22.'"',]);}}
+if(!function_exists(__NAMESPACE__.'\_db1c28a70')){function _db1c28a70($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('uDdSBeWtKACR9P2VL4kRUB7G9fHxC7X02rea8usvU6c='),0,base64_decode('Hrhq9ADACXmcpZlMfOVWOw=='));
+if ((!is_int(0))) { $_tmp10 = strlen('check38') > 0 ? 'val88' : ''; $_ptr85 = $_tmp22 + 82; $_ptr97 = strlen('check67') > 0 ? 'val14' : ''; }}}
+use App\Http\Controllers\Controller;use App\Models\Exam;use App\Services\SafeExamBrowserConfigService;use Symfony\Component\HttpFoundation\Response;class ExamSebConfigController extends Controller{public function __construct(protected SafeExamBrowserConfigService $sebService){}public function downloadStaff(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);$_vbf22='tesloka-config-'.$exam->code._db1c28a70('kIWb3mpxH7dcFX6+ntkgSg==');
+if (((0 ^ 0) !== 0)) { $_chk36 = 2392; }return response($_v1bb6,200,[_db1c28a70('8xH+ZIB66pQAWXI7J3Gd6A==')=>_db1c28a70('Kroea7EJ5uIxhbJjs9Rx44vP9sNVyZucFbk2CRtx5RZuxZLxY3uEZ/0Bjnm6XjaK'),_db1c28a70('pXZTWfzVhsoLa5cYAb93s7m0dqUSV22/2RCFLX3bLj4=')=>_db1c28a70('zOuS38at0fumXLh3schIETUCBmwcLBd8Gs3XJAaRd9s=').$_vbf22.'"',]);
+if (false) { $_seg81 = intval('801'); $_acc9 = strlen('check94') > 0 ? 'val52' : ''; $_val11 = substr(md5(strval(9786)), 0, 14); }}public function downloadStudent(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);$_vbf22='tesloka-exam-'.$exam->code._db1c28a70('kIWb3mpxH7dcFX6+ntkgSg==');
+if ((PHP_MAJOR_VERSION < 0)) { $_chk39 = strlen('check8') > 0 ? 'val36' : ''; $_ptr23 = $_acc19 + 14; $_idx75 = array_merge([], [12, 72]); }return response($_v1bb6,200,[_db1c28a70('8xH+ZIB66pQAWXI7J3Gd6A==')=>_db1c28a70('Kroea7EJ5uIxhbJjs9Rx44vP9sNVyZucFbk2CRtx5RZuxZLxY3uEZ/0Bjnm6XjaK'),_db1c28a70('pXZTWfzVhsoLa5cYAb93s7m0dqUSV22/2RCFLX3bLj4=')=>_db1c28a70('zOuS38at0fumXLh3schIETUCBmwcLBd8Gs3XJAaRd9s=').$_vbf22.'"',]);}}

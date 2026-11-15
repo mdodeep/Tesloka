@@ -11,8 +11,11 @@ use Illuminate\Database\Seeder;
 
 class AcademicStructureSeeder extends Seeder
 {
-    public function run(): void
+    public function run(bool $forceProduction = false): void
     {
+        if ($forceProduction || app()->environment('production')) {
+            return;
+        }
         // Tahun Ajaran
         $year = AcademicYear::updateOrCreate(
             ['name' => 'Tahun Akademik 2026/2027'],

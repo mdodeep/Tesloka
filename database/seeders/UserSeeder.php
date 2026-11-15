@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    public function run(): void
+    public function run(bool $forceProduction = false): void
     {
         $defaultPassword = Hash::make('Tesloka2026!');
 
@@ -48,6 +48,12 @@ class UserSeeder extends Seeder
         );
         if ($adminRole && ! $admin->hasRole('admin')) {
             $admin->roles()->syncWithoutDetaching([$adminRole->id]);
+        }
+
+        // Khusus Lingkungan Production: Hanya Administrator Utama yang dibuat.
+        // Hentikan proses seeder di sini agar database institusi tetap bersih.
+        if ($forceProduction || app()->environment('production')) {
+            return;
         }
 
         // 2. Guru / Dosen

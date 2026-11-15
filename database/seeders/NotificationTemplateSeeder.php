@@ -44,4 +44,3 @@ class NotificationTemplateSeeder extends Seeder
         }
     }
 }
-

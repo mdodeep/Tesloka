@@ -12,6 +12,9 @@
                 <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
                     Selamat Datang, {{ auth('staff')->user()->name }} 👋
                 </h2>
+                <p class="text-sm text-white/70">
+                    Pusat komando operasional Computer Based Test (CBT) TESLOKA. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.
+                </p>
                 <div class="flex flex-wrap gap-2.5 pt-1">
                     <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5">
                         <i data-lucide="clock" class="size-4"></i>
@@ -35,54 +38,54 @@
     <!-- Stat Cards (Tailwick Style) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider">Total Peserta Terdaftar</span>
-                    <div class="text-2xl font-bold text-default-800 mt-1.5">{{ $stats['total_students'] }}</div>
-                    <p class="text-xs text-default-500 mt-0.5">Siswa &amp; Peserta Ujian</p>
+            <div class="card-body">
+                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-primary/10">
+                    <i data-lucide="users" class="size-6 text-primary"></i>
                 </div>
-                <div class="size-11 rounded bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5.5"></i>
-                </div>
+                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
+                    {{ number_format($stats['total_students']) }}
+                </h5>
+                <p class="text-center text-sm text-default-700 font-semibold">Total Peserta Terdaftar</p>
+                <p class="text-center text-xs text-default-400 mt-0.5">Siswa &amp; Peserta Ujian</p>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider">Rombel / Kelas Aktif</span>
-                    <div class="text-2xl font-bold text-default-800 mt-1.5">{{ $stats['total_classes'] }}</div>
-                    <p class="text-xs text-default-500 mt-0.5">Tahun Ajaran Aktif</p>
+            <div class="card-body">
+                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-secondary/10">
+                    <i data-lucide="graduation-cap" class="size-6 text-secondary"></i>
                 </div>
-                <div class="size-11 rounded bg-teal-500/10 text-teal-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="graduation-cap" class="size-5.5"></i>
-                </div>
+                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
+                    {{ number_format($stats['total_classes']) }}
+                </h5>
+                <p class="text-center text-sm text-default-700 font-semibold">Rombel / Kelas Aktif</p>
+                <p class="text-center text-xs text-default-400 mt-0.5">Tahun Ajaran Aktif</p>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider">Bank Soal & Butir</span>
-                    <div class="text-2xl font-bold text-default-800 mt-1.5">{{ $stats['total_questions'] }}</div>
-                    <p class="text-xs text-default-500 mt-0.5">Butir Soal Multi-Tipe</p>
+            <div class="card-body">
+                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-success/10">
+                    <i data-lucide="file-question" class="size-6 text-success"></i>
                 </div>
-                <div class="size-11 rounded bg-indigo-500/10 text-indigo-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="file-question" class="size-5.5"></i>
-                </div>
+                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
+                    {{ number_format($stats['total_questions']) }}
+                </h5>
+                <p class="text-center text-sm text-default-700 font-semibold">Bank Soal &amp; Butir</p>
+                <p class="text-center text-xs text-default-400 mt-0.5">Butir Soal Multi-Tipe</p>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider">Paket Ujian Aktif</span>
-                    <div class="text-2xl font-bold text-default-800 mt-1.5">{{ $stats['total_exams'] }}</div>
-                    <p class="text-xs text-default-500 mt-0.5">Siap Dijadwalkan</p>
+            <div class="card-body">
+                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-warning/10">
+                    <i data-lucide="calendar" class="size-6 text-warning"></i>
                 </div>
-                <div class="size-11 rounded bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="calendar" class="size-5.5"></i>
-                </div>
+                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
+                    {{ number_format($stats['total_exams']) }}
+                </h5>
+                <p class="text-center text-sm text-default-700 font-semibold">Paket Ujian Aktif</p>
+                <p class="text-center text-xs text-default-400 mt-0.5">Siap Dijadwalkan</p>
             </div>
         </div>
     </div>

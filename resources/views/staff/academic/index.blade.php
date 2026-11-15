@@ -241,7 +241,7 @@
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Jenjang</th>
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Kelas</th>
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center whitespace-nowrap">Mata Pelajaran</th>
-                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200">Deskripsi</th>
+                            <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Deskripsi</th>
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
@@ -253,7 +253,7 @@
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $d->level ?? '-' }}</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $d->classes_count }} rombel</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $d->subjects_count }} mapel</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-500">{{ Str::limit($d->description, 40) ?? '-' }}</td>
+                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-500 whitespace-nowrap">{{ Str::limit($d->description, 40) ?? '-' }}</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 

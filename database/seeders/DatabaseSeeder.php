@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
                 AcademicStructureSeeder::class,
                 UserSeeder::class,
                 RealisticExamSimulationSeeder::class,
+                PtiqEptPaketASeeder::class,
             ]);
 
             return;

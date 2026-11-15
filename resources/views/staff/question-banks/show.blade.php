@@ -56,6 +56,15 @@
                                     </span>
                                 @endif
                             </div>
+                            @if ($stimulus->media_type === 'audio' && $stimulus->media_url)
+                                <div class="my-2 p-1.5 bg-slate-100 border border-default-200 rounded">
+                                    <audio controls class="w-full h-7" preload="none" src="{{ $stimulus->media_url }}"></audio>
+                                </div>
+                            @elseif ($stimulus->media_type === 'image' && $stimulus->media_url)
+                                <div class="my-2">
+                                    <img src="{{ $stimulus->media_url }}" alt="{{ $stimulus->title }}" class="max-h-24 rounded border border-default-200 object-contain">
+                                </div>
+                            @endif
                             <p class="text-[11px] text-default-500 line-clamp-2 mt-1">{{ strip_tags($stimulus->content) }}</p>
                         </div>
                         <div class="pt-2 mt-2 border-t border-default-200 flex items-center justify-between text-[11px] text-default-400">

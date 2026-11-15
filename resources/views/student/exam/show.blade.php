@@ -348,10 +348,19 @@
 
             // Stimulus
             const stimBox = document.getElementById('stimulusContainer');
-            if (q.stimulus && q.stimulus.content) {
+            if (q.stimulus && (q.stimulus.content || q.stimulus.media_url)) {
                 stimBox.classList.remove('hidden');
                 document.getElementById('stimulusTitle').innerText = q.stimulus.title || 'Wacana Stimulus';
-                document.getElementById('stimulusContent').innerHTML = q.stimulus.content.replace(/\n/g, '<br>');
+                let stimHtml = '';
+                if (q.stimulus.media_type === 'audio' && q.stimulus.media_url) {
+                    stimHtml += `<div class="cbt-audio-container mb-3"><audio controls preload="none" src="${q.stimulus.media_url}"></audio></div>`;
+                } else if (q.stimulus.media_type === 'image' && q.stimulus.media_url) {
+                    stimHtml += `<div class="cbt-image-container mb-3"><img src="${q.stimulus.media_url}" alt="${q.stimulus.title || ''}" class="max-h-72 rounded border border-default-200"></div>`;
+                }
+                if (q.stimulus.content) {
+                    stimHtml += q.stimulus.content.replace(/\n/g, '<br>');
+                }
+                document.getElementById('stimulusContent').innerHTML = stimHtml;
             } else {
                 stimBox.classList.add('hidden');
             }

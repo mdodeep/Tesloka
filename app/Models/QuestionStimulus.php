@@ -28,4 +28,20 @@ class QuestionStimulus extends Model
     {
         return $this->hasMany(Question::class, 'stimulus_id');
     }
+
+    public function getMediaUrlAttribute(): ?string
+    {
+        if (empty($this->media_path)) {
+            return null;
+        }
+
+        return str_starts_with($this->media_path, 'http')
+            ? $this->media_path
+            : \Illuminate\Support\Facades\Storage::disk('public')->url($this->media_path);
+    }
+
+    public function getTypeAttribute(): ?string
+    {
+        return $this->media_type;
+    }
 }

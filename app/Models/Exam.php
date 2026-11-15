@@ -340,9 +340,11 @@ class Exam extends Model
                         'stimulus' => $q->stimulus ? [
                             'id' => $q->stimulus->id,
                             'title' => $q->stimulus->title,
-                            'type' => $q->stimulus->type,
+                            'type' => $q->stimulus->media_type,
+                            'media_type' => $q->stimulus->media_type,
                             'content' => $q->stimulus->content,
                             'media_url' => $q->stimulus->media_url,
+                            'media_path' => $q->stimulus->media_path,
                         ] : null,
                         'options' => $snapshotOptions->toArray(),
                     ];

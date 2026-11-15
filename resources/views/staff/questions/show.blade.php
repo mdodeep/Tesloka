@@ -44,6 +44,10 @@
                     <span class="text-xs text-default-400">Tipe: <strong class="text-default-700">{{ strtoupper(str_replace('_', ' ', $question->type)) }}</strong></span>
                 </div>
 
+                @php
+                    $allowedTags = '<p><br><strong><b><em><i><u><s><ul><ol><li><table><thead><tbody><tr><th><td><img><span><sub><sup><div><audio><source>';
+                @endphp
+
                 <!-- Stimulus jika ada -->
                 @if($question->stimulus)
                     <div class="p-4 bg-default-50 border border-default-200 rounded mb-6">
@@ -53,7 +57,6 @@
                         </div>
                         <div class="prose prose-sm max-w-none text-default-700 leading-relaxed">
                             @php
-                                $allowedTags = '<p><br><strong><b><em><i><u><s><ul><ol><li><table><thead><tbody><tr><th><td><img><span><sub><sup><div>';
                                 $stimContent = strip_tags($question->stimulus->content, $allowedTags);
                                 if (!str_contains($stimContent, '<p>') && !str_contains($stimContent, '<br>')) {
                                     $stimContent = nl2br($stimContent);
@@ -63,6 +66,11 @@
                         </div>
                         @if($question->stimulus->media_url)
                             <div class="mt-3">
+                                @if($question->stimulus->media_type === 'audio')
+                                    <div class="mb-2 p-2 bg-slate-100 rounded border border-default-200">
+                                        <audio controls class="w-full h-8" preload="none" src="{{ $question->stimulus->media_url }}"></audio>
+                                    </div>
+                                @endif
                                 <a href="{{ $question->stimulus->media_url }}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1">
                                     <i data-lucide="paperclip" class="size-3.5"></i>
                                     <span>Buka Lampiran Berkas Stimulus</span>

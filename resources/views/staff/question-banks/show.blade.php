@@ -73,12 +73,58 @@
     @endif
 
     <!-- Questions Table -->
-    <div class="bg-white border border-default-200 rounded-md p-6 shadow-xs">
-        <div class="flex items-center justify-between mb-4">
+    <div class="bg-white border border-default-200 rounded-md p-6 shadow-xs space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-default-100 pb-4">
             <div>
                 <h2 class="text-sm font-bold text-default-800">Daftar Butir Soal ({{ $questions->total() }})</h2>
                 <p class="text-xs text-default-400">Soal-soal yang tersimpan pada bank soal ini.</p>
             </div>
+
+            <!-- Quick Filter & Search Bar -->
+            <form method="GET" action="{{ route('staff.question-banks.show', $questionBank) }}" class="flex flex-wrap items-center gap-2">
+                <!-- Search Input -->
+                <div class="relative min-w-[180px] sm:min-w-[220px]">
+                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-default-400">
+                        <i data-lucide="search" class="size-3.5"></i>
+                    </span>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kode / konten..." 
+                        class="form-input w-full h-8 pl-8 pr-3 text-xs rounded border-default-200 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none">
+                </div>
+
+                <!-- Stimulus Filter -->
+                @if ($questionBank->stimuli->count() > 0)
+                    <select name="stimulus_id" onchange="this.form.submit()" class="form-select h-8 text-xs py-1 px-2.5 rounded border-default-200 text-default-700">
+                        <option value="">Semua Stimulus ({{ $questionBank->stimuli->count() }})</option>
+                        <option value="none" {{ request('stimulus_id') === 'none' ? 'selected' : '' }}>Tanpa Stimulus</option>
+                        @foreach ($questionBank->stimuli as $st)
+                            <option value="{{ $st->id }}" {{ request('stimulus_id') == $st->id ? 'selected' : '' }}>
+                                {{ Str::limit($st->title, 25) }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
+
+                <!-- Urutan Sort -->
+                <select name="order" onchange="this.form.submit()" class="form-select h-8 text-xs py-1 px-2.5 rounded border-default-200 text-default-700">
+                    <option value="asc" {{ ($order ?? 'asc') === 'asc' ? 'selected' : '' }}>Urut No: 1 &rarr; Akhir</option>
+                    <option value="desc" {{ ($order ?? 'asc') === 'desc' ? 'selected' : '' }}>Urut No: Akhir &rarr; 1</option>
+                </select>
+
+                <!-- Per Page Selector -->
+                <select name="per_page" onchange="this.form.submit()" class="form-select h-8 text-xs py-1 px-2.5 rounded border-default-200 text-default-700 font-semibold">
+                    <option value="20" {{ ($perPage ?? '20') == '20' ? 'selected' : '' }}>20 / hal</option>
+                    <option value="50" {{ ($perPage ?? '20') == '50' ? 'selected' : '' }}>50 / hal</option>
+                    <option value="100" {{ ($perPage ?? '20') == '100' ? 'selected' : '' }}>100 / hal</option>
+                    <option value="all" {{ ($perPage ?? '20') == 'all' ? 'selected' : '' }}>Tampilkan Semua ({{ $questions->total() }})</option>
+                </select>
+
+                @if (request()->hasAny(['search', 'stimulus_id', 'order', 'per_page', 'difficulty', 'type']))
+                    <a href="{{ route('staff.question-banks.show', $questionBank) }}" class="btn btn-sm h-8 px-2.5 rounded border border-default-200 text-default-500 hover:bg-default-100 text-xs inline-flex items-center gap-1" title="Reset Filter">
+                        <i data-lucide="rotate-ccw" class="size-3"></i>
+                        <span>Reset</span>
+                    </a>
+                @endif
+            </form>
         </div>
 
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
@@ -166,7 +212,6 @@
                                         </button>
                                     </form>
                                 </div>
-                                </div>
                             </td>
                         </tr>
                     @empty
@@ -179,8 +224,19 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $questions->links() }}
+
+        <!-- Pagination & Summary Footer -->
+        <div class="pt-4 border-t border-default-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-default-500">
+            <div>
+                Menampilkan <span class="font-bold text-default-800">{{ $questions->firstItem() ?? 0 }}</span> sampai <span class="font-bold text-default-800">{{ $questions->lastItem() ?? 0 }}</span> dari <span class="font-bold text-default-800">{{ $questions->total() }}</span> butir soal
+                @if (($perPage ?? '20') === 'all')
+                    <span class="ml-1.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Mode Semua Soal</span>
+                @endif
+            </div>
+
+            <div class="flex items-center gap-2">
+                {{ $questions->links() }}
+            </div>
         </div>
     </div>
 </div>

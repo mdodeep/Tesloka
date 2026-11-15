@@ -42,15 +42,11 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 {{ $bgFile ? 'bg-default-900/60 backdrop-blur-xs' : 'bg-default-50' }}">
     <div class="w-full max-w-md z-10 mx-auto">
-        <!-- Logo & Header -->
+        <!-- Logo -->
         <div class="text-center mb-6">
             <a href="/" class="inline-block">
-                <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-9 mx-auto mb-2 object-contain max-w-[220px]">
+                <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-10 mx-auto object-contain max-w-[220px]">
             </a>
-            <p class="text-xs font-semibold text-default-500 uppercase tracking-widest">{{ $systemInstName }}</p>
-            @if($systemTagline)
-                <p class="text-[11px] text-default-400 mt-0.5">{{ $systemTagline }}</p>
-            @endif
         </div>
 
         @if($customInstructions)

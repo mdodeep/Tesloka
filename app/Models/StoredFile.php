@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Storage;
 
 class StoredFile extends Model
 {
@@ -85,7 +86,7 @@ class StoredFile extends Model
     public function getUrlAttribute(): string
     {
         if ($this->disk === 'public') {
-            return \Illuminate\Support\Facades\Storage::disk('public')->url($this->storage_path);
+            return Storage::disk('public')->url($this->storage_path);
         }
 
         return route('media.stream', $this);
@@ -146,7 +147,7 @@ class StoredFile extends Model
                 'stimulus_id' => $attachable->id,
                 'questions_count' => count($questionList),
                 'questions' => $questionList,
-                'summary' => "Wacana Stimulus '{$attachable->title}' (" . count($questionList) . " Soal: {$labelStr})",
+                'summary' => "Wacana Stimulus '{$attachable->title}' (".count($questionList)." Soal: {$labelStr})",
             ];
         }
 
@@ -171,7 +172,7 @@ class StoredFile extends Model
                         'label' => $label,
                         'edit_url' => route('staff.questions.edit', $attachable->id),
                         'show_url' => route('staff.questions.show', $attachable->id),
-                    ]
+                    ],
                 ],
                 'summary' => "Butir Soal {$label}",
             ];

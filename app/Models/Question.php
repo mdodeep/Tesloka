@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Question extends Model
@@ -66,7 +68,7 @@ class Question extends Model
         return $this->hasMany(QuestionVersion::class)->orderByDesc('version_number');
     }
 
-    public function storedFiles(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function storedFiles(): MorphMany
     {
         return $this->morphMany(StoredFile::class, 'attachable');
     }
@@ -79,7 +81,7 @@ class Question extends Model
 
         return str_starts_with($this->media_path, 'http')
             ? $this->media_path
-            : \Illuminate\Support\Facades\Storage::disk('public')->url($this->media_path);
+            : Storage::disk('public')->url($this->media_path);
     }
 
     /**

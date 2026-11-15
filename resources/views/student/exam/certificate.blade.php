@@ -149,6 +149,9 @@
     @endphp
     <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         :root {
             --cert-primary: {{ $certPrimaryColor }};
             --cert-accent: {{ $certAccentColor }};
@@ -731,6 +734,7 @@
 
         .cert-viewport-wrapper,
         .doc-viewport-container {
+            box-sizing: border-box;
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -755,6 +759,7 @@
             }
             .cert-viewport-wrapper,
             .doc-viewport-container {
+            box-sizing: border-box;
                 justify-content: flex-start;
             }
             .cert-container {
@@ -776,6 +781,7 @@
 
             .cert-viewport-wrapper,
             .doc-viewport-container {
+            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;

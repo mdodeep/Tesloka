@@ -58,6 +58,9 @@
         $verificationHash = substr(hash('sha256', $attempt->id . $receipt . ($breakdown['total_score'] ?? 0)), 0, 24);
     @endphp
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         @page {
             size: A4 portrait;
             margin: 0;
@@ -328,6 +331,7 @@
             flex-shrink: 0;
         }
         .doc-viewport-container {
+            box-sizing: border-box;
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -351,6 +355,7 @@
                 justify-content: center;
             }
             .doc-viewport-container {
+            box-sizing: border-box;
                 justify-content: flex-start;
                 padding: 8px 4px;
             }
@@ -364,6 +369,7 @@
                 display: none !important;
             }
             .doc-viewport-container {
+            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;

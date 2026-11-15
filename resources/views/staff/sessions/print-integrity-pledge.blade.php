@@ -19,6 +19,9 @@
         $stampUrl = $stampPath ? asset('storage/' . $stampPath) : null;
     @endphp
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         @page {
             size: A4 portrait;
             margin: 0;
@@ -71,6 +74,7 @@
             font-size: 13px;
         }
         .doc-viewport-container {
+            box-sizing: border-box;
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -209,6 +213,7 @@
                 page-break-after: always;
             }
             .doc-viewport-container {
+            box-sizing: border-box;
                 padding: 0;
             }
             * {

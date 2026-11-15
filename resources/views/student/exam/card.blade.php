@@ -9,6 +9,9 @@
             size: A4 portrait;
             margin: 15mm 20mm;
         }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, Helvetica, sans-serif;
             color: #1e293b;
@@ -43,6 +46,7 @@
         }
         .doc-viewport-container {
             width: 100%;
+            box-sizing: border-box;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             padding: 12px 6px;

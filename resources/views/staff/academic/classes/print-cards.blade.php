@@ -10,6 +10,9 @@
         $instName = $inst?->name ?? config('app.name', 'TESLOKA CBT');
     @endphp
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         @page {
             size: A4 portrait;
             margin: 10mm;
@@ -61,6 +64,7 @@
             font-size: 13px;
         }
         .doc-viewport-container {
+            box-sizing: border-box;
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -216,6 +220,7 @@
                 display: none !important;
             }
             .doc-viewport-container {
+            box-sizing: border-box;
                 padding: 0;
             }
             .document-wrapper {

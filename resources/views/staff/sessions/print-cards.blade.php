@@ -10,6 +10,9 @@
         $instName = $institution?->name ?? config('app.name', 'TESLOKA CBT');
     @endphp
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         @page {
             size: A4 portrait;
             margin: 10mm;
@@ -47,6 +50,7 @@
             background: #1e24cc;
         }
         .doc-viewport-container {
+            box-sizing: border-box;
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -159,6 +163,7 @@
                 text-align: center;
             }
             .doc-viewport-container {
+            box-sizing: border-box;
                 justify-content: flex-start;
                 padding: 8px 4px;
             }
@@ -179,6 +184,7 @@
                 print-color-adjust: exact !important;
             }
             .doc-viewport-container {
+            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;

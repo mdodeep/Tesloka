@@ -181,6 +181,21 @@
     @else
         <!-- Kode Pemulihan Darurat Saat 2FA Aktif -->
         <x-cbt.card title="Kode Pemulihan Darurat (Emergency Recovery Codes)" subtitle="Simpan kode-kode pemulihan berikut di tempat yang aman. Setiap kode hanya dapat dipakai satu kali.">
+            <x-slot:actions>
+                <button type="button" onclick="copyAllRecoveryCodes()" id="btn-copy-codes" class="btn btn-sm border border-default-200 bg-white hover:bg-default-50 text-default-700 text-xs font-semibold rounded shadow-2xs inline-flex items-center gap-1.5 cursor-pointer">
+                    <i data-lucide="copy" class="size-3.5 text-default-500"></i>
+                    <span id="btn-copy-text">Salin Semua Kode</span>
+                </button>
+                <button type="button" onclick="downloadRecoveryCodes()" class="btn btn-sm border border-default-200 bg-white hover:bg-default-50 text-default-700 text-xs font-semibold rounded shadow-2xs inline-flex items-center gap-1.5 cursor-pointer">
+                    <i data-lucide="download" class="size-3.5 text-default-500"></i>
+                    <span>Unduh (.txt)</span>
+                </button>
+                <button type="button" onclick="window.print()" class="btn btn-sm border border-default-200 bg-white hover:bg-default-50 text-default-700 text-xs font-semibold rounded shadow-2xs inline-flex items-center gap-1.5 cursor-pointer">
+                    <i data-lucide="printer" class="size-3.5 text-default-500"></i>
+                    <span>Cetak</span>
+                </button>
+            </x-slot:actions>
+
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-default-50 p-4 rounded border border-default-200">
                 @foreach($recoveryCodes as $code)
                     <div class="font-mono text-center text-xs font-bold tracking-widest bg-card py-2 px-3 rounded border border-default-200 text-default-800 shadow-xs">
@@ -189,16 +204,15 @@
                 @endforeach
             </div>
 
-            <!-- Form Nonaktifkan 2FA -->
-            <div class="mt-5 pt-4 border-t border-default-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <!-- Petunjuk Penting Kode Pemulihan -->
+            <div class="mt-4 p-3.5 rounded bg-warning/10 border border-warning/20 text-xs text-warning-800 dark:text-warning-300 flex items-start gap-2.5">
+                <i data-lucide="alert-triangle" class="size-4.5 text-warning shrink-0 mt-0.5"></i>
                 <div>
-                    <h5 class="text-xs font-semibold text-default-800">Status Keamanan Akun</h5>
-                    <p class="text-xs text-default-500">Akun Anda dilindungi oleh Autentikasi Dua Faktor setiap kali melakukan login di perangkat baru.</p>
+                    <span class="font-bold text-default-800 block mb-0.5">Petunjuk Penting Kode Pemulihan Darurat:</span>
+                    <p class="text-default-600 leading-relaxed">
+                        Setiap kode di atas berfungsi sebagai kunci pemulihan satu kali pakai (*one-time recovery code*) untuk masuk ke akun Anda jika perangkat ponsel cerdas Anda rusak, hilang, atau tidak dapat mengakses aplikasi autentikator. Simpan kode ini secara aman dan terpisah dari ponsel Anda.
+                    </p>
                 </div>
-
-                <button type="button" onclick="document.getElementById('modal-disable-2fa').classList.remove('hidden')" class="btn btn-sm bg-danger/10 hover:bg-danger text-danger hover:text-white rounded border border-danger/20 transition cursor-pointer text-center justify-center w-full sm:w-auto">
-                    Nonaktifkan 2FA
-                </button>
             </div>
         </x-cbt.card>
 
@@ -230,6 +244,49 @@
                 </form>
             </div>
         </div>
+
+        <script>
+            const recoveryCodesList = @json($recoveryCodes ?? []);
+
+            function copyAllRecoveryCodes() {
+                if (!recoveryCodesList || recoveryCodesList.length === 0) return;
+                const text = recoveryCodesList.join('\n');
+                navigator.clipboard.writeText(text).then(() => {
+                    const btnText = document.getElementById('btn-copy-text');
+                    if (btnText) {
+                        const originalText = btnText.innerText;
+                        btnText.innerText = 'Tersalin!';
+                        setTimeout(() => {
+                            btnText.innerText = originalText;
+                        }, 2000);
+                    }
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+
+            function downloadRecoveryCodes() {
+                if (!recoveryCodesList || recoveryCodesList.length === 0) return;
+                const header = "KODE PEMULIHAN DARURAT (EMERGENCY RECOVERY CODES) — TESLOKA CBT\n" +
+                    "Akun: {{ $user->name }} ({{ $user->username }})\n" +
+                    "Institusi: {{ $user->institution->name ?? 'TESLOKA CBT' }}\n" +
+                    "Tanggal Unduh: " + new Date().toLocaleString('id-ID') + "\n" +
+                    "----------------------------------------------------------------------\n" +
+                    "PERINGATAN: Setiap kode hanya dapat dipakai 1 kali saat darurat.\n" +
+                    "Simpan file ini di lokasi aman (brankas password / media offline).\n" +
+                    "----------------------------------------------------------------------\n\n";
+                const content = header + recoveryCodesList.map((code, idx) => (idx + 1) + ". " + code).join('\n') + "\n";
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "kode-pemulihan-2fa-tesloka-{{ $user->username }}.txt";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        </script>
     @endif
 </div>
 @endsection

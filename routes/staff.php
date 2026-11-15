@@ -97,6 +97,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::post('/', [UserController::class, 'store'])->name('store');
             Route::post('bulk-import', [UserController::class, 'bulkImport'])->name('bulk-import');
+            Route::post('bulk-delete', [UserController::class, 'bulkDestroy'])->name('bulk-delete');
+            Route::post('bulk-status', [UserController::class, 'bulkStatus'])->name('bulk-status');
             Route::get('export-csv', [UserController::class, 'exportCsv'])->name('export-csv');
             Route::get('{user}', [UserController::class, 'show'])->whereNumber('user')->name('show');
             Route::put('{user}', [UserController::class, 'update'])->whereNumber('user')->name('update');

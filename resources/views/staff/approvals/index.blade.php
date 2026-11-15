@@ -38,7 +38,7 @@
                             <td class="py-3.5 px-4 font-mono text-default-500 whitespace-nowrap">{{ $req->created_at->format('Y-m-d H:i') }}</td>
                             <td class="py-3.5 px-4 text-default-600 max-w-xs truncate">{{ $req->reason ?? '-' }}</td>
                             <td class="py-3.5 px-6 text-right whitespace-nowrap">
-                                @if (auth('staff')->id() === $req->requester_id)
+                                @if (! auth('staff')->user()?->isAdmin() && auth('staff')->id() === $req->requester_id)
                                     <span class="text-default-400 italic text-[11px]">(Anda adalah pemohon - Four Eyes)</span>
                                 @else
                                     <div class="flex items-center justify-end gap-2">

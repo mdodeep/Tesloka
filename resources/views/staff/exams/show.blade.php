@@ -58,6 +58,15 @@
 
     @if($exam->status === 'draft')
         @if($validationResult['is_valid'] && $exam->packages->isNotEmpty())
+            @if(auth('staff')->user()?->isAdmin())
+                <form action="{{ route('staff.exams.approve', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Terbitkan ujian ini sekarang secara langsung?')">
+                    @csrf
+                    <button type="submit" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Terbitkan Langsung</span>
+                    </button>
+                </form>
+            @endif
             <form action="{{ route('staff.exams.request-approval', $exam) }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
@@ -68,7 +77,7 @@
         @endif
     @endif
 
-    @if($exam->status === 'pending_approval' && auth('staff')->id() !== $exam->creator_id)
+    @if($exam->status === 'pending_approval' && (auth('staff')->user()?->isAdmin() || auth('staff')->id() !== $exam->creator_id))
         <form action="{{ route('staff.exams.approve', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Setujui dan terbitkan ujian ini?')">
             @csrf
             <button type="submit" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">

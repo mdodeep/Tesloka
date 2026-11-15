@@ -49,8 +49,11 @@ class ApprovalRequest extends Model
 
     public function approve(int $approverId): bool
     {
-        // Aturan Four-Eyes: Pemohon tidak boleh menjadi penyetuju dirinya sendiri
-        if ($approverId === $this->requester_id) {
+        $approver = User::find($approverId);
+        $isAdmin = $approver && $approver->isAdmin();
+
+        // Aturan Four-Eyes: Pemohon tidak boleh menjadi penyetuju dirinya sendiri KECUALI Administrator dengan wewenang penuh
+        if (! $isAdmin && $approverId === $this->requester_id) {
             throw new \DomainException('Prinsip Four-Eyes: Pemohon tidak dapat menyetujui permintaannya sendiri.');
         }
 
@@ -63,7 +66,10 @@ class ApprovalRequest extends Model
 
     public function reject(int $approverId, string $rejectionReason): bool
     {
-        if ($approverId === $this->requester_id) {
+        $approver = User::find($approverId);
+        $isAdmin = $approver && $approver->isAdmin();
+
+        if (! $isAdmin && $approverId === $this->requester_id) {
             throw new \DomainException('Prinsip Four-Eyes: Pemohon tidak dapat menolak permintaannya sendiri melalui jalur penyetuju.');
         }
 

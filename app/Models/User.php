@@ -116,6 +116,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Memeriksa apakah pengguna memiliki peran administrator atau super administrator.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(['admin', 'super_admin']);
+    }
+
+    /**
      * Memeriksa apakah pengguna adalah staf/internal (Admin, Guru, Pengawas, Operator).
      */
     public function isStaff(): bool

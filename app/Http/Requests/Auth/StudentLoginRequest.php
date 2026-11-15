@@ -19,6 +19,18 @@ class StudentLoginRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Konversi nilai input sebelum divalidasi untuk mencegah galat boolean.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('remember')) {
+            $this->merge([
+                'remember' => $this->boolean('remember'),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [

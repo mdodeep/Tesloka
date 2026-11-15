@@ -33,7 +33,7 @@
 
         <div class="flex items-center justify-between text-xs pt-1">
             <label class="flex items-center gap-2 cursor-pointer select-none text-default-600">
-                <input type="checkbox" name="remember" class="form-checkbox">
+                <input type="checkbox" name="remember" value="1" class="form-checkbox">
                 <span>Ingat sesi ujian saya</span>
             </label>
         </div>
@@ -50,9 +50,5 @@
                 </a>
             </div>
         @endif
-
-        <div class="pt-4 border-t border-default-100 text-center text-xs text-default-500">
-            Dosen, Pengawas, atau Staf? <a href="{{ route('staff.login') }}" class="text-primary font-semibold hover:underline">Masuk ke Portal Staf &rarr;</a>
-        </div>
     </form>
 @endsection

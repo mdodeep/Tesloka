@@ -502,3 +502,21 @@ body.high-contrast-mode,
     color: #ffff00 !important;
     border: 2px solid #ffff00 !important;
 }
+
+/* Safe Area Insets Support for iOS & Android Mobile Devices */
+.pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+}
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pl-safe {
+    padding-left: env(safe-area-inset-left, 0px);
+}
+.pr-safe {
+    padding-right: env(safe-area-inset-right, 0px);
+}
+.mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+}
+

@@ -6,8 +6,8 @@
 @section('page-subtitle', 'Pilih ujian, tentukan ruang ujian sesuai batasan kapasitas DEC-001, dan jadwalkan rentang waktu pelaksanaan.')
 
 @section('page-actions')
-    <a href="{{ route('staff.sessions.index') }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="arrow-left" class="size-4"></i>
         <span>Kembali ke Sesi</span>
     </a>
 @endsection

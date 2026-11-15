@@ -19,7 +19,7 @@
 
         @if (! $isProfileComplete)
             <div class="p-3 bg-amber-50 border border-amber-200 rounded text-amber-900 text-xs flex items-center gap-3">
-                <svg class="w-5 h-5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <i data-lucide="alert-triangle" class="size-5 text-amber-600 shrink-0"></i>
                 <div>
                     <div class="font-bold">Profil Belum Lengkap!</div>
                     <a href="{{ route('student.profile.complete') }}" class="text-primary font-semibold underline">Lengkapi sekarang &rarr;</a>
@@ -27,7 +27,7 @@
             </div>
         @else
             <div class="p-3 bg-emerald-50 border border-emerald-200 rounded text-emerald-900 text-xs flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <i data-lucide="check-circle" class="size-5 text-emerald-600 shrink-0"></i>
                 <span class="font-semibold">Profil Lengkap & Siap Ujian</span>
             </div>
         @endif
@@ -71,13 +71,13 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-2 pt-1">
-                            <a href="{{ route('student.exam.card', $p->exam) }}" target="_blank" class="py-2 bg-default-100 hover:bg-slate-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 transition">
-                                <svg class="size-3.5 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                                {{ __('Kartu Ujian') }}
+                            <a href="{{ route('student.exam.card', $p->exam) }}" target="_blank" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="printer" class="size-3.5 text-default-500"></i>
+                                <span>{{ __('Kartu Ujian') }}</span>
                             </a>
-                            <a href="{{ route('student.exam.instructions', $p->exam) }}" class="py-2 bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition">
-                                <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
-                                {{ __('Buka Petunjuk') }}
+                            <a href="{{ route('student.exam.instructions', $p->exam) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition">
+                                <i data-lucide="arrow-right-circle" class="size-3.5"></i>
+                                <span>{{ __('Buka Petunjuk') }}</span>
                             </a>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
         @else
             <div class="bg-white border border-default-200 rounded-md p-8 text-center space-y-2 shadow-xs">
                 <div class="w-12 h-12 rounded-full bg-default-100 text-default-400 flex items-center justify-center mx-auto">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    <i data-lucide="calendar" class="size-6 text-default-400"></i>
                 </div>
                 <div class="text-sm font-bold text-default-700">{{ __('Belum Ada Sesi Ujian Aktif Saat Ini') }}</div>
                 <p class="text-xs text-default-400 max-w-sm mx-auto">

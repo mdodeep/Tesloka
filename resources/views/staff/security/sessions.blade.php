@@ -11,10 +11,8 @@ Manajemen Sesi & Perangkat Aktif
     @if(($otherActiveCount ?? 0) > 0)
         <form action="{{ route('staff.security.sessions.revoke-others') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mencabut seluruh sesi perangkat lain?')" class="inline w-full sm:w-auto">
             @csrf
-            <button type="submit" class="btn btn-sm bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded text-xs font-semibold transition inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs w-full sm:w-auto">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                </svg>
+            <button type="submit" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 rounded text-xs font-semibold transition inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs w-full sm:w-auto">
+                <i data-lucide="log-out" class="size-4"></i>
                 <span>Cabut Seluruh Sesi Lain ({{ $otherActiveCount }})</span>
             </button>
         </form>
@@ -55,13 +53,9 @@ Manajemen Sesi & Perangkat Aktif
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 rounded {{ $isCurrent ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-default-100 text-default-600' }} flex items-center justify-center shrink-0">
                             @if($session->device_type === 'mobile')
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                </svg>
+                                <i data-lucide="smartphone" class="size-5"></i>
                             @else
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
+                                <i data-lucide="monitor" class="size-5"></i>
                             @endif
                         </div>
 
@@ -94,7 +88,7 @@ Manajemen Sesi & Perangkat Aktif
                         @if(! $isCurrent && ! $session->is_revoked)
                             <form action="{{ route('staff.security.sessions.revoke', $session) }}" method="POST" onsubmit="return confirm('Cabut akses untuk perangkat ini?')">
                                 @csrf
-                                <button type="submit" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition cursor-pointer">
+                                <button type="submit" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 rounded text-xs font-semibold transition cursor-pointer">
                                     Cabut Sesi
                                 </button>
                             </form>

@@ -53,9 +53,9 @@
                     </div>
                 </div>
                 <div class="pt-2 flex justify-end">
-                    <a href="{{ route('student.exam.card', $exam) }}" target="_blank" class="px-3.5 py-2 bg-white border border-default-200 hover:bg-default-50 text-default-700 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-2xs transition">
-                        <svg class="size-3.5 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                        Cetak Kartu Peserta Ujian
+                    <a href="{{ route('student.exam.card', $exam) }}" target="_blank" class="btn btn-sm bg-white border border-default-200 hover:bg-default-50 text-default-700 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+                        <i data-lucide="printer" class="size-3.5 text-default-500"></i>
+                        <span>Cetak Kartu Peserta Ujian</span>
                     </a>
                 </div>
             </div>
@@ -64,8 +64,8 @@
             <div class="p-4 bg-white border border-default-200 rounded space-y-3">
                 <div class="flex items-center justify-between border-b border-default-100 pb-2.5">
                     <h3 class="text-sm font-bold text-default-900 flex items-center gap-2">
-                        <svg class="size-4.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Pemeriksaan Kesiapan Perangkat (Pre-Flight Check)
+                        <i data-lucide="check-circle" class="size-4.5 text-primary"></i>
+                        <span>Pemeriksaan Kesiapan Perangkat (Pre-Flight Check)</span>
                     </h3>
                     <span id="preflightOverallBadge" class="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-[11px] font-bold rounded-full">
                         Memeriksa Perangkat...
@@ -117,16 +117,16 @@
                 <div class="p-4 bg-amber-50 border border-amber-200 rounded flex items-center justify-between gap-4 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="size-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                            <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <i data-lucide="lock" class="size-5"></i>
                         </div>
                         <div>
                             <span class="text-xs font-bold text-amber-900 uppercase">Ujian Ini Mewajibkan Safe Exam Browser</span>
                             <p class="text-xs text-amber-700">Buka ujian ini menggunakan aplikasi Safe Exam Browser resmi.</p>
                         </div>
                     </div>
-                    <a href="{{ route('student.exam.seb-config', $exam) }}" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded transition inline-flex items-center gap-1.5 shadow-xs">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh File .seb
+                    <a href="{{ route('student.exam.seb-config', $exam) }}" class="btn btn-sm bg-amber-600 hover:bg-amber-700 text-white font-semibold inline-flex items-center gap-1.5 shadow-xs">
+                        <i data-lucide="download" class="size-4"></i>
+                        <span>Unduh File .seb</span>
                     </a>
                 </div>
             @endif
@@ -134,8 +134,8 @@
             <!-- Tata Tertib & Ketentuan CBT -->
             <div class="space-y-3">
                 <h3 class="text-sm font-bold text-default-800 uppercase tracking-wide flex items-center gap-2">
-                    <svg class="size-4.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    Tata Tertib & Ketentuan Pengerjaan:
+                    <i data-lucide="clipboard-list" class="size-4.5 text-primary"></i>
+                    <span>Tata Tertib & Ketentuan Pengerjaan:</span>
                 </h3>
                 <ul class="text-xs text-default-600 space-y-2 list-disc list-inside bg-white p-4 border border-default-200 rounded leading-relaxed">
                     <li><strong>Waktu Server:</strong> Hitung mundur pengerjaan menggunakan jam server resmi TESLOKA. Menutup browser atau memuat ulang halaman tidak menghentikan maupun menambah durasi timer.</li>
@@ -164,11 +164,11 @@
                 </div>
 
                 <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2">
-                    <a href="{{ route('student.exam.index') }}" class="w-full sm:w-auto px-4 py-2.5 bg-default-100 hover:bg-slate-200 text-default-700 text-xs font-semibold rounded transition text-center">
+                    <a href="{{ route('student.exam.index') }}" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-center w-full sm:w-auto">
                         Batal & Kembali
                     </a>
-                    <button type="submit" id="btnStartExam" class="w-full sm:w-auto px-6 py-2.5 bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 transition">
-                        <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <button type="submit" id="btnStartExam" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold shadow-xs inline-flex items-center justify-center gap-2 transition w-full sm:w-auto">
+                        <i data-lucide="play-circle" class="size-4 shrink-0"></i>
                         <span>Mulai Mengerjakan Ujian</span>
                     </button>
                 </div>

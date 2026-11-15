@@ -7,9 +7,7 @@
     <!-- Success Banner -->
     <div class="bg-emerald-50 border border-emerald-200 rounded-md p-6 text-center space-y-3 shadow-sm">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-2">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-            </svg>
+            <i data-lucide="check" class="size-8"></i>
         </div>
         <h1 class="text-2xl font-bold text-default-900">Ujian Berhasil Dikumpulkan</h1>
         <p class="text-sm text-default-600">
@@ -85,9 +83,7 @@
                 </div>
             @else
                 <div class="p-4 bg-default-50 border border-default-200 rounded text-xs text-default-600 flex items-center gap-3">
-                    <svg class="w-5 h-5 text-default-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                    <i data-lucide="info" class="size-5 text-default-400 shrink-0"></i>
                     <span>Hasil nilai dan perankingan akan diumumkan secara resmi oleh pihak sekolah/madrasah setelah seluruh sesi selesai.</span>
                 </div>
             @endif
@@ -102,24 +98,22 @@
         <!-- Action Buttons -->
         <div class="bg-default-50 p-4 border-t border-default-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 print:hidden">
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                <button type="button" onclick="window.print()" class="w-full sm:w-auto px-4 py-2.5 border border-default-200 rounded text-default-700 text-xs font-semibold hover:bg-default-50 transition inline-flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
-                    <svg class="w-4 h-4 text-default-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                    </svg>
-                    Cetak Bukti Resi
+                <button type="button" onclick="window.print()" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold shadow-2xs inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
+                    <i data-lucide="printer" class="size-4 text-default-500"></i>
+                    <span>Cetak Bukti Resi</span>
                 </button>
-                <a href="{{ route('student.exam.transcript', $attempt) }}" class="w-full sm:w-auto px-4 py-2 bg-indigo-50 border border-indigo-200 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 transition inline-flex items-center justify-center gap-1.5">
-                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <a href="{{ route('student.exam.transcript', $attempt) }}" class="btn btn-sm bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold shadow-2xs inline-flex items-center justify-center gap-1.5 w-full sm:w-auto">
+                    <i data-lucide="file-text" class="size-4 text-indigo-600"></i>
                     <span>Cetak SKHU / Transkrip</span>
                 </a>
                 @if($attempt->isPassed())
-                    <a href="{{ route('student.exam.certificate', $attempt) }}" class="w-full sm:w-auto px-4 py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg text-sm font-semibold hover:bg-emerald-100 transition inline-flex items-center justify-center gap-1.5">
-                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                    <a href="{{ route('student.exam.certificate', $attempt) }}" class="btn btn-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-semibold shadow-2xs inline-flex items-center justify-center gap-1.5 w-full sm:w-auto">
+                        <i data-lucide="award" class="size-4 text-emerald-600"></i>
                         <span>Sertifikat</span>
                     </a>
                 @endif
             </div>
-            <a href="{{ route('student.dashboard') }}" class="w-full sm:w-auto px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-semibold transition text-center shadow-sm">
+            <a href="{{ route('student.dashboard') }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs text-center w-full sm:w-auto">
                 Kembali ke Beranda
             </a>
         </div>

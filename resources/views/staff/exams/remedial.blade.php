@@ -6,8 +6,8 @@
 @section('page-subtitle', 'Menerbitkan ujian tindak lanjut yang terhubung ke ujian induk dengan penyalinan otomatis cetak biru (blueprint).')
 
 @section('page-actions')
-    <a href="{{ route('staff.exams.show', $exam) }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="arrow-left" class="size-4"></i>
         <span>Batal & Kembali</span>
     </a>
 @endsection
@@ -93,11 +93,11 @@
         </x-cbt.card>
 
         <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-2">
-            <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-sm border border-default-200 text-default-700 hover:bg-default-100 rounded text-center justify-center">
+            <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold text-center justify-center">
                 Batal
             </a>
-            <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded shadow-xs inline-flex items-center justify-center gap-2 transition">
-                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+            <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs inline-flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="plus-circle" class="size-4"></i>
                 <span>Terbitkan Draf Ujian Remedial / Susulan</span>
             </button>
         </div>

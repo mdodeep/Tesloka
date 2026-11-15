@@ -26,9 +26,9 @@
         </div>
 
         <div class="flex items-center gap-3 flex-wrap">
-            <a href="{{ route('staff.sessions.monitor', $session) }}" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-2xs">
-                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                Buka Monitoring Teks
+            <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs">
+                <i data-lucide="bar-chart-2" class="size-4"></i>
+                <span>Buka Monitoring Teks</span>
             </a>
             <div class="bg-slate-800 border border-slate-700 px-4 py-2 rounded text-center">
                 <span class="block text-[10px] text-default-400 uppercase tracking-wider">Kanal Media SFU</span>
@@ -52,9 +52,7 @@
                             @if($p['is_online'] && $p['camera_status'] === 'active')
                                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10"></div>
                                 <div class="flex flex-col items-center justify-center text-default-600 gap-1">
-                                    <svg class="w-8 h-8 text-primary animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                    </svg>
+                                    <i data-lucide="video" class="size-8 text-primary animate-pulse"></i>
                                     <span class="text-[10px] text-default-400 font-mono">Live WebRTC</span>
                                 </div>
                             @elseif($p['attempt_status'] === 'submitted' || $p['attempt_status'] === 'terminated')
@@ -63,9 +61,7 @@
                                 </div>
                             @else
                                 <div class="flex flex-col items-center justify-center text-default-600 gap-1">
-                                    <svg class="w-6 h-6 text-default-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
-                                    </svg>
+                                    <i data-lucide="video-off" class="size-6 text-default-600"></i>
                                     <span class="text-[10px] text-default-500">Kamera Mati / Belum Mulai</span>
                                 </div>
                             @endif
@@ -73,11 +69,8 @@
                             <!-- Overlay Controls on Hover -->
                             @if($p['attempt_id'] && $p['attempt_status'] === 'in_progress')
                                 <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2 z-20">
-                                    <button type="button" onclick="triggerSnapshotRequest({{ $p['attempt_id'] }}, '{{ addslashes($p['student_name']) }}')" class="p-2 bg-primary hover:bg-primary-hover text-white rounded-lg text-xs font-semibold shadow cursor-pointer transition" title="Ambil Foto Snapshot">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
+                                    <button type="button" onclick="triggerSnapshotRequest({{ $p['attempt_id'] }}, '{{ addslashes($p['student_name']) }}')" class="p-2 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow cursor-pointer transition" title="Ambil Foto Snapshot">
+                                        <i data-lucide="camera" class="size-4"></i>
                                     </button>
                                 </div>
                             @endif

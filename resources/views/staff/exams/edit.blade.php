@@ -6,12 +6,12 @@
 @section('page-subtitle', 'Kode: ' . $exam->code . ' • Status: ' . strtoupper($exam->status))
 
 @section('page-actions')
-    <a href="{{ route('staff.exams.show', $exam) }}" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+        <i data-lucide="eye" class="size-4"></i>
         <span>Kelola Blueprint</span>
     </a>
-    <a href="{{ route('staff.exams.index') }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <a href="{{ route('staff.exams.index') }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+        <i data-lucide="arrow-left" class="size-4"></i>
         <span>Kembali</span>
     </a>
 @endsection
@@ -199,11 +199,11 @@
 
                 <!-- Actions -->
                 <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-2">
-                    <a href="{{ route('staff.exams.show', $exam) }}" class="w-full sm:w-auto px-5 py-2.5 bg-default-100 hover:bg-slate-200 text-default-700 font-semibold text-xs rounded transition text-center">
+                    <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-sm w-full sm:w-auto px-5 py-2.5 bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded transition text-center">
                         Batal
                     </a>
-                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 transition">
-                        <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                    <button type="submit" class="btn btn-sm w-full sm:w-auto px-6 py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded shadow-xs inline-flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="save" class="size-4 shrink-0"></i>
                         <span>Simpan Perubahan</span>
                     </button>
                 </div>

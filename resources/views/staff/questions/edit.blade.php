@@ -6,12 +6,12 @@
 @section('page-subtitle', 'Versi #' . $question->version . ' • Menyimpan perubahan menghasilkan snapshot Versi #' . ($question->version + 1) . ' otomatis.')
 
 @section('page-actions')
-    <a href="{{ route('staff.questions.show', $question) }}" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    <a href="{{ route('staff.questions.show', $question) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="eye" class="size-4"></i>
         <span>Pratinjau</span>
     </a>
-    <a href="{{ route('staff.question-banks.show', $questionBank) }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <a href="{{ route('staff.question-banks.show', $questionBank) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="arrow-left" class="size-4"></i>
         <span>Kembali</span>
     </a>
 @endsection
@@ -119,8 +119,9 @@
                 <x-cbt.card title="Pilihan & Kunci Jawaban" id="optionsCard">
                     <div class="mb-4 flex items-center justify-between">
                         <p class="text-xs text-default-500" id="optionsGuidance">Perbarui pilihan dan tentukan kunci jawaban benar.</p>
-                        <button type="button" id="btnAddOption" onclick="addOptionRow()" class="px-3 py-1.5 text-xs bg-default-100 hover:bg-slate-200 text-default-700 font-semibold rounded inline-flex items-center gap-1.5 transition cursor-pointer">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Tambah Pilihan
+                        <button type="button" id="btnAddOption" onclick="addOptionRow()" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold inline-flex items-center gap-1.5 transition cursor-pointer">
+                            <i data-lucide="plus" class="size-3.5"></i>
+                            <span>Tambah Pilihan</span>
                         </button>
                     </div>
 
@@ -173,8 +174,8 @@
                                         <input type="text" name="options[{{ $idx }}][content]" value="{{ $opt->content }}" class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
                                     </div>
                                     <div>
-                                        <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Hapus Opsi">
-                                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-danger p-1.5 rounded hover:bg-danger/10 transition cursor-pointer" title="Hapus Opsi">
+                                            <i data-lucide="trash-2" class="size-4"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -185,11 +186,11 @@
 
                 <!-- Actions -->
                 <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-4">
-                    <a href="{{ route('staff.questions.show', $question) }}" class="w-full sm:w-auto px-5 py-2.5 bg-default-100 hover:bg-slate-200 text-default-700 font-semibold text-xs rounded transition text-center">
+                    <a href="{{ route('staff.questions.show', $question) }}" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold transition text-center w-full sm:w-auto">
                         Batal
                     </a>
-                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 transition">
-                        <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                    <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-2xs inline-flex items-center justify-center gap-2 transition w-full sm:w-auto">
+                        <i data-lucide="save" class="size-4 shrink-0"></i>
                         <span>Simpan Versi Baru (#{{ $question->version + 1 }})</span>
                     </button>
                 </div>
@@ -268,13 +269,14 @@
                     <input type="text" name="options[${i}][content]" placeholder="Teks opsi ${letter}..." class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
                 </div>
                 <div>
-                    <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Hapus Opsi">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-danger p-1.5 rounded hover:bg-danger/10 transition cursor-pointer" title="Hapus Opsi">
+                        <i data-lucide="trash-2" class="size-4"></i>
                     </button>
                 </div>
             `;
             container.appendChild(div);
         }
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
     }
 
     function renderTrueFalseOptions() {
@@ -356,14 +358,13 @@
                 <input type="text" name="options[${nextIdx}][content]" placeholder="Teks opsi ${letter}..." class="form-input w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary h-9" required>
             </div>
             <div>
-                <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Hapus Opsi">
-                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                <button type="button" onclick="removeOptionRow(this)" class="text-default-400 hover:text-danger p-1.5 rounded hover:bg-danger/10 transition cursor-pointer" title="Hapus Opsi">
+                    <i data-lucide="trash-2" class="size-4"></i>
                 </button>
             </div>
         `;
         container.appendChild(div);
-    }
-        container.appendChild(div);
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
     }
 
     function removeOptionRow(btn) {

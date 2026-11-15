@@ -37,7 +37,7 @@
             <!-- Center: Real-time Autosave Sync Status -->
             <div class="hidden md:flex items-center gap-2 text-xs">
                 <span id="saveStatusIndicator" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <i data-lucide="check-circle" class="size-4 text-emerald-600"></i>
                     <span id="saveStatusText">Tersimpan di Server</span>
                 </span>
             </div>
@@ -45,7 +45,7 @@
             <!-- Right: Server Timer & Palette Trigger -->
             <div class="flex items-center gap-3">
                 <div class="bg-slate-900 text-white px-3.5 py-1.5 rounded font-mono text-sm font-bold tracking-wider flex items-center gap-2 shadow-xs">
-                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <i data-lucide="clock" class="size-4 text-amber-400"></i>
                     <span id="cbtTimerDisplay">00:00:00</span>
                 </div>
 
@@ -62,12 +62,12 @@
                     </button>
                 </div>
 
-                <button type="button" onclick="toggleFullscreen()" class="p-2 rounded bg-default-100 hover:bg-slate-200 text-default-600 hidden sm:inline-flex" title="Layar Penuh">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                <button type="button" onclick="toggleFullscreen()" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-600 hidden sm:inline-flex" title="Layar Penuh">
+                    <i data-lucide="maximize" class="size-4"></i>
                 </button>
 
-                <button type="button" onclick="document.getElementById('paletteSidebar').classList.toggle('hidden')" class="lg:hidden p-2 rounded bg-default-100 hover:bg-slate-200 text-default-700" title="Daftar Soal">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <button type="button" onclick="document.getElementById('paletteSidebar').classList.toggle('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-700 lg:hidden" title="Daftar Soal">
+                    <i data-lucide="layout-grid" class="size-4"></i>
                 </button>
             </div>
         </div>
@@ -123,7 +123,7 @@
                         <!-- Stimulus Wacana Bacaan (Jika ada) -->
                         <div id="stimulusContainer" class="hidden p-4 bg-default-50 border border-default-200 rounded mb-6">
                             <div class="text-xs font-bold text-default-500 uppercase tracking-wide mb-1 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <i data-lucide="file-text" class="size-4 text-primary"></i>
                                 <span id="stimulusTitle">Stimulus</span>
                             </div>
                             <div id="stimulusContent" class="text-sm text-default-700 leading-relaxed prose prose-sm max-w-none"></div>
@@ -144,23 +144,23 @@
 
                     <!-- Bottom Navigation Buttons -->
                     <div class="pt-6 border-t border-default-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <button type="button" id="btnPrev" onclick="navigateQuestion(-1)" class="w-full sm:w-auto px-4 py-2.5 bg-default-100 hover:bg-slate-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        <button type="button" id="btnPrev" onclick="navigateQuestion(-1)" class="w-full sm:w-auto btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                            <i data-lucide="chevron-left" class="size-4"></i>
                             <span>Soal Sebelumnya</span>
                         </button>
 
-                        <button type="button" id="btnFlag" onclick="toggleCurrentFlag()" class="w-full sm:w-auto px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-xs rounded border border-amber-200 inline-flex items-center justify-center gap-2 cursor-pointer">
-                            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
+                        <button type="button" id="btnFlag" onclick="toggleCurrentFlag()" class="w-full sm:w-auto btn btn-sm bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-xs rounded border border-amber-200 inline-flex items-center justify-center gap-2 cursor-pointer">
+                            <i data-lucide="flag" class="size-4 text-amber-600"></i>
                             <span id="btnFlagText">Ragu-ragu</span>
                         </button>
 
                         <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <button type="button" id="btnNext" onclick="navigateQuestion(1)" class="flex-1 sm:flex-none px-5 py-2.5 bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
+                            <button type="button" id="btnNext" onclick="navigateQuestion(1)" class="flex-1 sm:flex-none btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
                                 <span>Soal Berikutnya</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                <i data-lucide="chevron-right" class="size-4"></i>
                             </button>
-                            <button type="button" onclick="openFinishModal()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <button type="button" onclick="openFinishModal()" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
+                                <i data-lucide="check" class="size-4"></i>
                                 <span>Selesai</span>
                             </button>
                         </div>
@@ -176,7 +176,7 @@
                         <div class="flex items-center gap-2">
                             <span class="text-xs text-default-400 font-mono">{{ count($orderedQuestions) }} Butir</span>
                             <button type="button" onclick="document.getElementById('paletteSidebar').classList.add('hidden')" class="lg:hidden p-1 rounded-md hover:bg-default-100 text-default-500 transition cursor-pointer" title="Tutup Palet Soal">
-                                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                <i data-lucide="x" class="size-4"></i>
                             </button>
                         </div>
                     </div>
@@ -209,8 +209,8 @@
                     </div>
 
                     <div class="pt-2">
-                        <button type="button" onclick="openFinishModal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <button type="button" onclick="openFinishModal()" class="w-full btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
+                            <i data-lucide="check-circle" class="size-4"></i>
                             <span>Kumpulkan Ujian</span>
                         </button>
                     </div>
@@ -220,10 +220,10 @@
     </main>
 
     <!-- Modal Peringatan Khusus Pengawas (Urgent Proctor Warning - FULL-FEATURE 20.8, 22) -->
-    <div id="urgentWarningModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-xs hidden p-3 sm:p-4">
-        <div class="bg-white rounded-xl max-w-md w-full p-6 text-center shadow-2xl border-2 border-rose-500 space-y-4 max-h-[90vh] flex flex-col">
+    <div id="urgentWarningModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
+        <div class="card max-w-md w-full p-6 text-center shadow-2xl border-2 border-rose-500 space-y-4 max-h-[90vh] flex flex-col">
             <div class="size-14 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center shrink-0">
-                <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <i data-lucide="alert-triangle" class="size-8"></i>
             </div>
             <div class="shrink-0">
                 <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-200">
@@ -235,7 +235,7 @@
                 <p id="urgentWarningMessage" class="whitespace-pre-wrap"></p>
             </div>
             <div class="pt-2 shrink-0">
-                <button type="button" onclick="acknowledgeUrgentWarning()" class="w-full py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow transition cursor-pointer">
+                <button type="button" onclick="acknowledgeUrgentWarning()" class="w-full btn btn-sm bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow-xs transition cursor-pointer">
                     Saya Mengerti &amp; Siap Melanjutkan Ujian
                 </button>
             </div>
@@ -243,11 +243,11 @@
     </div>
 
     <!-- Modal Konfirmasi Pengumpulan Ujian -->
-    <div id="finishModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs hidden p-3 sm:p-4">
-        <div class="bg-white rounded-md max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+    <div id="finishModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
+        <div class="card max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
             <div class="text-center space-y-2 shrink-0">
                 <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl font-bold">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <i data-lucide="check" class="size-6"></i>
                 </div>
                 <h3 class="text-lg font-bold text-default-900">Konfirmasi Selesai Ujian</h3>
                 <p class="text-xs text-default-500">Apakah Anda yakin ingin mengumpulkan lembar jawaban ujian sekarang?</p>
@@ -270,18 +270,18 @@
                 </div>
 
                 <div id="unansweredWarning" class="hidden p-3 bg-rose-50 border border-rose-200 rounded text-xs text-rose-800 flex items-start gap-2">
-                    <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <i data-lucide="alert-triangle" class="size-4 text-rose-600 shrink-0 mt-0.5"></i>
                     <span><strong>Peringatan:</strong> Masih ada butir soal yang belum Anda jawab. Jawaban kosong bernilai 0.</span>
                 </div>
             </div>
 
             <form action="{{ route('student.exam.submit', $attempt) }}" method="POST" id="submitExamForm" class="pt-2 flex flex-col-reverse sm:flex-row gap-2 justify-end shrink-0">
                 @csrf
-                <button type="button" onclick="document.getElementById('finishModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-slate-200 text-default-700 font-semibold text-xs rounded cursor-pointer text-center justify-center w-full sm:w-auto">
+                <button type="button" onclick="document.getElementById('finishModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded cursor-pointer text-center justify-center w-full sm:w-auto">
                     Periksa Kembali
                 </button>
                 <button type="submit" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <i data-lucide="check" class="size-4"></i>
                     <span>Ya, Kumpulkan Sekarang</span>
                 </button>
             </form>
@@ -776,7 +776,7 @@
                         header.className = 'flex items-center justify-between text-xs font-semibold';
                         header.innerHTML = `
                             <span class="flex items-center gap-1.5 text-primary">
-                                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                                <i data-lucide="volume-2" class="size-4"></i>
                                 <span>Audio Listening Comprehension</span>
                             </span>
                             <span class="audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] ${playedCount >= maxPlays ? 'bg-rose-100 text-rose-800' : 'bg-primary/10 text-primary'}">
@@ -785,6 +785,9 @@
                         `;
                         wrapper.appendChild(header);
                         wrapper.appendChild(audio);
+                        if (window.lucide && window.lucide.createIcons) {
+                            window.lucide.createIcons();
+                        }
                     }
 
                     const counterEl = wrapper.querySelector('.audio-play-counter');

@@ -27,27 +27,21 @@
         </div>
 
         <div class="flex items-center gap-3 flex-wrap">
-            <a href="{{ route('staff.sessions.camera-grid', $session) }}" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-sm font-semibold transition inline-flex items-center gap-2 border border-slate-700 shadow-sm">
-                <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                </svg>
-                Grid Kamera Live
+            <a href="{{ route('staff.sessions.camera-grid', $session) }}" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center gap-1.5 border border-slate-700 shadow-2xs">
+                <i data-lucide="video" class="size-4 text-rose-400"></i>
+                <span>Grid Kamera Live</span>
             </a>
             <div class="bg-slate-800 border border-slate-700 px-4 py-2 rounded text-center">
                 <span class="block text-[10px] text-default-400 uppercase tracking-wider">Token Rilis</span>
                 <span class="font-mono text-lg font-bold text-amber-400 tracking-widest">{{ $session->token ?: 'BELUM AKTIF' }}</span>
             </div>
-            <button type="button" onclick="openAnnouncementModal()" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold transition inline-flex items-center gap-2 shadow-xs cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-                </svg>
-                Siarkan Pengumuman
+            <button type="button" onclick="openAnnouncementModal()" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                <i data-lucide="megaphone" class="size-4"></i>
+                <span>Siarkan Pengumuman</span>
             </button>
-            <button type="button" onclick="openIncidentModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-                Catat Insiden
+            <button type="button" onclick="openIncidentModal()" class="btn btn-sm bg-danger hover:bg-danger-hover text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                <i data-lucide="alert-triangle" class="size-4"></i>
+                <span>Catat Insiden</span>
             </button>
         </div>
     </div>
@@ -94,9 +88,7 @@
         <div class="flex items-center gap-3 w-full md:w-auto">
             <div class="relative w-full md:w-64">
                 <input type="text" id="search-input" onkeyup="filterParticipants()" placeholder="Cari nama / meja..." class="form-input w-full pl-9 pr-3 h-9 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
-                <svg class="w-4 h-4 text-default-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+                <i data-lucide="search" class="size-4 text-default-400 absolute left-3 top-2.5"></i>
             </div>
             <div class="flex items-center gap-1 text-[11px] text-default-500 shrink-0">
                 <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -161,9 +153,7 @@
                     <!-- Warnings (Tab blur / fullscreen) -->
                     @if(! $part['is_tab_focused'])
                         <div class="mt-2 px-2 py-1 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-800 font-medium flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
+                            <i data-lucide="alert-triangle" class="size-3.5 text-amber-600 shrink-0"></i>
                             <span>Fokus Tab Lepas (Blur)</span>
                         </div>
                     @endif

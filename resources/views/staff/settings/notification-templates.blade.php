@@ -6,12 +6,12 @@
 @section('page-subtitle', 'Kustomisasi subjek dan bodi pesan otomatis dengan variabel dinamis (merge tags).')
 
 @section('page-actions')
-    <a href="{{ route('staff.settings.smtp.index') }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded-md inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="w-4 h-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    <a href="{{ route('staff.settings.smtp.index') }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="settings" class="size-4 text-default-500"></i>
         <span>Pengaturan SMTP</span>
     </a>
-    <a href="{{ route('staff.settings.notification-logs.index') }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded-md inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="w-4 h-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    <a href="{{ route('staff.settings.notification-logs.index') }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="file-text" class="size-4 text-default-500"></i>
         <span>Log Pengiriman</span>
     </a>
 @endsection
@@ -59,16 +59,13 @@
                         <button type="button" 
                                 id="btn-preview-{{ $tmpl->id }}"
                                 onclick="openTemplatePreview({{ $tmpl->id }}, '{{ $tmpl->code }}', '{{ addslashes($tmpl->name) }}')" 
-                                class="btn-preview-template w-full sm:w-auto px-4 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold text-xs rounded-md shadow-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer">
-                            <svg class="w-4 h-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
+                                class="btn-preview-template btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs w-full sm:w-auto">
+                            <i data-lucide="eye" class="size-4 text-primary shrink-0"></i>
                             <span>Pratinjau Email (View Template)</span>
                         </button>
 
-                        <button type="submit" class="w-full sm:w-auto px-5 py-2 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded-md shadow-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer">
-                            <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs w-full sm:w-auto">
+                            <i data-lucide="save" class="size-4 shrink-0"></i>
                             <span>Simpan Perubahan</span>
                         </button>
                     </div>
@@ -85,9 +82,7 @@
         <div class="flex items-center justify-between pb-4 border-b border-default-200 shrink-0">
             <div class="flex items-center gap-2.5">
                 <div class="size-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
+                    <i data-lucide="mail" class="size-5"></i>
                 </div>
                 <div>
                     <h3 class="text-sm font-bold text-default-800">Pratinjau Template Email</h3>
@@ -106,7 +101,7 @@
             </div>
 
             <button type="button" onclick="closeTemplatePreview()" class="text-default-400 hover:text-default-600 cursor-pointer p-1 rounded hover:bg-default-100">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
 
@@ -190,9 +185,7 @@
         <!-- Footer Modal -->
         <div class="pt-4 border-t border-default-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
             <span class="text-[11px] text-default-500 flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                <i data-lucide="info" class="size-4 text-emerald-500 shrink-0"></i>
                 <span>Pratinjau membaca langsung perubahan teks yang sedang diedit di formulir tanpa perlu disimpan terlebih dahulu.</span>
             </span>
 

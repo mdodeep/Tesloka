@@ -58,7 +58,7 @@
 
             <div class="border-t border-default-200 pt-4 mt-4">
                 <a href="{{ route('staff.security.two-factor') }}" class="w-full h-10 px-4 bg-white hover:bg-default-50 text-default-700 hover:text-default-900 border border-default-200 hover:border-default-300 rounded-md text-xs font-semibold shadow-2xs transition inline-flex items-center justify-center gap-2 cursor-pointer">
-                    <svg class="size-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <i data-lucide="shield-check" class="size-4 text-primary"></i>
                     <span>Pengaturan Autentikasi (2FA)</span>
                 </a>
             </div>
@@ -121,8 +121,8 @@
                 </div>
 
                 <div class="flex justify-end pt-3 border-t border-default-100">
-                    <button type="submit" class="h-10 px-5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-md shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer">
-                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+                        <i data-lucide="save" class="size-4"></i>
                         <span>Simpan Perubahan Profil</span>
                     </button>
                 </div>
@@ -186,7 +186,7 @@
                     </div>
 
                     <div class="flex justify-end pt-3 border-t border-default-100">
-                        <button type="submit" class="h-10 px-5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-md shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer">
+                        <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
                             <i data-lucide="lock" class="size-4"></i>
                             <span>Perbarui Kata Sandi</span>
                         </button>

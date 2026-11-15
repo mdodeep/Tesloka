@@ -13,8 +13,8 @@
         </span>
         <form action="{{ route('staff.settings.maintenance.disable') }}" method="POST" class="inline">
             @csrf
-            <button type="submit" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-semibold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <button type="submit" class="btn btn-sm bg-success hover:bg-success-hover text-white flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                <i data-lucide="check" class="size-4"></i>
                 <span>Buka Sistem</span>
             </button>
         </form>
@@ -33,8 +33,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-white border border-default-200 rounded-md p-5 shadow-sm flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center font-bold">
+                    <i data-lucide="clock" class="size-5"></i>
                 </div>
                 <div>
                     <div class="text-xs text-default-500">Pengerjaan Ujian Sedang Berlangsung</div>
@@ -56,8 +56,8 @@
 
         <div class="bg-white border border-default-200 rounded-md p-5 shadow-sm flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <div class="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center font-bold">
+                    <i data-lucide="calendar" class="size-5"></i>
                 </div>
                 <div>
                     <div class="text-xs text-default-500">Sesi Ujian Aktif Saat Ini</div>
@@ -107,7 +107,7 @@
                     @endif
                 </div>
                 <div class="p-3 bg-emerald-50 rounded border border-emerald-200 text-[11px] text-emerald-800 flex items-center gap-2 mt-2">
-                    <svg class="w-4 h-4 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <i data-lucide="info" class="size-4 shrink-0 text-emerald-600"></i>
                     <span><strong>Pengecualian Petugas Aktif:</strong> Portal Staf & Pengawas tetap dapat diakses penuh oleh administrator sehingga Anda dapat memantau dan menonaktifkan pemeliharaan kapan saja.</span>
                 </div>
             </div>
@@ -120,7 +120,7 @@
 
                 @if($activeAttemptsCount > 0)
                     <div class="p-4 rounded bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-3">
-                        <svg class="w-5 h-5 shrink-0 text-rose-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <i data-lucide="alert-triangle" class="size-5 shrink-0 text-rose-600 mt-0.5"></i>
                         <div>
                             <strong class="font-bold">PERINGATAN PERLINDUNGAN CBT:</strong>
                             <p class="mt-0.5">Saat ini terdapat {{ $activeAttemptsCount }} pengerjaan ujian siswa yang aktif. Mengaktifkan mode pemeliharaan dapat memutuskan sesi pengerjaan ujian siswa. Centang kotak persetujuan darurat di bawah jika ini adalah perbaikan kritis.</p>
@@ -174,8 +174,8 @@
                 </div>
 
                 <div class="pt-2 flex justify-end">
-                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    <button type="submit" class="btn btn-sm bg-danger hover:bg-danger-hover text-white flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer shadow-2xs">
+                        <i data-lucide="lock" class="size-4 shrink-0"></i>
                         <span>Aktifkan Mode Pemeliharaan Sekarang</span>
                     </button>
                 </div>

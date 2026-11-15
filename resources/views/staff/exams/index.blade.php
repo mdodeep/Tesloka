@@ -6,8 +6,8 @@
 @section('page-subtitle', 'Kelola jadwal ujian, cetak biru (blueprint), pembentukan paket terisolasi, dan validasi persetujuan penerbitan.')
 
 @section('page-actions')
-    <a href="{{ route('staff.exams.create') }}" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-2 cursor-pointer">
-        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+    <a href="{{ route('staff.exams.create') }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
+        <i data-lucide="plus" class="size-4"></i>
         <span>Rancang Ujian Baru</span>
     </a>
 @endsection
@@ -21,7 +21,7 @@
                 <label for="filter_search" class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Cari Ujian</label>
                 <div class="relative">
                     <input type="text" id="filter_search" name="search" value="{{ request('search') }}" placeholder="Judul atau kode ujian..." class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary pl-9">
-                    <svg class="size-4 text-default-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <i data-lucide="search" class="size-4 text-default-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                 </div>
             </div>
 
@@ -52,11 +52,11 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <button type="submit" class="h-10 px-4 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition flex-1">
-                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition flex-1 h-10">
+                    <i data-lucide="filter" class="size-4"></i>
                     <span>Terapkan Filter</span>
                 </button>
-                <a href="{{ route('staff.exams.index') }}" class="h-10 px-3.5 bg-default-100 hover:bg-slate-200 text-default-700 text-xs font-medium rounded inline-flex items-center justify-center transition" title="Reset Filter">
+                <a href="{{ route('staff.exams.index') }}" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 text-xs font-medium rounded inline-flex items-center justify-center transition h-10 px-3.5" title="Reset Filter">
                     Reset
                 </a>
             </div>
@@ -98,12 +98,8 @@
                             </td>
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                 <div class="inline-flex items-center gap-1.5">
-                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[11px] font-semibold rounded-full border border-blue-200/60" title="Jumlah aturan cetak biru">
-                                        {{ $exam->blueprints_count }} BP
-                                    </span>
-                                    <span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-[11px] font-semibold rounded-full border border-purple-200/60" title="Jumlah paket soal terbentuk">
-                                        {{ $exam->packages_count }} Pkg
-                                    </span>
+                                    <x-cbt.badge color="primary">{{ $exam->blueprints_count }} BP</x-cbt.badge>
+                                    <x-cbt.badge color="purple">{{ $exam->packages_count }} Pkg</x-cbt.badge>
                                 </div>
                             </td>
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
@@ -125,29 +121,29 @@
                             </td>
                             <td class="py-3.5 px-4 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('staff.exams.grading.index', $exam) }}" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50 shadow-2xs transition" title="Penilaian &amp; Hasil Siswa">
-                                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                                    <a href="{{ route('staff.exams.grading.index', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50 transition" title="Penilaian &amp; Hasil Siswa">
+                                        <i data-lucide="check-square" class="size-4"></i>
                                     </a>
-                                    <a href="{{ route('staff.exams.reports.index', $exam) }}" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 shadow-2xs transition" title="Grafik, Psikometri &amp; Analisis">
-                                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                    <a href="{{ route('staff.exams.reports.index', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition" title="Grafik, Psikometri &amp; Analisis">
+                                        <i data-lucide="bar-chart-2" class="size-4"></i>
                                     </a>
-                                    <a href="{{ route('staff.exams.show', $exam) }}" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-primary hover:border-primary/40 hover:bg-primary/5 shadow-2xs transition" title="Detail & Kelola Blueprint">
-                                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition" title="Detail & Kelola Blueprint">
+                                        <i data-lucide="eye" class="size-4"></i>
                                     </a>
-                                    <a href="{{ route('staff.exams.edit', $exam) }}" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-amber-600 hover:border-amber-300 hover:bg-amber-50 shadow-2xs transition" title="Edit Konfigurasi">
-                                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                    <a href="{{ route('staff.exams.edit', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-amber-600 hover:border-amber-300 hover:bg-amber-50 transition" title="Edit Konfigurasi">
+                                        <i data-lucide="edit" class="size-4"></i>
                                     </a>
                                     <form action="{{ route('staff.exams.duplicate', $exam) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 shadow-2xs transition" title="Gandakan Ujian">
-                                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition" title="Gandakan Ujian">
+                                            <i data-lucide="copy" class="size-4"></i>
                                         </button>
                                     </form>
                                     <form action="{{ route('staff.exams.destroy', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus/mengarsipkan ujian ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 shadow-2xs transition" title="Hapus Ujian">
-                                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 transition" title="Hapus Ujian">
+                                            <i data-lucide="trash-2" class="size-4"></i>
                                         </button>
                                     </form>
                                 </div>

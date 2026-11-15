@@ -9,9 +9,7 @@ Repositori Berkas & Media Terisolasi
 
 @section('page-actions')
     <button type="button" onclick="document.getElementById('modal-upload-media').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-        </svg>
+        <i data-lucide="upload" class="size-4"></i>
         <span>Unggah Berkas Baru</span>
     </button>
 @endsection
@@ -57,10 +55,8 @@ Repositori Berkas & Media Terisolasi
                         <img src="{{ route('media.stream', $file) }}" alt="{{ $file->original_name }}" class="max-h-full max-w-full object-contain rounded-lg">
                     @elseif($file->isAudio())
                         <div class="text-center p-2 w-full">
-                            <div class="w-12 h-12 mx-auto rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mb-2">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
-                                </svg>
+                            <div class="w-12 h-12 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center mb-2">
+                                <i data-lucide="volume-2" class="size-6"></i>
                             </div>
                             <audio controls class="w-full h-8" preload="none">
                                 <source src="{{ route('media.stream', $file) }}" type="{{ $file->mime_type }}">
@@ -68,10 +64,8 @@ Repositori Berkas & Media Terisolasi
                         </div>
                     @else
                         <div class="text-center">
-                            <div class="w-12 h-12 mx-auto rounded-full bg-slate-200 text-default-600 flex items-center justify-center mb-1">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
+                            <div class="w-12 h-12 mx-auto rounded-full bg-default-100 text-default-600 flex items-center justify-center mb-1">
+                                <i data-lucide="file-text" class="size-6"></i>
                             </div>
                             <span class="text-[10px] font-mono text-default-500 uppercase">{{ $file->mime_type }}</span>
                         </div>
@@ -97,14 +91,14 @@ Repositori Berkas & Media Terisolasi
 
                     <div class="pt-2 border-t border-default-100 flex items-center justify-between gap-2">
                         <button type="button" onclick="navigator.clipboard.writeText('{{ route('media.stream', $file) }}'); alert('Tautan media aman berhasil disalin!')"
-                            class="px-2.5 py-1 bg-default-50 hover:bg-default-100 text-default-700 text-[11px] font-semibold rounded-lg border border-default-200 transition cursor-pointer">
+                            class="btn btn-sm bg-default-50 hover:bg-default-100 text-default-700 text-[11px] font-semibold rounded border border-default-200 transition cursor-pointer">
                             Salin URL
                         </button>
 
                         <form action="{{ route('staff.media.destroy', $file) }}" method="POST" onsubmit="return confirm('Hapus berkas ini dari repositori media?')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-semibold rounded-lg border border-rose-200 transition cursor-pointer">
+                            <button type="submit" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 rounded text-[11px] font-semibold transition cursor-pointer">
                                 Hapus
                             </button>
                         </form>
@@ -114,9 +108,7 @@ Repositori Berkas & Media Terisolasi
         @empty
             <div class="col-span-full py-16 text-center bg-white rounded-md border border-default-200">
                 <div class="w-12 h-12 mx-auto rounded-full bg-default-100 text-default-400 flex items-center justify-center mb-3">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
+                    <i data-lucide="image" class="size-6"></i>
                 </div>
                 <h3 class="text-sm font-bold text-default-700">Repositori Media Masih Kosong</h3>
                 <p class="text-xs text-default-400 mt-1">Unggah berkas gambar, audio listening, atau wacana stimulus untuk digunakan dalam ujian.</p>
@@ -131,8 +123,8 @@ Repositori Berkas & Media Terisolasi
     @endif
 
     <!-- Modal Unggah Media Baru -->
-    <div id="modal-upload-media" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-        <div class="bg-white rounded-md max-w-md w-full p-4 sm:p-6 shadow-xl space-y-4 max-h-[90vh] flex flex-col">
+    <div id="modal-upload-media" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+        <div class="card max-w-md w-full p-4 sm:p-6 shadow-xl space-y-4 max-h-[90vh] flex flex-col">
             <div class="shrink-0 space-y-1">
                 <h3 class="text-base font-bold text-default-900">Unggah Berkas Media Baru</h3>
                 <p class="text-xs text-default-500">
@@ -168,7 +160,7 @@ Repositori Berkas & Media Terisolasi
                         Batal
                     </button>
                     <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition-all cursor-pointer inline-flex items-center justify-center gap-1.5 w-full sm:w-auto">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        <i data-lucide="upload" class="size-4"></i>
                         <span>Mulai Unggah</span>
                     </button>
                 </div>

@@ -9,7 +9,7 @@
 <div class="space-y-6">
     <div class="flex items-center justify-end">
         <button onclick="document.getElementById('modal-delegation').classList.toggle('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-xs flex items-center justify-center gap-2 cursor-pointer transition w-full sm:w-auto">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <i data-lucide="plus" class="size-4"></i>
             <span>Berikan Delegasi Wewenang</span>
         </button>
     </div>
@@ -53,7 +53,7 @@
                                     <form method="POST" action="{{ route('staff.delegations.revoke', $del) }}" class="inline" onsubmit="return confirm('Cabut delegasi ini?')">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="px-3 py-1.5 rounded border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold shadow-2xs transition cursor-pointer">
+                                        <button type="submit" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 rounded text-xs font-semibold transition cursor-pointer">
                                             Cabut
                                         </button>
                                     </form>
@@ -122,11 +122,13 @@
 </div>
 
 <!-- Modal Form Delegasi -->
-<div id="modal-delegation" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-md max-w-lg w-full p-4 sm:p-6 shadow-xl border border-default-200 max-h-[90vh] flex flex-col">
+<div id="modal-delegation" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="card max-w-lg w-full p-4 sm:p-6 shadow-xl border border-default-200 max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-default-100 shrink-0">
             <h3 class="text-sm font-bold text-default-800">Formulir Pelimpahan Delegasi Wewenang</h3>
-            <button onclick="document.getElementById('modal-delegation').classList.add('hidden')" class="text-default-400 hover:text-default-600 text-lg cursor-pointer">&times;</button>
+            <button onclick="document.getElementById('modal-delegation').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer p-1 rounded hover:bg-default-100">
+                <i data-lucide="x" class="size-5"></i>
+            </button>
         </div>
 
         <form method="POST" action="{{ route('staff.delegations.store') }}" class="space-y-4 text-xs overflow-y-auto pr-1">

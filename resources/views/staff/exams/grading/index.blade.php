@@ -32,37 +32,31 @@
         <div class="flex items-center gap-2 flex-wrap">
             <form action="{{ route('staff.exams.grading.recalculate', $exam) }}" method="POST" class="inline">
                 @csrf
-                <button type="submit" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold transition inline-flex items-center gap-1.5 border border-slate-700">
-                    <svg class="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                    Hitung Ulang Nilai
+                <button type="submit" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center gap-1.5 border border-slate-700">
+                    <i data-lucide="refresh-cw" class="size-4 text-primary-400"></i>
+                    <span>Hitung Ulang Nilai</span>
                 </button>
             </form>
 
-            <button type="button" onclick="openRegradeModal()" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                </svg>
-                Regrade Kunci Soal
+            <button type="button" onclick="openRegradeModal()" class="btn btn-sm bg-amber-600 hover:bg-amber-500 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-xs">
+                <i data-lucide="edit-3" class="size-4"></i>
+                <span>Regrade Kunci Soal</span>
             </button>
 
             <form action="{{ route('staff.exams.grading.approve', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Setujui seluruh nilai akhir ujian ini secara resmi?')">
                 @csrf
-                <button type="submit" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-sm" title="Persetujuan Nilai Akhir">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    Setujui Nilai (Approval)
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold transition inline-flex items-center gap-1.5 shadow-xs" title="Persetujuan Nilai Akhir">
+                    <i data-lucide="shield-check" class="size-4"></i>
+                    <span>Setujui Nilai (Approval)</span>
                 </button>
             </form>
 
             @if(!$exam->show_result_on_finish)
                 <form action="{{ route('staff.exams.grading.publish', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Publikasikan nilai ujian kepada seluruh peserta?')">
                     @csrf
-                    <button type="submit" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Publikasikan Nilai
+                    <button type="submit" class="btn btn-sm bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-xs">
+                        <i data-lucide="check-circle" class="size-4"></i>
+                        <span>Publikasikan Nilai</span>
                     </button>
                 </form>
             @endif
@@ -156,8 +150,9 @@
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-right whitespace-nowrap">
-                                <a href="{{ route('staff.exams.grading.attempt', [$exam, $res->exam_attempt_id]) }}" class="px-3 py-1.5 bg-default-100 hover:bg-slate-200 text-default-700 rounded-lg font-semibold inline-flex items-center gap-1">
-                                    Periksa & Koreksi
+                                <a href="{{ route('staff.exams.grading.attempt', [$exam, $res->exam_attempt_id]) }}" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold inline-flex items-center gap-1.5 shadow-2xs">
+                                    <i data-lucide="eye" class="size-3.5"></i>
+                                    <span>Periksa & Koreksi</span>
                                 </a>
                             </td>
                         </tr>
@@ -202,11 +197,13 @@
 </div>
 
 <!-- Modal Regrade Kunci Soal -->
-<div id="modal-regrade" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-md max-w-xl w-full p-4 sm:p-6 space-y-4 shadow-xl max-h-[90vh] flex flex-col">
-        <div class="flex items-center justify-between border-b pb-3 shrink-0">
+<div id="modal-regrade" class="hidden fixed inset-0 z-50 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div class="card max-w-xl w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
+        <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <h3 class="font-bold text-default-900 text-base">Alur Regrade Penilaian Ulang (Koreksi Kunci)</h3>
-            <button type="button" onclick="closeRegradeModal()" class="text-default-400 hover:text-default-600 cursor-pointer">&times;</button>
+            <button type="button" onclick="closeRegradeModal()" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+                <i data-lucide="x" class="size-5"></i>
+            </button>
         </div>
 
         <form id="form-regrade" action="{{ route('staff.exams.grading.regrade.execute', $exam) }}" method="POST" class="space-y-4 overflow-y-auto pr-1">

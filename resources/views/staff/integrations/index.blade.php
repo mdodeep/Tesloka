@@ -6,12 +6,12 @@
 @section('page-subtitle', 'Kelola API Keys antarsistem, sinkronisasi sertifikat kelulusan, dan siaran peristiwa webhook.')
 
 @section('page-actions')
-    <button type="button" onclick="document.getElementById('createWebhookModal').classList.remove('hidden')" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 rounded text-xs font-semibold shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
-        <svg class="w-4 h-4 text-default-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+    <button type="button" onclick="document.getElementById('createWebhookModal').classList.remove('hidden')" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 rounded text-xs font-semibold shadow-2xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
+        <i data-lucide="zap" class="size-4 text-default-500"></i>
         <span>Tambah Webhook</span>
     </button>
-    <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+    <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
+        <i data-lucide="key" class="size-4"></i>
         <span>Buat API Key Baru</span>
     </button>
 @endsection
@@ -27,7 +27,7 @@
     @if(session('generated_plain_key'))
         <div class="bg-amber-50 border border-amber-300 rounded-md p-5 shadow-xs space-y-3">
             <div class="flex items-center gap-2 text-amber-900 font-bold text-sm">
-                <svg class="w-5 h-5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <i data-lucide="alert-triangle" class="size-5 text-amber-600 shrink-0"></i>
                 <span>Salin API Key Baru Anda Segera!</span>
             </div>
             <p class="text-xs text-amber-800 leading-relaxed">
@@ -49,7 +49,7 @@
             <div class="p-5 border-b border-default-100 flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <span class="w-8 h-8 rounded bg-blue-50 text-primary flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                        <i data-lucide="key" class="size-4"></i>
                     </span>
                     <div>
                         <h3 class="text-sm font-bold text-default-800">Kunci API Antarsistem (API Keys)</h3>
@@ -110,7 +110,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer" title="Cabut Kunci">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            <i data-lucide="trash-2" class="size-4"></i>
                                         </button>
                                     </form>
                                 </td>
@@ -120,11 +120,11 @@
                                 <td colspan="5" class="py-12 text-center">
                                     <div class="max-w-xs mx-auto space-y-3">
                                         <div class="size-12 rounded-md bg-blue-50 text-primary flex items-center justify-center mx-auto">
-                                            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                                            <i data-lucide="key" class="size-6"></i>
                                         </div>
                                         <div class="text-xs font-bold text-default-700">Belum Ada Kunci API Dibuat</div>
                                         <p class="text-[11px] text-default-400">Buat API Key untuk menghubungkan aplikasi kelulusan eksternal secara aman.</p>
-                                        <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="px-3.5 py-1.5 bg-primary hover:bg-primary-hover text-white text-[11px] font-bold rounded shadow-xs transition">
+                                        <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-[11px] font-bold rounded shadow-xs transition">
                                             + Buat API Key Pertama
                                         </button>
                                     </div>
@@ -141,7 +141,7 @@
             <div class="p-5 border-b border-default-100 flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <span class="w-8 h-8 rounded bg-teal-50 text-[#14bba6] flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <i data-lucide="zap" class="size-4"></i>
                     </span>
                     <div>
                         <h3 class="text-sm font-bold text-default-800">Langganan Webhook (Peristiwa)</h3>
@@ -201,14 +201,14 @@
                                         <form action="{{ route('staff.integrations.webhooks.toggle', $wh) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="p-1.5 rounded-lg text-default-500 hover:text-default-800 hover:bg-default-100 transition cursor-pointer" title="{{ $wh->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <i data-lucide="power" class="size-4"></i>
                                             </button>
                                         </form>
                                         <form action="{{ route('staff.integrations.webhooks.destroy', $wh) }}" method="POST" onsubmit="return confirm('Hapus webhook ini?');" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 transition cursor-pointer" title="Hapus Webhook">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>
                                     </div>
@@ -219,7 +219,7 @@
                                 <td colspan="5" class="py-12 text-center">
                                     <div class="max-w-xs mx-auto space-y-3">
                                         <div class="size-12 rounded-md bg-teal-50 text-[#14bba6] flex items-center justify-center mx-auto">
-                                            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                            <i data-lucide="zap" class="size-6"></i>
                                         </div>
                                         <div class="text-xs font-bold text-default-700">Belum Ada Endpoint Webhook</div>
                                         <p class="text-[11px] text-default-400">Daftarkan endpoint HTTPS untuk menerima peristiwa kelulusan & hasil ujian otomatis.</p>
@@ -241,7 +241,7 @@
         <div class="p-5 border-b border-default-100 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
                 <span class="w-8 h-8 rounded bg-default-100 text-default-600 flex items-center justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <i data-lucide="clock" class="size-4"></i>
                 </span>
                 <div>
                     <h3 class="text-sm font-bold text-default-800">Riwayat Pengiriman Webhook Terkini</h3>
@@ -296,7 +296,7 @@
                             <td colspan="7" class="py-10 text-center">
                                 <div class="max-w-xs mx-auto space-y-2">
                                     <div class="size-10 rounded bg-default-100 text-default-400 flex items-center justify-center mx-auto">
-                                        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <i data-lucide="clock" class="size-5"></i>
                                     </div>
                                     <div class="text-xs font-bold text-default-700">Belum Ada Riwayat Pengiriman Webhook</div>
                                     <p class="text-[11px] text-default-400">Pengiriman webhook akan dicatat di sini saat peristiwa ujian/kelulusan dipicu.</p>
@@ -312,7 +312,7 @@
     {{-- Section 4: Panduan Integrasi Cepat (Quick API Docs) --}}
     <div class="bg-white border border-default-200 rounded-md p-6 shadow-xs space-y-4">
         <div class="flex items-center gap-2.5 text-default-900 font-bold text-sm">
-            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            <i data-lucide="code" class="size-5 text-primary"></i>
             <span>Dokumentasi Cepat Integrasi Aplikasi Sertifikat (REST API v1)</span>
         </div>
 
@@ -343,12 +343,12 @@
 </div>
 
 {{-- Modal Buat API Key --}}
-<div id="createApiKeyModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-    <div class="bg-white rounded-md max-w-lg w-full p-4 sm:p-6 shadow-xl max-h-[90vh] flex flex-col">
-        <div class="flex items-center justify-between border-b border-default-100 pb-3 mb-4 shrink-0">
+<div id="createApiKeyModal" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+    <div class="card max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[90vh] flex flex-col">
+        <div class="flex items-center justify-between border-b border-default-200 pb-3 mb-4 shrink-0">
             <h3 class="text-base font-bold text-default-900">Buat API Key Baru</h3>
-            <button type="button" onclick="document.getElementById('createApiKeyModal').classList.add('hidden')" class="text-default-400 hover:text-default-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button type="button" onclick="document.getElementById('createApiKeyModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+                <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
 
@@ -356,35 +356,35 @@
             @csrf
             <div>
                 <label class="block text-xs font-semibold text-default-700 mb-1">Nama Aplikasi / Klien <span class="text-rose-500">*</span></label>
-                <input type="text" name="name" class="w-full px-3 py-2 border border-default-200 rounded text-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Contoh: Aplikasi Sertifikat Online Institusi" required>
+                <input type="text" name="name" class="form-input w-full text-xs h-10 rounded border-default-200 bg-white" placeholder="Contoh: Aplikasi Sertifikat Online Institusi" required>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-default-700 mb-1">Masa Berlaku (Hari)</label>
-                <input type="number" name="expires_days" class="w-full px-3 py-2 border border-default-200 rounded text-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Kosongkan jika tidak ada batas kadaluwarsa" min="1" max="365">
+                <input type="number" name="expires_days" class="form-input w-full text-xs h-10 rounded border-default-200 bg-white" placeholder="Kosongkan jika tidak ada batas kadaluwarsa" min="1" max="365">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-default-700 mb-2">Hak Akses (Abilities)</label>
                 <div class="space-y-2 text-xs">
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="abilities[]" value="*" checked class="rounded text-primary">
+                        <input type="checkbox" name="abilities[]" value="*" checked class="rounded text-primary focus:ring-primary">
                         <span class="font-medium text-default-800">Akses Penuh (*)</span>
                     </label>
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="abilities[]" value="grades.read" class="rounded text-primary">
+                        <input type="checkbox" name="abilities[]" value="grades.read" class="rounded text-primary focus:ring-primary">
                         <span class="text-default-600">Baca Nilai & Kelulusan (grades.read)</span>
                     </label>
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="abilities[]" value="exams.read" class="rounded text-primary">
+                        <input type="checkbox" name="abilities[]" value="exams.read" class="rounded text-primary focus:ring-primary">
                         <span class="text-default-600">Baca Data Ujian (exams.read)</span>
                     </label>
                 </div>
             </div>
 
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-default-100 shrink-0">
-                <button type="button" onclick="document.getElementById('createApiKeyModal').classList.add('hidden')" class="btn btn-sm border border-default-200 rounded text-xs font-semibold text-default-600 hover:bg-default-50 cursor-pointer text-center justify-center w-full sm:w-auto">
+                <button type="button" onclick="document.getElementById('createApiKeyModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold cursor-pointer text-center justify-center w-full sm:w-auto">
                     Batal
                 </button>
-                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs cursor-pointer text-center justify-center w-full sm:w-auto">
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs cursor-pointer text-center justify-center w-full sm:w-auto">
                     Generate API Key
                 </button>
             </div>
@@ -393,12 +393,12 @@
 </div>
 
 {{-- Modal Tambah Webhook --}}
-<div id="createWebhookModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-    <div class="bg-white rounded-md max-w-lg w-full p-4 sm:p-6 shadow-xl max-h-[90vh] flex flex-col">
-        <div class="flex items-center justify-between border-b border-default-100 pb-3 mb-4 shrink-0">
+<div id="createWebhookModal" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+    <div class="card max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[90vh] flex flex-col">
+        <div class="flex items-center justify-between border-b border-default-200 pb-3 mb-4 shrink-0">
             <h3 class="text-base font-bold text-default-900">Daftarkan Webhook Baru</h3>
-            <button type="button" onclick="document.getElementById('createWebhookModal').classList.add('hidden')" class="text-default-400 hover:text-default-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button type="button" onclick="document.getElementById('createWebhookModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+                <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
 
@@ -406,44 +406,44 @@
             @csrf
             <div>
                 <label class="block text-xs font-semibold text-default-700 mb-1">Nama Webhook <span class="text-rose-500">*</span></label>
-                <input type="text" name="name" class="w-full px-3 py-2 border border-default-200 rounded text-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Contoh: Sync Sertifikat Otomatis" required>
+                <input type="text" name="name" class="form-input w-full text-xs h-10 rounded border-default-200 bg-white" placeholder="Contoh: Sync Sertifikat Otomatis" required>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-default-700 mb-1">URL Endpoint Penerima (HTTPS) <span class="text-rose-500">*</span></label>
-                <input type="url" name="url" class="w-full px-3 py-2 border border-default-200 rounded text-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="https://sertifikat.institusi.ac.id/api/webhooks/tesloka" required>
+                <input type="url" name="url" class="form-input w-full text-xs h-10 rounded border-default-200 bg-white" placeholder="https://sertifikat.institusi.ac.id/api/webhooks/tesloka" required>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-default-700 mb-1">Kunci Rahasia HMAC (Secret)</label>
-                <input type="text" name="secret" class="w-full px-3 py-2 border border-default-200 rounded text-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Kosongkan untuk dibuatkan otomatis">
+                <input type="text" name="secret" class="form-input w-full text-xs h-10 rounded border-default-200 bg-white" placeholder="Kosongkan untuk dibuatkan otomatis">
                 <p class="text-[10px] text-default-400 mt-1">Digunakan untuk menandatangani header X-TESLOKA-Signature.</p>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-default-700 mb-2">Peristiwa yang Dilanggan <span class="text-rose-500">*</span></label>
                 <div class="space-y-2 text-xs">
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="events[]" value="exam.graduation_published" checked class="rounded text-primary">
+                        <input type="checkbox" name="events[]" value="exam.graduation_published" checked class="rounded text-primary focus:ring-primary">
                         <span class="text-default-700">Hasil Kelulusan & Nilai Diterbitkan (exam.graduation_published)</span>
                     </label>
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="events[]" value="exam.published" class="rounded text-primary">
+                        <input type="checkbox" name="events[]" value="exam.published" class="rounded text-primary focus:ring-primary">
                         <span class="text-default-700">Ujian Baru Dipublikasikan (exam.published)</span>
                     </label>
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="events[]" value="exam.completed" class="rounded text-primary">
+                        <input type="checkbox" name="events[]" value="exam.completed" class="rounded text-primary focus:ring-primary">
                         <span class="text-default-700">Sesi Ujian Selesai (exam.completed)</span>
                     </label>
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="events[]" value="grade.updated" class="rounded text-primary">
+                        <input type="checkbox" name="events[]" value="grade.updated" class="rounded text-primary focus:ring-primary">
                         <span class="text-default-700">Penilaian Ulang (Regrade Checkpoint)</span>
                     </label>
                 </div>
             </div>
 
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-default-100 shrink-0">
-                <button type="button" onclick="document.getElementById('createWebhookModal').classList.add('hidden')" class="btn btn-sm border border-default-200 rounded text-xs font-semibold text-default-600 hover:bg-default-50 cursor-pointer text-center justify-center w-full sm:w-auto">
+                <button type="button" onclick="document.getElementById('createWebhookModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold cursor-pointer text-center justify-center w-full sm:w-auto">
                     Batal
                 </button>
-                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs cursor-pointer text-center justify-center w-full sm:w-auto">
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs cursor-pointer text-center justify-center w-full sm:w-auto">
                     Daftarkan Webhook
                 </button>
             </div>

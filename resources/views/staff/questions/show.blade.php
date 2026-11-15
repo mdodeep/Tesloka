@@ -6,19 +6,19 @@
 @section('page-subtitle', 'Mata Pelajaran: ' . ($question->questionBank->subject->name ?? '-') . ' • Versi #' . $question->version . ' • Bobot: ' . $question->weight)
 
 @section('page-actions')
-    <a href="{{ route('staff.questions.edit', $question) }}" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+    <a href="{{ route('staff.questions.edit', $question) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="edit" class="size-4"></i>
         <span>Edit / Revisi</span>
     </a>
     <form action="{{ route('staff.questions.duplicate', $question) }}" method="POST" class="inline">
         @csrf
-        <button type="submit" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-            <svg class="size-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        <button type="submit" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+            <i data-lucide="copy" class="size-4 text-default-500"></i>
             <span>Gandakan</span>
         </button>
     </form>
-    <a href="{{ route('staff.question-banks.show', $question->questionBank) }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="size-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <a href="{{ route('staff.question-banks.show', $question->questionBank) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="arrow-left" class="size-4 text-default-500"></i>
         <span>Kembali</span>
     </a>
 @endsection
@@ -32,13 +32,13 @@
             <x-cbt.card>
                 <div class="border-b border-default-200 pb-3 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center gap-2 flex-wrap">
-                        <button type="button" id="tabBtnCandidate" onclick="switchPreviewTab('candidate')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-primary/10 text-primary inline-flex items-center gap-1.5 transition">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                            Tampilan Peserta (Simulasi Ujian)
+                        <button type="button" id="tabBtnCandidate" onclick="switchPreviewTab('candidate')" class="px-3.5 py-1.5 text-xs font-semibold rounded bg-primary/10 text-primary inline-flex items-center gap-1.5 transition cursor-pointer">
+                            <i data-lucide="user" class="size-3.5"></i>
+                            <span>Tampilan Peserta (Simulasi Ujian)</span>
                         </button>
-                        <button type="button" id="tabBtnTeacher" onclick="switchPreviewTab('teacher')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg text-default-500 hover:text-default-800 inline-flex items-center gap-1.5 transition">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                            Tampilan Guru (Kunci & Bobot)
+                        <button type="button" id="tabBtnTeacher" onclick="switchPreviewTab('teacher')" class="px-3.5 py-1.5 text-xs font-semibold rounded text-default-500 hover:text-default-800 inline-flex items-center gap-1.5 transition cursor-pointer">
+                            <i data-lucide="key" class="size-3.5"></i>
+                            <span>Tampilan Guru (Kunci & Bobot)</span>
                         </button>
                     </div>
                     <span class="text-xs text-default-400">Tipe: <strong class="text-default-700">{{ strtoupper(str_replace('_', ' ', $question->type)) }}</strong></span>
@@ -48,8 +48,8 @@
                 @if($question->stimulus)
                     <div class="p-4 bg-default-50 border border-default-200 rounded mb-6">
                         <div class="flex items-center gap-2 text-xs font-bold text-default-500 uppercase tracking-wide mb-2">
-                            <svg class="size-4 text-default-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                            Stimulus / Wacana: {{ $question->stimulus->title }}
+                            <i data-lucide="book-open" class="size-4 text-default-400"></i>
+                            <span>Stimulus / Wacana: {{ $question->stimulus->title }}</span>
                         </div>
                         <div class="prose prose-sm max-w-none text-default-700 leading-relaxed">
                             @php
@@ -64,8 +64,8 @@
                         @if($question->stimulus->media_url)
                             <div class="mt-3">
                                 <a href="{{ $question->stimulus->media_url }}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1">
-                                    <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                                    Buka Lampiran Berkas Stimulus
+                                    <i data-lucide="paperclip" class="size-3.5"></i>
+                                    <span>Buka Lampiran Berkas Stimulus</span>
                                 </a>
                             </div>
                         @endif
@@ -139,8 +139,8 @@
                                 <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg grid grid-cols-2 gap-4 items-center">
                                     <div class="text-sm font-medium text-default-800">{!! strip_tags($opt->content, '<br><strong><b><em><i><u><s><sub><sup><img><span>') !!}</div>
                                     <div class="text-sm font-semibold text-emerald-800 flex items-center gap-1.5">
-                                        <svg class="size-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        {{ $opt->pair_match }}
+                                        <i data-lucide="check" class="size-4 text-emerald-600"></i>
+                                        <span>{{ $opt->pair_match }}</span>
                                     </div>
                                 </div>
                             @endforeach
@@ -156,7 +156,7 @@
                                 </div>
                                 @if($opt->is_correct)
                                     <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
-                                        <svg class="size-3.5 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                        <i data-lucide="check" class="size-3.5 text-emerald-700"></i>
                                         Jawaban Benar
                                     </span>
                                 @endif
@@ -166,9 +166,9 @@
 
                     @if($question->explanation)
                         <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
-                            <div class="text-xs font-bold text-blue-800 uppercase tracking-wide mb-1 flex items-center gap-1.5">
-                                <svg class="size-4 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-                                Pembahasan Soal
+                            <div class="text-xs font-bold text-primary uppercase tracking-wide mb-1 flex items-center gap-1.5">
+                                <i data-lucide="help-circle" class="size-4 text-primary"></i>
+                                <span>Pembahasan Soal</span>
                             </div>
                             <div class="text-sm text-blue-900 leading-relaxed">
                                 {!! nl2br(e($question->explanation)) !!}
@@ -202,8 +202,8 @@
                             </div>
                             <p class="text-xs text-default-600 mt-1 font-medium">{{ $ver->change_summary ?? 'Perubahan butir soal' }}</p>
                             <div class="text-[11px] text-default-400 mt-1 flex items-center gap-1.5">
-                                <svg class="size-3.5 text-default-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                {{ $ver->created_at->format('d M Y H:i') }} &bull; {{ $ver->author->name ?? 'Sistem' }}
+                                <i data-lucide="clock" class="size-3.5 text-default-400"></i>
+                                <span>{{ $ver->created_at->format('d M Y H:i') }} &bull; {{ $ver->author->name ?? 'Sistem' }}</span>
                             </div>
                         </div>
                     @empty

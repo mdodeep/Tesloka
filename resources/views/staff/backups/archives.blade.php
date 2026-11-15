@@ -6,8 +6,8 @@
 @section('page-subtitle', 'Data ujian yang telah selesai diarsipkan secara permanen dengan manifest data snapshot utuh dan proteksi hukum (Legal Hold).')
 
 @section('page-actions')
-    <a href="{{ route('staff.backups.index') }}" class="px-3.5 py-2 border border-default-200 bg-white hover:bg-default-50 text-default-700 rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
-        <svg class="w-4 h-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <a href="{{ route('staff.backups.index') }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+        <i data-lucide="arrow-left" class="size-4 text-default-500"></i>
         <span>Kembali ke Cadangan</span>
     </a>
 @endsection

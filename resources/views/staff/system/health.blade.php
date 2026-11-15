@@ -17,8 +17,8 @@
             Perlu Perhatian ({{ $health['critical_failures_count'] }} Isu Kritis)
         </span>
     @endif
-    <button id="btnRefreshHealth" onclick="window.location.reload()" class="px-3 py-1.5 bg-white border border-default-200 hover:bg-default-50 text-default-700 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-        <svg class="size-3.5 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    <button id="btnRefreshHealth" onclick="window.location.reload()" class="btn btn-sm bg-white border border-default-200 hover:bg-default-50 text-default-700 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+        <i data-lucide="refresh-cw" class="size-3.5 text-default-500"></i>
         <span>Perbarui</span>
     </button>
 @endsection
@@ -124,7 +124,7 @@
                             <td class="py-3 px-4 text-right whitespace-nowrap">
                                 @if($item['status'] === 'passed')
                                     <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-lg inline-flex items-center gap-1">
-                                        <svg class="size-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                        <i data-lucide="check" class="size-3.5 text-emerald-600"></i>
                                         Lolos
                                     </span>
                                 @elseif($item['status'] === 'warning')

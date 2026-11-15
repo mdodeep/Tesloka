@@ -24,24 +24,18 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
-            <a href="{{ route('staff.exams.reports.export-csv', $exam) }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-semibold transition inline-flex items-center justify-center gap-1.5 shadow-sm w-full sm:w-auto">
-                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
+            <a href="{{ route('staff.exams.reports.export-csv', $exam) }}" class="btn btn-sm bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition inline-flex items-center justify-center gap-1.5 shadow-xs w-full sm:w-auto">
+                <i data-lucide="file-spreadsheet" class="size-4 shrink-0"></i>
                 <span>Ekspor CSV Nilai</span>
             </a>
 
-            <a href="{{ route('staff.exams.reports.export-pdf', $exam) }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-semibold transition inline-flex items-center justify-center gap-1.5 shadow-sm w-full sm:w-auto" title="Unduh Berkas PDF Asli Laporan Resmi">
-                <svg class="w-4 h-4 text-indigo-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                </svg>
+            <a href="{{ route('staff.exams.reports.export-pdf', $exam) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold transition inline-flex items-center justify-center gap-1.5 shadow-xs w-full sm:w-auto" title="Unduh Berkas PDF Asli Laporan Resmi">
+                <i data-lucide="download" class="size-4 shrink-0"></i>
                 <span>Unduh PDF Asli</span>
             </a>
 
-            <a href="{{ route('staff.exams.reports.print-official', $exam) }}" target="_blank" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold transition inline-flex items-center justify-center gap-1.5 border border-slate-700 w-full sm:w-auto">
-                <svg class="w-4 h-4 text-slate-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                </svg>
+            <a href="{{ route('staff.exams.reports.print-official', $exam) }}" target="_blank" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center justify-center gap-1.5 border border-slate-700 w-full sm:w-auto">
+                <i data-lucide="printer" class="size-4 shrink-0 text-slate-300"></i>
                 <span>Cetak Laporan Resmi</span>
             </a>
         </div>
@@ -316,8 +310,8 @@
         <x-cbt.card title="Daftar Siswa Rekomendasi Program Remedial (Di Bawah KKM {{ $exam->passing_grade ?? 75 }})">
             @slot('actions')
                 @if($remedialStudents->isNotEmpty())
-                    <a href="{{ route('staff.exams.remedial', $exam) }}" class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <a href="{{ route('staff.exams.remedial', $exam) }}" class="btn btn-sm bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="refresh-cw" class="size-4"></i>
                         <span>Jadwalkan Ujian Remedial ({{ $remedialStudents->count() }} Siswa)</span>
                     </a>
                 @endif

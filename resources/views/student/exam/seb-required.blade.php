@@ -6,9 +6,7 @@
 <div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="bg-white border border-default-200 rounded-md shadow-sm p-8 text-center">
         <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-md flex items-center justify-center mx-auto mb-6">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-            </svg>
+            <i data-lucide="lock" class="size-8"></i>
         </div>
 
         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 mb-3">
@@ -31,13 +29,11 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="{{ $downloadUrl }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded bg-primary hover:bg-primary-hover text-white font-medium text-sm transition shadow-sm cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                </svg>
+            <a href="{{ $downloadUrl }}" class="w-full sm:w-auto btn inline-flex items-center justify-center gap-2 px-6 py-3 rounded bg-primary hover:bg-primary-hover text-white font-medium text-sm transition shadow-xs cursor-pointer">
+                <i data-lucide="download" class="size-4"></i>
                 <span>Unduh Berkas Konfigurasi (.seb)</span>
             </a>
-            <a href="{{ route('student.dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded bg-default-100 hover:bg-slate-200 text-default-700 font-medium text-sm transition">
+            <a href="{{ route('student.dashboard') }}" class="w-full sm:w-auto btn inline-flex items-center justify-center px-6 py-3 rounded bg-default-100 hover:bg-default-200 text-default-700 font-medium text-sm transition">
                 <span>Kembali ke Dashboard</span>
             </a>
         </div>

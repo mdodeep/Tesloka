@@ -5,9 +5,7 @@
 @section('content')
     <div class="mb-6 text-center">
         <div class="size-12 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center mb-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-            </svg>
+            <i data-lucide="shield-check" class="size-6"></i>
         </div>
         <h1 class="text-xl font-bold text-default-800">Tantangan Keamanan 2FA</h1>
         <p class="text-xs text-default-500 mt-1">

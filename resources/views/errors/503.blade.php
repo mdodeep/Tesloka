@@ -126,6 +126,7 @@
             margin-bottom: 0;
         }
     </style>
+    @vite(['resources/js/app.js'])
 </head>
 <body>
     @php
@@ -157,10 +158,8 @@
 
         <div class="info-box">
             <div class="info-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2e33ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-                Integritas Data Ujian Terlindungi
+                <i data-lucide="shield-check" class="size-4 text-primary"></i>
+                <span>Integritas Data Ujian Terlindungi</span>
             </div>
             <div class="info-desc">
                 Seluruh data akun, bank soal, dan riwayat pengerjaan ujian aman tersimpan di basis data server PostgreSQL. Peserta tidak perlu khawatir kehilangan data.
@@ -168,9 +167,7 @@
         </div>
 
         <button type="button" onclick="window.location.reload()" class="btn">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-            </svg>
+            <i data-lucide="refresh-cw" class="size-4"></i>
             <span>Segarkan Halaman (Periksa Kembali)</span>
         </button>
 

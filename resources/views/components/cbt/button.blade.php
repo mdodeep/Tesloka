@@ -8,7 +8,7 @@
     $baseClasses = 'btn';
 
     $variants = [
-        'primary' => 'bg-primary text-white hover:bg-primary-hover shadow-xs <!-- #2e33ff -->',
+        'primary' => 'bg-primary text-white hover:bg-primary-hover shadow-xs',
         'secondary' => 'border border-default-200 bg-card text-default-700 hover:bg-default-100 shadow-xs',
         'success' => 'bg-success text-white hover:bg-success/90 shadow-xs',
         'danger' => 'bg-danger text-white hover:bg-danger/90 shadow-xs',
@@ -27,6 +27,6 @@
     $classes = "{$baseClasses} " . ($variants[$variant] ?? $variants['primary']) . ($sizes[$size] ? ' ' . $sizes[$size] : '');
 @endphp
 
-<button type="{{ $type }}" {{ $attributes->merge(['class' => $classes]) }}>
+<button type="{{ $type }}" data-theme-color="#2e33ff" {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </button>

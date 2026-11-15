@@ -6,12 +6,12 @@
 @section('page-subtitle', 'Konfigurasi server SMTP transaksional dan pengujian pengiriman email sistem.')
 
 @section('page-actions')
-    <a href="{{ route('staff.settings.notification-templates.index') }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded-md inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="w-4 h-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+    <a href="{{ route('staff.settings.notification-templates.index') }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="mail" class="size-4 text-default-500"></i>
         <span>Template Pesan</span>
     </a>
-    <a href="{{ route('staff.settings.notification-logs.index') }}" class="px-3.5 py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded-md inline-flex items-center gap-1.5 shadow-xs transition">
-        <svg class="w-4 h-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    <a href="{{ route('staff.settings.notification-logs.index') }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+        <i data-lucide="file-text" class="size-4 text-default-500"></i>
         <span>Log Pengiriman</span>
     </a>
 @endsection
@@ -78,9 +78,9 @@
                                 <input type="password" id="input_password" name="password" autocomplete="new-password"
                                     placeholder="•••••••• (Kosongkan bila tidak diubah)"
                                     class="form-input font-mono pr-10 @error('password') border-rose-500 @enderror">
-                                <button type="button" onclick="togglePasswordVisibility('input_password', this)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-default-400 hover:text-default-700">
-                                    <svg class="w-4 h-4 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                    <svg class="w-4 h-4 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/></svg>
+                                <button type="button" onclick="togglePasswordVisibility('input_password', this)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-default-400 hover:text-default-700 cursor-pointer">
+                                    <span class="eye-open"><i data-lucide="eye" class="size-4"></i></span>
+                                    <span class="eye-closed hidden"><i data-lucide="eye-off" class="size-4"></i></span>
                                 </button>
                             </div>
                             <span class="text-[11px] text-default-400">Biarkan kosong jika tetap memakai password tersimpan saat ini.</span>
@@ -138,12 +138,12 @@
 
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-default-100">
                         <div class="flex items-center gap-2 text-xs text-default-500">
-                            <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            <i data-lucide="shield-check" class="size-4 text-emerald-500 shrink-0"></i>
                             <span>Tersimpan aman di database institusi (<code>system_settings</code>).</span>
                         </div>
 
-                        <button type="submit" id="btnSaveSmtp" class="h-10 px-5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded shadow-xs transition inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
-                            <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <button type="submit" id="btnSaveSmtp" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto shadow-2xs">
+                            <i data-lucide="save" class="size-4 shrink-0"></i>
                             <span>Simpan Konfigurasi SMTP</span>
                         </button>
                     </div>
@@ -164,8 +164,8 @@
                         <input type="email" id="testEmailInput" value="{{ auth()->user()->email ?? 'admin@tesloka.test' }}" placeholder="admin@institusi.ac.id" class="form-input">
                     </div>
 
-                    <button type="button" id="btnTestSend" onclick="executeSmtpTest()" class="w-full py-2.5 px-4 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded shadow-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                    <button type="button" id="btnTestSend" onclick="executeSmtpTest()" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold flex items-center justify-center gap-2 cursor-pointer w-full shadow-2xs">
+                        <i data-lucide="send" class="size-4"></i>
                         <span>Kirim Email Uji Coba</span>
                     </button>
 
@@ -173,7 +173,7 @@
 
                     <div class="p-3 bg-default-50 border border-default-200 rounded text-[11px] text-default-600 space-y-1">
                         <div class="font-semibold text-default-700 flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <i data-lucide="info" class="size-3.5 text-primary"></i>
                             <span>Tips Pengaturan:</span>
                         </div>
                         <ul class="list-disc list-inside space-y-0.5 text-default-500">
@@ -231,7 +231,8 @@ function executeSmtpTest() {
     .then(r => r.json().then(data => ({ status: r.status, body: data })))
     .then(res => {
         btn.disabled = false;
-        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg><span>Kirim Email Uji Coba</span>';
+        btn.innerHTML = '<i data-lucide="send" class="size-4"></i><span>Kirim Email Uji Coba</span>';
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
         if (res.status === 200 && res.body.success) {
             box.className = 'p-3 rounded text-xs font-medium border bg-emerald-50 text-emerald-800 border-emerald-200 block';
             box.innerHTML = '✓ ' + res.body.message;
@@ -242,7 +243,8 @@ function executeSmtpTest() {
     })
     .catch(err => {
         btn.disabled = false;
-        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg><span>Kirim Email Uji Coba</span>';
+        btn.innerHTML = '<i data-lucide="send" class="size-4"></i><span>Kirim Email Uji Coba</span>';
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
         box.className = 'p-3 rounded text-xs font-medium border bg-rose-50 text-rose-800 border-rose-200 block';
         box.innerHTML = '✕ Terjadi kesalahan koneksi jaringan: ' + err;
     });

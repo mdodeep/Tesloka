@@ -6,41 +6,41 @@
 @section('page-subtitle', 'Kode: ' . $session->session_code . ' • Ujian: ' . $session->exam->title . ' • Ruang: ' . $session->room->name . ' (Kapasitas: ' . $session->room->capacity . ')')
 
 @section('page-actions')
-    <a href="{{ route('staff.sessions.monitor', $session) }}" class="h-9 px-3.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition" title="Monitoring Pelaksanaan">
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
+        <i data-lucide="bar-chart-2" class="size-4"></i>
         <span>Monitoring</span>
     </a>
-    <a href="{{ route('staff.sessions.camera-grid', $session) }}" class="h-9 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition" title="Grid Kamera Live Siswa">
-        <svg class="size-4 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+    <a href="{{ route('staff.sessions.camera-grid', $session) }}" class="btn btn-sm bg-slate-900 hover:bg-slate-800 text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Grid Kamera Live Siswa">
+        <i data-lucide="video" class="size-4 text-rose-400"></i>
         <span>Kamera Live</span>
     </a>
 
     <!-- Dropdown Menu Cetak Dokumen Administrasi -->
     <div class="relative inline-block text-left" id="sessionDocDropdownContainer">
-        <button type="button" onclick="toggleSessionDocDropdown()" class="h-9 px-3.5 bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-            <svg class="size-4 text-default-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        <button type="button" onclick="toggleSessionDocDropdown()" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+            <i data-lucide="printer" class="size-4 text-default-500"></i>
             <span>Cetak Dokumen Sesi</span>
-            <svg class="size-3.5 text-default-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <i data-lucide="chevron-down" class="size-3.5 text-default-400"></i>
         </button>
 
         <div id="sessionDocDropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-white border border-default-200 rounded-md shadow-lg z-50 py-1 divide-y divide-default-100">
             <div class="py-1">
                 <a href="{{ route('staff.sessions.print-cards', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                    <svg class="size-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+                    <i data-lucide="credit-card" class="size-4 text-indigo-500"></i>
                     <div>
                         <div class="font-semibold">Kartu Peserta Ujian</div>
                         <div class="text-[10px] text-default-400">Format A4 (Grid 4 kartu per lembar)</div>
                     </div>
                 </a>
                 <a href="{{ route('staff.sessions.print-desk-labels', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                    <svg class="size-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                    <i data-lucide="tag" class="size-4 text-amber-500"></i>
                     <div>
                         <div class="font-semibold">Tempelan / Label Meja Lab</div>
                         <div class="text-[10px] text-default-400">Label nomor meja &amp; QR login peserta</div>
                     </div>
                 </a>
                 <a href="{{ route('staff.sessions.print-attendance', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                    <svg class="size-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <i data-lucide="clipboard-list" class="size-4 text-emerald-500"></i>
                     <div>
                         <div class="font-semibold">Daftar Hadir Peserta</div>
                         <div class="text-[10px] text-default-400">Lembar presensi &amp; tanda tangan kehadiran</div>
@@ -49,28 +49,28 @@
             </div>
             <div class="py-1">
                 <a href="{{ route('staff.sessions.print-minutes', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                    <svg class="size-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    <i data-lucide="file-check-2" class="size-4 text-blue-500"></i>
                     <div>
                         <div class="font-semibold">Berita Acara Pelaksanaan</div>
                         <div class="text-[10px] text-default-400">Format resmi Berita Acara ruang ujian</div>
                     </div>
                 </a>
                 <a href="{{ route('staff.sessions.print-proctor-duties', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                    <svg class="size-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <i data-lucide="file-text" class="size-4 text-purple-500"></i>
                     <div>
                         <div class="font-semibold">Surat Tugas Pengawas</div>
                         <div class="text-[10px] text-default-400">Surat penugasan kepala institusi</div>
                     </div>
                 </a>
                 <a href="{{ route('staff.sessions.print-integrity-pledge', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                    <svg class="size-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <i data-lucide="shield" class="size-4 text-rose-500"></i>
                     <div>
                         <div class="font-semibold">Pakta Integritas Pengawas</div>
                         <div class="text-[10px] text-default-400">Lembar komitmen integritas pengawas</div>
                     </div>
                 </a>
                 <a href="{{ route('staff.sessions.print-proctoring-summary', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
-                    <svg class="size-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    <i data-lucide="bar-chart" class="size-4 text-slate-500"></i>
                     <div>
                         <div class="font-semibold">Rekapitulasi Pengawasan</div>
                         <div class="text-[10px] text-default-400">Rekap status peserta &amp; insiden</div>
@@ -85,8 +85,8 @@
             @csrf
             @method('PATCH')
             <input type="hidden" name="status" value="active">
-            <button type="submit" class="h-9 px-3.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <button type="submit" class="btn btn-sm bg-success hover:bg-success-hover text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+                <i data-lucide="play" class="size-4"></i>
                 <span>Mulai Sesi</span>
             </button>
         </form>
@@ -95,8 +95,8 @@
             @csrf
             @method('PATCH')
             <input type="hidden" name="status" value="finished">
-            <button type="submit" class="h-9 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-                <svg class="size-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+            <button type="submit" class="btn btn-sm bg-slate-900 hover:bg-slate-800 text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+                <i data-lucide="square" class="size-4 text-amber-400"></i>
                 <span>Selesaikan Sesi</span>
             </button>
         </form>
@@ -121,16 +121,16 @@
                     <div class="flex items-center justify-center gap-2 pt-1 flex-wrap">
                         <form action="{{ route('staff.sessions.generate-token', $session) }}" method="POST">
                             @csrf
-                            <button type="submit" class="px-3.5 py-1.5 bg-amber-200/80 hover:bg-amber-300 text-amber-900 text-xs font-semibold rounded-lg inline-flex items-center gap-1.5 transition cursor-pointer">
-                                <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            <button type="submit" class="btn btn-sm bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold inline-flex items-center gap-1.5 transition cursor-pointer">
+                                <i data-lucide="refresh-cw" class="size-3.5"></i>
                                 <span>Segarkan Token</span>
                             </button>
                         </form>
 
                         <form action="{{ route('staff.sessions.notify-participants', $session) }}" method="POST" onsubmit="return confirm('Kirimkan email notifikasi jadwal dan token ujian ke {{ $session->participants->count() }} peserta sesi ini?')">
                             @csrf
-                            <button type="submit" class="px-3.5 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold rounded-lg inline-flex items-center gap-1.5 transition cursor-pointer" title="Kirim email jadwal dan token ujian ke semua peserta sesi">
-                                <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            <button type="submit" class="btn btn-sm bg-primary/10 hover:bg-primary/20 text-primary font-semibold inline-flex items-center gap-1.5 transition cursor-pointer" title="Kirim email jadwal dan token ujian ke semua peserta sesi">
+                                <i data-lucide="send" class="size-3.5"></i>
                                 <span>Kirim Token ke Peserta</span>
                             </button>
                         </form>
@@ -173,8 +173,8 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="w-full h-10 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded inline-flex items-center justify-center gap-2 shadow-xs transition cursor-pointer">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                    <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-2 shadow-2xs transition cursor-pointer w-full">
+                        <i data-lucide="user-plus" class="size-4"></i>
                         <span>Tugaskan Pengawas</span>
                     </button>
                 </form>
@@ -198,14 +198,14 @@
                             <form action="{{ route('staff.sessions.proctors.destroy', $prc) }}" method="POST" onsubmit="return confirm('Hapus pengawas ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-default-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg transition cursor-pointer" title="Hapus Pengawas">
-                                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                <button type="submit" class="text-default-400 hover:text-danger hover:bg-danger/10 p-1.5 rounded transition cursor-pointer" title="Hapus Pengawas">
+                                    <i data-lucide="trash-2" class="size-4"></i>
                                 </button>
                             </form>
                         </div>
                     @empty
                         <div class="text-center py-6 px-4 border border-dashed border-default-200 rounded bg-default-50/50">
-                            <svg class="size-8 text-slate-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                            <i data-lucide="users" class="size-8 text-slate-300 mx-auto mb-2"></i>
                             <p class="text-xs text-default-600 font-semibold">Belum ada pengawas ditugaskan</p>
                             <p class="text-[11px] text-default-400 mt-0.5">Pilih guru atau staf di atas untuk menetapkan proktor ruangan.</p>
                         </div>
@@ -235,12 +235,12 @@
                     </div>
 
                     <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                        <button type="button" onclick="document.getElementById('assignClassModal').classList.remove('hidden')" class="w-full sm:w-auto px-3.5 py-2.5 sm:py-2 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition">
-                            <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        <button type="button" onclick="document.getElementById('assignClassModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-1.5 shadow-2xs transition w-full sm:w-auto">
+                            <i data-lucide="users" class="size-4 shrink-0"></i>
                             <span>Tugaskan Rombel / Kelas</span>
                         </button>
-                        <button type="button" onclick="document.getElementById('assignStudentModal').classList.remove('hidden')" class="w-full sm:w-auto px-3.5 py-2.5 sm:py-2 bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition">
-                            <svg class="size-4 text-default-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                        <button type="button" onclick="document.getElementById('assignStudentModal').classList.remove('hidden')" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 font-semibold inline-flex items-center justify-center gap-1.5 shadow-2xs transition w-full sm:w-auto">
+                            <i data-lucide="user-plus" class="size-4 text-default-500 shrink-0"></i>
                             <span>Tambah Siswa Individual</span>
                         </button>
                     </div>
@@ -307,8 +307,8 @@
                                     </td>
                                     <td class="py-3 px-3.5 text-right whitespace-nowrap">
                                         <div class="inline-flex items-center gap-1.5 whitespace-nowrap">
-                                            <button type="button" onclick="openAccommodationModal({{ $ptc->id }}, '{{ addslashes($ptc->student->name) }}', {{ $ptc->time_extension_percent ?? 0 }}, {{ $ptc->needs_scribe ? 'true' : 'false' }}, '{{ addslashes($ptc->scribe_name ?? '') }}', '{{ addslashes($ptc->scribe_nik ?? '') }}', '{{ addslashes($ptc->scribe_phone ?? '') }}', '{{ addslashes($ptc->scribe_pledge ?? '') }}', '{{ addslashes($ptc->accommodation_notes ?? ($ptc->accommodations['notes'] ?? '')) }}')" class="p-1.5 text-default-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition" title="Atur Akomodasi Disabilitas & Scribe">
-                                                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                            <button type="button" onclick="openAccommodationModal({{ $ptc->id }}, '{{ addslashes($ptc->student->name) }}', {{ $ptc->time_extension_percent ?? 0 }}, {{ $ptc->needs_scribe ? 'true' : 'false' }}, '{{ addslashes($ptc->scribe_name ?? '') }}', '{{ addslashes($ptc->scribe_nik ?? '') }}', '{{ addslashes($ptc->scribe_phone ?? '') }}', '{{ addslashes($ptc->scribe_pledge ?? '') }}', '{{ addslashes($ptc->accommodation_notes ?? ($ptc->accommodations['notes'] ?? '')) }}')" class="btn btn-sm btn-icon bg-default-100 hover:bg-primary-50 text-default-500 hover:text-primary rounded-md transition" title="Atur Akomodasi Disabilitas & Scribe">
+                                                <i data-lucide="user-check" class="size-4"></i>
                                             </button>
                                             <form action="{{ route('staff.sessions.participants.attendance', $ptc) }}" method="POST" class="inline">
                                                 @csrf
@@ -345,15 +345,15 @@
 </div>
 
 <!-- Modal Tugaskan Kelas / Rombel -->
-<div id="assignClassModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs hidden p-3 sm:p-4">
-    <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl border border-default-200 animate-in fade-in zoom-in-95 duration-150">
-        <div class="flex items-center justify-between border-b border-default-100 p-4 sm:p-5 shrink-0">
+<div id="assignClassModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
+    <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-default-800">Tugaskan Rombongan Belajar (Kelas)</h3>
-            <button type="button" onclick="document.getElementById('assignClassModal').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 hover:bg-default-100 transition cursor-pointer">
-                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <button type="button" onclick="document.getElementById('assignClassModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+                <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
-        <form action="{{ route('staff.sessions.assign-class', $session) }}" method="POST" class="p-4 sm:p-5 space-y-4 overflow-y-auto">
+        <form action="{{ route('staff.sessions.assign-class', $session) }}" method="POST" class="pt-4 space-y-4 overflow-y-auto">
             @csrf
             <div>
                 <label for="modal_academic_class_id" class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">Pilih Kelas Sasaran *</label>
@@ -368,10 +368,10 @@
                 <p class="text-[11px] text-default-400 mt-1.5 leading-relaxed">Sistem otomatis mendistribusikan varian paket soal secara bergantian (A, B, C...) dan mengalokasikan nomor kursi.</p>
             </div>
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2 border-t border-default-100">
-                <button type="button" onclick="document.getElementById('assignClassModal').classList.add('hidden')" class="w-full sm:w-auto px-4 py-2 bg-default-100 hover:bg-slate-200 text-default-700 text-xs font-medium rounded transition">
+                <button type="button" onclick="document.getElementById('assignClassModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold">
                     Batal
                 </button>
-                <button type="submit" class="w-full sm:w-auto px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded shadow-xs transition">
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs">
                     Tugaskan Siswa Kelas
                 </button>
             </div>
@@ -380,15 +380,15 @@
 </div>
 
 <!-- Modal Tambah Siswa Individual -->
-<div id="assignStudentModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs hidden p-3 sm:p-4">
-    <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl border border-default-200 animate-in fade-in zoom-in-95 duration-150">
-        <div class="flex items-center justify-between border-b border-default-100 p-4 sm:p-5 shrink-0">
+<div id="assignStudentModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
+    <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-default-800">Tambah Peserta Individual</h3>
-            <button type="button" onclick="document.getElementById('assignStudentModal').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 hover:bg-default-100 transition cursor-pointer">
-                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <button type="button" onclick="document.getElementById('assignStudentModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+                <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
-        <form action="{{ route('staff.sessions.assign-student', $session) }}" method="POST" class="p-4 sm:p-5 space-y-4 overflow-y-auto">
+        <form action="{{ route('staff.sessions.assign-student', $session) }}" method="POST" class="pt-4 space-y-4 overflow-y-auto">
             @csrf
             <div>
                 <label for="modal_student_id" class="block text-xs font-semibold text-default-700 uppercase tracking-wider mb-1.5">Pilih Siswa *</label>
@@ -409,10 +409,10 @@
                 </select>
             </div>
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2 border-t border-default-100">
-                <button type="button" onclick="document.getElementById('assignStudentModal').classList.add('hidden')" class="w-full sm:w-auto px-4 py-2 bg-default-100 hover:bg-slate-200 text-default-700 text-xs font-medium rounded transition">
+                <button type="button" onclick="document.getElementById('assignStudentModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold">
                     Batal
                 </button>
-                <button type="submit" class="w-full sm:w-auto px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded shadow-xs transition">
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs">
                     Tambahkan Peserta
                 </button>
             </div>
@@ -421,18 +421,18 @@
 </div>
 
 <!-- Modal Akomodasi Khusus & Scribe -->
-<div id="accommodationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs hidden p-3 sm:p-4">
-    <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl border border-default-200 animate-in fade-in zoom-in-95 duration-150">
-        <div class="flex items-center justify-between border-b border-default-100 p-4 sm:p-5 shrink-0">
+<div id="accommodationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
+    <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <div>
                 <h3 class="text-sm font-bold text-default-800">Akomodasi Khusus & Pendamping (Scribe)</h3>
                 <p id="accomStudentName" class="text-[11px] text-default-400 mt-0.5 font-medium"></p>
             </div>
-            <button type="button" onclick="document.getElementById('accommodationModal').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 hover:bg-default-100 transition cursor-pointer">
-                <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <button type="button" onclick="document.getElementById('accommodationModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+                <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
-        <form id="accommodationForm" method="POST" class="p-4 sm:p-5 space-y-4 overflow-y-auto">
+        <form id="accommodationForm" method="POST" class="pt-4 space-y-4 overflow-y-auto">
             @csrf
             @method('PATCH')
             <div>
@@ -480,16 +480,13 @@
             </div>
 
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2 border-t border-default-100">
-                <button type="button" onclick="document.getElementById('accommodationModal').classList.add('hidden')" class="w-full sm:w-auto px-4 py-2 bg-default-100 hover:bg-slate-200 text-default-700 text-xs font-medium rounded transition">
+                <button type="button" onclick="document.getElementById('accommodationModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold">
                     Batal
                 </button>
-                <button type="submit" class="w-full sm:w-auto px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded shadow-xs transition">
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs">
                     Simpan Akomodasi
                 </button>
             </div>
-        </form>
-    </div>
-</div>
         </form>
     </div>
 </div>

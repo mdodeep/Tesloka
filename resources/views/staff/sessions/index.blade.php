@@ -6,8 +6,8 @@
 @section('page-subtitle', 'Kelola jadwal pelaksanaan, penugasan ruang, token rilis ujian, pengawas, dan daftar hadir peserta.')
 
 @section('page-actions')
-    <a href="{{ route('staff.sessions.create') }}" class="px-3.5 py-2 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-2 cursor-pointer">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+    <a href="{{ route('staff.sessions.create') }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">
+        <i data-lucide="plus" class="size-4"></i>
         <span>Jadwalkan Sesi Baru</span>
     </a>
 @endsection
@@ -54,11 +54,11 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <button type="submit" class="h-10 px-4 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition flex-1 cursor-pointer">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition flex-1 h-10 cursor-pointer">
+                    <i data-lucide="filter" class="size-3.5"></i>
                     <span>Filter</span>
                 </button>
-                <a href="{{ route('staff.sessions.index') }}" class="h-10 px-3.5 bg-default-100 hover:bg-slate-200 text-default-700 text-xs font-medium rounded inline-flex items-center justify-center transition" title="Reset Filter">
+                <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 text-xs font-medium rounded inline-flex items-center justify-center transition h-10 px-3.5" title="Reset Filter">
                     Reset
                 </a>
             </div>
@@ -104,25 +104,25 @@
                             </td>
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                 @if($session->status === 'scheduled')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200 whitespace-nowrap inline-block">Terjadwal</span>
+                                    <x-cbt.badge color="info">Terjadwal</x-cbt.badge>
                                 @elseif($session->status === 'active')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap inline-block">Aktif Berlangsung</span>
+                                    <x-cbt.badge color="success">Aktif Berlangsung</x-cbt.badge>
                                 @elseif($session->status === 'suspended')
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap inline-block">Ditangguhkan</span>
+                                    <x-cbt.badge color="warning">Ditangguhkan</x-cbt.badge>
                                 @else
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-default-100 text-default-600 border border-default-200 whitespace-nowrap inline-block">Selesai</span>
+                                    <x-cbt.badge color="slate">Selesai</x-cbt.badge>
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-right whitespace-nowrap">
                                 <div class="inline-flex items-center gap-1.5 justify-end">
                                     @if(in_array($session->status, ['scheduled', 'active']))
-                                        <a href="{{ route('staff.sessions.monitor', $session) }}" class="h-8 px-3 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
-                                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                        <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
+                                            <i data-lucide="bar-chart-2" class="size-3.5"></i>
                                             <span>Monitoring</span>
                                         </a>
                                     @endif
-                                    <a href="{{ route('staff.sessions.show', $session) }}" class="h-8 px-3 bg-white hover:bg-default-50 text-default-700 border border-default-200 rounded text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Kelola Sesi, Peserta & Pengawas">
-                                        <svg class="size-3.5 text-default-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    <a href="{{ route('staff.sessions.show', $session) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 rounded inline-flex items-center gap-1.5 shadow-2xs transition" title="Kelola Sesi, Peserta & Pengawas">
+                                        <i data-lucide="settings" class="size-3.5 text-default-500"></i>
                                         <span>Kelola Sesi</span>
                                     </a>
                                 </div>
@@ -132,13 +132,14 @@
                         <tr>
                             <td colspan="6" class="py-12 text-center text-default-400">
                                 <div class="max-w-xs mx-auto space-y-3">
-                                    <div class="size-12 rounded-md bg-blue-50 text-primary flex items-center justify-center mx-auto">
-                                        <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <div class="size-12 rounded-md bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                                        <i data-lucide="clock" class="size-6 text-primary"></i>
                                     </div>
                                     <div class="font-bold text-default-800 text-sm">Belum Ada Sesi Ujian</div>
                                     <p class="text-xs text-default-500">Jadwalkan sesi pelaksanaan ujian baru dan tentukan ruang serta peserta.</p>
-                                    <a href="{{ route('staff.sessions.create') }}" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5">
-                                        + Jadwalkan Sesi Pertama
+                                    <a href="{{ route('staff.sessions.create') }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center gap-1.5">
+                                        <i data-lucide="plus" class="size-4"></i>
+                                        <span>Jadwalkan Sesi Pertama</span>
                                     </a>
                                 </div>
                             </td>

@@ -48,9 +48,7 @@
 
         <div class="flex flex-col items-center justify-center">
             <div class="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-2xs">
-                <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                </svg>
+                <i data-lucide="upload-cloud" class="size-6"></i>
             </div>
             <p class="font-medium text-xs text-default-800 group-hover:text-primary transition-colors">
                 Tarik & letakkan berkas di sini, atau <span class="text-primary font-bold underline underline-offset-2">pilih dari perangkat</span>
@@ -77,9 +75,7 @@
                 <!-- Thumbnail Box -->
                 <div id="thumb_box_{{ $inputId }}" class="size-14 rounded-lg bg-default-100 border border-default-200 flex items-center justify-center shrink-0 overflow-hidden relative shadow-2xs">
                     <img id="thumb_img_{{ $inputId }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" class="size-full object-cover hidden" alt="Selected File">
-                    <svg id="thumb_icon_{{ $inputId }}" class="size-6 text-default-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
+                    <i id="thumb_icon_{{ $inputId }}" data-lucide="file-text" class="size-6 text-default-400"></i>
                 </div>
 
                 <!-- File Info Details -->
@@ -93,7 +89,7 @@
                     <div class="text-[11px] text-default-500 flex items-center gap-2 flex-wrap">
                         <span id="filesize_{{ $inputId }}" class="font-semibold text-default-700">0 KB</span>
                         <span id="savings_tag_{{ $inputId }}" class="hidden text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded text-[10px] border border-emerald-200/60 inline-flex items-center gap-1">
-                            <svg class="size-3 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                            <i data-lucide="arrow-down" class="size-3 text-emerald-600"></i>
                             <span>Hemat 0%</span>
                         </span>
                     </div>
@@ -101,13 +97,11 @@
 
                 <!-- Action Controls -->
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <button type="button" onclick="document.getElementById('{{ $inputId }}').click()" class="px-3 py-1.5 bg-default-100 hover:bg-default-200 text-default-700 text-xs font-semibold rounded border border-default-200/70 transition cursor-pointer shadow-2xs" title="Ganti berkas">
+                    <button type="button" onclick="document.getElementById('{{ $inputId }}').click()" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold shadow-2xs" title="Ganti berkas">
                         Ganti
                     </button>
                     <button type="button" onclick="resetDropzone('{{ $inputId }}', '{{ $previewContainerId }}', '{{ $currentUrl ? 'current_' . $inputId : '' }}')" class="size-8 flex items-center justify-center text-default-400 hover:text-rose-600 hover:bg-rose-50 rounded transition cursor-pointer" title="Hapus / Batal Pilih">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
+                        <i data-lucide="x" class="size-4"></i>
                     </button>
                 </div>
             </div>

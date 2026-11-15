@@ -6,31 +6,33 @@
 @section('page-subtitle', 'Kode: ' . $questionBank->code . ' • Mapel: ' . ($questionBank->subject?->name ?? 'Umum') . ' • Penyusun: ' . ($questionBank->author?->name ?? 'Staf'))
 
 @section('page-actions')
-    <a href="{{ route('staff.question-banks.export-docx', $questionBank) }}" class="px-3 py-2 rounded border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all" title="Ekspor Naskah Soal Lengkap ke Format Microsoft Word (.docx)">
-        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+    <a href="{{ route('staff.question-banks.export-docx', $questionBank) }}" class="btn btn-sm bg-primary/10 text-primary hover:bg-primary hover:text-white rounded font-semibold shadow-xs flex items-center gap-1.5 transition-all" title="Ekspor Naskah Soal Lengkap ke Format Microsoft Word (.docx)">
+        <i data-lucide="file-text" class="size-4"></i>
         <span>Ekspor Word (.docx)</span>
     </a>
 
-    <a href="{{ route('staff.question-banks.export-zip', $questionBank) }}" class="px-3 py-2 rounded border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all" title="Ekspor Paket Media Bundle ZIP (Soal + Lampiran Gambar/Audio)">
-        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+    <a href="{{ route('staff.question-banks.export-zip', $questionBank) }}" class="btn btn-sm bg-purple-500/10 text-purple-600 hover:bg-purple-600 hover:text-white rounded font-semibold shadow-xs flex items-center gap-1.5 transition-all" title="Ekspor Paket Media Bundle ZIP (Soal + Lampiran Gambar/Audio)">
+        <i data-lucide="archive" class="size-4"></i>
         <span>Ekspor ZIP Bundle</span>
     </a>
 
-    <a href="{{ route('staff.question-banks.export-csv', $questionBank) }}" class="px-3 py-2 rounded border border-default-200 bg-white hover:bg-default-50 text-default-700 text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all">
-        <svg class="w-4 h-4 text-default-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+    <a href="{{ route('staff.question-banks.export-csv', $questionBank) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 rounded font-semibold shadow-xs flex items-center gap-1.5 transition-all">
+        <i data-lucide="download" class="size-4 text-default-500"></i>
         <span>Ekspor CSV</span>
     </a>
 
-    <button onclick="document.getElementById('modal-import-csv').classList.toggle('hidden')" class="px-3 py-2 rounded bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+    <button onclick="document.getElementById('modal-import-csv').classList.toggle('hidden')" class="btn btn-sm bg-info/10 text-info hover:bg-info hover:text-white rounded font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
+        <i data-lucide="upload" class="size-4"></i>
         <span>Impor Soal</span>
     </button>
 
-    <button onclick="document.getElementById('modal-stimulus').classList.toggle('hidden')" class="px-3 py-2 rounded bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
+    <button onclick="document.getElementById('modal-stimulus').classList.toggle('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-800 rounded font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
+        <i data-lucide="book-open" class="size-4"></i>
         <span>+ Stimulus</span>
     </button>
 
-    <a href="{{ route('staff.question-banks.questions.create', $questionBank) }}" class="px-3.5 py-2 rounded bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all">
+    <a href="{{ route('staff.question-banks.questions.create', $questionBank) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded font-semibold shadow-xs flex items-center gap-1.5 transition-all">
+        <i data-lucide="plus" class="size-4"></i>
         <span>+ Tambah Soal</span>
     </a>
 @endsection
@@ -141,28 +143,29 @@
                             </td>
                             <td class="py-3.5 px-6 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('staff.questions.show', $q) }}" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-primary hover:border-primary/40 hover:bg-primary/5 shadow-2xs transition" title="Pratinjau & Riwayat Versi">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    <a href="{{ route('staff.questions.show', $q) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-primary hover:border-primary/40 hover:bg-primary/5 shadow-2xs transition" title="Pratinjau & Riwayat Versi">
+                                        <i data-lucide="eye" class="size-4"></i>
                                     </a>
 
-                                    <a href="{{ route('staff.questions.edit', $q) }}" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-amber-600 hover:border-amber-300 hover:bg-amber-50 shadow-2xs transition" title="Edit Soal (Bentuk Versi Baru)">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    <a href="{{ route('staff.questions.edit', $q) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-amber-600 hover:border-amber-300 hover:bg-amber-50 shadow-2xs transition" title="Edit Soal (Bentuk Versi Baru)">
+                                        <i data-lucide="edit" class="size-4"></i>
                                     </a>
 
                                     <form method="POST" action="{{ route('staff.questions.duplicate', $q) }}" class="inline">
                                         @csrf
-                                        <button type="submit" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 shadow-2xs transition cursor-pointer" title="Duplikasi Soal">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 shadow-2xs transition cursor-pointer" title="Duplikasi Soal">
+                                            <i data-lucide="copy" class="size-4"></i>
                                         </button>
                                     </form>
 
                                     <form method="POST" action="{{ route('staff.questions.destroy', $q) }}" class="inline" onsubmit="return confirm('Hapus butir soal ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="size-8 rounded-lg border border-default-200 bg-white inline-flex items-center justify-center text-default-600 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 shadow-2xs transition cursor-pointer" title="Hapus Soal">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 shadow-2xs transition cursor-pointer" title="Hapus Soal">
+                                            <i data-lucide="trash-2" class="size-4"></i>
                                         </button>
                                     </form>
+                                </div>
                                 </div>
                             </td>
                         </tr>
@@ -183,11 +186,13 @@
 </div>
 
 <!-- Modal Stimulus Baru -->
-<div id="modal-stimulus" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 overflow-y-auto">
+<div id="modal-stimulus" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="card max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between mb-4 border-b border-default-100 pb-3">
             <h3 class="text-sm font-bold text-default-800">Tambah Stimulus / Wacana Bersama</h3>
-            <button onclick="document.getElementById('modal-stimulus').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 cursor-pointer">&times;</button>
+            <button type="button" onclick="document.getElementById('modal-stimulus').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 cursor-pointer">
+                <i data-lucide="x" class="size-4"></i>
+            </button>
         </div>
 
         <form method="POST" action="{{ route('staff.question-banks.stimuli.store', $questionBank) }}" enctype="multipart/form-data" class="space-y-4 text-xs">
@@ -226,14 +231,16 @@
 </div>
 
 <!-- Modal Impor Soal (CSV, XLSX, Aiken, GIFT, ZIP) -->
-<div id="modal-import-csv" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 space-y-4 overflow-y-auto">
+<div id="modal-import-csv" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="card max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 space-y-4 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <div>
                 <h3 class="text-base font-bold text-default-900">Impor Soal ke Bank</h3>
                 <p class="text-[11px] text-default-500">Mendukung format Excel (.xlsx), CSV, Media Bundle ZIP, Aiken, dan Moodle GIFT</p>
             </div>
-            <button onclick="document.getElementById('modal-import-csv').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 text-lg cursor-pointer leading-none">&times;</button>
+            <button type="button" onclick="document.getElementById('modal-import-csv').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 cursor-pointer">
+                <i data-lucide="x" class="size-4"></i>
+            </button>
         </div>
 
         <form method="POST" action="{{ route('staff.question-banks.import-csv', $questionBank) }}" enctype="multipart/form-data" class="space-y-4 text-xs">
@@ -253,8 +260,8 @@
             <div id="guide-xlsx" class="p-3 bg-emerald-50 border border-emerald-200 rounded text-emerald-950 space-y-2">
                 <div class="flex items-center justify-between">
                     <span class="font-bold text-emerald-900">Format Excel (.xlsx) Standar:</span>
-                    <a href="{{ route('staff.question-banks.template-xlsx') }}" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-[10px] inline-flex items-center gap-1 shadow-2xs">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <a href="{{ route('staff.question-banks.template-xlsx') }}" class="btn btn-sm bg-success hover:bg-success-hover text-white rounded font-bold text-[10px] inline-flex items-center gap-1 shadow-2xs">
+                        <i data-lucide="download" class="size-3"></i>
                         <span>Unduh Template Excel</span>
                     </a>
                 </div>

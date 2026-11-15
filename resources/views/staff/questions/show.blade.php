@@ -105,6 +105,24 @@
                 <!-- Pokok Soal -->
                 <div class="mb-6">
                     <div class="text-xs font-bold text-default-400 uppercase tracking-wide mb-2">Pertanyaan / Soal</div>
+
+                    <!-- Lampiran Media Butir Soal (Audio / Gambar dari Pustaka Media) -->
+                    @if($question->media_url)
+                        @if($question->media_type === 'audio' || str_ends_with(strtolower($question->media_path ?? ''), '.mp3') || str_ends_with(strtolower($question->media_path ?? ''), '.wav'))
+                            <div class="mb-4 p-3 bg-indigo-50/70 border border-indigo-200/70 rounded-md">
+                                <div class="flex items-center gap-2 mb-1.5 text-xs font-bold text-indigo-900">
+                                    <i data-lucide="volume-2" class="size-4 text-indigo-600"></i>
+                                    <span>Audio Pertanyaan / Soal Listening</span>
+                                </div>
+                                <audio controls class="w-full h-8" preload="none" src="{{ $question->media_url }}"></audio>
+                            </div>
+                        @elseif($question->media_type === 'image' || preg_match('/\.(jpg|jpeg|png|webp|gif|svg)$/i', $question->media_path ?? ''))
+                            <div class="mb-4 p-2 bg-white border border-default-200 rounded-md max-w-lg">
+                                <img src="{{ $question->media_url }}" alt="Media Soal" class="rounded max-h-72 object-contain mx-auto">
+                            </div>
+                        @endif
+                    @endif
+
                     <div class="text-base text-default-900 leading-relaxed font-sans {{ $question->is_rtl ? 'text-right font-serif text-xl' : '' }}" {{ $question->is_rtl ? 'dir=rtl' : '' }}>
                         @php
                             $qContent = strip_tags($question->content, $allowedTags);

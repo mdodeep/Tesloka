@@ -279,6 +279,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
         // Media Library & Isolated File Management (FULL-FEATURE Sec 47, 50)
         Route::prefix('media')->name('media.')->group(function () {
             Route::get('/', [MediaController::class, 'index'])->name('index');
+            Route::get('picker', [MediaController::class, 'picker'])->name('picker');
             Route::post('/', [MediaController::class, 'store'])->name('store');
             Route::delete('{file}', [MediaController::class, 'destroy'])->name('destroy');
         });

@@ -16,20 +16,60 @@ Repositori Berkas & Media Terisolasi
 
 @section('content')
 <div class="space-y-6 w-full">
+    <!-- Stat Ringkasan Repositori -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
+            <div>
+                <p class="text-[11px] uppercase tracking-wider font-bold text-default-400">Total Berkas</p>
+                <h3 class="text-xl sm:text-2xl font-black text-default-900 mt-0.5">{{ number_format($stats['total'] ?? 0) }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <i data-lucide="folder" class="size-5"></i>
+            </div>
+        </div>
+        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
+            <div>
+                <p class="text-[11px] uppercase tracking-wider font-bold text-indigo-500">Audio Listening</p>
+                <h3 class="text-xl sm:text-2xl font-black text-indigo-950 mt-0.5">{{ number_format($stats['audio'] ?? 0) }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                <i data-lucide="volume-2" class="size-5"></i>
+            </div>
+        </div>
+        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
+            <div>
+                <p class="text-[11px] uppercase tracking-wider font-bold text-emerald-500">Gambar & Wacana</p>
+                <h3 class="text-xl sm:text-2xl font-black text-emerald-950 mt-0.5">{{ number_format($stats['image'] ?? 0) }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <i data-lucide="image" class="size-5"></i>
+            </div>
+        </div>
+        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
+            <div>
+                <p class="text-[11px] uppercase tracking-wider font-bold text-amber-500">Dokumen / PDF</p>
+                <h3 class="text-xl sm:text-2xl font-black text-amber-950 mt-0.5">{{ number_format($stats['document'] ?? 0) }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                <i data-lucide="file-text" class="size-5"></i>
+            </div>
+        </div>
+    </div>
+
     <!-- Filter Bar -->
     <div class="bg-white border border-default-200 rounded-md p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-2 overflow-x-auto text-xs">
             <a href="{{ route('staff.media.index') }}" class="px-3 py-1.5 rounded font-semibold transition {{ !request('category') ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
-                Semua Berkas
+                Semua Berkas ({{ $stats['total'] ?? 0 }})
             </a>
             <a href="{{ route('staff.media.index', ['category' => 'image']) }}" class="px-3 py-1.5 rounded font-semibold transition {{ request('category') === 'image' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
-                Gambar (Soal & Wacana)
+                Gambar ({{ $stats['image'] ?? 0 }})
             </a>
             <a href="{{ route('staff.media.index', ['category' => 'audio']) }}" class="px-3 py-1.5 rounded font-semibold transition {{ request('category') === 'audio' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
-                Audio (Listening)
+                Audio Listening ({{ $stats['audio'] ?? 0 }})
             </a>
             <a href="{{ route('staff.media.index', ['category' => 'document']) }}" class="px-3 py-1.5 rounded font-semibold transition {{ request('category') === 'document' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
-                Dokumen (PDF & CSV)
+                Dokumen ({{ $stats['document'] ?? 0 }})
             </a>
         </div>
 
@@ -48,18 +88,19 @@ Repositori Berkas & Media Terisolasi
     <!-- Grid Berkas Media -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         @forelse($files as $file)
+            @php $usage = $file->getUsageDetails(); @endphp
             <div class="bg-white border border-default-200 rounded-md overflow-hidden shadow-xs flex flex-col justify-between transition hover:shadow-md">
                 <!-- Preview Area -->
-                <div class="h-40 bg-default-100 flex items-center justify-center p-3 overflow-hidden relative group">
+                <div class="h-44 bg-default-100 flex items-center justify-center p-3 overflow-hidden relative group">
                     @if($file->isImage())
-                        <img src="{{ route('media.stream', $file) }}" alt="{{ $file->original_name }}" class="max-h-full max-w-full object-contain rounded-lg">
+                        <img src="{{ $file->url }}" alt="{{ $file->original_name }}" class="max-h-full max-w-full object-contain rounded-lg">
                     @elseif($file->isAudio())
                         <div class="text-center p-2 w-full">
-                            <div class="w-12 h-12 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center mb-2">
-                                <i data-lucide="volume-2" class="size-6"></i>
+                            <div class="w-10 h-10 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center mb-2">
+                                <i data-lucide="volume-2" class="size-5"></i>
                             </div>
                             <audio controls class="w-full h-8" preload="none">
-                                <source src="{{ route('media.stream', $file) }}" type="{{ $file->mime_type }}">
+                                <source src="{{ $file->url }}" type="{{ $file->mime_type }}">
                             </audio>
                         </div>
                     @else
@@ -78,19 +119,66 @@ Repositori Berkas & Media Terisolasi
                     </div>
                 </div>
 
-                <!-- Metadata & Action Area -->
-                <div class="p-4 space-y-3">
-                    <div>
-                        <h4 class="text-xs font-bold text-default-900 truncate" title="{{ $file->original_name }}">
-                            {{ $file->original_name }}
-                        </h4>
-                        <p class="text-[10px] text-default-400 mt-0.5 font-mono">
-                            Oleh: {{ $file->uploadedBy->name ?? 'Staf' }} &bull; {{ $file->created_at->format('d/m/Y') }}
-                        </p>
+                <!-- Metadata & Usage Area -->
+                <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <div>
+                            <h4 class="text-xs font-bold text-default-900 truncate" title="{{ $file->original_name }}">
+                                {{ $file->original_name }}
+                            </h4>
+                            <p class="text-[10px] text-default-400 mt-0.5 font-mono">
+                                Oleh: {{ $file->uploadedBy->name ?? 'Sistem' }} &bull; {{ $file->created_at->format('d/m/Y') }}
+                            </p>
+                        </div>
+
+                        <!-- Informasi Keterkaitan Penggunaan Media -->
+                        @if($usage['is_used'])
+                            @if($usage['type'] === 'stimulus')
+                                <div class="p-2.5 bg-indigo-50/90 border border-indigo-200 rounded text-xs space-y-1.5">
+                                    <div class="flex items-center gap-1.5 font-bold text-indigo-900">
+                                        <i data-lucide="book-open" class="size-3.5 text-indigo-600 shrink-0"></i>
+                                        <span class="truncate" title="{{ $usage['target_title'] }}">Stimulus: {{ $usage['target_title'] }}</span>
+                                    </div>
+                                    <div class="text-[11px] text-indigo-700">
+                                        <div class="text-indigo-500 font-medium text-[10px] uppercase mb-1">Digunakan pada {{ $usage['questions_count'] }} Soal:</div>
+                                        <div class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-0.5">
+                                            @foreach($usage['questions'] as $q)
+                                                <a href="{{ $q['show_url'] }}" target="_blank" class="px-1.5 py-0.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded text-[10px] font-mono font-bold transition inline-flex items-center gap-1" title="Lihat {{ $q['code'] }}">
+                                                    <span>{{ $q['label'] }}</span>
+                                                    <i data-lucide="external-link" class="size-2.5"></i>
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif($usage['type'] === 'question')
+                                <div class="p-2.5 bg-emerald-50/90 border border-emerald-200 rounded text-xs">
+                                    <div class="flex items-center justify-between gap-1.5 font-bold text-emerald-900">
+                                        <div class="flex items-center gap-1.5 truncate">
+                                            <i data-lucide="help-circle" class="size-3.5 text-emerald-600 shrink-0"></i>
+                                            <span class="truncate">{{ $usage['target_title'] }}</span>
+                                        </div>
+                                        @if(!empty($usage['questions'][0]['show_url']))
+                                            <a href="{{ $usage['questions'][0]['show_url'] }}" target="_blank" class="text-[10px] text-emerald-700 hover:text-emerald-950 font-bold underline shrink-0 inline-flex items-center gap-0.5">
+                                                <span>Buka</span>
+                                                <i data-lucide="external-link" class="size-2.5"></i>
+                                            </a>
+                                        @endif
+                                    </div>
+                                    <div class="text-[10px] text-emerald-600 mt-1">Audio / Gambar langsung pada butir soal</div>
+                                </div>
+                            @endif
+                        @else
+                            <div class="p-2 bg-slate-50 border border-slate-200 rounded text-xs text-slate-500 flex items-center gap-1.5">
+                                <i data-lucide="info" class="size-3.5 text-slate-400 shrink-0"></i>
+                                <span class="text-[11px]">Belum dikaitkan ke soal / stimulus</span>
+                            </div>
+                        @endif
                     </div>
 
+                    <!-- Actions Area -->
                     <div class="pt-2 border-t border-default-100 flex items-center justify-between gap-2">
-                        <button type="button" onclick="navigator.clipboard.writeText('{{ route('media.stream', $file) }}'); alert('Tautan media aman berhasil disalin!')"
+                        <button type="button" onclick="navigator.clipboard.writeText('{{ $file->url }}'); alert('Tautan media aman berhasil disalin!')"
                             class="btn btn-sm bg-default-50 hover:bg-default-100 text-default-700 text-[11px] font-semibold rounded border border-default-200 transition cursor-pointer">
                             Salin URL
                         </button>

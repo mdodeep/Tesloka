@@ -311,6 +311,8 @@
                         number: {{ $idx + 1 }},
                         type: "{{ $snap['type'] ?? 'multiple_choice' }}",
                         content: {!! json_encode($snap['content'] ?? '') !!},
+                        media_type: "{{ $snap['media_type'] ?? '' }}",
+                        media_url: "{{ $snap['media_url'] ?? '' }}",
                         difficulty: "{{ $snap['difficulty'] ?? 'medium' }}",
                         weight: {{ $snap['weight'] ?? 1.0 }},
                         isRtl: {{ !empty($snap['is_rtl']) ? 'true' : 'false' }},
@@ -373,9 +375,17 @@
                 stimBox.classList.add('hidden');
             }
 
-            // Question Content (Arabic RTL Harakat Support)
+            // Question Content (Arabic RTL Harakat Support & Media Audio/Image)
             const qContentEl = document.getElementById('questionContent');
-            qContentEl.innerHTML = q.content.replace(/\n/g, '<br>');
+            let qMediaHtml = '';
+            if (q.media_url) {
+                if (q.media_type === 'audio' || q.media_url.endsWith('.mp3') || q.media_url.endsWith('.wav')) {
+                    qMediaHtml = `<div class="cbt-audio-container mb-3.5"><audio controls preload="none" src="${q.media_url}" class="w-full"></audio></div>`;
+                } else if (q.media_type === 'image' || /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(q.media_url)) {
+                    qMediaHtml = `<div class="cbt-image-container mb-3.5"><img src="${q.media_url}" alt="Lampiran Soal" class="max-h-72 rounded border border-default-200"></div>`;
+                }
+            }
+            qContentEl.innerHTML = qMediaHtml + q.content.replace(/\n/g, '<br>');
             if (q.isRtl) {
                 qContentEl.setAttribute('dir', 'rtl');
                 qContentEl.classList.add('text-right', 'font-serif', 'text-xl');

@@ -78,4 +78,113 @@ class StoredFile extends Model
 
         return $bytes.' B';
     }
+
+    /**
+     * URL akses berkas (stream route atau public url).
+     */
+    public function getUrlAttribute(): string
+    {
+        if ($this->disk === 'public') {
+            return \Illuminate\Support\Facades\Storage::disk('public')->url($this->storage_path);
+        }
+
+        return route('media.stream', $this);
+    }
+
+    /**
+     * Informasi pelacakan penggunaan berkas di wacana stimulus dan butir soal.
+     */
+    public function getUsageDetails(): array
+    {
+        // 1. Periksa dari relasi attachable
+        $attachable = $this->attachable;
+
+        // 2. Jika belum ada attachable eksplisit, telusuri QuestionStimulus dan Question berdasarkan storage_path / nama file
+        if (! $attachable) {
+            $baseName = basename($this->storage_path);
+            $stimulus = QuestionStimulus::where('media_path', $this->storage_path)
+                ->orWhere('media_path', 'like', '%'.$baseName)
+                ->first();
+
+            if ($stimulus) {
+                $attachable = $stimulus;
+            } else {
+                $question = Question::where('media_path', $this->storage_path)
+                    ->orWhere('media_path', 'like', '%'.$baseName)
+                    ->orWhere('content', 'like', '%'.$baseName.'%')
+                    ->first();
+                if ($question) {
+                    $attachable = $question;
+                }
+            }
+        }
+
+        if ($attachable instanceof QuestionStimulus) {
+            $questions = $attachable->questions()->select('id', 'code', 'content')->get();
+            $questionList = [];
+            foreach ($questions as $q) {
+                $num = null;
+                if (preg_match('/(\d+)$/', $q->code, $m)) {
+                    $num = (int) $m[1];
+                }
+                $questionList[] = [
+                    'id' => $q->id,
+                    'code' => $q->code,
+                    'label' => $num ? "Soal #{$num}" : $q->code,
+                    'edit_url' => route('staff.questions.edit', $q->id),
+                    'show_url' => route('staff.questions.show', $q->id),
+                ];
+            }
+
+            $labelItems = array_column($questionList, 'label');
+            $labelStr = ! empty($labelItems) ? implode(', ', $labelItems) : 'Belum ada butir soal';
+
+            return [
+                'is_used' => true,
+                'type' => 'stimulus',
+                'target_title' => $attachable->title,
+                'stimulus_id' => $attachable->id,
+                'questions_count' => count($questionList),
+                'questions' => $questionList,
+                'summary' => "Wacana Stimulus '{$attachable->title}' (" . count($questionList) . " Soal: {$labelStr})",
+            ];
+        }
+
+        if ($attachable instanceof Question) {
+            $num = null;
+            if (preg_match('/(\d+)$/', $attachable->code, $m)) {
+                $num = (int) $m[1];
+            }
+            $label = $num ? "Soal #{$num} ({$attachable->code})" : $attachable->code;
+
+            return [
+                'is_used' => true,
+                'type' => 'question',
+                'target_code' => $attachable->code,
+                'target_title' => $label,
+                'question_id' => $attachable->id,
+                'questions_count' => 1,
+                'questions' => [
+                    [
+                        'id' => $attachable->id,
+                        'code' => $attachable->code,
+                        'label' => $label,
+                        'edit_url' => route('staff.questions.edit', $attachable->id),
+                        'show_url' => route('staff.questions.show', $attachable->id),
+                    ]
+                ],
+                'summary' => "Butir Soal {$label}",
+            ];
+        }
+
+        return [
+            'is_used' => false,
+            'type' => 'unattached',
+            'target_title' => null,
+            'target_code' => null,
+            'questions_count' => 0,
+            'questions' => [],
+            'summary' => 'Belum dikaitkan ke soal / wacana stimulus',
+        ];
+    }
 }

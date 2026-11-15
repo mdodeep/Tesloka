@@ -97,6 +97,15 @@
 
             <!-- Kolom Tengah & Kanan: Konten Soal & Opsi Jawaban -->
             <div class="lg:col-span-2 space-y-6">
+                <!-- Media Lampiran Soal (Audio / Gambar dari Pustaka Media) -->
+                <x-cbt.card title="Media Lampiran Soal (Audio / Gambar)">
+                    <x-cbt.media-picker
+                        namePath="media_path"
+                        nameType="media_type"
+                        label="Media Lampiran Butir Soal"
+                    />
+                </x-cbt.card>
+
                 <x-cbt.card title="Konten Pokok Soal">
                     <div class="space-y-2">
                         <textarea name="content" id="questionContent" rows="6" placeholder="Tuliskan teks pertanyaan atau instruksi soal di sini..." class="form-textarea w-full text-sm rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed" required>{{ old('content') }}</textarea>

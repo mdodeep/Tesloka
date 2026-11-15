@@ -19,6 +19,8 @@ class Question extends Model
         'code',
         'type',
         'content',
+        'media_type',
+        'media_path',
         'difficulty',
         'weight',
         'explanation',
@@ -27,6 +29,10 @@ class Question extends Model
         'is_rtl',
         'scoring_rules',
         'metadata',
+    ];
+
+    protected $appends = [
+        'media_url',
     ];
 
     protected function casts(): array
@@ -60,6 +66,22 @@ class Question extends Model
         return $this->hasMany(QuestionVersion::class)->orderByDesc('version_number');
     }
 
+    public function storedFiles(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(StoredFile::class, 'attachable');
+    }
+
+    public function getMediaUrlAttribute(): ?string
+    {
+        if (empty($this->media_path)) {
+            return null;
+        }
+
+        return str_starts_with($this->media_path, 'http')
+            ? $this->media_path
+            : \Illuminate\Support\Facades\Storage::disk('public')->url($this->media_path);
+    }
+
     /**
      * Membentuk snapshot data butir soal yang mandiri dan tidak berubah (FULL-FEATURE 6.11).
      */
@@ -72,6 +94,9 @@ class Question extends Model
             'code' => $this->code,
             'type' => $this->type,
             'content' => $this->content,
+            'media_type' => $this->media_type,
+            'media_path' => $this->media_path,
+            'media_url' => $this->media_url,
             'difficulty' => $this->difficulty,
             'weight' => (float) $this->weight,
             'explanation' => $this->explanation,
@@ -85,6 +110,7 @@ class Question extends Model
                 'content' => $this->stimulus->content,
                 'media_type' => $this->stimulus->media_type,
                 'media_path' => $this->stimulus->media_path,
+                'media_url' => $this->stimulus->media_url,
             ] : null,
             'options' => $this->options->map(fn ($opt) => [
                 'id' => $opt->id,

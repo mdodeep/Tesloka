@@ -96,7 +96,7 @@
     <!-- Pre-Flight Checklist Table -->
     <x-cbt.card title="Audit Kesiapan Sistem Sebelum Production">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[700px] text-left border-collapse text-xs">
+            <table class="w-full min-w-[700px] text-left border-collapse text-xs" data-gridjs="true" data-gridjs-page-size="10">
                 <thead>
                     <tr class="border-b border-default-200 bg-default-50/75">
                         <th class="py-3 px-4 font-bold text-default-700 whitespace-nowrap">Komponen Diperiksa</th>

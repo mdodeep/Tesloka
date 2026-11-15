@@ -95,7 +95,7 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs">
+                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50">
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Nama Tahun Ajaran</th>
@@ -162,7 +162,7 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs">
+                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50">
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>
@@ -233,7 +233,7 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs">
+                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50">
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>
@@ -300,7 +300,7 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs">
+                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50">
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>
@@ -400,7 +400,7 @@
             </x-slot:actions>
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs">
+                <table class="w-full min-w-[760px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50">
                             <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode</th>

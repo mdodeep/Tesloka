@@ -129,7 +129,7 @@
         </div>
 
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[850px] text-left text-xs">
+            <table class="w-full min-w-[850px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
                 <thead>
                     <tr>
                         <th class="w-10 px-3.5 py-2.5 border-b border-default-200 text-center whitespace-nowrap">

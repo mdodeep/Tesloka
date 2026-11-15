@@ -66,7 +66,7 @@
     <!-- Table of Exams -->
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[780px] text-left text-xs text-default-600">
+            <table class="w-full min-w-[780px] text-left text-xs text-default-600" data-gridjs="true" data-gridjs-page-size="10">
                 <thead class="bg-default-50 text-[11px] uppercase font-bold text-default-500 border-b border-default-200">
                     <tr>
                         <th class="py-3.5 px-4 whitespace-nowrap">Kode & Judul Ujian</th>

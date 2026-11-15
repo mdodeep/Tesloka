@@ -17,7 +17,7 @@
     <!-- Delegasi yang Diberikan -->
     <x-cbt.card title="Delegasi yang Anda Berikan" subtitle="Daftar wewenang yang Anda limpahkan kepada rekan sejawat">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse">
+            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                     <tr>
                         <th class="py-3.5 px-6 whitespace-nowrap">Penerima Wewenang</th>
@@ -77,7 +77,7 @@
     <!-- Delegasi yang Diterima -->
     <x-cbt.card title="Delegasi yang Anda Terima dari Staf Lain" subtitle="Kewenangan tambahan yang dilimpahkan rekan sejawat kepada Anda">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse">
+            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                     <tr>
                         <th class="py-3.5 px-6 whitespace-nowrap">Pemberi Wewenang</th>

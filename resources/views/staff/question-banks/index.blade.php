@@ -122,7 +122,7 @@
     <div id="view-table" class="space-y-4">
         <x-cbt.card title="Daftar Bank Soal Terdaftar" subtitle="Kelola butir soal, stimulus bacaan/audio, dan ekspor duplikasi bank soal">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs text-default-600">
+                <table class="w-full min-w-[760px] text-left text-xs text-default-600" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50 border-b border-default-200 text-default-700">
                             <th class="px-4 py-3 font-semibold w-36 whitespace-nowrap">Kode Bank</th>

@@ -25,7 +25,7 @@
     <!-- Table of Rooms -->
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[720px] text-left text-xs">
+            <table class="w-full min-w-[720px] text-left text-xs" data-gridjs="true" data-gridjs-page-size="10">
                 <thead>
                     <tr>
                         <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Kode &amp; Nama Ruang</th>

@@ -2,13 +2,19 @@ import ApexCharts from "apexcharts";
 import "preline";
 import { createIcons, icons } from "lucide";
 import { TailwickApp, TailwickLayout } from "./tailwick.js";
+import { initTailwickGrid, initTailwickGridTables } from "./tailwick-gridjs.js";
+import { Grid, html } from "gridjs";
 
 window.ApexCharts = ApexCharts;
+window.gridjs = { Grid, html };
+window.initTailwickGrid = initTailwickGrid;
+window.initTailwickGridTables = initTailwickGridTables;
 
 document.addEventListener("DOMContentLoaded", () => {
     createIcons({ icons });
     new TailwickApp().init();
     new TailwickLayout().init();
+    initTailwickGridTables();
 });
 
 // Register Service Worker for Offline Resilience

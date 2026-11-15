@@ -85,7 +85,7 @@
 
         <x-cbt.card title="Karakteristik Psikometrik Butir Soal Ujian">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[780px] text-left text-xs border-collapse">
+                <table class="w-full min-w-[780px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                             <th class="py-3 px-3.5 w-12 text-center whitespace-nowrap">No</th>
@@ -149,7 +149,7 @@
         <!-- Matriks Efektivitas Pengecoh / Distraktor (FULL-FEATURE 35.4) -->
         <x-cbt.card title="Matriks Analisis Efektivitas Pengecoh / Distraktor (Distractor Analysis)" subtitle="Evaluasi pilihan ganda: Pola sebaran pilihan Kelompok Atas (Upper 27%) vs Kelompok Bawah (Lower 27%)">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[850px] text-left text-xs border-collapse">
+                <table class="w-full min-w-[850px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                             <th class="py-3 px-3.5 w-12 text-center whitespace-nowrap">No</th>
@@ -317,7 +317,7 @@
                 @endif
             @endslot
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] text-left text-xs border-collapse">
+                <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                             <th class="py-3 px-3.5 w-12 text-center whitespace-nowrap">No</th>

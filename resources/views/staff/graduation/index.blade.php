@@ -109,7 +109,7 @@
     <!-- Results Table -->
     <x-cbt.card title="Rekapitulasi Hasil Kelulusan &amp; Yudisium Peserta">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[850px] text-left text-xs border-collapse">
+            <table class="w-full min-w-[850px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead>
                     <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider">
                         <th class="py-3 px-4 text-center w-12 whitespace-nowrap">No</th>

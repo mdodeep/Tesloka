@@ -16,7 +16,7 @@
         </x-slot:actions>
 
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse">
+            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                     <tr>
                         <th class="py-3.5 px-6 whitespace-nowrap">Tindakan Kritis</th>
@@ -75,7 +75,7 @@
     <!-- History Requests -->
     <x-cbt.card title="Riwayat Keputusan Four-Eyes" subtitle="Catatan keputusan permohonan kritis terdahulu">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse">
+            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead class="bg-default-50/80 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                     <tr>
                         <th class="py-3.5 px-6 whitespace-nowrap">Tindakan</th>

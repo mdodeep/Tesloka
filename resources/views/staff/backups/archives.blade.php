@@ -18,7 +18,7 @@
     <!-- Tabel Arsip Ujian -->
     <x-cbt.card title="Daftar Arsip Ujian Resmi (Total {{ $archives->total() }})">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse">
+            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead>
                     <tr class="border-b border-default-200 bg-default-50 text-default-600 font-semibold uppercase tracking-wider">
                         <th class="py-3 px-4 whitespace-nowrap">Kode Arsip</th>

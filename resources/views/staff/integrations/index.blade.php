@@ -62,7 +62,7 @@
             </div>
 
             <div class="overflow-x-auto flex-1">
-                <table class="w-full min-w-[700px] text-left text-xs border-collapse">
+                <table class="w-full min-w-[700px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                             <th class="py-3 px-4 whitespace-nowrap">Nama & Prefix</th>
@@ -154,7 +154,7 @@
             </div>
 
             <div class="overflow-x-auto flex-1">
-                <table class="w-full min-w-[700px] text-left text-xs border-collapse">
+                <table class="w-full min-w-[700px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                     <thead>
                         <tr class="bg-default-50 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                             <th class="py-3 px-4 whitespace-nowrap">Nama & URL Endpoint</th>
@@ -251,7 +251,7 @@
         </div>
 
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] text-left text-xs border-collapse">
+            <table class="w-full min-w-[760px] text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead>
                     <tr class="bg-default-50 border-b border-default-200 text-default-600 font-semibold uppercase tracking-wider text-[11px]">
                         <th class="py-3 px-4 whitespace-nowrap">Waktu</th>

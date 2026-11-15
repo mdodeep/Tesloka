@@ -68,7 +68,7 @@
     <!-- Table of Sessions -->
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0 -my-3.5 sm:-my-5">
-            <table class="w-full text-left text-xs border-collapse">
+            <table class="w-full text-left text-xs border-collapse" data-gridjs="true" data-gridjs-page-size="10">
                 <thead class="bg-default-50 text-[11px] uppercase font-bold text-default-600 border-b border-default-200">
                     <tr>
                         <th class="py-3.5 px-4 whitespace-nowrap">Kode & Nama Sesi</th>

@@ -51,26 +51,48 @@
                 <!-- Stimulus jika ada -->
                 @if($question->stimulus)
                     <div class="p-4 bg-default-50 border border-default-200 rounded mb-6">
-                        <div class="flex items-center gap-2 text-xs font-bold text-default-500 uppercase tracking-wide mb-2">
-                            <i data-lucide="book-open" class="size-4 text-default-400"></i>
+                        <div class="flex items-center gap-2 text-xs font-bold text-default-500 uppercase tracking-wide mb-3">
+                            <i data-lucide="book-open" class="size-4 text-primary"></i>
                             <span>Stimulus / Wacana: {{ $question->stimulus->title }}</span>
                         </div>
-                        <div class="prose prose-sm max-w-none text-default-700 leading-relaxed">
-                            @php
-                                $stimContent = strip_tags($question->stimulus->content, $allowedTags);
-                                if (!str_contains($stimContent, '<p>') && !str_contains($stimContent, '<br>')) {
-                                    $stimContent = nl2br($stimContent);
-                                }
-                            @endphp
-                            {!! $stimContent !!}
-                        </div>
-                        @if($question->stimulus->media_url)
+
+                        @php
+                            $stimContent = strip_tags($question->stimulus->content, $allowedTags);
+                            if (!str_contains($stimContent, '<p>') && !str_contains($stimContent, '<br>')) {
+                                $stimContent = nl2br($stimContent);
+                            }
+                        @endphp
+
+                        @if($question->stimulus->media_type === 'audio')
+                            @if($question->stimulus->media_url)
+                                <div class="mb-3 p-2.5 bg-white rounded border border-default-200">
+                                    <audio controls class="w-full h-8" preload="none" src="{{ $question->stimulus->media_url }}"></audio>
+                                </div>
+                            @endif
+                            <!-- Mode Peserta: Transkrip disembunyikan untuk simulasi listening asli -->
+                            <div id="stimulusAudioTranscriptCandidate" class="p-3 bg-primary-50/70 border border-primary-200/60 rounded text-xs text-primary-900 flex items-center gap-2">
+                                <i data-lucide="headphones" class="size-4 text-primary shrink-0"></i>
+                                <span><strong>Simulasi Mode Peserta:</strong> Transkrip audio disembunyikan agar murni menguji kemampuan mendengarkan. Peserta hanya mendengarkan rekaman suara melalui pemutar di atas.</span>
+                            </div>
+                            <!-- Mode Guru: Transkrip ditampilkan untuk verifikasi & telaah naskah -->
+                            <div id="stimulusAudioTranscriptTeacher" class="hidden">
+                                <div class="text-xs font-bold text-default-600 uppercase tracking-wide mb-1.5 flex items-center gap-1.5">
+                                    <i data-lucide="file-text" class="size-3.5 text-primary"></i>
+                                    <span>Transkrip Naskah Audio (Tampilan Khusus Guru / Staf):</span>
+                                </div>
+                                <div class="prose prose-sm max-w-none text-default-700 leading-relaxed p-3.5 bg-white border border-default-200 rounded">
+                                    {!! $stimContent !!}
+                                </div>
+                            </div>
+                        @else
+                            <!-- Stimulus Teks / Bacaan (Passage Reading Comprehension) -->
+                            <div class="prose prose-sm max-w-none text-default-700 leading-relaxed">
+                                {!! $stimContent !!}
+                            </div>
+                        @endif
+
+                        @if($question->stimulus->media_url && $question->stimulus->media_type !== 'audio')
                             <div class="mt-3">
-                                @if($question->stimulus->media_type === 'audio')
-                                    <div class="mb-2 p-2 bg-slate-100 rounded border border-default-200">
-                                        <audio controls class="w-full h-8" preload="none" src="{{ $question->stimulus->media_url }}"></audio>
-                                    </div>
-                                @endif
                                 <a href="{{ $question->stimulus->media_url }}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1">
                                     <i data-lucide="paperclip" class="size-3.5"></i>
                                     <span>Buka Lampiran Berkas Stimulus</span>
@@ -250,17 +272,23 @@
         const teacherView = document.getElementById('previewTeacher');
         const btnCandidate = document.getElementById('tabBtnCandidate');
         const btnTeacher = document.getElementById('tabBtnTeacher');
+        const audioTranscriptCandidate = document.getElementById('stimulusAudioTranscriptCandidate');
+        const audioTranscriptTeacher = document.getElementById('stimulusAudioTranscriptTeacher');
 
         if (tab === 'candidate') {
             candidateView.classList.remove('hidden');
             teacherView.classList.add('hidden');
-            btnCandidate.className = 'px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-primary-50 text-primary-700';
-            btnTeacher.className = 'px-3.5 py-1.5 text-xs font-semibold rounded-lg text-default-500 hover:text-default-800';
+            if (audioTranscriptCandidate) audioTranscriptCandidate.classList.remove('hidden');
+            if (audioTranscriptTeacher) audioTranscriptTeacher.classList.add('hidden');
+            btnCandidate.className = 'px-3.5 py-1.5 text-xs font-semibold rounded bg-primary/10 text-primary inline-flex items-center gap-1.5 transition cursor-pointer';
+            btnTeacher.className = 'px-3.5 py-1.5 text-xs font-semibold rounded text-default-500 hover:text-default-800 inline-flex items-center gap-1.5 transition cursor-pointer';
         } else {
             teacherView.classList.remove('hidden');
             candidateView.classList.add('hidden');
-            btnTeacher.className = 'px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-primary-50 text-primary-700';
-            btnCandidate.className = 'px-3.5 py-1.5 text-xs font-semibold rounded-lg text-default-500 hover:text-default-800';
+            if (audioTranscriptCandidate) audioTranscriptCandidate.classList.add('hidden');
+            if (audioTranscriptTeacher) audioTranscriptTeacher.classList.remove('hidden');
+            btnTeacher.className = 'px-3.5 py-1.5 text-xs font-semibold rounded bg-primary/10 text-primary inline-flex items-center gap-1.5 transition cursor-pointer';
+            btnCandidate.className = 'px-3.5 py-1.5 text-xs font-semibold rounded text-default-500 hover:text-default-800 inline-flex items-center gap-1.5 transition cursor-pointer';
         }
     }
 </script>

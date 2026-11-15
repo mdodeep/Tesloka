@@ -4,13 +4,12 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-15T14:08:01+00:00
- * Integrity: 32a0d6d1e68df6079ebf52c2c66790de0ca51d31399c1ea9359321ce575e627c
+ * Timestamp: 2026-11-15T14:38:35+00:00
+ * Integrity: 8fb32f9c498b75637e4210b82223abef44c55b561a70cd4ce9a36aab7d49c102
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_df895b7c1')){function _df895b7c1($s){static $c=[];
-if (((0 ^ 0) !== 0)) { $_seg34 = substr(md5(strval(5263)), 0, 10); $_idx86 = 3731; $_cnt18 = array_merge([], [19, 75]); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('AYsI1APkJtPJJ8qfBU6Ooo277dI2L2bvTgkIw+/GSno='),0,base64_decode('xHvD5aB0VtbngWmVJWxZ9A=='));
-if (((~0 & 0) !== 0)) { $_idx98 = substr(md5(strval(8033)), 0, 13); }}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_df895b7c1('B5gRDFQSYwswhJOKC/F6kRyViCCGP6FkYxAiETIgpu5Djdmzt4jpEjk6IUokSteHy2TvGo0fQ+/eVHjGpfg++N1TA79h8dmYw2jMC8O/v0k=')],403);
-if (((0 ^ 0) !== 0)) { $_val54 = intval('690'); }}abort(403,_df895b7c1('zMMYMihNXebhWdJ8IrGIvbSRog31+cqIxZBJhNFONDiX1Vj7q1MagYlheqPYuqJhFh42m3US0XenDS8wefHP2FYwVLSFHU+hSB7NXZ0fiXOSPT4wyWuMbZqNLORWfjWc'));}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d583a197c')){function _d583a197c($s){static $c=[];
+if (((PHP_INT_SIZE * 0) !== 0)) { $_buf66 = intval('420'); $_res53 = substr(md5(strval(3537)), 0, 7); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('1mwpe06Ep7vStak2oJf4pjUSNVl1Oo/S/KFcZCogWLA='),0,base64_decode('nWmQXZWI9zTi4cEDc8iHAA=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_d583a197c('3vPeM8t88id24/yeHTSdVXmU++bMuSksohOK6Gtnfuqe7BNsGFUtj/83J1PsFsM5KOB45ntC27BcUB7JZ43sI/AWkpICyF0vogNweO8Lu+Y=')],403);}abort(403,_d583a197c('FXO/i40OYGw/HKiYTb9teLQpqEjBd3iemEn5J5WL1q4nG1aHb9D7jQAYLw1F0zrHneRnLuo+N1VXryvY/7ApQGCQg29jSaZWaKJ4USwrj3IEiDPjzZNQjZRZGcz+UNM/'));}return $next($request);
+if (false) { $_buf28 = 8613; }}}

@@ -353,14 +353,22 @@
                 document.getElementById('stimulusTitle').innerText = q.stimulus.title || 'Wacana Stimulus';
                 let stimHtml = '';
                 if (q.stimulus.media_type === 'audio' && q.stimulus.media_url) {
-                    stimHtml += `<div class="cbt-audio-container mb-3"><audio controls preload="none" src="${q.stimulus.media_url}"></audio></div>`;
+                    stimHtml += `<div class="cbt-audio-container mb-3"><audio controls preload="none" src="${q.stimulus.media_url}" class="w-full"></audio></div>`;
+                    stimHtml += `<div class="p-2.5 rounded bg-primary-50/70 border border-primary-200/60 text-xs text-primary-900 flex items-center gap-2"><i data-lucide="headphones" class="size-4 text-primary shrink-0"></i><span><strong>Petunjuk Mendengarkan:</strong> Dengarkan rekaman audio di atas untuk menjawab butir soal terkait. Transkrip teks tidak ditampilkan pada sesi ujian.</span></div>`;
                 } else if (q.stimulus.media_type === 'image' && q.stimulus.media_url) {
                     stimHtml += `<div class="cbt-image-container mb-3"><img src="${q.stimulus.media_url}" alt="${q.stimulus.title || ''}" class="max-h-72 rounded border border-default-200"></div>`;
-                }
-                if (q.stimulus.content) {
-                    stimHtml += q.stimulus.content.replace(/\n/g, '<br>');
+                    if (q.stimulus.content) {
+                        stimHtml += q.stimulus.content.replace(/\n/g, '<br>');
+                    }
+                } else {
+                    if (q.stimulus.content) {
+                        stimHtml += q.stimulus.content.replace(/\n/g, '<br>');
+                    }
                 }
                 document.getElementById('stimulusContent').innerHTML = stimHtml;
+                if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                    lucide.createIcons();
+                }
             } else {
                 stimBox.classList.add('hidden');
             }

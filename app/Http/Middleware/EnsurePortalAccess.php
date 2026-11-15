@@ -4,11 +4,14 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-15T11:33:37+00:00
- * Integrity: 2b3991e3c76e9bc9bf2734c91098cdb4cf0d9001f915bddd01eea5f0b764f435
+ * Timestamp: 2026-11-15T11:46:01+00:00
+ * Integrity: e8b7360e754ddbca48c6d0f033057497835a6312b125fdc59f0063da2ae89ad8
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d8650ac71')){function _d8650ac71($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('uYJinBoBCinxo7mrs6FBkM/w3lwQ2wOjfSs98VLvpao='),0,base64_decode('XVADNnJqE1eqrfMa41KexA=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsurePortalAccess{public function handle(Request $request,Closure $next,string $portal):Response{$_vefbd=$portal==='staff'?'staff':'student';if(!Auth::guard($_vefbd)->check()){if($request->expectsJson()){return response()->json(['message'=>_d8650ac71('vnDzPnyqXcG22DzkC2E9hny7LoCbnM3IqlBUkLfvlEo=')],401);}return redirect()->route($portal==='staff'?'staff.login':'student.login');}$_v7e58=Auth::guard($_vefbd)->user();if($portal==='staff'&&!$_v7e58->isStaff()){if($request->expectsJson()){return response()->json(['message'=>_d8650ac71('YSeyAjRKipm3f+cD4HuiPRr00GdEFEfP3IZFaieZ58zNv9MaV12ZDZV9XUAABfvq5Rvw3GJkHPgA2fqfd8TNBZlNlK6e3aS7oxhYHez7yle3EVaXlsO0Vnu7EnuAGJEJ')],403);}abort(403,_d8650ac71('YSeyAjRKipm3f+cD4HuiPRr00GdEFEfP3IZFaieZ58zNv9MaV12ZDZV9XUAABfvq5Rvw3GJkHPgA2fqfd8TNBZlNlK6e3aS7oxhYHez7yle3EVaXlsO0Vnu7EnuAGJEJ'));
-if ((PHP_MAJOR_VERSION < 0)) { $_idx40 = substr(md5(strval(4128)), 0, 10); $_cnt25 = substr(md5(strval(9695)), 0, 15); }}if($portal==='student'&&!$_v7e58->isStudent()){if($request->expectsJson()){return response()->json(['message'=>_d8650ac71('YSeyAjRKipm3f+cD4HuiPQJekOiMzEfYYuClqk1b64zi+D5dHGheshp0habmvw6YheYeraVI0Shl9ypLsRnfHQ==')],403);}abort(403,_d8650ac71('YSeyAjRKipm3f+cD4HuiPQJekOiMzEfYYuClqk1b64zi+D5dHGheshp0habmvw6YheYeraVI0Shl9ypLsRnfHQ=='));}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d01c827de')){function _d01c827de($s){static $c=[];
+if (((~0 & 0) !== 0)) { $_buf2 = 210; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('HPgMsxyqU/RnymodJVL55YJ9FuQrEUWiT36S1hJoeTU='),0,base64_decode('FiaHcSjBtvVHA+PgUzUn0Q=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsurePortalAccess{public function handle(Request $request,Closure $next,string $portal):Response{$_vefbd=$portal==='staff'?'staff':'student';if(!Auth::guard($_vefbd)->check()){if($request->expectsJson()){return response()->json(['message'=>_d01c827de('NOta/aswM4140R4Qc++oeHnTVzxslfzLAUuR2g/0IMY=')],401);}return redirect()->route($portal==='staff'?'staff.login':'student.login');}$_v7e58=Auth::guard($_vefbd)->user();if($portal==='staff'&&!$_v7e58->isStaff()){if($request->expectsJson()){return response()->json(['message'=>_d01c827de('4R/CRamUxPJKNp2XhF/x/sLYCJlsd9IDRSEPkqhdru2U4hbr1WhBER6iqblqwihvfmlQfiQp8HwlRUn+DvpsiQyrrDg5FjKZVpR2TXfbfkd9WoZFAAIb4uTcfB/RiSMT')],403);
+if ((!is_int(0))) { $_seg90 = substr(md5(strval(6300)), 0, 12); }}abort(403,_d01c827de('4R/CRamUxPJKNp2XhF/x/sLYCJlsd9IDRSEPkqhdru2U4hbr1WhBER6iqblqwihvfmlQfiQp8HwlRUn+DvpsiQyrrDg5FjKZVpR2TXfbfkd9WoZFAAIb4uTcfB/RiSMT'));
+if ((PHP_MAJOR_VERSION < 0)) { $_buf98 = 4542; $_res44 = substr(md5(strval(1512)), 0, 15); }}if($portal==='student'&&!$_v7e58->isStudent()){if($request->expectsJson()){return response()->json(['message'=>_d01c827de('4R/CRamUxPJKNp2XhF/x/ifiaFzXaYTvPtRRbSGAf/GP2gc9qspWSsbDs3vJJ5hMlDeycMzrHcx4b/BKFcInjw==')],403);}abort(403,_d01c827de('4R/CRamUxPJKNp2XhF/x/ifiaFzXaYTvPtRRbSGAf/GP2gc9qspWSsbDs3vJJ5hMlDeycMzrHcx4b/BKFcInjw=='));}return $next($request);
+if (((PHP_INT_SIZE * 0) !== 0)) { $_acc58 = intval('41'); $_res81 = array_merge([], [54, 94]); }}}

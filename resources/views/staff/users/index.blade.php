@@ -104,25 +104,25 @@
                 </div>
 
                 <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="text-default-500 font-medium text-[11px] hidden md:inline">Aksi Massal:</span>
+                    <span class="text-default-500 font-medium text-xs hidden md:inline whitespace-nowrap">Aksi Massal:</span>
                     
                     <!-- Dropdown Ubah Status Massal -->
-                    <select id="bulkStatusSelect" disabled class="form-select text-xs py-1.5 px-3 rounded bg-white border border-default-300 text-default-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <select id="bulkStatusSelect" disabled class="form-select text-xs h-9 py-1 px-3 rounded-md bg-default-100 border border-default-200 text-default-400 disabled:cursor-not-allowed transition">
                         <option value="">-- Ubah Status --</option>
                         <option value="active">Jadikan Aktif</option>
                         <option value="inactive">Jadikan Nonaktif</option>
                         <option value="locked">Kunci Akun</option>
                     </select>
 
-                    <button type="button" id="applyStatusBtn" disabled onclick="executeBulkStatus()" class="btn btn-sm bg-primary text-white hover:bg-primary-hover font-semibold shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition inline-flex items-center gap-1.5">
-                        <i data-lucide="check" class="size-3.5"></i>
-                        <span>Terapkan</span>
+                    <button type="button" id="applyStatusBtn" disabled onclick="executeBulkStatus()" class="btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5">
+                        <i data-lucide="check" class="size-4 shrink-0"></i>
+                        <span class="whitespace-nowrap">Terapkan</span>
                     </button>
 
                     <!-- Hapus Terpilih -->
-                    <button type="button" id="bulkDeleteBtn" disabled onclick="openBulkDeleteModal()" class="btn btn-sm bg-danger text-white hover:bg-danger/90 font-semibold inline-flex items-center gap-1.5 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition">
-                        <i data-lucide="trash-2" class="size-3.5"></i>
-                        <span>Hapus Terpilih</span>
+                    <button type="button" id="bulkDeleteBtn" disabled onclick="openBulkDeleteModal()" class="btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5">
+                        <i data-lucide="trash-2" class="size-4 shrink-0"></i>
+                        <span class="whitespace-nowrap">Hapus Terpilih</span>
                     </button>
                 </div>
             </div>
@@ -803,9 +803,18 @@
                 badge.classList.add('bg-primary', 'text-white');
             }
             if (clearBtn) clearBtn.classList.remove('hidden');
-            if (statusSelect) statusSelect.disabled = false;
-            if (applyBtn) applyBtn.disabled = false;
-            if (deleteBtn) deleteBtn.disabled = false;
+            if (statusSelect) {
+                statusSelect.disabled = false;
+                statusSelect.className = 'form-select text-xs h-9 py-1 px-3 rounded-md bg-white border border-default-300 text-default-700 transition cursor-pointer';
+            }
+            if (applyBtn) {
+                applyBtn.disabled = false;
+                applyBtn.className = 'btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-primary text-white hover:bg-primary-hover font-semibold shadow-xs cursor-pointer transition-all inline-flex items-center justify-center gap-1.5';
+            }
+            if (deleteBtn) {
+                deleteBtn.disabled = false;
+                deleteBtn.className = 'btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-danger text-white hover:bg-danger/90 font-semibold shadow-xs cursor-pointer transition-all inline-flex items-center justify-center gap-1.5';
+            }
         } else {
             if (bar) {
                 bar.classList.remove('bg-primary/5', 'border-primary/30', 'ring-1', 'ring-primary/20');
@@ -819,9 +828,16 @@
             if (statusSelect) {
                 statusSelect.value = '';
                 statusSelect.disabled = true;
+                statusSelect.className = 'form-select text-xs h-9 py-1 px-3 rounded-md bg-default-100 border border-default-200 text-default-400 disabled:cursor-not-allowed transition';
             }
-            if (applyBtn) applyBtn.disabled = true;
-            if (deleteBtn) deleteBtn.disabled = true;
+            if (applyBtn) {
+                applyBtn.disabled = true;
+                applyBtn.className = 'btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5';
+            }
+            if (deleteBtn) {
+                deleteBtn.disabled = true;
+                deleteBtn.className = 'btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5';
+            }
         }
     }
 

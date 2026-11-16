@@ -152,7 +152,7 @@ class ImportQuestionsCommand extends Command
             );
 
             $this->newLine();
-            $this->info("✓ BERHASIL! Sebanyak {$count} butir soal berhasil diimpor ke Bank Soal [{$questionBank->code}].");
+            $this->info("[BERHASIL] Sebanyak {$count} butir soal berhasil diimpor ke Bank Soal [{$questionBank->code}].");
             $this->line("Total Soal Aktif di Bank : <fg=cyan>{$questionBank->questions()->count()}</>");
             $this->line("Total Stimulus / Wacana  : <fg=cyan>{$questionBank->stimuli()->count()}</>");
 

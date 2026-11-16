@@ -271,10 +271,10 @@ function executeSmtpTest() {
         if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
         if (res.status === 200 && res.body.success) {
             box.className = 'p-3 rounded text-xs font-medium border bg-emerald-50 text-emerald-800 border-emerald-200 block';
-            box.innerHTML = '✓ ' + res.body.message;
+            box.innerHTML = res.body.message;
         } else {
             box.className = 'p-3 rounded text-xs font-medium border bg-rose-50 text-rose-800 border-rose-200 block';
-            box.innerHTML = '✕ ' + (res.body.message || 'Gagal mengirim email.');
+            box.innerHTML = res.body.message || 'Gagal mengirim email.';
         }
     })
     .catch(err => {
@@ -282,7 +282,7 @@ function executeSmtpTest() {
         btn.innerHTML = '<i data-lucide="send" class="size-4"></i><span>Kirim Email Uji Coba</span>';
         if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
         box.className = 'p-3 rounded text-xs font-medium border bg-rose-50 text-rose-800 border-rose-200 block';
-        box.innerHTML = '✕ Terjadi kesalahan koneksi jaringan: ' + err;
+        box.innerHTML = 'Terjadi kesalahan koneksi jaringan: ' + err;
     });
 }
 </script>

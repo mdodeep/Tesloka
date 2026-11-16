@@ -10,7 +10,7 @@
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-3 max-w-2xl">
                 <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                    Selamat Datang, {{ auth('staff')->user()->name }} 👋
+                    Selamat Datang, {{ auth('staff')->user()->name }}
                 </h2>
                 <p class="text-sm text-white/70">
                     Pusat komando operasional Computer Based Test (CBT) TESLOKA. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.

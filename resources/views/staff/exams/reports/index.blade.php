@@ -181,7 +181,7 @@
                                         <td class="py-2.5 px-3 text-center whitespace-nowrap font-mono font-bold {{ $dist['is_correct'] ? 'text-emerald-700' : 'text-default-700' }}">
                                             {{ $dist['option_key'] }}
                                             @if($dist['is_correct'])
-                                                <span class="text-[10px] text-emerald-600 font-sans font-bold">✓</span>
+                                                <i data-lucide="check" class="size-3 text-emerald-600 inline ml-0.5"></i>
                                             @endif
                                         </td>
                                         <td class="py-2.5 px-3 text-center font-mono font-semibold text-default-700 whitespace-nowrap">

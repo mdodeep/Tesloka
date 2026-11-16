@@ -74,9 +74,9 @@
                             <div>
                                 <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Mode Pelaksanaan CBT *</label>
                                 <select name="delivery_mode" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium" required>
-                                    <option value="online" {{ old('delivery_mode', 'online') == 'online' ? 'selected' : '' }}>🌐 Daring / Jarak Jauh (Online CBT Mandiri)</option>
-                                    <option value="offline" {{ old('delivery_mode') == 'offline' ? 'selected' : '' }}>🏢 Luring / Tatap Muka (Lab CBT Terjadwal)</option>
-                                    <option value="hybrid" {{ old('delivery_mode') == 'hybrid' ? 'selected' : '' }}>🔄 Hybrid (Daring & Luring Fleksibel)</option>
+                                    <option value="online" {{ old('delivery_mode', 'online') == 'online' ? 'selected' : '' }}>Daring / Jarak Jauh (Online CBT Mandiri)</option>
+                                    <option value="offline" {{ old('delivery_mode') == 'offline' ? 'selected' : '' }}>Luring / Tatap Muka (Lab CBT Terjadwal)</option>
+                                    <option value="hybrid" {{ old('delivery_mode') == 'hybrid' ? 'selected' : '' }}>Hybrid (Daring & Luring Fleksibel)</option>
                                 </select>
                             </div>
                         </div>

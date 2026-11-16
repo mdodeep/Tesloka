@@ -396,7 +396,7 @@
                     <!-- Standardized Tailwick Page Title & Breadcrumbs -->
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-5">
                         <div class="min-w-0 flex-1">
-                            <div class="flex items-center gap-1.5 text-[11px] font-medium text-default-400 mb-1">
+                            <div class="flex items-center gap-1.5 text-[11px] font-medium text-default-400 mb-1 flex-wrap">
                                 <a href="{{ route('staff.dashboard') }}" class="text-default-500 hover:text-primary transition">Dashboard</a>
                                 @hasSection('page-parent')
                                     <i data-lucide="chevron-right" class="size-3 text-default-300"></i>
@@ -404,16 +404,16 @@
                                 @endif
                                 @hasSection('page-title')
                                     <i data-lucide="chevron-right" class="size-3 text-default-300"></i>
-                                    <span class="text-default-700 font-semibold truncate max-w-xs sm:max-w-md">@yield('page-title')</span>
+                                    <span class="text-default-700 font-semibold truncate max-w-xs sm:max-w-md md:max-w-xl">@yield('page-title')</span>
                                 @endif
                             </div>
-                            <h4 class="text-default-900 text-lg font-semibold truncate">@yield('page-title', 'Dashboard')</h4>
+                            <h4 class="text-default-900 text-lg font-semibold break-words">@yield('page-title', 'Dashboard')</h4>
                             @hasSection('page-subtitle')
-                                <p class="text-xs text-default-500 mt-0.5 truncate max-w-3xl">@yield('page-subtitle')</p>
+                                <p class="text-xs text-default-500 mt-0.5 break-words">@yield('page-subtitle')</p>
                             @endif
                         </div>
                         @hasSection('page-actions')
-                            <div class="flex items-center gap-2 shrink-0 flex-wrap sm:flex-nowrap justify-start lg:justify-end">
+                            <div class="flex items-center gap-2 shrink-0 flex-wrap justify-start lg:justify-end">
                                 @yield('page-actions')
                             </div>
                         @endif

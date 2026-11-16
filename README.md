@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-289%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="289 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-2.125%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.125 Assertions">
+  <img src="https://img.shields.io/badge/Tests-302%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="302 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-2.195%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.195 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwick%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwick Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -29,6 +29,7 @@
 - [Arsitektur Tiga Portal Mandiri](#arsitektur-tiga-portal-mandiri)
 - [16 Modul Utama Portal Staf & Administrasi](#16-modul-utama-portal-staf--administrasi)
 - [Fitur Utama & Keunggulan Sistem](#fitur-utama--keunggulan-sistem)
+- [Tutorial Operasional Lengkap Pasca-Deployment (Initial Setup to Daily Use)](#tutorial-operasional-lengkap-pasca-deployment-initial-setup-to-daily-use)
 - [Integrasi Asesmen PTIQ English Proficiency Test (140 Butir)](#integrasi-asesmen-ptiq-english-proficiency-test-140-butir)
 - [Standardisasi Antarmuka Tailwick & Multi-Device 12 Viewport](#standardisasi-antarmuka-tailwick--multi-device-12-viewport)
 - [Matriks Sizing & Spesifikasi Server VPS](#matriks-sizing--spesifikasi-server-vps)
@@ -137,6 +138,59 @@ Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang t
    Pembuatan berkas Microsoft Word `.docx` asli tanpa library eksternal berat menggunakan `ZipArchive` bawaan PHP, serta perenderan dokumen cetak resmi PDF biner di server via `dompdf`.
 9. **Portal Verifikasi Publik Berpagar KKM:**
    Publik dapat memverifikasi nomor resi kelulusan atau memindai QR Code sertifikat secara instan pada `https://sertifikat.tesloka.test/` dengan caching Redis ber-TTL 1 jam, di mana peserta yang belum lulus KKM secara tegas ditolak penerbitan sertifikatnya.
+10. **Mode Ujian Daring Jarak Jauh (Online Remote):**
+    Opsi perancangan ujian `delivery_mode: online` yang membebaskan institusi dari kewajiban alokasi ruang lab komputer fisik. Peserta dapat mengerjakan ujian dari rumah secara fleksibel dengan tetap terlindungi oleh heartbeat telemetri dan pengawasan webcam real-time.
+11. **Mode Sertifikasi Bahasa / TOEFL / EPT Bebas KKM:**
+    Pengaturan `is_certification: true` yang menonaktifkan konsep lulus/gagal KKM biner dan beralih ke evaluasi murni berdasarkan band score total capaian dan predikat kecakapan (*Elementary, Intermediate, Advanced*).
+12. **WebRTC Live-Only Camera Proctoring & CCTV Zoom Grid (DEC-004):**
+    Widget kamera Picture-in-Picture di antarmuka siswa yang secara otomatis menangkap snapshot saat mulai ujian, secara berkala setiap 45 detik, saat berpindah tab (*tab blur*), dan saat keluar layar penuh (*fullscreen exit*). Sisi pengawas dilengkapi **Modal Zoom CCTV** interaktif beresolusi tinggi, telemetri live, histori foto insiden, dan penangkapan snapshot instan on-demand.
+13. **Master Data Akademik Ber-Retensi Tab & Enrolment Rombel:**
+    Navigasi master akademik yang mempertahankan tab aktif saat submit data, filter jenjang program studi (S1, S2, D3), serta alur pendaftaran siswa ke rombongan belajar dengan fasilitas cetak kartu ujian rombel massal.
+
+---
+
+## Tutorial Operasional Lengkap Pasca-Deployment (Initial Setup to Daily Use)
+
+Panduan operasional lengkap step-by-step telah didokumentasikan secara rinci pada:
+> **Dokumentasi Lengkap:** [`docs/TUTORIAL-PENGGUNAAN-LENGKAP.md`](docs/TUTORIAL-PENGGUNAAN-LENGKAP.md)
+
+### Ringkasan Alur Operasional 12 Langkah:
+1. **Initial Setup Pasca-Deployment:**
+   - Jalankan `php artisan migrate --force` dan `php artisan storage:link`.
+   - Inisialisasi akun Super Administrator pertama via `php artisan db:seed --class=ProductionCleanDatabaseSeeder --force`.
+   - Login ke `https://staff.institusi.ac.id/staff/login` dengan username `admin` dan password `Tesloka2026!`.
+2. **Branding & Konfigurasi Lembaga:**
+   - Masuk ke menu `/staff/settings/general` untuk mengatur nama lembaga, alamat, NIP kepala lembaga, logo institusi, dan favicon.
+   - Masuk ke `/staff/settings/smtp` untuk konfigurasi server email notifikasi transaksional.
+3. **Penyusunan Master Data Akademik Terstruktur:**
+   - Masuk ke menu `/staff/academic` dan isi data berurutan: Tahun Ajaran -> Semester -> Jurusan & Dept -> Kelas & Rombel -> Mata Pelajaran.
+4. **Pendaftaran Pengguna & Enrolment Rombel:**
+   - Masuk ke `/staff/users` untuk membuat akun Guru dan Pengawas.
+   - Impor massal data siswa via berkas template Excel/CSV.
+   - Daftarkan siswa ke rombongan belajar di `/staff/academic?tab=classes` untuk pencetakan kartu kelas massal.
+5. **Penyusunan Bank Soal & Stimulus Media:**
+   - Masuk ke `/staff/question-banks` untuk membuat bank soal dari 7 tipe soal terstandar.
+   - Manfaatkan Quill Snow WYSIWYG, palet rumus KaTeX, dan unggah audio MP3 stimulus listening.
+   - Atau gunakan CLI mandiri: `php artisan tesloka:import-questions berkas.zip`.
+6. **Perancangan Ujian (Exam Creation):**
+   - Masuk ke `/staff/exams` dan pilih mode pelaksanaan (Daring vs Onsite) serta mode penilaian (Sertifikasi Bebas KKM vs Reguler).
+   - Bentuk paket soal, kunci paket (*immutable snapshot*), dan terbitkan ujian.
+7. **Penjadwalan Sesi & Rilis Token:**
+   - Masuk ke `/staff/sessions` untuk membuat sesi, mendaftarkan peserta, mencetak 7 dokumen legalitas A4 (Kartu, Tempelan Meja, Daftar Hadir, Berita Acara), dan merilis token ujian.
+8. **Pelaksanaan Ujian Peserta (Student CBT):**
+   - Siswa login di `https://ujian.institusi.ac.id/`, memverifikasi webcam, memasukkan token sesi, dan mengerjakan soal.
+   - Dilindungi oleh sinkronisasi timer NTP absolut, autosave transaksional ber-sequence, dan layout mobile responsif.
+9. **Pengawasan Real-Time & CCTV Zoom Grid:**
+   - Pengawas memantau kemajuan pengerjaan siswa di `/staff/sessions/{id}/monitor` dan `/staff/sessions/{id}/camera-grid`.
+   - Menggunakan fitur Zoom CCTV untuk inspeksi visual siswa, cek riwayat insiden, dan tombol ambil snapshot seketika.
+10. **Koreksi & Analisis Psikometri:**
+    - Soal objektif dinilai otomatis; soal esai dikoreksi di `/staff/grading` dengan fitur *Blind Marking*.
+    - Buka tab Analitik untuk evaluasi daya beda butir ($D$), tingkat kesukaran ($P$), dan efektivitas distraktor.
+11. **Yudisium & Penerbitan Sertifikat:**
+    - Kunci hasil nilai di `/staff/graduation`, terbitkan SKL dan Sertifikat Kelulusan resmi A4.
+12. **Verifikasi Publik Kriptografis & Backup:**
+    - Masyarakat umum memvalidasi keaslian dokumen di `https://sertifikat.institusi.ac.id/` via nomor resi atau scan QR Code.
+    - Lakukan pencadangan basis data berkala di `/staff/backups`.
 
 ---
 

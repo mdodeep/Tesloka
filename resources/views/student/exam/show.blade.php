@@ -171,6 +171,39 @@
             <!-- Kolom Kanan: Palet Nomor Soal & Ringkasan (1 Kolom) -->
             <div id="paletteSidebar" class="hidden lg:block fixed inset-0 lg:static z-50 lg:z-auto bg-black/40 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none flex items-center justify-center lg:items-stretch lg:justify-start p-3 sm:p-4 lg:p-0">
                 <div class="bg-white border border-default-200 rounded-md p-4 sm:p-5 shadow-2xl lg:shadow-xs space-y-4 sm:space-y-5 w-full max-w-sm lg:max-w-none max-h-[90vh] lg:max-h-none overflow-y-auto">
+
+                    @if($attempt->exam->isCameraProctoringEnabled())
+                        <!-- Widget Kamera Pengawas Peserta (Live Proctoring & Anti-Cheat) -->
+                        <div id="cbtWebcamWidget" class="bg-slate-900 border border-slate-800 rounded-md p-3 text-white space-y-2.5 shadow-sm">
+                            <div class="flex items-center justify-between text-xs pb-1.5 border-b border-slate-800">
+                                <div class="flex items-center gap-1.5 font-bold text-slate-200">
+                                    <span id="cbtCamIndicator" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                                    <span>Kamera Pengawas</span>
+                                </div>
+                                <span id="cbtCamBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-amber-300">
+                                    Meminta Izin...
+                                </span>
+                            </div>
+
+                            <div class="aspect-video bg-black rounded overflow-hidden relative flex items-center justify-center border border-slate-800">
+                                <video id="cbtWebcamVideo" autoplay playsinline muted class="w-full h-full object-cover -scale-x-100"></video>
+                                <canvas id="cbtSnapshotCanvas" class="hidden" width="640" height="480"></canvas>
+                                <div id="cbtWebcamFallback" class="absolute inset-0 flex flex-col items-center justify-center text-center p-3 bg-slate-950/95 text-slate-400 z-10">
+                                    <i data-lucide="camera-off" class="size-6 text-rose-400 mb-1"></i>
+                                    <span id="cbtWebcamFallbackText" class="text-[11px] font-medium text-slate-300">Menghubungkan kamera...</span>
+                                    <button type="button" onclick="initCameraProctoring(true)" class="mt-2 px-2.5 py-1 bg-primary hover:bg-primary-hover text-white text-[11px] font-semibold rounded shadow-xs transition cursor-pointer">
+                                        Aktifkan Kamera
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between text-[10px] text-slate-400">
+                                <span>Status: <strong id="cbtCamStatusText" class="text-slate-200">Menyiapkan</strong></span>
+                                <span id="cbtSnapCounter" class="font-mono text-slate-400">0 Snapshot</span>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="flex items-center justify-between pb-3 border-b border-default-100">
                         <h3 class="text-xs font-bold text-default-800 uppercase tracking-wide">Navigasi Soal</h3>
                         <div class="flex items-center gap-2">
@@ -298,6 +331,8 @@
             timeUrl: "{{ route('student.exam.time', $attempt) }}",
             heartbeatUrl: "{{ route('student.exam.heartbeat', $attempt) }}",
             announcementsUrl: "{{ route('student.exam.announcements', $attempt) }}",
+            snapshotUrl: "{{ route('student.exam.incident-snapshot', $attempt) }}",
+            cameraProctoring: {{ $attempt->exam->isCameraProctoringEnabled() ? 'true' : 'false' }},
             submitUrl: "{{ route('student.exam.submit', $attempt) }}",
             csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             questions: [
@@ -650,12 +685,135 @@
             setInterval(updateTimerDisplay, 1000);
         }
 
+        // ==========================================
+        // WEBCAM & CAMERA PROCTORING ENGINE (DEC-004)
+        // ==========================================
+        let webcamStream = null;
+        let isCameraActive = false;
+        let snapshotCount = 0;
+
+        async function initCameraProctoring(isUserClick = false) {
+            if (!window.CBT_DATA.cameraProctoring) return;
+
+            const fallbackEl = document.getElementById('cbtWebcamFallback');
+            const fallbackText = document.getElementById('cbtWebcamFallbackText');
+            const badgeEl = document.getElementById('cbtCamBadge');
+            const indicatorEl = document.getElementById('cbtCamIndicator');
+            const statusTextEl = document.getElementById('cbtCamStatusText');
+            const videoEl = document.getElementById('cbtWebcamVideo');
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                if (fallbackText) fallbackText.innerText = 'Peramban tidak mendukung akses kamera.';
+                if (badgeEl) {
+                    badgeEl.innerText = 'Tidak Didukung';
+                    badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300';
+                }
+                return;
+            }
+
+            try {
+                if (fallbackText) fallbackText.innerText = 'Meminta izin kamera...';
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'user'
+                    },
+                    audio: false
+                });
+
+                webcamStream = stream;
+                if (videoEl) {
+                    videoEl.srcObject = stream;
+                    await videoEl.play();
+                }
+
+                isCameraActive = true;
+                if (fallbackEl) fallbackEl.classList.add('hidden');
+                if (badgeEl) {
+                    badgeEl.innerText = 'Live Mengawasi';
+                    badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800';
+                }
+                if (indicatorEl) {
+                    indicatorEl.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+                }
+                if (statusTextEl) statusTextEl.innerText = 'Aktif & Terhubung';
+
+                // Ambil snapshot kehadiran awal setelah kamera stabil (2 detik)
+                setTimeout(() => takeAndUploadSnapshot('exam_start'), 2000);
+
+                // Kirim heartbeat pertama dengan status active
+                sendHeartbeat({ camera_status: 'active' });
+
+            } catch (err) {
+                console.warn('Akses kamera tidak diizinkan atau gagal:', err);
+                isCameraActive = false;
+                if (fallbackEl) fallbackEl.classList.remove('hidden');
+                if (fallbackText) fallbackText.innerText = 'Izin kamera belum diberikan.';
+                if (badgeEl) {
+                    badgeEl.innerText = 'Kamera Mati';
+                    badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800';
+                }
+                if (indicatorEl) {
+                    indicatorEl.className = 'w-2 h-2 rounded-full bg-rose-500';
+                }
+                if (statusTextEl) statusTextEl.innerText = 'Izin Ditolak';
+                sendHeartbeat({ camera_status: 'denied' });
+            }
+        }
+
+        function captureFrameBase64() {
+            const video = document.getElementById('cbtWebcamVideo');
+            const canvas = document.getElementById('cbtSnapshotCanvas');
+            if (!video || !canvas || !isCameraActive || video.videoWidth === 0) return null;
+
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL('image/jpeg', 0.65);
+        }
+
+        function takeAndUploadSnapshot(reason = 'periodic_check') {
+            if (!window.CBT_DATA.cameraProctoring) return;
+            const base64 = captureFrameBase64();
+            if (!base64) return;
+
+            fetch(window.CBT_DATA.snapshotUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': window.CBT_DATA.csrfToken
+                },
+                body: JSON.stringify({
+                    image_base64: base64,
+                    trigger_reason: reason,
+                    metadata: {
+                        timestamp: new Date().toISOString(),
+                        current_question: (currentIndex + 1),
+                        is_tab_focused: document.hasFocus(),
+                        is_fullscreen: !(!document.fullscreenElement)
+                    }
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'uploaded') {
+                    snapshotCount++;
+                    const counterEl = document.getElementById('cbtSnapCounter');
+                    if (counterEl) counterEl.innerText = `${snapshotCount} Snapshot`;
+                }
+            })
+            .catch(e => console.warn('Gagal upload snapshot:', e));
+        }
+
         function sendHeartbeat(options = {}) {
             const payload = {
                 is_fullscreen: !(!document.fullscreenElement),
                 is_tab_focused: document.hasFocus(),
                 battery_level: null,
-                camera_status: 'active',
+                camera_status: isCameraActive ? 'active' : 'inactive',
                 ...options
             };
 
@@ -688,6 +846,10 @@
                     alert('Sesi perangkat Anda telah di-reset / di-logout paksa oleh Pengawas Ujian. Jawaban Anda tersimpan dengan aman di server. Silakan hubungi pengawas atau masuk kembali.');
                     window.location.href = "{{ route('student.login') }}";
                     return;
+                }
+
+                if (data.instruction === 'take_snapshot') {
+                    takeAndUploadSnapshot('proctor_requested');
                 }
 
                 if (data.remaining_seconds !== undefined) {
@@ -855,14 +1017,34 @@
         }
 
         function startServerSyncHeartbeat() {
+            // Inisialisasi Kamera Pengawas (DEC-004)
+            if (window.CBT_DATA.cameraProctoring) {
+                initCameraProctoring();
+                // Pengambilan foto snapshot berkala setiap 45 detik
+                setInterval(() => {
+                    if (isCameraActive) {
+                        takeAndUploadSnapshot('periodic_check');
+                    }
+                }, 45000);
+            }
+
             // Heartbeat live telemetri setiap 15 detik
             sendHeartbeat();
             setInterval(sendHeartbeat, 15000);
 
             // Deteksi seketika saat window blur atau fullscreen exit
-            window.addEventListener('blur', () => sendHeartbeat({ is_tab_focused: false }));
+            window.addEventListener('blur', () => {
+                sendHeartbeat({ is_tab_focused: false });
+                takeAndUploadSnapshot('tab_blur');
+            });
             window.addEventListener('focus', () => sendHeartbeat({ is_tab_focused: true }));
-            document.addEventListener('fullscreenchange', () => sendHeartbeat({ is_fullscreen: !(!document.fullscreenElement) }));
+            document.addEventListener('fullscreenchange', () => {
+                const isFull = !(!document.fullscreenElement);
+                sendHeartbeat({ is_fullscreen: isFull });
+                if (!isFull) {
+                    takeAndUploadSnapshot('fullscreen_exit');
+                }
+            });
         }
 
         function openFinishModal() {

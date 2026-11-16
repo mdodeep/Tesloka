@@ -428,6 +428,11 @@ class Exam extends Model
         return ($this->delivery_mode ?? 'online') === 'online';
     }
 
+    public function isCameraProctoringEnabled(): bool
+    {
+        return (bool) ($this->camera_proctoring_enabled || $this->delivery_mode === 'online');
+    }
+
     public function getDeliveryModeLabel(): string
     {
         return match ($this->delivery_mode) {

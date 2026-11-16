@@ -253,6 +253,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
             // WebRTC Live-Only Camera Proctoring & Incident Snapshots (DEC-004 & FULL-FEATURE Sec 19, 98)
             Route::get('{session}/camera-grid', [ExamCameraController::class, 'cameraGrid'])->name('camera-grid');
+            Route::get('{session}/camera-feed', [ExamCameraController::class, 'cameraFeed'])->name('camera-feed');
             Route::post('{session}/attempts/{attempt}/request-snapshot', [ExamCameraController::class, 'requestSnapshot'])->name('request-snapshot');
             Route::get('snapshots/{snapshot}', [ExamCameraController::class, 'viewSnapshot'])->name('snapshots.view');
         });

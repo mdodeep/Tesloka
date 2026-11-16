@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-302%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="302 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-2.195%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.195 Assertions">
+  <img src="https://img.shields.io/badge/Tests-311%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="311 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-2.225%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.225 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -398,7 +398,7 @@ php artisan tesloka:install --non-interactive --db-name=tesloka --db-user=postgr
 ## Panduan Deployment Produksi (Linux Ubuntu / aaPanel)
 
 Panduan instalasi langkah-demi-langkah lengkap untuk server Linux Ubuntu dan panel aaPanel tersedia pada:
-👉 **[`deploy/INSTALL-AAPANEL.md`](deploy/INSTALL-AAPANEL.md)**
+[deploy/INSTALL-AAPANEL.md](deploy/INSTALL-AAPANEL.md)
 
 ### Ringkasan Langkah Cepat Produksi:
 1. **Persiapan OS Linux & Swap File 2–4 GB:**
@@ -487,22 +487,29 @@ Panduan instalasi langkah-demi-langkah lengkap untuk server Linux Ubuntu dan pan
 ## Perintah CLI Artisan Bawaan
 
 ```bash
-# 1. Uji Kesiapan Produksi (Memeriksa 8 Indikator Kritis Sistem):
+# 1. Pemasang Sistem Headless CLI (Interaktif atau Non-Interaktif):
+php artisan tesloka:install
+php artisan tesloka:install --non-interactive --db-name=tesloka --db-user=postgres --admin-email=admin@institusi.ac.id
+
+# 2. Impor Paket Soal Cepat Mandiri (Format ZIP Media Bundle / XLSX):
+php artisan tesloka:import-questions storage/app/PTIQ_EPT_Paket_A_Media_Bundle.zip --bank="QB-EPT-A" --subject="ENG-01"
+
+# 3. Uji Kesiapan Produksi (Memeriksa 8 Indikator Kritis Sistem):
 php artisan tesloka:production-check
 
-# 2. Menjalankan Seluruh Automated Test Suite (289 Tests, 2.125 Assertions):
+# 4. Menjalankan Seluruh Automated Test Suite (311 Tests, 2.225 Assertions):
 php artisan test
 
-# 3. Simulasi Beban Pengerjaan & Autosave Bersamaan:
+# 5. Simulasi Beban Pengerjaan & Autosave Bersamaan:
 php artisan tesloka:simulate-load --students=50 --answers=10
 
-# 4. Membersihkan Seluruh Cache Laravel:
+# 6. Membersihkan Seluruh Cache Laravel:
 php artisan optimize:clear
 
-# 5. Menjalankan Antrean Queue Worker secara Manual:
+# 7. Menjalankan Antrean Queue Worker secara Manual:
 php artisan queue:work redis --tries=3
 
-# 6. Pipeline Rilis & Obfuskasi Publik Otomatis (PowerShell):
+# 8. Pipeline Rilis & Obfuskasi Publik Otomatis (PowerShell):
 powershell -ExecutionPolicy Bypass -File .\scripts\sync-obfuscated-release.ps1
 ```
 
@@ -512,14 +519,15 @@ powershell -ExecutionPolicy Bypass -File .\scripts\sync-obfuscated-release.ps1
 
 Sistem TESLOKA dibangun dengan standar pengujian mutlak berbasis bukti eksekusi (*evidence-based quality assurance*):
 
-- **Backend Automated Test Suite:** **289 tests, 2.125 assertions — 100% PASS** (0 errors, 0 failures, durasi 117.3s di PostgreSQL).
-- **Headless Browser Multi-Device Testing:** **300 pengujian interaksi peramban (Puppeteer)** pada 25 halaman utama di 3 portal lintas 12 ukuran layar (320px hingga 1920px) menghasilkan **100% PASS (0 horizontal overflow dan 0 runtime console errors)**.
+- **Backend Automated Test Suite:** **311 tests, 2.225 assertions — 100% PASS** (0 errors, 0 failures, durasi 123.8s di PostgreSQL 18.6 / 16).
+- **Headless Browser Multi-Device Testing:** **156 pengujian interaksi peramban (Puppeteer)** pada 25 halaman utama di 3 portal lintas 12 ukuran layar (320px hingga 1920px) menghasilkan **100% PASS (0 horizontal overflow dan 0 runtime console errors)**.
 - **Code Style Linting:** 100% lulus standar PSR-12 via Laravel Pint (`vendor/bin/pint --test`).
 - **Frontend Asset Compilation:** 2.758 modul terkompilasi bersih via Vite & Rollup dalam ~2.8 detik.
-- **Protokol Zero-Input & Pipeline Rilis Obfuskasi:** Sinkronisasi satu arah otomatis ke repositori publik terdistribusi (`D:\laragon\www\tesloka-obfuscated`) dengan obfuskasi kode PHP bisnis layer (39 controllers, 12 services, jobs, middleware), 0 syntax error, dan commit otomatis tanpa repot bagi pengguna.
+- **Protokol Zero-Input & Pipeline Rilis Obfuskasi:** Sinkronisasi satu arah otomatis ke repositori publik terdistribusi (`D:\laragon\www\tesloka-obfuscated`) dengan obfuskasi kode PHP bisnis layer (40 controllers, 12 services, jobs, middleware), 0 syntax error, dan commit otomatis tanpa repot bagi pengguna.
 
 Dokumentasi lengkap hasil pengujian dan matriks keterlacakan fitur tersedia di:
-👉 **[`docs/HASIL-PENGUJIAN.md`](docs/HASIL-PENGUJIAN.md)** dan **[`docs/PROGRESS.md`](docs/PROGRESS.md)**.
+- [docs/HASIL-PENGUJIAN.md](docs/HASIL-PENGUJIAN.md)
+- [docs/PROGRESS.md](docs/PROGRESS.md)
 
 ---
 

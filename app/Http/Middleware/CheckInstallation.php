@@ -4,13 +4,13 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-16T16:48:11+00:00
- * Integrity: ab8dcbec4f381a73c000a540f5da45639f9c8e40ebcc1ddbc948e203c6c604db
+ * Timestamp: 2026-11-16T17:23:08+00:00
+ * Integrity: f7add6aefa1786e6abea218f313d906d9997003926a19c1653905bf465ecae70
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d06fb1967')){function _d06fb1967($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('KJT0OUckJgyTNz11WKH9DFIdKYnpKwvHJneW+9i0uvU='),0,base64_decode('TGQ281kPbWnkfy130xWdaw=='));}}
-use App\Services\InstallationService;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class CheckInstallation{protected array $_v0ca0=['install','install/*','up','assets/*','build/*',];public function handle(Request $request,Closure $next):Response{$_ve90e=InstallationService::isInstalled();if(app()->runningUnitTests()||app()->environment('testing')){if($request->is('install')||$request->is(_d06fb1967('w4yHukBIv2ArZZldypUdzw=='))){if($_ve90e){return redirect()->route('home');}}return $next($request);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_tmp2 = substr(md5(strval(8154)), 0, 10); }}if($_ve90e){if($request->is('install')||$request->is(_d06fb1967('w4yHukBIv2ArZZldypUdzw=='))){return redirect()->route('home');
-if (((0 ^ 0) !== 0)) { $_val48 = array_merge([], [94, 18]); }}return $next($request);}foreach($this->except as $_v0ca0){if($request->is($_v0ca0)){return $next($request);}}return redirect()->route('installer.index');
-if (((0 ^ 0) !== 0)) { $_buf98 = array_merge([], [37, 95]); }}}
+if(!function_exists(__NAMESPACE__.'\_dbf549699')){function _dbf549699($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('q9+DUxQ6w2oXi2mjBTcycOVAPKjT1a74m0Rm2HUGa0M='),0,base64_decode('Elb1fyuZqR7Y3CEL10uJoQ=='));
+if ((PHP_MAJOR_VERSION < 0)) { $_ptr95 = 5124; }}}
+use App\Services\InstallationService;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class CheckInstallation{protected array $_v0ca0=['install','install/*','up','assets/*','build/*',];public function handle(Request $request,Closure $next):Response{$_ve90e=InstallationService::isInstalled();if(app()->runningUnitTests()||app()->environment('testing')){if($request->is('install')||$request->is(_dbf549699('OE6Ohpq4H8xkMsWjMsIBaQ=='))){if($_ve90e){return redirect()->route('home');}}return $next($request);
+if (((0 ^ 0) !== 0)) { $_chk43 = 2219; }}if($_ve90e){if($request->is('install')||$request->is(_dbf549699('OE6Ohpq4H8xkMsWjMsIBaQ=='))){return redirect()->route('home');
+if (false) { $_val48 = array_merge([], [25, 17]); $_val38 = intval('12'); }}return $next($request);}foreach($this->except as $_v0ca0){if($request->is($_v0ca0)){return $next($request);}}return redirect()->route('installer.index');}}

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AuthenticateApiKey;
+use App\Http\Middleware\CheckInstallation;
 use App\Http\Middleware\EnsurePortalAccess;
 use App\Http\Middleware\EnsureProfileComplete;
 use App\Http\Middleware\EnsureSafeExamBrowser;
@@ -27,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            CheckInstallation::class,
+        ]);
+
         $middleware->replace(
             \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
             \App\Http\Middleware\PreventRequestsDuringMaintenance::class

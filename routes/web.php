@@ -1,10 +1,27 @@
 <?php
 
+use App\Http\Controllers\InstallerController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PublicVerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+// Web Setup Wizard (Installation System)
+Route::prefix('install')->name('installer.')->group(function () {
+    Route::get('/', [InstallerController::class, 'index'])->name('index');
+    Route::get('/database', [InstallerController::class, 'database'])->name('database');
+    Route::post('/database/test', [InstallerController::class, 'testDatabase'])->name('database.test');
+    Route::post('/database/test-redis', [InstallerController::class, 'testRedis'])->name('redis.test');
+    Route::post('/database', [InstallerController::class, 'saveDatabase'])->name('database.save');
+    Route::get('/institution', [InstallerController::class, 'institution'])->name('institution');
+    Route::post('/institution', [InstallerController::class, 'saveInstitution'])->name('institution.save');
+    Route::get('/admin', [InstallerController::class, 'admin'])->name('admin');
+    Route::post('/admin', [InstallerController::class, 'saveAdmin'])->name('admin.save');
+    Route::get('/process', [InstallerController::class, 'process'])->name('process');
+    Route::post('/execute', [InstallerController::class, 'execute'])->name('execute');
+    Route::get('/finish', [InstallerController::class, 'finish'])->name('finish');
+});
 
 // Root Domain & Subdomain Router (sertifikat.*, staff.*, ujian.*)
 Route::match(['get', 'post'], '/', function (Request $request) {

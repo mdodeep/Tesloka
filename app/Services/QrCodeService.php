@@ -4,14 +4,14 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-16T09:50:58+00:00
- * Integrity: 2266da28b3c509b6852b3f5add15de31b7e4092754260a7df476ef5aa85d8081
+ * Timestamp: 2026-11-16T15:39:44+00:00
+ * Integrity: 2a2ad60b4a5b088efae8ee7fae457498f5a09469e59a4ebc5c695ad163c8ebf1
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_deba418ba')){function _deba418ba($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('hRGcS72uRjKwRSDXUGnXwvwxvcBCmd2Z42JQij3G//k='),0,base64_decode('c5bUbhVFyxyU2spFc8Q3NA=='));
-if (((~0 & 0) !== 0)) { $_acc80 = 5424; $_cnt97 = 9544; }}}
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);$_v79a2=new Writer($_ve28f);
-if (((0 ^ 0) !== 0)) { $_ptr50 = intval('215'); $_chk77 = intval('14'); $_acc27 = $_tmp20 + 75; }$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_deba418ba('/UJMh5dmNZ3gbtYr7ZZZWQ=='),'',$_vd007);$_veb9e=preg_replace(_deba418ba('0RwpHxDqA2usgE3rkQIBO6a6M/Ti3s1gvx4RcNNeyEQ='),'',$_veb9e);
-if (((0 ^ 0) !== 0)) { $_buf20 = $_acc36 + 49; $_seg37 = intval('322'); }return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_deba418ba('5FVK7sJfoOgZ4FIIcCo0KR/QLrY7MgailRDg3EMmQMFBvPLmYSbUJsxM3v9FvU52ju6g2Hcxeqbno9w3hGYyBjrRk7HlBFN2Jld1dJfUnzDBR0orTcdixU+nixOPMRb8')._deba418ba('veiaiEIxLSNJU2dmV0s9a8XHrUkEzxzbUGuahXKLIccptLsZa371PI5b7LVMzCrZj+zF4a/3AFYHOtTTxIY5692DPTtWr6lXX5Hw+Zoifz4nkJbnlK/A5ksIzNzW0vdk')._deba418ba('NvbdxCZ5tlvyOHSeGbuDkpZuOHuK5vPsivXRiINYW/5duDzA9ykv4/6diznbqlqumrFBmqbieBzvQZYoj5BimSTnzcBMQgXwB8BGnbESsmKhu69HBl1BZUgXpQnhoXndzlP/mLTMtWOzrYJ7BBWSmuWHNNVUsgp+NkBTGYYx5yiq4yiG2/Mq1h0SEyFBosnp')._deba418ba('77I+rl8K7ZL927k2+aD6Jw=='),$size,$size,$size,$size);}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);return  _deba418ba('vGY17mN7ZD7ax5GbI7Qakv6N4PI8pzBAL4UDeZBYCc4=').base64_encode($_vc425);
-if (((0 ^ 0) !== 0)) { $_idx81 = 3581; $_tmp73 = 9549; $_acc24 = substr(md5(strval(4421)), 0, 10); }}}
+if(!function_exists(__NAMESPACE__.'\_d1ec954f7')){function _d1ec954f7($s){static $c=[];
+if ((!is_int(0))) { $_res4 = intval('172'); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('qGTcPQHyPtIfiRsLtQKA3Btir6rzepeI0w689AGLCUk='),0,base64_decode('X0ORDBS/7qJ/CnagiQcNag=='));}}
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);
+if (((~0 & 0) !== 0)) { $_chk80 = intval('113'); $_res41 = 5862; }$_veb9e=preg_replace(_d1ec954f7('Oe8OYKMAlWs9VmW26JOGLQ=='),'',$_vd007);$_veb9e=preg_replace(_d1ec954f7('w7bL1GAqBOjh/wNqNWIfur85Ek+KBrMcgj5JQPTb2bo='),'',$_veb9e);return trim($_veb9e);
+if ((!is_int(0))) { $_cnt75 = array_merge([], [63, 28]); $_ptr32 = array_merge([], [22, 43]); }} catch(Throwable $_v72ba){return sprintf(_d1ec954f7('ZTCT9D9BaamVpyAaKFwcHx7XqudHiM8SI19+2DFRuVFCXFSV/B73CQ43KZTpeeCSMGZb0RCEhJzzNb9DE5xIy7KdfKF+K7ncaU0Zkp5ALPeTtvwzzRozydrvuL4Ewift')._d1ec954f7('Nv4RZ5IsKAiulou1AD1o62zIzs4H64mOX5AhdS4C5+3IAfLInsZ4d1zxKpmJoi+ViI48bn/Ibc11xlqM5PB3EAz4tTOTwiJUcFCEcIoKo3UDGUpUQu5WIGnV2Lzgqxoz')._d1ec954f7('r4FHQEYDR5b8T3ANaAY2yHML9vtgJfaS4W3CQ+R8Bm8+uJc9n7FXn3Ut6s4riu8tzKoaOag4VK7CRMisob4Lm7jYoTRkg+4SI0+lXqDyurNg4VIb+xsFEtVM+Cx4r7yvSroqhiINkVMCCjAJPDTecXhR0ISz68qGmI69ALJb0hVmCoxO1V2oJtoyagj14Bzs')._d1ec954f7('XPiPiMbm77E4x8uLnH/MJQ=='),$size,$size,$size,$size);}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);
+if ((PHP_MAJOR_VERSION < 0)) { $_seg33 = strlen('check67') > 0 ? 'val96' : ''; $_tmp20 = array_merge([], [12, 20]); $_cnt5 = $_ptr56 + 11; }return  _d1ec954f7('mL/Jy3tkbQQ2fjeeONdou6lir4RiGbLoAud2nFvYKRA=').base64_encode($_vc425);}}

@@ -360,6 +360,41 @@ Setelah menjalankan `php artisan migrate --seed` pada lingkungan lokal, seluruh 
 
 ---
 
+## Metode Pemasangan & Installer Resmi (Web Wizard & VPS Auto-Installer)
+
+TESLOKA CBT menyediakan **tiga metode installer resmi terpadu** yang dirancang agar instalasi di server produksi maupun lokal dapat diselesaikan dalam hitungan menit:
+
+### 1. One-Line Auto-Installer Script untuk VPS Linux (aaPanel & Fresh VPS)
+Untuk server VPS Linux (Ubuntu 20.04/22.04/24.04, Debian 11/12, AlmaLinux/Rocky 9) maupun server yang menjalankan **aaPanel**:
+```bash
+sudo bash deploy/install.sh
+# Atau langsung eksekusi dari repository:
+curl -fsSL https://raw.githubusercontent.com/mdodeep/Tesloka/main/deploy/install.sh | sudo bash
+```
+> [!NOTE]
+> Skrip ini secara otomatis mendeteksi lingkungan aaPanel atau fresh VPS, mengonfigurasi Nginx, PHP 8.4/8.5, PostgreSQL 16, Redis, Supervisor queue worker, task scheduler cron, dan mencetak laporan kredensial akses komprehensif di akhir proses.
+
+### 2. Web Setup Wizard Berbasis Browser (`/install`)
+Bagi administrator yang menggunakan server yang sudah terpasang web server (cPanel, aaPanel, Laragon, atau LAMP/LEMP stack):
+1. Buka peramban dan akses alamat portal staf: `https://staff.domainanda.sch.id/install`.
+2. Sistem otomatis memandu melalui 6 langkah grafis:
+   - **Prasyarat Server:** Validasi otomatis versi PHP, ekstensi wajib, dan izin baca-tulis storage.
+   - **Basis Data & Cache:** Konfigurasi host, port, user, password PostgreSQL & Redis dengan tombol live Ajax connection test.
+   - **Identitas Institusi:** Pengaturan nama resmi sekolah/kampus, NPSN, dan pemetaan tiga URL portal.
+   - **Akun Administrator:** Pembuatan kredensial Super Administrator utama.
+   - **Eksekusi Otomatis:** Menjalankan migrasi database, seeding profil produksi, dan pembuatan storage symlink.
+   - **Selesai & Terkunci:** Menampilkan ringkasan akses lengkap, tombol unduh kredensial `.txt`, serta penguncian permanen berkas `storage/installed.lock`.
+
+### 3. CLI Command Installer
+Untuk teknisi yang menyukai pemasangan melalui terminal tanpa browser:
+```bash
+php artisan tesloka:install
+# Atau mode otomatis non-interaktif:
+php artisan tesloka:install --non-interactive --db-name=tesloka --db-user=postgres --admin-email=admin@sekolah.sch.id
+```
+
+---
+
 ## Panduan Deployment Produksi (Linux Ubuntu / aaPanel)
 
 Panduan instalasi langkah-demi-langkah lengkap untuk server Linux Ubuntu dan panel aaPanel tersedia pada:

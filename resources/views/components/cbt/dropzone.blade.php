@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <!-- Active File Preview Card (Menggantikan dropzone secara rapi dengan tampilan modern Tailwick) -->
+    <!-- Active File Preview Card (Menggantikan dropzone secara rapi dengan tampilan modern terstandar) -->
     <div id="{{ $previewContainerId }}" class="hidden">
         <div class="border border-default-200 rounded-lg bg-white p-3.5 shadow-2xs transition-all hover:border-primary/40">
             <!-- Loading Indicator Konversi WebP 60% -->

@@ -22,7 +22,7 @@
             @csrf
             @method('PUT')
 
-            <!-- Avatar & Notice with Tailwick CBT Dropzone -->
+            <!-- Avatar & Notice with CBT Dropzone -->
             <div class="pb-5 border-b border-default-100 flex flex-col sm:flex-row items-center gap-5">
                 <div class="shrink-0 text-center">
                     <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="size-20 rounded-full object-cover border-2 border-default-200 shadow-sm mx-auto">

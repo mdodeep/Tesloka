@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
-    <!-- Kolom Kiri: Kartu Ringkasan Pengguna (Tailwick Style) -->
+    <!-- Kolom Kiri: Kartu Ringkasan Pengguna (Modern Style) -->
     <div class="lg:col-span-4 space-y-6">
         <x-cbt.card>
             <div class="text-center py-4">

@@ -84,7 +84,7 @@
             </div>
         @endif
 
-        <!-- Tailwick Card Container -->
+        <!-- Card Container -->
         <div class="card shadow-sm">
             <div class="card-body p-6 sm:p-8">
                 @yield('content')

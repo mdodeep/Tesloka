@@ -138,7 +138,7 @@
                 </div>
             </x-cbt.card>
 
-            <!-- Pengawas Ruang Ujian (Tailwick Clean Form & Roster) -->
+            <!-- Pengawas Ruang Ujian (Clean Form & Roster) -->
             <x-cbt.card title="Pengawas Ruang Ujian">
                 <x-slot:actions>
                     <span class="px-2.5 py-1 bg-primary/10 text-primary font-bold text-[11px] rounded-lg">

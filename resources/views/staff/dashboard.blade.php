@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="space-y-5 w-full">
-    <!-- Tailwick Hero Welcome Banner -->
+    <!-- Hero Welcome Banner -->
     <div class="relative overflow-hidden bg-gradient-to-r from-default-900 via-default-800 to-secondary rounded-md p-6 text-white shadow-sm">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-3 max-w-2xl">
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <!-- Stat Cards (Tailwick Style) -->
+    <!-- Stat Cards (Modern Style) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="card">
             <div class="card-body">

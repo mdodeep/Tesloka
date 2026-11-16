@@ -40,7 +40,7 @@
 </head>
 <body class="antialiased font-body font-normal text-sm leading-normal bg-default-50 text-default-800">
     <div class="wrapper">
-        <!-- Sidebar Navigation (Tailwick Sidenav) -->
+        <!-- Sidebar Navigation (Sidebar Navigation) -->
         <aside id="app-menu" class="app-menu bg-card border-e border-default-200">
             <!-- Brand Logo & Mobile Close Button -->
             <div class="logo-box sticky top-0 flex min-h-topbar-height items-center justify-between px-5 bg-card border-b border-default-200 z-10 transition-all">
@@ -262,7 +262,7 @@
 
         <!-- Page Content Area -->
         <div class="page-content">
-            <!-- Tailwick Topbar Header -->
+            <!-- Topbar Header -->
             <header class="app-header min-h-topbar-height flex items-center sticky top-0 z-30 bg-card border-b border-default-200">
                 <div class="w-full flex items-center justify-between px-3 sm:px-6">
                     <!-- Left: Menu Toggle & Quick Search -->
@@ -280,7 +280,7 @@
 
                     <!-- Right: Notifications & User Profile -->
                     <div class="flex items-center gap-3">
-                        <!-- In-App Notification Center (Tailwick Topbar Notification Dropdown) -->
+                        <!-- In-App Notification Center (Topbar Notification Dropdown) -->
                         <div class="relative" id="staffNotifContainer">
                             <button type="button" id="staffNotifBtn" onclick="toggleStaffNotifDropdown()" class="btn btn-icon size-8 hover:bg-default-150 rounded-full relative cursor-pointer" aria-haspopup="menu" aria-expanded="false" aria-label="Notifikasi" title="Pusat Notifikasi">
                                 <i data-lucide="bell-ring" class="size-4.5 text-default-600"></i>
@@ -302,7 +302,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Filter Tabs (Tailwick Tabs) -->
+                                <!-- Filter Tabs (Filter Tabs) -->
                                 <nav class="flex gap-x-1 bg-default-150 p-2 border-b border-default-200" aria-label="Tabs" role="tablist">
                                     <button type="button" onclick="filterStaffNotifs('all')" id="tab-notif-all" class="py-1 px-3 rounded font-semibold inline-flex items-center text-xs whitespace-nowrap bg-card text-primary shadow-xs transition cursor-pointer">
                                         Semua
@@ -326,7 +326,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Footer (Tailwick Style) -->
+                                <!-- Footer (Modern Style) -->
                                 <div class="flex items-center justify-between p-3.5 border-t border-default-200 bg-default-50/50">
                                     <a href="{{ route('staff.settings.notification-logs.index') }}" class="text-xs font-semibold text-default-700 hover:text-primary transition">
                                         Log Pengiriman
@@ -393,7 +393,7 @@
             <!-- Main Workspace -->
             <main>
                 <div class="container-fluid">
-                    <!-- Standardized Tailwick Page Title & Breadcrumbs -->
+                    <!-- Standardized Page Title & Breadcrumbs -->
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-5">
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5 text-[11px] font-medium text-default-400 mb-1 flex-wrap">
@@ -512,7 +512,7 @@
                 </div>
             </main>
 
-            <!-- Tailwick Footer -->
+            <!-- App Footer -->
             <footer class="mt-auto footer flex items-center py-4 border-t border-default-200">
                 <div class="px-6 w-full flex justify-between items-center text-xs text-default-500">
                     <div>{{ date('Y') }} &copy; {{ $systemInstName }} &bull; TESLOKA CBT On-Premise Single-Tenant</div>

@@ -189,7 +189,7 @@
     const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     let isRawMode = false;
 
-    // Inisialisasi Quill Editor (Tailwick Snow WYSIWYG)
+    // Inisialisasi Quill Editor (Quill Snow WYSIWYG)
     function initQuillEditor() {
         const QuillClass = window.Quill || (typeof Quill !== 'undefined' ? Quill : null);
         if (!QuillClass) {

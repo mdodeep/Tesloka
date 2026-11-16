@@ -27,7 +27,7 @@
     <x-cbt.branding-styles />
 </head>
 <body class="min-h-screen bg-default-50 flex flex-col text-default-800 antialiased font-body text-sm">
-    <!-- Student Header (Tailwick Topbar Style) -->
+    <!-- Student Header (Tailwind Topbar Style) -->
     <header class="app-header bg-card border-b border-default-200 sticky top-0 z-30 min-h-topbar-height flex items-center">
         <div class="w-full px-3.5 sm:px-6 lg:px-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -38,7 +38,7 @@
 
             <!-- Student Profile, Notifications & Status -->
             <div class="flex items-center gap-2 sm:gap-3">
-                <!-- In-App Notification Center (Tailwick Topbar Notification Dropdown) -->
+                <!-- In-App Notification Center (Topbar Notification Dropdown) -->
                 <div class="relative" id="studentNotifContainer">
                     <button type="button" id="studentNotifBtn" onclick="toggleStudentNotifDropdown()" class="btn btn-icon size-8 hover:bg-default-150 rounded-full relative cursor-pointer" aria-haspopup="menu" aria-expanded="false" aria-label="{{ __('Notifikasi Peserta') }}" title="{{ __('Notifikasi Peserta') }}">
                         <i data-lucide="bell-ring" class="size-4.5 text-default-600"></i>
@@ -187,7 +187,7 @@
         </div>
     </main>
 
-    <!-- Student Footer (Tailwick Footer Style) -->
+    <!-- Student Footer (Tailwind Footer Style) -->
     <footer class="mt-auto footer flex items-center py-5 border-t border-default-200 bg-card">
         <div class="w-full px-6 lg:px-8 flex md:justify-between justify-center gap-4 text-xs text-default-500">
             <div>

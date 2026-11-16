@@ -47,7 +47,7 @@
         </a>
     </div>
 
-    <!-- Filter Form (Tailwick Design System) -->
+    <!-- Filter Form (Design System) -->
     <x-cbt.card>
         <form method="GET" action="{{ route('staff.users.index') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end text-xs">
             <input type="hidden" name="tab" value="{{ $currentTab }}">

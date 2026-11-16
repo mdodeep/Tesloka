@@ -17,7 +17,7 @@
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
   <img src="https://img.shields.io/badge/Tests-302%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="302 Tests Passed">
   <img src="https://img.shields.io/badge/Assertions-2.195%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.195 Assertions">
-  <img src="https://img.shields.io/badge/UI_Kit-Tailwick%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwick Native">
+  <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
 </p>
@@ -31,7 +31,7 @@
 - [Fitur Utama & Keunggulan Sistem](#fitur-utama--keunggulan-sistem)
 - [Tutorial Operasional Lengkap Pasca-Deployment (Initial Setup to Daily Use)](#tutorial-operasional-lengkap-pasca-deployment-initial-setup-to-daily-use)
 - [Integrasi Asesmen PTIQ English Proficiency Test (140 Butir)](#integrasi-asesmen-ptiq-english-proficiency-test-140-butir)
-- [Standardisasi Antarmuka Tailwick & Multi-Device 12 Viewport](#standardisasi-antarmuka-tailwick--multi-device-12-viewport)
+- [Standardisasi Antarmuka Modern & Multi-Device 12 Viewport](#standardisasi-antarmuka-modern--multi-device-12-viewport)
 - [Matriks Sizing & Spesifikasi Server VPS](#matriks-sizing--spesifikasi-server-vps)
 - [Panduan Instalasi Lingkungan Lokal (Development)](#panduan-instalasi-lingkungan-lokal-development)
 - [Pemisahan Seeder: Produksi Bersih vs Simulasi Lokal](#pemisahan-seeder-produksi-bersih-vs-simulasi-lokal)
@@ -87,7 +87,7 @@ flowchart TD
 
 ## 16 Modul Utama Portal Staf & Administrasi
 
-Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang telah distandardisasi dengan komponen native Tailwick:
+Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang telah distandardisasi dengan komponen native Tailwind:
 
 | No | Modul Staf | URL Rute | Deskripsi Fungsional & Kapabilitas |
 |:---:|:---|:---|:---|
@@ -122,8 +122,8 @@ Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang t
    - Isian Singkat / Short Answer (pencocokan kata kunci toleran *case-insensitive*)
    - Esai Terstruktur Berbasis Rubrik (koreksi bertingkat dengan kriteria bobot dan opsi *Blind Marking*)
    - Skala Likert (survei afektif, kepribadian, dan evaluasi pengajaran 1–5)
-2. **Editor Visual Tailwick Snow & Dual-Mode Switcher:**
-   Penyusunan butir soal dilengkapi editor WYSIWYG Quill Snow resmi Tailwick dengan tombol alih mode instan: Mode Visual (format heading, bold, italic, underline, strike, sub/superskrip, lists, blok kode, blockquote, teks Arab RTL) dan Mode Teks Kode / Raw HTML dengan sinkronisasi dua arah real-time.
+2. **Editor Visual Quill Snow & Dual-Mode Switcher:**
+   Penyusunan butir soal dilengkapi editor WYSIWYG Quill Snow modern dengan tombol alih mode instan: Mode Visual (format heading, bold, italic, underline, strike, sub/superskrip, lists, blok kode, blockquote, teks Arab RTL) dan Mode Teks Kode / Raw HTML dengan sinkronisasi dua arah real-time.
 3. **Pusat Collapsible Panduan KaTeX & Palet 50+ Simbol 1-Klik:**
    Komponen collapsible tepat di bawah editor pokok soal yang menyediakan palet 50+ simbol cepat matematika ($\pm$, $\times$, $\div$, $\neq$, $\le$, $\ge$, $\sqrt{}$, $\infty$, $\sum$, $\int$), Yunani ($\alpha$, $\beta$, $\theta$, $\lambda$, $\pi$), dan sains ($^\circ\text{C}$, $\text{m/s}^2$, $\Omega$) dengan fitur 1-klik sisipkan langsung ke kursor aktif editor, serta tabel sintaks rumus KaTeX siap pakai.
 4. **Pustaka Media Terisolasi & Audio Listening Stimulus:**
@@ -210,11 +210,11 @@ Aplikasi telah dilengkapi secara bawaan dengan paket asesmen berspesifikasi TOEF
 
 ---
 
-## Standardisasi Antarmuka Tailwick & Multi-Device 12 Viewport
+## Standardisasi Antarmuka Modern & Multi-Device 12 Viewport
 
-Seluruh tampilan antarmuka dibangun di atas fondasi Tailwick UI Kit dari `template-envato` dengan penyesuaian khusus CBT:
+Seluruh tampilan antarmuka dibangun di atas fondasi desain sistem modern Tailwind CSS dengan penyesuaian khusus CBT:
 
-1. **Standar Baku Tabel Data (Native Tailwick - Zero Third-Party Bloat):**
+1. **Standar Baku Tabel Data (Native Modern - Zero Third-Party Bloat):**
    - Menghindari library bloated seperti Grid.js atau DataTables lama demi kecepatan render maksimal dan nol konflik DOM JavaScript.
    - Seluruh tabel dibungkus container responsif `<div class="overflow-x-auto -mx-3.5 sm:mx-0">`.
    - Diberikan batas lebar minimum eksplisit (`min-w-[700px]` s.d. `min-w-[850px]`) agar kolom tidak gepeng di layar ponsel.
@@ -515,7 +515,7 @@ tesloka/
 │   ├── assets/images/        # Logo institusi resmi, favicon WebP, avatar
 │   └── build/                # Aset frontend Vite terkompilasi
 ├── resources/
-│   ├── css/tailwick/         # Stylesheet Tailwick UI Kit & Tailwind CSS 4
+│   ├── css/                  # Stylesheet tema antarmuka & Tailwind CSS 4
 │   ├── js/                   # Skrip interaktif, timer, autosave handler
 │   └── views/                # 93 Template Blade (staff, student, public, errors)
 ├── routes/

@@ -1,7 +1,7 @@
 import ApexCharts from "apexcharts";
 import "preline";
 import { createIcons, icons } from "lucide";
-import { TailwickApp, TailwickLayout } from "./tailwick.js";
+import { CbtApp, CbtLayout } from "./tailwick.js";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
@@ -10,10 +10,10 @@ window.Quill = Quill;
 
 document.addEventListener("DOMContentLoaded", () => {
     createIcons({ icons });
-    new TailwickApp().init();
-    new TailwickLayout().init();
+    new CbtApp().init();
+    new CbtLayout().init();
 
-    // Native Tailwick Instant Table Filter (Zero-Dependency & Fast)
+    // Native Instant Table Filter (Zero-Dependency & Fast)
     document.addEventListener("input", (e) => {
         const input = e.target.closest("[data-table-filter]");
         if (!input) return;
@@ -41,7 +41,7 @@ if (
     });
 }
 
-// Tailwick CBT Browser Image Compression & Conversion (FULL-FEATURE 5.8)
+// CBT Browser Image Compression & Conversion (FULL-FEATURE 5.8)
 /**
  * Konversi dan kompresi gambar ke WebP (kualitas 60% / 0.60) langsung di browser sebelum pengunggahan.
  * Menggunakan Web APIs native: createImageBitmap (orientasi EXIF otomatis), Canvas, dan toBlob.
@@ -113,7 +113,7 @@ window.compressImageToWebP = async function (file, quality = 0.60) {
     }
 };
 
-// Tailwick CBT Dropzone Handlers
+// CBT Dropzone Handlers
 window.handleDropzoneChange = async function (input, previewId) {
     if (!input.files || !input.files[0]) return;
     let file = input.files[0];

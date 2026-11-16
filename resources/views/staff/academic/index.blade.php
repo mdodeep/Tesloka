@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Quick Stats Grid (Tailwick Metric Cards) -->
+    <!-- Quick Stats Grid (Metric Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div class="card">
             <div class="card-body flex items-center justify-between">

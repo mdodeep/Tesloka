@@ -14,7 +14,7 @@
 
 @section('content')
 <div class="space-y-6 w-full">
-    <!-- Filter & Search Bar (Tailwick Design System) -->
+    <!-- Filter & Search Bar (Design System) -->
     <x-cbt.card>
         <form method="GET" action="{{ route('staff.exams.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div>

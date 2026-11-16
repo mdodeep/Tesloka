@@ -1,9 +1,9 @@
 /**
- * Tailwick Design System Engine
+ * Modern Design System Engine
  * Ported from template-envato/src/assets/js/app.js
  */
 
-export class TailwickApp {
+export class CbtApp {
     initSidenav() {
         const pageUrl = window.location.href.split(/[?#]/)[0];
         document.querySelectorAll("ul.side-nav .menu-item > a").forEach((element) => {
@@ -75,7 +75,7 @@ export class TailwickApp {
     }
 }
 
-export class TailwickLayout {
+export class CbtLayout {
     constructor() {
         this.html = document.documentElement;
         this.defaultConfig = {

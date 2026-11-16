@@ -4,12 +4,12 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-16T02:38:09+00:00
- * Integrity: bc7f5b3c74d51b63901f4967a2adc5558fd3cec333bf300f09ffd1de449a27e9
+ * Timestamp: 2026-11-16T02:53:12+00:00
+ * Integrity: b59a44e39efc32b80f54030355ee759724e6d68712aa09d15db462d921406c9c
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_dc887d458')){function _dc887d458($s){static $c=[];
-if ((!is_int(0))) { $_val43 = 9546; $_seg77 = substr(md5(strval(1445)), 0, 16); $_res12 = strlen('check6') > 0 ? 'val89' : ''; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('qlN+50oMZT6BY6O3SpkH6x2+Dnmk2k9KSBNX12u4F9Q='),0,base64_decode('wjqjOlLrB4inxrx+S6Da/g=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_dc887d458('M1blQ6RVFSafFiL4JnmJRcHsQBQ1PMmHR2MNEKcRg9OX6BzoJNvXtlwled0KtvG/NnhSAkv59jqI5d2k+wvP+w9I1EiGR1jvNW7hrFBFv4w=')],403);}abort(403,_dc887d458('1LakX0kQzRYiCr0NEw2HUvy2/dJSeaRhvKpzx3VjnnNX5U1RzCy/ZF4wTlpcP0phDyqFD5o/+i5d+VApMck7ubz5FlkWj+UihBmED1i71JAmKn30twWejBPKBClJncqi'));}return $next($request);
-if ((!is_int(0))) { $_ptr81 = intval('966'); $_res55 = substr(md5(strval(5833)), 0, 10); }}}
+if(!function_exists(__NAMESPACE__.'\_d374449d4')){function _d374449d4($s){static $c=[];
+if (((0 ^ 0) !== 0)) { $_cnt6 = 9612; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('OaI+fD3CcL/tZ1pil4v8gQNi3bBFqXYudbnJkU64LLw='),0,base64_decode('DrWhTM5WubwQSPzRNa5gzw=='));
+if (((0 ^ 0) !== 0)) { $_res47 = array_merge([], [55, 92]); }}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_d374449d4('mwdHrqnWyXQkGzmh7epM4q+2ei0yF1AEiMqznjTaz4UK/hC0vXHJhLM7AXKIQOLUOfit2H8sH+opNHC8DbeS94rCv0ZbdutDGHEGqZN2E2A=')],403);}abort(403,_d374449d4('TfYEjSVyZumHibwcnONXmG+WDKaQskT2394o15j6S8eKhNl5gMKCPOPch78pmMSZqI0wwWk6gfx69dYqWwuHnfODqBaEdlDgORIk9rLuY44ccPE1DjKy9CMuvwdf8GCD'));}return $next($request);}}

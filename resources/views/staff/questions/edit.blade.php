@@ -222,13 +222,14 @@
                                 </div>
                             @endforeach
                         @else
-                            {{-- multiple_choice default --}}
+                            {{-- multiple_choice default (Tunggal) --}}
                             @php
-                                $hasCorrect = $question->options->contains('is_correct', true);
+                                $firstCorrectOpt = $question->options->firstWhere('is_correct', true);
+                                $chosenKey = $firstCorrectOpt ? $firstCorrectOpt->option_key : optional($question->options->first())->option_key;
                             @endphp
                             @foreach($question->options as $idx => $opt)
                                 @php
-                                    $isThisCorrect = $opt->is_correct || (!$hasCorrect && $idx === 0);
+                                    $isThisCorrect = ($opt->option_key === $chosenKey);
                                 @endphp
                                 <div class="option-row p-3 border border-default-200 rounded flex items-center gap-3 bg-white hover:bg-default-50/50 transition shadow-2xs">
                                     <div class="pt-0.5">

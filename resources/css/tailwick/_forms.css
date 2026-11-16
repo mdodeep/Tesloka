@@ -40,24 +40,41 @@ select.form-input {
 .form-radio,
 .form-checkbox {
     @apply appearance-none bg-no-repeat bg-center;
-    @apply shrink-0 bg-current border border-current ring-offset-white focus-visible:outline-none;
-    @apply focus-visible:ring-2 focus-visible:ring-inherit focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-90;
+    @apply shrink-0 bg-white border border-default-300 ring-offset-white focus-visible:outline-none;
+    @apply focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
     @apply aria-invalid:border-danger/60 aria-invalid:ring-danger/10;
-    @apply cursor-pointer checked:border-inherit focus:ring-0 focus:ring-offset-0;
-    @apply checked:bg-current checked:border-transparent;
+    @apply cursor-pointer focus:ring-0 focus:ring-offset-0;
+    background-image: none;
 }
 
+.form-radio {
+    @apply rounded-full;
+}
 
+.form-radio:checked {
+    @apply bg-primary border-primary;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3.5'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+}
 
-
-.form-radio:not([class*="text-"]),
-.form-checkbox:not([class*="text-"]) {
-    @apply bg-transparent border-default-300;
-    @apply checked:bg-primary checked:border-transparent;
+.form-radio[class*="text-"]:checked {
+    background-color: currentColor;
+    border-color: currentColor;
 }
 
 .form-checkbox {
     @apply rounded-sm;
+}
+
+.form-checkbox:checked {
+    @apply bg-primary border-primary;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+}
+
+.form-checkbox[class*="text-"]:checked {
+    background-color: currentColor;
+    border-color: currentColor;
 }
 
 .form-radio:not([class*="size-"]),

@@ -16,46 +16,7 @@
 @section('page-subtitle', 'Kode: ' . $exam->code . ' • Mapel: ' . ($exam->subject->name ?? '-') . ' • Durasi: ' . $exam->duration_minutes . ' Menit • KKM: ' . $exam->passing_grade)
 
 @section('page-actions')
-    <a href="{{ route('staff.exams.remedial', $exam) }}" class="btn btn-sm bg-warning hover:bg-warning/90 text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <i data-lucide="refresh-cw" class="size-4"></i>
-        <span>Buat Remedial</span>
-    </a>
-
-    <a href="{{ route('staff.exams.grading.index', $exam) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <i data-lucide="check-square" class="size-4"></i>
-        <span>Penilaian &amp; Hasil</span>
-    </a>
-
-    <a href="{{ route('staff.exams.reports.index', $exam) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <i data-lucide="bar-chart-2" class="size-4 text-default-500"></i>
-        <span>Grafik &amp; Analitik</span>
-    </a>
-
-    <a href="{{ route('staff.graduation.index', ['exam_id' => $exam->id]) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-        <i data-lucide="award" class="size-4 text-emerald-600"></i>
-        <span>Kelulusan Peserta</span>
-    </a>
-
-    @if(in_array($exam->status, ['draft', 'pending_approval']))
-        <a href="{{ route('staff.exams.edit', $exam) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
-            <i data-lucide="edit" class="size-4 text-default-500"></i>
-            <span>Edit</span>
-        </a>
-    @endif
-
-    <form action="{{ route('staff.exams.duplicate', $exam) }}" method="POST" class="inline">
-        @csrf
-        <button type="submit" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-            <i data-lucide="copy" class="size-4 text-default-500"></i>
-            <span>Gandakan</span>
-        </button>
-    </form>
-
-    <a href="{{ route('staff.exams.seb-config', $exam) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition" title="Unduh berkas konfigurasi .seb untuk Safe Exam Browser">
-        <i data-lucide="shield" class="size-4 text-default-500"></i>
-        <span>Unduh SEB</span>
-    </a>
-
+    {{-- 1. Tombol Aksi Utama Sesuai Status Ujian --}}
     @if($exam->status === 'draft')
         @if($validationResult['is_valid'] && $exam->packages->isNotEmpty())
             @if(auth('staff')->user()?->isAdmin())
@@ -75,22 +36,94 @@
                 </button>
             </form>
         @endif
-    @endif
+        <a href="{{ route('staff.exams.edit', $exam) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+            <i data-lucide="edit" class="size-4 text-default-500"></i>
+            <span>Edit</span>
+        </a>
+    @elseif($exam->status === 'pending_approval')
+        @if(auth('staff')->user()?->isAdmin() || auth('staff')->id() !== $exam->creator_id)
+            <form action="{{ route('staff.exams.approve', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Setujui dan terbitkan ujian ini?')">
+                @csrf
+                <button type="submit" class="btn btn-sm bg-success hover:bg-success/90 text-white text-xs font-bold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                    <i data-lucide="check-circle" class="size-4"></i>
+                    <span>Setujui</span>
+                </button>
+            </form>
 
-    @if($exam->status === 'pending_approval' && (auth('staff')->user()?->isAdmin() || auth('staff')->id() !== $exam->creator_id))
-        <form action="{{ route('staff.exams.approve', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Setujui dan terbitkan ujian ini?')">
-            @csrf
-            <button type="submit" class="btn btn-sm bg-success hover:bg-success/90 text-white text-xs font-bold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-                <i data-lucide="check-circle" class="size-4"></i>
-                <span>Setujui</span>
+            <button type="button" onclick="document.getElementById('rejectModal').classList.remove('hidden')" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 text-xs font-semibold rounded inline-flex items-center gap-1.5 transition cursor-pointer">
+                <i data-lucide="x-circle" class="size-4"></i>
+                <span>Tolak</span>
             </button>
-        </form>
+        @endif
+        <a href="{{ route('staff.exams.edit', $exam) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+            <i data-lucide="edit" class="size-4 text-default-500"></i>
+            <span>Edit</span>
+        </a>
+    @else
+        <a href="{{ route('staff.exams.grading.index', $exam) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+            <i data-lucide="check-square" class="size-4"></i>
+            <span>Penilaian &amp; Hasil</span>
+        </a>
 
-        <button type="button" onclick="document.getElementById('rejectModal').classList.remove('hidden')" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 text-xs font-semibold rounded inline-flex items-center gap-1.5 transition cursor-pointer">
-            <i data-lucide="x-circle" class="size-4"></i>
-            <span>Tolak</span>
-        </button>
+        <a href="{{ route('staff.graduation.index', ['exam_id' => $exam->id]) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition">
+            <i data-lucide="award" class="size-4 text-emerald-600"></i>
+            <span>Kelulusan Peserta</span>
+        </a>
     @endif
+
+    {{-- 2. Dropdown Menu Aksi Terpadu (Mengelompokkan Aksi Sekunder Agar Header Tetap Ramping) --}}
+    <div class="relative inline-block text-left" id="examActionsDropdownContainer">
+        <button type="button" onclick="toggleExamActionsMenu()" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 text-xs font-semibold rounded inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+            <i data-lucide="more-horizontal" class="size-4 text-default-500"></i>
+            <span>Menu Aksi</span>
+            <i data-lucide="chevron-down" class="size-3.5 text-default-400"></i>
+        </button>
+
+        <div id="examActionsMenu" class="hidden absolute right-0 mt-1.5 w-56 bg-white border border-default-200 rounded-md shadow-lg z-50 py-1 divide-y divide-default-100 text-xs">
+            <!-- Grup Evaluasi & Laporan -->
+            <div class="py-1">
+                <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-default-400">Hasil &amp; Evaluasi</div>
+                <a href="{{ route('staff.exams.grading.index', $exam) }}" class="flex items-center gap-2 px-3 py-1.5 text-default-700 hover:bg-default-50 hover:text-primary transition">
+                    <i data-lucide="check-square" class="size-4 text-primary"></i>
+                    <span>Penilaian &amp; Hasil</span>
+                </a>
+                <a href="{{ route('staff.graduation.index', ['exam_id' => $exam->id]) }}" class="flex items-center gap-2 px-3 py-1.5 text-default-700 hover:bg-default-50 hover:text-emerald-600 transition">
+                    <i data-lucide="award" class="size-4 text-emerald-600"></i>
+                    <span>Kelulusan Peserta</span>
+                </a>
+                <a href="{{ route('staff.exams.reports.index', $exam) }}" class="flex items-center gap-2 px-3 py-1.5 text-default-700 hover:bg-default-50 hover:text-primary transition">
+                    <i data-lucide="bar-chart-2" class="size-4 text-default-500"></i>
+                    <span>Grafik &amp; Analitik</span>
+                </a>
+                <a href="{{ route('staff.exams.remedial', $exam) }}" class="flex items-center gap-2 px-3 py-1.5 text-default-700 hover:bg-default-50 hover:text-warning transition">
+                    <i data-lucide="refresh-cw" class="size-4 text-warning"></i>
+                    <span>Buat Sesi Remedial</span>
+                </a>
+            </div>
+
+            <!-- Grup Utilitas & Pengelolaan -->
+            <div class="py-1">
+                <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-default-400">Utilitas &amp; Berkas</div>
+                @if(in_array($exam->status, ['draft', 'pending_approval']))
+                    <a href="{{ route('staff.exams.edit', $exam) }}" class="flex items-center gap-2 px-3 py-1.5 text-default-700 hover:bg-default-50 hover:text-primary transition">
+                        <i data-lucide="edit" class="size-4 text-default-500"></i>
+                        <span>Edit Pengaturan Ujian</span>
+                    </a>
+                @endif
+                <form action="{{ route('staff.exams.duplicate', $exam) }}" method="POST" class="block w-full">
+                    @csrf
+                    <button type="submit" class="flex items-center gap-2 w-full text-left px-3 py-1.5 text-default-700 hover:bg-default-50 hover:text-primary transition cursor-pointer">
+                        <i data-lucide="copy" class="size-4 text-default-500"></i>
+                        <span>Gandakan Ujian</span>
+                    </button>
+                </form>
+                <a href="{{ route('staff.exams.seb-config', $exam) }}" class="flex items-center gap-2 px-3 py-1.5 text-default-700 hover:bg-default-50 hover:text-primary transition" title="Unduh berkas konfigurasi .seb untuk Safe Exam Browser">
+                    <i data-lucide="shield" class="size-4 text-default-500"></i>
+                    <span>Unduh Konfigurasi SEB</span>
+                </a>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('content')
@@ -379,5 +412,21 @@
         const el = document.getElementById('pkg-questions-' + id);
         el.classList.toggle('hidden');
     }
+
+    function toggleExamActionsMenu() {
+        const menu = document.getElementById('examActionsMenu');
+        if (menu) {
+            menu.classList.toggle('hidden');
+            if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const container = document.getElementById('examActionsDropdownContainer');
+        const menu = document.getElementById('examActionsMenu');
+        if (container && menu && !container.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
 </script>
 @endsection

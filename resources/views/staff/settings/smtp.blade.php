@@ -116,6 +116,10 @@
                                 placeholder="noreply@institusi.ac.id"
                                 class="form-input font-mono @error('from_address') border-rose-500 @enderror">
                             <span class="text-[11px] text-default-400">Alamat email yang tercantum sebagai header pengirim keluar.</span>
+                            <div class="mt-1.5 p-2.5 bg-amber-50/90 border border-amber-200 rounded text-[11px] text-amber-800 flex items-start gap-2">
+                                <i data-lucide="info" class="size-4 text-amber-600 shrink-0 mt-0.5"></i>
+                                <span><strong>Penting untuk cPanel / Domain Khusus:</strong> Alamat pengirim wajib sama dengan <em>Username SMTP</em> (misal: <code>ujian@lbbptiq.id</code>). Jika berbeda, mail server akan menolak dengan error 550.</span>
+                            </div>
                             @error('from_address')
                                 <p class="text-xs text-rose-500">{{ $message }}</p>
                             @enderror
@@ -204,6 +208,19 @@ function togglePasswordVisibility(inputId, btn) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const userInput = document.getElementById('input_username');
+    const fromInput = document.getElementById('input_from_address');
+    if (userInput && fromInput) {
+        userInput.addEventListener('input', function() {
+            const val = this.value.trim();
+            if (val.includes('@') && (!fromInput.value || fromInput.value.includes('@example.com') || fromInput.value.includes('@tesloka.test'))) {
+                fromInput.value = val;
+            }
+        });
+    }
+});
+
 function executeSmtpTest() {
     const email = document.getElementById('testEmailInput').value.trim();
     const btn = document.getElementById('btnTestSend');
@@ -214,10 +231,29 @@ function executeSmtpTest() {
         return;
     }
 
+    const host = document.getElementById('input_host')?.value.trim();
+    const port = document.getElementById('input_port')?.value.trim();
+    const username = document.getElementById('input_username')?.value.trim();
+    const password = document.getElementById('input_password')?.value;
+    const encryption = document.getElementById('select_encryption')?.value;
+    const from_address = document.getElementById('input_from_address')?.value.trim();
+    const from_name = document.getElementById('input_from_name')?.value.trim();
+
     btn.disabled = true;
-    btn.innerHTML = '<span class="inline-flex items-center gap-1.5"><div class="inline-block border-2 rounded-full size-4 animate-spin border-s-transparent border-white"></div> Mengirim...</span>';
+    btn.innerHTML = '<span class="inline-flex items-center gap-1.5"><div class="inline-block border-2 rounded-full size-4 animate-spin border-s-transparent border-white"></div> Menguji...</span>';
     box.className = 'p-3 rounded text-xs font-medium border bg-blue-50 text-blue-800 border-blue-200 block';
     box.innerHTML = 'Menghubungkan ke server SMTP dan mengirimkan pesan...';
+
+    const payload = {
+        test_email: email,
+        host: host || undefined,
+        port: port || undefined,
+        username: username !== undefined ? username : undefined,
+        password: password ? password : undefined,
+        encryption: encryption || undefined,
+        from_address: from_address || undefined,
+        from_name: from_name || undefined
+    };
 
     fetch('{{ route('staff.settings.smtp.test') }}', {
         method: 'POST',
@@ -226,7 +262,7 @@ function executeSmtpTest() {
             'Accept': 'application/json',
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
-        body: JSON.stringify({ test_email: email })
+        body: JSON.stringify(payload)
     })
     .then(r => r.json().then(data => ({ status: r.status, body: data })))
     .then(res => {

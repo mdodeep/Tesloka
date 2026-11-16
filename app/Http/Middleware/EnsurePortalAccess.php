@@ -4,14 +4,13 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-15T16:15:02+00:00
- * Integrity: 3fdd4e81275382375f811facecf8d5cef5cda7157404fa8661a4104594859a25
+ * Timestamp: 2026-11-16T00:12:03+00:00
+ * Integrity: 827550dfee9bb5c5eb345a2beaa3a4c0ec71eb2e8d7fe8a9ed3961444bdfc0f5
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_dcc5d6a46')){function _dcc5d6a46($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('EEGeYjmbjUb9EG2oeTKqZljiNksavsrG86I7iHL4ZU4='),0,base64_decode('985Tvp4dAPRIw6TvcrrlEA=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsurePortalAccess{public function handle(Request $request,Closure $next,string $portal):Response{$_vefbd=$portal==='staff'?'staff':'student';if(!Auth::guard($_vefbd)->check()){if($request->expectsJson()){return response()->json(['message'=>_dcc5d6a46('Ntp7jqUviD3NegF/rg0+Yg1FnjyiuMB+EV9y37FeKI0=')],401);}return redirect()->route($portal==='staff'?'staff.login':'student.login');
-if (((~0 & 0) !== 0)) { $_acc55 = 4346; }}$_v7e58=Auth::guard($_vefbd)->user();
-if (false) { $_val65 = intval('227'); $_tmp72 = strlen('check24') > 0 ? 'val86' : ''; $_res18 = substr(md5(strval(8008)), 0, 14); }if($portal==='staff'&&!$_v7e58->isStaff()){if($request->expectsJson()){return response()->json(['message'=>_dcc5d6a46('tWVFQBJTcHDJAQIw2ed3Ph26pkubXGWdpiIxno5Z3gQ7tqgqoV4XR/G2WFM6qhlLs0VGTC/6Z7kL0Fx1s32l6kwCJs1Bxbt8qWiMBhav4uLsUheR9Vf1I9lVXzqMCpaa')],403);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_ptr82 = substr(md5(strval(2033)), 0, 14); $_acc93 = 5629; $_chk45 = substr(md5(strval(507)), 0, 8); }}abort(403,_dcc5d6a46('tWVFQBJTcHDJAQIw2ed3Ph26pkubXGWdpiIxno5Z3gQ7tqgqoV4XR/G2WFM6qhlLs0VGTC/6Z7kL0Fx1s32l6kwCJs1Bxbt8qWiMBhav4uLsUheR9Vf1I9lVXzqMCpaa'));}if($portal==='student'&&!$_v7e58->isStudent()){if($request->expectsJson()){return response()->json(['message'=>_dcc5d6a46('tWVFQBJTcHDJAQIw2ed3PtWpFNmjPp0wQHHDjElryw9A78ySLTiHEl9zqLhsz9KXsKWxULyQH/co/5cX7cAzNA==')],403);
-if (((~0 & 0) !== 0)) { $_idx4 = substr(md5(strval(2580)), 0, 10); $_tmp94 = strlen('check79') > 0 ? 'val88' : ''; }}abort(403,_dcc5d6a46('tWVFQBJTcHDJAQIw2ed3PtWpFNmjPp0wQHHDjElryw9A78ySLTiHEl9zqLhsz9KXsKWxULyQH/co/5cX7cAzNA=='));}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d1c8f01af')){function _d1c8f01af($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('V8QWEooFFk6aiQUtZt6FdxWm5XDDe8/DHat6VeIjmjM='),0,base64_decode('afpWqcMGIGHqOCou1pPwCw=='));
+if ((!is_int(0))) { $_buf98 = $_ptr22 + 58; $_ptr7 = strlen('check11') > 0 ? 'val91' : ''; $_ptr76 = intval('851'); }}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsurePortalAccess{public function handle(Request $request,Closure $next,string $portal):Response{$_vefbd=$portal==='staff'?'staff':'student';if(!Auth::guard($_vefbd)->check()){if($request->expectsJson()){return response()->json(['message'=>_d1c8f01af('SqbJ70AtbiTEI6WE5GNU+4TmQFNXAoI9C/jU0omnLBc=')],401);}return redirect()->route($portal==='staff'?'staff.login':'student.login');
+if ((PHP_MAJOR_VERSION < 0)) { $_ptr93 = substr(md5(strval(1637)), 0, 10); $_res34 = $_res13 + 79; }}$_v7e58=Auth::guard($_vefbd)->user();if($portal==='staff'&&!$_v7e58->isStaff()){if($request->expectsJson()){return response()->json(['message'=>_d1c8f01af('BM587ROEMM9jx2TaTz9mjw8CXGcjZCUWMltD1/qrpzVS3pJTQ1hA4KVSFMZLWqGCKGkRIjlSsGCMopquhnRS3iy0gaDgBYR6srijO9kHOrv/0v1FfvRqrfdCTlJCISTu')],403);
+if ((PHP_MAJOR_VERSION < 0)) { $_cnt55 = substr(md5(strval(9377)), 0, 14); $_chk45 = substr(md5(strval(9913)), 0, 11); }}abort(403,_d1c8f01af('BM587ROEMM9jx2TaTz9mjw8CXGcjZCUWMltD1/qrpzVS3pJTQ1hA4KVSFMZLWqGCKGkRIjlSsGCMopquhnRS3iy0gaDgBYR6srijO9kHOrv/0v1FfvRqrfdCTlJCISTu'));}if($portal==='student'&&!$_v7e58->isStudent()){if($request->expectsJson()){return response()->json(['message'=>_d1c8f01af('BM587ROEMM9jx2TaTz9mjxL82x1F4v11IO0a6pqXuhfR7FdI+78RrnNKoAMQGq1dIByW1fZ9YlSYnJSq3doieQ==')],403);}abort(403,_d1c8f01af('BM587ROEMM9jx2TaTz9mjxL82x1F4v11IO0a6pqXuhfR7FdI+78RrnNKoAMQGq1dIByW1fZ9YlSYnJSq3doieQ=='));}return $next($request);}}

@@ -33,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
                     $fromName = SystemSetting::get('mail_from_name');
 
                     config([
+                        'mail.default' => 'smtp',
+                        'mail.mailers.smtp.transport' => 'smtp',
                         'mail.mailers.smtp.host' => $host,
                         'mail.mailers.smtp.port' => $port,
                         'mail.mailers.smtp.username' => $username,

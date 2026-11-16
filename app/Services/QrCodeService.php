@@ -4,15 +4,13 @@
  * Author: Muhammad Dody Pratama
  * Email: me@dodypratama.my.id
  * Version: 1.0.0
- * Timestamp: 2026-11-16T00:12:03+00:00
- * Integrity: 827550dfee9bb5c5eb345a2beaa3a4c0ec71eb2e8d7fe8a9ed3961444bdfc0f5
+ * Timestamp: 2026-11-16T00:47:06+00:00
+ * Integrity: f408fa3e851c400fdf9ceb2524f4008d6b6a752b519867c0fa58e731adb24061
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_dbfbf7f6f')){function _dbfbf7f6f($s){static $c=[];
-if ((PHP_MAJOR_VERSION < 0)) { $_acc21 = array_merge([], [40, 73]); $_buf42 = strlen('check63') > 0 ? 'val14' : ''; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('Ug1bGZMmEeG1MlxjIuF+5dNsSmG0E1Jg7EhN1SrIwso='),0,base64_decode('n23OR0V1XewIvTmB9Gl7rQ=='));
-if (((0 ^ 0) !== 0)) { $_acc74 = substr(md5(strval(3177)), 0, 15); $_acc77 = $_chk31 + 14; $_buf24 = array_merge([], [13, 43]); }}}
+if(!function_exists(__NAMESPACE__.'\_d150e2954')){function _d150e2954($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('LpWhD24LdHoJwGNSmisVFOFfQTb5aJPpBoas8RwJIpo='),0,base64_decode('2B2+OeIC4Med25Mbt2R2xg=='));}}
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);
-if ((PHP_MAJOR_VERSION < 0)) { $_seg10 = intval('986'); $_chk90 = substr(md5(strval(4133)), 0, 16); $_acc14 = array_merge([], [1, 32]); }$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_dbfbf7f6f('sxCu6iXQwsBkQq2l9jd4vA=='),'',$_vd007);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_acc89 = array_merge([], [1, 37]); $_idx0 = substr(md5(strval(8502)), 0, 16); $_chk67 = intval('982'); }$_veb9e=preg_replace(_dbfbf7f6f('BIN36D+LwY/ZGss7qcqEqwn6FwNHUtqyStwVzCOkY0c='),'',$_veb9e);return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_dbfbf7f6f('Vay7LAjuHV33q4doAMXDKsZX+qesK8p/l5x5wS018bSrVYEA0huqVF7u42vK2s5OHumKcjFC4YNkJpVQ8T/adMSLKMltBdw710puyK9bXmTP4IkOoIC4UZgy4IF7MaJZ')._dbfbf7f6f('IMi5CGmnsQ/0O9NEd9+ab8enlvbqv2dSfNrYk1I1aeu6nI7z8EBf4yVLRXgMghCapGVSLHi43lqODg1yQcdfLGAdN+ZjNyj7sjW89Q8O/+g4ju/A4JwhSF7jeujmf7jm')._dbfbf7f6f('5vUOamUnznFKn9mie3k8KnK4mczuHyvg0vmPPutubVuG3jj4qO2ER5E3DZfBJxR+sm/oCl1U784wSCjaSba9UcnVVK60s8EX3bwu0/jSi3IleDmPoM1H6iku9hhtj9l30D/hblHaDq0K6+BIRkUQaGGFmVuq2pXkHDao2g7t+kdhiwnNxX1Hpz4YjBtp573H')._dbfbf7f6f('EezfWy78zS8ffr5kZFvYvw=='),$size,$size,$size,$size);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_seg65 = $_cnt3 + 42; $_seg77 = intval('331'); $_res74 = substr(md5(strval(5765)), 0, 15); }}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);return  _dbfbf7f6f('yrS453exU/zw8n0CTQ9TyY50PQBX2VvkenFJL4MdecY=').base64_encode($_vc425);}}
+if ((!is_int(0))) { $_seg44 = substr(md5(strval(9152)), 0, 4); }$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_d150e2954('OfEE9px7YZsCmyCmzyaRMQ=='),'',$_vd007);
+if (((~0 & 0) !== 0)) { $_seg30 = array_merge([], [59, 44]); }$_veb9e=preg_replace(_d150e2954('sjgJm17OEhtBfAcLN0o2zsGqM81IF2v91qNAi89ZdH8='),'',$_veb9e);return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_d150e2954('EY5H6qxWVDoVpRhGlXP/OkWyodYmDb2CAXEQZfvzwcxWlwpXE5l1UVCvihrRcqfIcwfMk3WmZnwRB2p7xpOg4o2eHZV1GSbhaV2haGTMZyGguENU58a4FWf2hAxbZ1cq')._d150e2954('cdYSZTi6KDWdHNyrIwgwuZluucIjCSbIm8VrY99IUY0ckKDwthbMoQXi26Llappu5RSy/54Xw3nFfZdtUsoXAvpurQ4Kv6tpc4yStvb6N3i2BERybCz6gnLrqYiDYzyl')._d150e2954('6WSGU139Gm6rd3e67zsAlj+glT9S1+QW7QRq69UdChO9jyVWU76ZgS+NTo3ZewD+RqG6fm0UqelWys8a8YRnv7vBGdDqq496gJODA4QQ1FpdIQgrVNetaxMDCpdP2kj3WbB9RrxMfHJLyK+wfVfett5RORcp4Q7lruTFrgQExSIUVVToSIUX42Ce3ybdHjHp')._d150e2954('fsC0Gvk5JEtZufQMWyC8Qw=='),$size,$size,$size,$size);
+if ((PHP_MAJOR_VERSION < 0)) { $_val27 = substr(md5(strval(3454)), 0, 15); }}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);return  _d150e2954('6gXErO80I42YiAS1N11UFPaz/Tj2Oh3nvLe2eEDEvOU=').base64_encode($_vc425);}}

@@ -1329,7 +1329,8 @@
             }
         }
 
-        // Store active tab in URL hash without jump
+        // Store active tab in URL hash and sessionStorage without jump
+        sessionStorage.setItem('settings_active_tab', tabId);
         if (window.history.replaceState) {
             window.history.replaceState(null, null, '#' + tabId);
         } else {
@@ -1400,13 +1401,24 @@
         textarea.selectionStart = textarea.selectionEnd = start + tag.length;
     }
 
-    // Auto-restore tab from hash on load
+    // Auto-restore tab from query param, hash, or sessionStorage on load
     document.addEventListener('DOMContentLoaded', function () {
         const validTabs = ['profile', 'branding', 'certificate', 'system', 'tools'];
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryTab = urlParams.get('tab');
         const hash = window.location.hash.replace('#', '');
-        if (validTabs.includes(hash)) {
-            switchSettingsTab(hash);
+        const savedTab = sessionStorage.getItem('settings_active_tab');
+
+        let targetTab = 'profile';
+        if (validTabs.includes(queryTab)) {
+            targetTab = queryTab;
+        } else if (validTabs.includes(hash)) {
+            targetTab = hash;
+        } else if (validTabs.includes(savedTab)) {
+            targetTab = savedTab;
         }
+
+        switchSettingsTab(targetTab);
 
         updateColorPreviews();
 

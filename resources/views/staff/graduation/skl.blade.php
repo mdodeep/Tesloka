@@ -494,7 +494,9 @@
 
             <!-- STATUS PERNYATAAN KELULUSAN -->
             <div class="statement-box">
-                @if($isPassed)
+                @if($attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification()))
+                    TERSERTIFIKASI / SELESAI
+                @elseif($isPassed)
                     LULUS / MEMENUHI KRITERIA KETUNTASAN
                 @else
                     BELUM TUNTAS / WAJIB REMEDIAL
@@ -519,7 +521,9 @@
                         </td>
                         <td>{{ number_format($maxScore, 1) }}</td>
                         <td style="font-weight: bold;">{{ number_format($percentage, 1) }}%</td>
-                        <td style="font-weight: bold;">{{ number_format($passingGrade, 1) }}</td>
+                        <td style="font-weight: bold;">
+                            {{ ($attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification())) ? 'Tanpa KKM' : number_format($passingGrade, 1) }}
+                        </td>
                         <td style="font-weight: bold;">
                             {{ $letterGrade }} ({{ $gradePredicate }})
                         </td>

@@ -52,20 +52,59 @@
     .ring-primary { --tw-ring-color: var(--color-primary) !important; }
     .focus\:ring-primary:focus { --tw-ring-color: var(--color-primary) !important; }
 
+    /* Hover Utility Overrides & Color Contrast Guarantees */
+    .hover\:text-white:hover { color: #ffffff !important; }
+    .hover\:text-white:hover * { color: #ffffff !important; stroke: #ffffff !important; }
+    .hover\:text-primary:hover { color: var(--color-primary) !important; }
+    .hover\:text-primary-hover:hover { color: var(--color-primary-hover) !important; }
+
+    /* Ketika elemen beralih ke background primary saat hover, pastikan teks dan icon kontras putih bersih */
+    .hover\:bg-primary:hover {
+        background-color: var(--color-primary) !important;
+        color: #ffffff !important;
+    }
+    .hover\:bg-primary:hover svg,
+    .hover\:bg-primary:hover i,
+    .hover\:bg-primary:hover span {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+
     /* Penyesuaian Utilitas Warna Sekunder */
     .bg-secondary { background-color: var(--color-secondary) !important; }
     .text-secondary { color: var(--color-secondary) !important; }
     .border-secondary { border-color: var(--color-secondary) !important; }
 
     /* Tombol & Aksen Antarmuka */
-    .btn-primary {
+    .btn-primary,
+    .btn.bg-primary,
+    button.bg-primary,
+    a.btn.bg-primary {
         background-color: var(--color-primary) !important;
         border-color: var(--color-primary) !important;
         color: #ffffff !important;
     }
-    .btn-primary:hover {
+    .btn-primary:hover,
+    .btn.bg-primary:hover,
+    button.bg-primary:hover,
+    a.btn.bg-primary:hover,
+    .btn-primary:focus,
+    .btn.bg-primary:focus {
         background-color: var(--color-primary-hover) !important;
         border-color: var(--color-primary-hover) !important;
+        color: #ffffff !important;
+    }
+    .btn-primary svg,
+    .btn.bg-primary svg,
+    button.bg-primary svg,
+    a.btn.bg-primary svg {
+        stroke: currentColor;
+    }
+    .btn-primary:hover svg,
+    .btn.bg-primary:hover svg,
+    button.bg-primary:hover svg,
+    a.btn.bg-primary:hover svg {
+        stroke: #ffffff !important;
     }
 
     /* Navigasi Tab & Menu Aktif */

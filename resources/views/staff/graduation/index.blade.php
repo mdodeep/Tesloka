@@ -147,8 +147,12 @@
                             <td class="py-3 px-4 text-center font-bold text-default-800 whitespace-nowrap">
                                 {{ number_format($res->percentage, 1) }}%
                             </td>
-                            <td class="py-3 px-4 text-center font-mono font-semibold text-emerald-600 whitespace-nowrap">
-                                {{ number_format($res->passing_grade, 1) }}
+                            <td class="py-3 px-4 text-center font-mono font-semibold whitespace-nowrap">
+                                @if($res->exam && (!($res->exam->has_passing_grade ?? true) || $res->exam->isCertification()))
+                                    <span class="text-slate-400 font-normal text-xs">Tanpa KKM</span>
+                                @else
+                                    <span class="text-emerald-600">{{ number_format($res->passing_grade, 1) }}</span>
+                                @endif
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
                                 <span class="px-2 py-0.5 rounded font-black font-mono {{ $res->final_grade_letter === 'A' ? 'bg-emerald-100 text-emerald-800' : ($res->final_grade_letter === 'B' ? 'bg-blue-100 text-blue-800' : ($res->final_grade_letter === 'C' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800')) }}">
@@ -156,7 +160,12 @@
                                 </span>
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
-                                @if($res->is_passed)
+                                @if($res->exam && (!($res->exam->has_passing_grade ?? true) || $res->exam->isCertification()))
+                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 inline-flex items-center gap-1 border border-blue-200 whitespace-nowrap">
+                                        <i data-lucide="award" class="size-3"></i>
+                                        <span>TERSERTIFIKASI</span>
+                                    </span>
+                                @elseif($res->is_passed)
                                     <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 inline-flex items-center gap-1 border border-emerald-200 whitespace-nowrap">
                                         <i data-lucide="check" class="size-3"></i>
                                         <span>LULUS</span>

@@ -3,7 +3,7 @@
 @section('title', 'Kelola Sesi — ' . $session->name)
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', $session->name)
-@section('page-subtitle', 'Kode: ' . $session->session_code . ' • Ujian: ' . $session->exam->title . ' • Ruang: ' . $session->room->name . ' (Kapasitas: ' . $session->room->capacity . ')')
+@section('page-subtitle', 'Kode: ' . $session->session_code . ' • Ujian: ' . $session->exam->title . ' • ' . ($session->isOnline() ? 'Pelaksanaan: Daring (Online CBT)' : ('Ruang: ' . ($session->room->name ?? 'Lab CBT') . ' (Kapasitas: ' . ($session->room->capacity ?? 30) . ')')))
 
 @section('page-actions')
     <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
@@ -220,19 +220,34 @@
             <x-cbt.card title="Kapasitas Ruang & Penugasan Peserta">
                 @php
                     $count = $session->participants->count();
-                    $cap = $session->room->capacity;
+                    $isOnline = $session->isOnline() || ! $session->exam_room_id;
+                    $cap = $isOnline ? 1000 : ($session->room->capacity ?? 30);
                     $percent = $cap > 0 ? min(100, round(($count / $cap) * 100)) : 0;
                 @endphp
                 <div class="space-y-3">
                     <div class="flex items-center justify-between text-xs">
-                        <span class="font-semibold text-default-700">Kapasitas Ruang Terisi (Maksimal 30 Peserta per DEC-001):</span>
-                        <span class="font-bold {{ $count >= $cap ? 'text-amber-600' : 'text-default-800' }}">
-                            {{ $count }} / {{ $cap }} Peserta ({{ $percent }}%)
+                        <span class="font-semibold text-default-700">
+                            @if($isOnline)
+                                <span class="inline-flex items-center gap-1 text-teal-700 font-bold">
+                                    <i data-lucide="globe" class="size-3.5"></i> Sesi Pelaksanaan Daring (Online CBT)
+                                </span>
+                            @else
+                                Kapasitas Ruang Terisi (Maksimal 30 Peserta per DEC-001):
+                            @endif
+                        </span>
+                        <span class="font-bold {{ (!$isOnline && $count >= $cap) ? 'text-amber-600' : 'text-default-800' }}">
+                            @if($isOnline)
+                                {{ $count }} Peserta Terdaftar (Daring / Fleksibel)
+                            @else
+                                {{ $count }} / {{ $cap }} Peserta ({{ $percent }}%)
+                            @endif
                         </span>
                     </div>
-                    <div class="w-full bg-default-100 rounded-full h-2.5 overflow-hidden">
-                        <div class="h-2.5 rounded-full {{ $count >= $cap ? 'bg-amber-500' : 'bg-primary' }}" style="width: {{ $percent }}%"></div>
-                    </div>
+                    @if(! $isOnline)
+                        <div class="w-full bg-default-100 rounded-full h-2.5 overflow-hidden">
+                            <div class="h-2.5 rounded-full {{ $count >= $cap ? 'bg-amber-500' : 'bg-primary' }}" style="width: {{ $percent }}%"></div>
+                        </div>
+                    @endif
 
                     <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                         <button type="button" onclick="document.getElementById('assignClassModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-1.5 shadow-2xs transition w-full sm:w-auto">

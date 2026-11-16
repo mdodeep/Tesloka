@@ -8,7 +8,7 @@
     $baseClasses = 'btn';
 
     $variants = [
-        'primary' => 'bg-primary text-white hover:bg-primary-hover shadow-xs',
+        'primary' => 'bg-primary text-white hover:bg-primary-hover hover:text-white shadow-xs',
         'secondary' => 'border border-default-200 bg-card text-default-700 hover:bg-default-100 shadow-xs',
         'success' => 'bg-success text-white hover:bg-success/90 shadow-xs',
         'danger' => 'bg-danger text-white hover:bg-danger/90 shadow-xs',

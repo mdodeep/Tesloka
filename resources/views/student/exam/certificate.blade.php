@@ -18,6 +18,14 @@
         $certAccentColor = \App\Models\SystemSetting::get('branding.cert_accent_color', '#c59b27');
         $certTitle = \App\Models\SystemSetting::get('branding.cert_title', 'SERTIFIKAT KELULUSAN');
         $certSubtitle = \App\Models\SystemSetting::get('branding.cert_subtitle', 'CERTIFICATE OF ACHIEVEMENT');
+
+        if ($attempt->exam && $attempt->exam->certificate_type === 'language_proficiency') {
+            $certTitle = 'SERTIFIKAT KECAKAPAN BAHASA';
+            $certSubtitle = 'CERTIFICATE OF LANGUAGE PROFICIENCY';
+        } elseif ($attempt->exam && $attempt->exam->certificate_type === 'competency') {
+            $certTitle = 'SERTIFIKAT KOMPETENSI';
+            $certSubtitle = 'CERTIFICATE OF COMPETENCY';
+        }
         
         // Template Narasi Pernyataan Kelulusan Sertifikat
         $rawStatementTemplate = \App\Models\SystemSetting::get(
@@ -915,7 +923,13 @@
                                     <div class="cert-cred-sep"></div>
                                     <div class="cert-cred-col">
                                         <div class="cert-cred-label">Status Kualifikasi</div>
-                                        <div class="cert-cred-status">LULUS (MEMENUHI KKM)</div>
+                                        <div class="cert-cred-status">
+                                            @if($attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification()))
+                                                TERSERTIFIKASI / SELESAI
+                                            @else
+                                                LULUS (MEMENUHI KKM)
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>

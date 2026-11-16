@@ -223,7 +223,44 @@
     <!-- ========================================== -->
     <!-- TAB 2: JURUSAN & DEPARTEMEN                -->
     <!-- ========================================== -->
-    <div id="tab-pane-departments" class="tab-pane hidden space-y-6">
+    <div id="tab-pane-departments" class="tab-pane hidden space-y-4">
+        <!-- Filter Bar Jenjang (Prodi / Jurusan) -->
+        <div class="card p-3 sm:p-4 border border-default-200 bg-white">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
+                    <span class="text-default-400 font-bold uppercase tracking-wider text-[11px] mr-1 shrink-0">Filter Jenjang:</span>
+                    <button type="button" onclick="filterDepartmentLevel('all')" id="btn-filter-dept-all" class="dept-level-filter-btn px-3 py-1.5 rounded-full font-semibold transition shrink-0 bg-primary text-white shadow-2xs cursor-pointer">
+                        Semua Jenjang (<span id="count-dept-all">{{ $departments->count() }}</span>)
+                    </button>
+                    @foreach(['S1', 'S2', 'S3', 'D3', 'D4', 'SMA', 'SMK', 'MA'] as $lvl)
+                        @php
+                            $cnt = $departments->filter(fn($d) => str_contains(strtoupper($d->level ?? ''), $lvl))->count();
+                        @endphp
+                        @if($cnt > 0)
+                            <button type="button" onclick="filterDepartmentLevel('{{ $lvl }}')" id="btn-filter-dept-{{ strtolower($lvl) }}" class="dept-level-filter-btn px-3 py-1.5 rounded-full font-semibold transition shrink-0 bg-default-100 text-default-600 hover:bg-default-200 cursor-pointer">
+                                {{ $lvl }} ({{ $cnt }})
+                            </button>
+                        @endif
+                    @endforeach
+                    @foreach($departmentLevels as $customLvl)
+                        @if(!in_array(strtoupper($customLvl), ['S1', 'S2', 'S3', 'D3', 'D4', 'SMA', 'SMK', 'MA']))
+                            @php
+                                $cnt = $departments->filter(fn($d) => strtoupper(trim($d->level ?? '')) === strtoupper(trim($customLvl)))->count();
+                            @endphp
+                            @if($cnt > 0)
+                                <button type="button" onclick="filterDepartmentLevel('{{ $customLvl }}')" id="btn-filter-dept-{{ Str::slug($customLvl) }}" class="dept-level-filter-btn px-3 py-1.5 rounded-full font-semibold transition shrink-0 bg-default-100 text-default-600 hover:bg-default-200 cursor-pointer">
+                                    {{ $customLvl }} ({{ $cnt }})
+                                </button>
+                            @endif
+                        @endif
+                    @endforeach
+                </div>
+                <div class="w-full md:w-64">
+                    <input type="text" id="deptSearchInput" onkeyup="filterDepartmentTable()" placeholder="Cari nama / kode jurusan..." class="form-input w-full h-8.5 text-xs rounded border-default-200 bg-white">
+                </div>
+            </div>
+        </div>
+
         <x-cbt.card title="Daftar Jurusan / Program Studi" subtitle="Daftar departemen yang terdaftar beserta relasi kelas dan mata pelajaran">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-department')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
@@ -245,12 +282,18 @@
                             <th class="px-3.5 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200 dark:divide-white/14" id="tbody-departments">
                         @forelse ($departments as $d)
-                            <tr class="hover:bg-default-50 transition">
+                            <tr class="hover:bg-default-50 transition dept-table-row" data-dept-level="{{ strtoupper($d->level ?? '') }}" data-dept-text="{{ strtolower($d->code . ' ' . $d->name . ' ' . ($d->level ?? '')) }}">
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $d->code }}</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-700 whitespace-nowrap">{{ $d->name }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $d->level ?? '-' }}</td>
+                                <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                                    @if($d->level)
+                                        <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-info/10 text-info border border-info/20">{{ $d->level }}</span>
+                                    @else
+                                        <span class="text-default-400">-</span>
+                                    @endif
+                                </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $d->classes_count }} rombel</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $d->subjects_count }} mapel</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-default-500 whitespace-nowrap">{{ Str::limit($d->description, 40) ?? '-' }}</td>
@@ -265,6 +308,7 @@
                                         <form method="POST" action="{{ route('staff.academic.departments.destroy', $d) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jurusan {{ $d->name }}?')">
                                             @csrf
                                             @method('DELETE')
+                                            <input type="hidden" name="active_tab" value="departments">
                                             <button type="submit" 
                                                     class="size-7 rounded bg-danger/10 hover:bg-danger/20 text-danger flex items-center justify-center transition cursor-pointer"
                                                     title="Hapus Jurusan">
@@ -275,12 +319,17 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
+                            <tr id="empty-row-dept">
                                 <td colspan="7" class="py-8 text-center text-default-400">
                                     <x-cbt.empty-state title="Belum Ada Jurusan" description="Klik tombol 'Tambah Jurusan Baru' untuk membuat jurusan/prodi." />
                                 </td>
                             </tr>
                         @endforelse
+                        <tr id="filter-empty-row-dept" class="hidden">
+                            <td colspan="7" class="py-8 text-center text-default-400">
+                                Tidak ada jurusan/prodi yang sesuai dengan filter jenjang atau pencarian ini.
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -291,7 +340,7 @@
     <!-- TAB 3: ROMBEL & KELAS                      -->
     <!-- ========================================== -->
     <div id="tab-pane-classes" class="tab-pane hidden space-y-6">
-        <x-cbt.card title="Daftar Rombel / Kelas Terdaftar" subtitle="Kelola seluruh kelas, pengarsipan status, dan edit rincian kapasitas peserta (Maks. 30)">
+        <x-cbt.card title="Daftar Rombel / Kelas Terdaftar" subtitle="Kelola seluruh kelas, alokasi siswa terdaftar, pengarsipan status, dan rincian kapasitas peserta (Maks. 30)">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-class')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="size-4"></i>
@@ -308,9 +357,9 @@
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jurusan</th>
                             <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kapasitas</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Peserta</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Peserta Terdaftar</th>
                             <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
+                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-40 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-default-200 dark:divide-white/14">
@@ -322,9 +371,13 @@
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $c->department?->name ?? 'Umum' }}</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-medium text-default-700 font-mono whitespace-nowrap">{{ $c->capacity }} peserta</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
-                                    <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-primary/10 text-primary">
-                                        {{ $c->students_count }} terdaftar
-                                    </span>
+                                    <button type="button" 
+                                            onclick="openClassStudentsModal({{ $c->id }}, '{{ addslashes($c->name) }}', '{{ $c->code }}', {{ $c->capacity }})"
+                                            class="px-2.5 py-1 rounded text-[11px] font-semibold bg-primary/10 hover:bg-primary hover:text-white text-primary transition inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                                            title="Klik untuk Kelola Anggota Siswa (Tambah/Hapus Siswa)">
+                                        <i data-lucide="users" class="size-3.5"></i>
+                                        <span>{{ $c->students_count }} / {{ $c->capacity }} terdaftar</span>
+                                    </button>
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     @if ($c->is_active)
@@ -335,6 +388,12 @@
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
+                                        <button type="button" 
+                                                onclick="openClassStudentsModal({{ $c->id }}, '{{ addslashes($c->name) }}', '{{ $c->code }}', {{ $c->capacity }})"
+                                                class="size-7 rounded bg-primary/10 hover:bg-primary hover:text-white text-primary flex items-center justify-center transition cursor-pointer"
+                                                title="Kelola Peserta Didik (Daftarkan / Keluarkan Siswa)">
+                                            <i data-lucide="user-plus" class="size-3.5"></i>
+                                        </button>
                                         <a href="{{ route('staff.academic.classes.print-cards', $c) }}" target="_blank"
                                            class="size-7 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 flex items-center justify-center transition cursor-pointer"
                                            title="Cetak Kartu Ujian Massal Siswa Kelas Ini (A4)">
@@ -350,6 +409,7 @@
                                         <form method="POST" action="{{ route('staff.academic.classes.toggle', $c) }}" class="inline">
                                             @csrf
                                             @method('PATCH')
+                                            <input type="hidden" name="active_tab" value="classes">
                                             <button type="submit" 
                                                     class="size-7 rounded {{ $c->is_active ? 'bg-warning/10 hover:bg-warning/20 text-warning' : 'bg-success/10 hover:bg-success/20 text-success' }} flex items-center justify-center transition cursor-pointer"
                                                     title="{{ $c->is_active ? 'Nonaktifkan / Arsipkan' : 'Aktifkan Kembali' }}">
@@ -360,6 +420,7 @@
                                         <form method="POST" action="{{ route('staff.academic.classes.destroy', $c) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kelas {{ $c->name }}?')">
                                             @csrf
                                             @method('DELETE')
+                                            <input type="hidden" name="active_tab" value="classes">
                                             <button type="submit" 
                                                     class="size-7 rounded bg-danger/10 hover:bg-danger/20 text-danger flex items-center justify-center transition cursor-pointer"
                                                     title="Hapus Kelas">
@@ -794,6 +855,7 @@
         </div>
         <form method="POST" action="{{ route('staff.academic.departments.store') }}" class="p-4 sm:p-5 space-y-4 overflow-y-auto">
             @csrf
+            <input type="hidden" name="active_tab" value="departments">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                 <div>
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kode Jurusan <span class="text-danger">*</span></label>
@@ -801,7 +863,22 @@
                 </div>
                 <div class="sm:col-span-2">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Jenjang / Level</label>
-                    <input type="text" name="level" placeholder="Contoh: S1 / SMA / D3" class="form-input w-full">
+                    <div class="flex items-center gap-1.5">
+                        <select id="create_dept_level_select" onchange="if(this.value) document.getElementById('create_dept_level').value = this.value" class="form-select text-xs h-9 w-32 shrink-0">
+                            <option value="">-- Preset --</option>
+                            <option value="S1">S1 (Sarjana)</option>
+                            <option value="S2">S2 (Magister)</option>
+                            <option value="S3">S3 (Doktor)</option>
+                            <option value="D3">D3 (Diploma 3)</option>
+                            <option value="D4">D4 (Sarjana Terapan)</option>
+                            <option value="SMA">SMA</option>
+                            <option value="MA">MA (Madrasah)</option>
+                            <option value="SMK">SMK (Kejuruan)</option>
+                            <option value="SMP">SMP / MTs</option>
+                            <option value="Umum">Umum / Kursus</option>
+                        </select>
+                        <input type="text" id="create_dept_level" name="level" placeholder="Ketik/Pilih Jenjang (cth: S1)" class="form-input text-xs h-9 w-full">
+                    </div>
                 </div>
             </div>
             <div>
@@ -832,6 +909,7 @@
         <form id="form-edit-department" method="POST" action="" class="p-4 sm:p-5 space-y-4 overflow-y-auto">
             @csrf
             @method('PUT')
+            <input type="hidden" name="active_tab" value="departments">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                 <div>
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kode <span class="text-danger">*</span></label>
@@ -839,7 +917,22 @@
                 </div>
                 <div class="sm:col-span-2">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Jenjang / Level</label>
-                    <input type="text" id="edit_dept_level" name="level" class="form-input w-full">
+                    <div class="flex items-center gap-1.5">
+                        <select id="edit_dept_level_select" onchange="if(this.value) document.getElementById('edit_dept_level').value = this.value" class="form-select text-xs h-9 w-32 shrink-0">
+                            <option value="">-- Preset --</option>
+                            <option value="S1">S1 (Sarjana)</option>
+                            <option value="S2">S2 (Magister)</option>
+                            <option value="S3">S3 (Doktor)</option>
+                            <option value="D3">D3 (Diploma 3)</option>
+                            <option value="D4">D4 (Sarjana Terapan)</option>
+                            <option value="SMA">SMA</option>
+                            <option value="MA">MA (Madrasah)</option>
+                            <option value="SMK">SMK (Kejuruan)</option>
+                            <option value="SMP">SMP / MTs</option>
+                            <option value="Umum">Umum / Kursus</option>
+                        </select>
+                        <input type="text" id="edit_dept_level" name="level" class="form-input text-xs h-9 w-full">
+                    </div>
                 </div>
             </div>
             <div>
@@ -947,9 +1040,104 @@
     </div>
 </div>
 
+<!-- 11. MODAL KELOLA PESERTA DIDIK ROMBEL / KELAS -->
+<div id="modal-class-students" class="fixed inset-0 z-50 hidden bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-md max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl border border-default-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0 bg-default-50">
+            <div>
+                <h4 class="text-sm font-bold text-default-900 flex items-center gap-2">
+                    <i data-lucide="users" class="size-4.5 text-primary"></i>
+                    <span>Kelola Peserta Didik Rombel / Kelas</span>
+                </h4>
+                <p id="class-students-subtitle" class="text-xs text-default-500 mt-0.5">Memuat data kelas...</p>
+            </div>
+            <button type="button" onclick="closeModal('modal-class-students')" class="size-8 rounded-full hover:bg-default-200 text-default-400 hover:text-default-600 flex items-center justify-center cursor-pointer transition">
+                <i data-lucide="x" class="size-4.5"></i>
+            </button>
+        </div>
+
+        <div class="p-4 sm:p-5 overflow-y-auto space-y-5">
+            <!-- Kapasitas & Status Card -->
+            <div class="bg-default-50 rounded-lg p-3.5 border border-default-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-0.5">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-default-400">Status Kapasitas Kelas (DEC-001)</span>
+                    <div class="flex items-center gap-2">
+                        <span id="class-capacity-badge" class="px-2.5 py-0.5 rounded text-xs font-bold bg-primary/10 text-primary">0 / 30 Peserta</span>
+                        <span id="class-capacity-desc" class="text-xs text-default-500">Tersedia kuota untuk siswa baru.</span>
+                    </div>
+                </div>
+                <div id="class-capacity-bar-container" class="w-full sm:w-48 bg-default-200 h-2 rounded-full overflow-hidden">
+                    <div id="class-capacity-bar" class="bg-primary h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Bagian 1: Daftarkan Siswa Baru ke Kelas Ini -->
+            <div id="enroll-form-container" class="border border-default-200 rounded-lg p-3.5 bg-white space-y-3">
+                <h5 class="text-xs font-bold text-default-800 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="user-plus" class="size-3.5 text-primary"></i>
+                    <span>Daftarkan Siswa ke Kelas Ini</span>
+                </h5>
+                <form id="form-enroll-student" method="POST" action="" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    @csrf
+                    <input type="hidden" name="active_tab" value="classes">
+                    <div class="flex-1">
+                        <select id="select-enroll-student" name="student_id" required class="form-select w-full h-9 text-xs rounded border-default-200 bg-white">
+                            <option value="">-- Pilih Siswa yang Belum Terdaftar --</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="btn-submit-enroll" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs shrink-0 cursor-pointer inline-flex items-center justify-center gap-1.5 h-9">
+                        <i data-lucide="plus" class="size-3.5"></i>
+                        <span>Daftarkan</span>
+                    </button>
+                </form>
+                <p id="enroll-empty-notice" class="text-xs text-default-400 italic hidden">Seluruh siswa aktif telah terdaftar atau belum ada akun siswa tersedia.</p>
+            </div>
+
+            <!-- Bagian 2: Tabel Siswa Terdaftar -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <h5 class="text-xs font-bold text-default-800 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="list" class="size-3.5 text-primary"></i>
+                        <span>Daftar Siswa Terdaftar (<span id="enrolled-count-header">0</span>)</span>
+                    </h5>
+                    <input type="text" id="filterEnrolledStudentsInput" onkeyup="filterEnrolledStudentsTable()" placeholder="Cari siswa terdaftar..." class="form-input text-xs h-7.5 w-44 rounded border-default-200">
+                </div>
+
+                <div class="border border-default-200 rounded-md overflow-hidden">
+                    <div class="overflow-x-auto max-h-64 overflow-y-auto">
+                        <table class="w-full text-left text-xs divide-y divide-default-200" id="table-enrolled-students">
+                            <thead class="bg-default-100 sticky top-0 z-10">
+                                <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap">
+                                    <th class="px-3 py-2 border-b border-default-200 text-center w-10">No</th>
+                                    <th class="px-3 py-2 border-b border-default-200">Nama Siswa</th>
+                                    <th class="px-3 py-2 border-b border-default-200">NIM / NISN</th>
+                                    <th class="px-3 py-2 border-b border-default-200">Email</th>
+                                    <th class="px-3 py-2 border-b border-default-200 text-center w-24">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="enrolled-students-body" class="divide-y divide-default-200 bg-white">
+                                <tr>
+                                    <td colspan="5" class="py-6 text-center text-default-400">Memuat data siswa...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-5 py-3 border-t border-default-200 bg-default-50 flex items-center justify-between shrink-0">
+            <span class="text-xs text-default-400">Perubahan pendaftaran siswa langsung tersimpan aman ke database.</span>
+            <button type="button" onclick="closeModal('modal-class-students')" class="btn btn-sm border border-default-200 bg-white hover:bg-default-100 text-default-700 font-semibold cursor-pointer">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
-    // Tab switching logic
+    // Tab switching logic with sessionStorage and URL hash persistence
     function switchTab(tabId) {
         document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -974,8 +1162,15 @@
             }
         }
 
-        // Store active tab in URL hash
-        window.location.hash = tabId;
+        // Store active tab in sessionStorage and URL hash
+        sessionStorage.setItem('academic_active_tab', tabId);
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, '#' + tabId);
+        } else {
+            window.location.hash = tabId;
+        }
+
+        if (window.lucide) lucide.createIcons();
     }
 
     // Modal helpers
@@ -1030,6 +1225,10 @@
         document.getElementById('edit_dept_code').value = code;
         document.getElementById('edit_dept_name').value = name;
         document.getElementById('edit_dept_level').value = level;
+        const select = document.getElementById('edit_dept_level_select');
+        if (select) {
+            select.value = level || '';
+        }
         document.getElementById('edit_dept_desc').value = description;
         openModal('modal-edit-department');
     }
@@ -1045,12 +1244,209 @@
         openModal('modal-edit-subject');
     }
 
-    // Restore active tab from hash on page load (defaults to 'years' if no hash)
-    document.addEventListener('DOMContentLoaded', function() {
-        const hash = window.location.hash.replace('#', '');
-        if (hash && ['years', 'departments', 'classes', 'subjects'].includes(hash)) {
-            switchTab(hash);
+    // Kelola Peserta Didik Rombel / Kelas
+    let currentManageClassId = null;
+
+    function openClassStudentsModal(classId, className, classCode, capacity) {
+        currentManageClassId = classId;
+        document.getElementById('class-students-subtitle').innerText = `Kelas ${className} (${classCode}) • Kapasitas: ${capacity} Peserta`;
+        document.getElementById('form-enroll-student').action = `/staff/academic/classes/${classId}/students`;
+
+        openModal('modal-class-students');
+
+        const tbody = document.getElementById('enrolled-students-body');
+        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-default-400">Memuat data peserta didik...</td></tr>`;
+
+        fetch(`/staff/academic/classes/${classId}/students`)
+            .then(res => res.json())
+            .then(data => {
+                renderClassStudentsData(data);
+            })
+            .catch(err => {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-danger font-medium">Gagal memuat data siswa: ${err.message}</td></tr>`;
+            });
+    }
+
+    function renderClassStudentsData(data) {
+        const cls = data.class;
+        const enrolled = data.enrolled || [];
+        const available = data.available || [];
+
+        // Update capacity UI
+        const badge = document.getElementById('class-capacity-badge');
+        const desc = document.getElementById('class-capacity-desc');
+        const bar = document.getElementById('class-capacity-bar');
+        const headerCount = document.getElementById('enrolled-count-header');
+
+        if (badge) badge.innerText = `${cls.enrolled_count} / ${cls.capacity} Peserta`;
+        if (headerCount) headerCount.innerText = cls.enrolled_count;
+
+        const percent = Math.min(100, Math.round((cls.enrolled_count / cls.capacity) * 100));
+        if (bar) {
+            bar.style.width = `${percent}%`;
+            if (percent >= 100) {
+                bar.className = 'bg-danger h-full transition-all duration-300';
+            } else if (percent >= 80) {
+                bar.className = 'bg-warning h-full transition-all duration-300';
+            } else {
+                bar.className = 'bg-primary h-full transition-all duration-300';
+            }
         }
+
+        const isFull = cls.enrolled_count >= cls.capacity;
+        if (desc) {
+            if (isFull) {
+                desc.innerHTML = `<span class="text-danger font-bold">Kapasitas maksimal tercapai (${cls.capacity} peserta).</span>`;
+            } else {
+                desc.innerText = `Tersisa ${cls.capacity - cls.enrolled_count} kuota kursi kosong.`;
+            }
+        }
+
+        // Available students select options
+        const select = document.getElementById('select-enroll-student');
+        const btnSubmit = document.getElementById('btn-submit-enroll');
+        const notice = document.getElementById('enroll-empty-notice');
+
+        if (select) {
+            select.innerHTML = '<option value="">-- Pilih Siswa untuk Didaftarkan --</option>';
+            available.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.textContent = `${s.name} (NISN/NIM: ${s.identity_number || '-'}) - ${s.email}`;
+                select.appendChild(opt);
+            });
+
+            if (available.length === 0 || isFull) {
+                select.disabled = true;
+                if (btnSubmit) btnSubmit.disabled = true;
+                if (notice) {
+                    notice.classList.remove('hidden');
+                    notice.innerText = isFull ? 'Kelas telah penuh. Tidak dapat menambahkan siswa lagi.' : 'Seluruh siswa aktif telah terdaftar ke kelas ini.';
+                }
+            } else {
+                select.disabled = false;
+                if (btnSubmit) btnSubmit.disabled = false;
+                if (notice) notice.classList.add('hidden');
+            }
+        }
+
+        // Render enrolled table
+        renderEnrolledTableRows(enrolled, cls.id);
+    }
+
+    function renderEnrolledTableRows(students, classId) {
+        const tbody = document.getElementById('enrolled-students-body');
+        if (!tbody) return;
+
+        if (students.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-default-400">Belum ada siswa yang didaftarkan ke rombel ini. Pilih siswa di atas dan klik Daftarkan.</td></tr>`;
+            return;
+        }
+
+        const csrfToken = '{{ csrf_token() }}';
+
+        tbody.innerHTML = students.map((s, idx) => `
+            <tr class="hover:bg-default-50 transition enrolled-student-row" data-name="${(s.name || '').toLowerCase()}" data-nim="${(s.identity_number || '').toLowerCase()}">
+                <td class="px-3 py-2 text-default-500 font-mono text-center">${idx + 1}</td>
+                <td class="px-3 py-2 font-semibold text-default-800">${s.name}</td>
+                <td class="px-3 py-2 font-mono text-default-600">${s.identity_number || '-'}</td>
+                <td class="px-3 py-2 text-default-500">${s.email}</td>
+                <td class="px-3 py-2 text-center">
+                    <form method="POST" action="/staff/academic/classes/${classId}/students/${s.id}" class="inline" onsubmit="return confirm('Keluarkan siswa ${s.name} dari rombel ini?')">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="active_tab" value="classes">
+                        <button type="submit" class="size-6.5 rounded bg-danger/10 hover:bg-danger/20 text-danger inline-flex items-center justify-center transition cursor-pointer" title="Keluarkan dari Rombel">
+                            <i data-lucide="trash-2" class="size-3.5"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        `).join('');
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function filterEnrolledStudentsTable() {
+        const query = (document.getElementById('filterEnrolledStudentsInput')?.value || '').toLowerCase().trim();
+        const rows = document.querySelectorAll('.enrolled-student-row');
+        rows.forEach(r => {
+            const name = r.getAttribute('data-name') || '';
+            const nim = r.getAttribute('data-nim') || '';
+            if (name.includes(query) || nim.includes(query)) {
+                r.classList.remove('hidden');
+            } else {
+                r.classList.add('hidden');
+            }
+        });
+    }
+
+    // Filter Jurusan berdasarkan Jenjang & Search
+    let currentDeptLevelFilter = 'all';
+
+    function filterDepartmentLevel(level) {
+        currentDeptLevelFilter = level;
+
+        document.querySelectorAll('.dept-level-filter-btn').forEach(btn => {
+            btn.className = 'dept-level-filter-btn px-3 py-1.5 rounded-full font-semibold transition shrink-0 bg-default-100 text-default-600 hover:bg-default-200 cursor-pointer';
+        });
+
+        const activeFilterBtn = document.getElementById(level === 'all' ? 'btn-filter-dept-all' : `btn-filter-dept-${level.toLowerCase()}`);
+        if (activeFilterBtn) {
+            activeFilterBtn.className = 'dept-level-filter-btn px-3 py-1.5 rounded-full font-semibold transition shrink-0 bg-primary text-white shadow-2xs cursor-pointer';
+        }
+
+        filterDepartmentTable();
+    }
+
+    function filterDepartmentTable() {
+        const query = (document.getElementById('deptSearchInput')?.value || '').toLowerCase().trim();
+        const rows = document.querySelectorAll('.dept-table-row');
+        let visibleCount = 0;
+
+        rows.forEach(r => {
+            const rowLevel = (r.getAttribute('data-dept-level') || '').toUpperCase();
+            const rowText = (r.getAttribute('data-dept-text') || '').toLowerCase();
+
+            const matchLevel = (currentDeptLevelFilter === 'all') || rowLevel.includes(currentDeptLevelFilter.toUpperCase());
+            const matchQuery = !query || rowText.includes(query);
+
+            if (matchLevel && matchQuery) {
+                r.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                r.classList.add('hidden');
+            }
+        });
+
+        const filterEmpty = document.getElementById('filter-empty-row-dept');
+        if (filterEmpty) {
+            if (visibleCount === 0 && rows.length > 0) {
+                filterEmpty.classList.remove('hidden');
+            } else {
+                filterEmpty.classList.add('hidden');
+            }
+        }
+    }
+
+    // Restore active tab from query param, hash, or sessionStorage on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const validTabs = ['years', 'departments', 'classes', 'subjects'];
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryTab = urlParams.get('tab');
+        const hash = window.location.hash.replace('#', '');
+        const savedTab = sessionStorage.getItem('academic_active_tab');
+
+        let targetTab = '{{ $activeTab ?? 'years' }}';
+        if (validTabs.includes(queryTab)) {
+            targetTab = queryTab;
+        } else if (validTabs.includes(hash)) {
+            targetTab = hash;
+        } else if (validTabs.includes(savedTab)) {
+            targetTab = savedTab;
+        }
+
+        switchTab(targetTab);
     });
 </script>
 @endpush

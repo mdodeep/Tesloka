@@ -93,9 +93,24 @@
                                 <div class="text-[11px] text-default-500 mt-0.5">{{ $session->exam->subject->name ?? '-' }}</div>
                             </td>
                             <td class="py-3.5 px-4 whitespace-nowrap">
-                                <div class="font-semibold text-default-800 text-sm">{{ $session->room->name ?? '-' }}</div>
-                                <div class="text-[11px] text-default-500">
-                                    Terisi: <strong class="{{ $session->participants_count > ($session->room->capacity ?? 30) ? 'text-rose-600' : 'text-default-800' }}">{{ $session->participants_count }}</strong> / {{ $session->room->capacity ?? 30 }} Peserta
+                                <div class="flex items-center gap-1.5 font-semibold text-default-800 text-sm">
+                                    @if($session->isOnline() || ! $session->exam_room_id)
+                                        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                                            <i data-lucide="globe" class="size-3"></i> Daring
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                            <i data-lucide="building" class="size-3"></i> Lab CBT
+                                        </span>
+                                    @endif
+                                    <span>{{ $session->room->name ?? 'Daring (Online CBT)' }}</span>
+                                </div>
+                                <div class="text-[11px] text-default-500 mt-0.5">
+                                    @if($session->isOnline() || ! $session->exam_room_id)
+                                        Terdaftar: <strong class="text-default-800">{{ $session->participants_count }}</strong> Peserta
+                                    @else
+                                        Terisi: <strong class="{{ $session->participants_count > ($session->room->capacity ?? 30) ? 'text-rose-600' : 'text-default-800' }}">{{ $session->participants_count }}</strong> / {{ $session->room->capacity ?? 30 }} Peserta
+                                    @endif
                                 </div>
                             </td>
                             <td class="py-3.5 px-4 text-xs text-default-700 whitespace-nowrap">

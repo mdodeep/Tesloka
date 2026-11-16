@@ -35,27 +35,45 @@
                         <option value="">-- Pilih Ujian --</option>
                         @foreach($exams as $ex)
                             <option value="{{ $ex->id }}" {{ (old('exam_id') == $ex->id || $selectedExamId == $ex->id) ? 'selected' : '' }}>
-                                {{ $ex->title }} ({{ $ex->code }}) - Durasi {{ $ex->duration_minutes }} menit
+                                {{ $ex->title }} ({{ $ex->code }}) - Durasi {{ $ex->duration_minutes }} menit [{{ $ex->getDeliveryModeLabel() }}]
                             </option>
                         @endforeach
                     </select>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Ruang Ujian *</label>
-                    <select name="exam_room_id" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium" required>
-                        <option value="">-- Pilih Ruang Ujian --</option>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Mode Pelaksanaan Sesi *</label>
+                        <select name="delivery_mode" id="select-session-delivery-mode" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium" required>
+                            <option value="online" {{ old('delivery_mode', 'online') == 'online' ? 'selected' : '' }}>🌐 Daring / Jarak Jauh (Online CBT)</option>
+                            <option value="offline" {{ old('delivery_mode') == 'offline' ? 'selected' : '' }}>🏢 Luring / Tatap Muka (Lab CBT)</option>
+                            <option value="hybrid" {{ old('delivery_mode') == 'hybrid' ? 'selected' : '' }}>🔄 Hybrid (Daring & Luring)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Nama / Keterangan Sesi *</label>
+                        <input type="text" name="name" value="{{ old('name', 'Sesi 1') }}" placeholder="Contoh: Sesi 1 (Pagi) / Shift 1" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
+                    </div>
+                </div>
+
+                <div id="container-exam-room">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-semibold text-default-700 uppercase">
+                            Ruang Ujian Fisik <span id="room-required-indicator" class="text-rose-500 hidden">*</span>
+                        </label>
+                        <span id="room-optional-badge" class="text-[11px] text-teal-600 font-medium">Opsional pada mode Daring</span>
+                    </div>
+                    <select name="exam_room_id" id="select-exam-room" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium">
+                        <option value="">-- Daring / Jarak Jauh (Tanpa Ruangan Fisik) --</option>
                         @foreach($rooms as $rm)
                             <option value="{{ $rm->id }}" {{ old('exam_room_id') == $rm->id ? 'selected' : '' }}>
                                 {{ $rm->name }} ({{ $rm->code }}) &bull; Kapasitas {{ $rm->capacity }} Peserta &bull; {{ $rm->location ?? 'Gedung Utama' }}
                             </option>
                         @endforeach
                     </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Nama / Keterangan Sesi *</label>
-                    <input type="text" name="name" value="{{ old('name', 'Sesi 1') }}" placeholder="Contoh: Sesi 1 (Pagi) / Shift 1" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
+                    <p id="room-info-help" class="text-[11px] text-default-500 mt-1">
+                        Sesi ujian daring tidak memerlukan ruangan fisik. Peserta dapat mengakses ujian dari mana saja menggunakan browser dan token rilis.
+                    </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -86,5 +104,38 @@
         </x-cbt.card>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectMode = document.getElementById('select-session-delivery-mode');
+        const selectRoom = document.getElementById('select-exam-room');
+        const reqIndicator = document.getElementById('room-required-indicator');
+        const optBadge = document.getElementById('room-optional-badge');
+        const infoHelp = document.getElementById('room-info-help');
+
+        function updateRoomMode() {
+            if (!selectMode) return;
+            const mode = selectMode.value;
+            if (mode === 'offline') {
+                if (reqIndicator) reqIndicator.classList.remove('hidden');
+                if (optBadge) optBadge.classList.add('hidden');
+                if (selectRoom) selectRoom.required = true;
+                if (infoHelp) infoHelp.textContent = 'Mode luring (tatap muka) wajib memilih ruang lab komputer fisik dengan alokasi kursi.';
+            } else {
+                if (reqIndicator) reqIndicator.classList.add('hidden');
+                if (optBadge) optBadge.classList.remove('hidden');
+                if (selectRoom) selectRoom.required = false;
+                if (infoHelp) infoHelp.textContent = 'Sesi ujian daring tidak memerlukan ruangan fisik. Peserta dapat mengakses ujian dari mana saja menggunakan browser dan token rilis.';
+            }
+        }
+
+        if (selectMode) {
+            selectMode.addEventListener('change', updateRoomMode);
+            updateRoomMode();
+        }
+    });
+</script>
+@endpush
 @endsection
 

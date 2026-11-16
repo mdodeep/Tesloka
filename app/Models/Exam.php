@@ -24,6 +24,11 @@ class Exam extends Model
         'code',
         'description',
         'exam_type',
+        'delivery_mode',
+        'assessment_type',
+        'has_passing_grade',
+        'score_scale',
+        'certificate_type',
         'duration_minutes',
         'passing_grade',
         'scheduled_start',
@@ -49,6 +54,7 @@ class Exam extends Model
     {
         return [
             'duration_minutes' => 'integer',
+            'has_passing_grade' => 'boolean',
             'passing_grade' => 'decimal:2',
             'scheduled_start' => 'datetime',
             'scheduled_end' => 'datetime',
@@ -152,7 +158,7 @@ class Exam extends Model
         if ($this->duration_minutes <= 0) {
             $criticalErrors[] = 'Durasi ujian harus lebih besar dari 0 menit.';
         }
-        if ($this->passing_grade < 0 || $this->passing_grade > 100) {
+        if ($this->has_passing_grade && ($this->passing_grade < 0 || $this->passing_grade > 100)) {
             $criticalErrors[] = 'Nilai batas kelulusan (KKM) harus berada di antara 0 dan 100.';
         }
         if ($this->scheduled_start && $this->scheduled_end && $this->scheduled_end->lte($this->scheduled_start)) {
@@ -183,7 +189,7 @@ class Exam extends Model
                 // Periksa ketersediaan kunci jawaban pada soal objektif
                 foreach ($availableQuestions as $q) {
                     if (in_array($q->type, ['multiple_choice', 'true_false'])) {
-                        $hasCorrect = $q->options->contains(fn ($opt) => (bool) $opt->is_correct);
+                        $hasCorrect = $q->options->contains(fn($opt) => (bool) $opt->is_correct);
                         if (! $hasCorrect) {
                             $criticalErrors[] = "Soal {$q->code} dalam bank '{$bank->name}' belum memiliki kunci jawaban benar.";
                         }
@@ -203,15 +209,15 @@ class Exam extends Model
 
         $isValid = empty($criticalErrors);
 
-        $hasBaseConfig = ! empty($this->title) && $this->duration_minutes > 0 && $this->passing_grade >= 0 && $this->passing_grade <= 100;
+        $hasBaseConfig = ! empty($this->title) && $this->duration_minutes > 0 && (! $this->has_passing_grade || ($this->passing_grade >= 0 && $this->passing_grade <= 100));
         $hasBlueprints = $blueprints->isNotEmpty() && ($totalBlueprintQuestions ?? 0) > 0;
-        $hasSufficientQuota = $blueprints->isNotEmpty() && ! collect($criticalErrors)->contains(fn ($err) => str_contains($err, 'kurang dari kebutuhan blueprint'));
-        $hasAnswerKeys = ! collect($criticalErrors)->contains(fn ($err) => str_contains($err, 'belum memiliki kunci jawaban benar'));
+        $hasSufficientQuota = $blueprints->isNotEmpty() && ! collect($criticalErrors)->contains(fn($err) => str_contains($err, 'kurang dari kebutuhan blueprint'));
+        $hasAnswerKeys = ! collect($criticalErrors)->contains(fn($err) => str_contains($err, 'belum memiliki kunci jawaban benar'));
         $hasPackages = $this->packages()->exists();
 
         $checklist = [
             [
-                'label' => 'Konfigurasi parameter dasar (judul, durasi, KKM)',
+                'label' => $this->has_passing_grade ? 'Konfigurasi parameter dasar (judul, durasi, KKM)' : 'Konfigurasi parameter dasar (judul, durasi) - Mode Tanpa KKM',
                 'passed' => $hasBaseConfig,
             ],
             [
@@ -261,7 +267,7 @@ class Exam extends Model
 
         DB::transaction(function () use ($packageCount, $blueprints, $packageLetters, &$createdPackages, $shuffleOptions) {
             for ($pIdx = 0; $pIdx < $packageCount; $pIdx++) {
-                $packageLetter = $packageLetters[$pIdx] ?? ('V'.($pIdx + 1));
+                $packageLetter = $packageLetters[$pIdx] ?? ('V' . ($pIdx + 1));
                 $packageCode = "{$this->code}-PKG-{$packageLetter}";
 
                 // Hapus paket dengan kode yang sama jika ada sebelumnya untuk regenerasi bersih
@@ -378,7 +384,7 @@ class Exam extends Model
             'published_at',
         ]);
 
-        $clone->code = 'EXAM-'.strtoupper(Str::random(6));
+        $clone->code = 'EXAM-' . strtoupper(Str::random(6));
         $clone->title = "{$this->title} (Salinan)";
         $clone->status = 'draft';
         $clone->save();
@@ -400,5 +406,44 @@ class Exam extends Model
     public function finalResults(): HasMany
     {
         return $this->hasMany(ExamFinalResult::class);
+    }
+
+    public function isCertification(): bool
+    {
+        return str_starts_with((string) $this->assessment_type, 'certification') || ! $this->has_passing_grade;
+    }
+
+    public function isLanguageCertification(): bool
+    {
+        return $this->assessment_type === 'certification_language';
+    }
+
+    public function requiresPassingGrade(): bool
+    {
+        return (bool) ($this->has_passing_grade ?? true);
+    }
+
+    public function isOnline(): bool
+    {
+        return ($this->delivery_mode ?? 'online') === 'online';
+    }
+
+    public function getDeliveryModeLabel(): string
+    {
+        return match ($this->delivery_mode) {
+            'offline' => 'Luring / Tatap Muka (Lab CBT)',
+            'hybrid' => 'Hybrid (Luring & Daring)',
+            default => 'Daring / Jarak Jauh (Online CBT)',
+        };
+    }
+
+    public function getAssessmentTypeLabel(): string
+    {
+        return match ($this->assessment_type) {
+            'certification_language' => 'Sertifikasi Bahasa (TOEFL/EPT/ITP/TOAFL)',
+            'certification_competency' => 'Sertifikasi Kompetensi & Profesi',
+            'tryout' => 'Tryout / Uji Coba Mandiri',
+            default => 'Ujian Akademik Standar',
+        };
     }
 }

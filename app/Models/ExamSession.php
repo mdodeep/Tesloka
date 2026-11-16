@@ -15,6 +15,7 @@ class ExamSession extends Model
     protected $fillable = [
         'exam_id',
         'exam_room_id',
+        'delivery_mode',
         'name',
         'session_code',
         'start_time',
@@ -38,7 +39,25 @@ class ExamSession extends Model
 
     public function room(): BelongsTo
     {
-        return $this->belongsTo(ExamRoom::class, 'exam_room_id');
+        return $this->belongsTo(ExamRoom::class, 'exam_room_id')->withDefault([
+            'name' => 'Daring / Jarak Jauh (Online CBT)',
+            'location' => 'Virtual Remote',
+            'capacity' => 1000,
+        ]);
+    }
+
+    public function isOnline(): bool
+    {
+        return empty($this->exam_room_id);
+    }
+
+    public function getDeliveryModeLabel(): string
+    {
+        return match ($this->delivery_mode) {
+            'offline' => 'Luring / Tatap Muka (Lab CBT)',
+            'hybrid' => 'Hybrid (Luring & Daring)',
+            default => 'Daring / Jarak Jauh (Online CBT)',
+        };
     }
 
     public function proctors(): HasMany

@@ -259,6 +259,7 @@
                                     <button type="button" 
                                             onclick="openEditUserFromData({{ json_encode($u->only(['id', 'name', 'username', 'email', 'identity_number', 'nik', 'phone', 'gender', 'status', 'birth_place', 'address']) + [
                                                 'role_id' => $u->roles->first()?->id,
+                                                'class_id' => $u->classes->first()?->id,
                                                 'birth_date_raw' => $u->birth_date ? $u->birth_date->format('Y-m-d') : '',
                                                 'has_custom_photo' => $u->hasCustomPhoto(),
                                                 'photo_url' => $u->photo_url,
@@ -397,10 +398,22 @@
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Peran (Role) <span class="text-danger">*</span></label>
                     <select name="role_id" required class="form-select w-full max-w-full truncate">
                         @foreach ($roles as $r)
-                            <option value="{{ $r->id }}">{{ $r->display_name }}</option>
+                            <option value="{{ $r->id }}" {{ $r->name === 'student' ? 'selected' : '' }}>{{ $r->display_name }}</option>
                         @endforeach
                     </select>
                 </div>
+            </div>
+
+            <div class="space-y-1.5 min-w-0">
+                <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Rombel / Kelas (Khusus Siswa / Peserta Didik)</label>
+                <select name="academic_class_id" class="form-select w-full">
+                    <option value="">-- Tanpa Rombel / Belum Ditugaskan --</option>
+                    @if(isset($academicClasses))
+                        @foreach($academicClasses as $ac)
+                            <option value="{{ $ac->id }}">{{ $ac->name }} ({{ $ac->code }}) &bull; Th. {{ $ac->academicYear->name ?? '-' }}</option>
+                        @endforeach
+                    @endif
+                </select>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -659,6 +672,18 @@
                         @endforeach
                     </select>
                 </div>
+            </div>
+
+            <div class="space-y-1.5 min-w-0">
+                <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Rombel / Kelas (Khusus Siswa / Peserta Didik)</label>
+                <select id="edit_user_academic_class_id" name="academic_class_id" class="form-select w-full">
+                    <option value="">-- Tanpa Rombel / Belum Ditugaskan --</option>
+                    @if(isset($academicClasses))
+                        @foreach($academicClasses as $ac)
+                            <option value="{{ $ac->id }}">{{ $ac->name }} ({{ $ac->code }}) &bull; Th. {{ $ac->academicYear->name ?? '-' }}</option>
+                        @endforeach
+                    @endif
+                </select>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -997,6 +1022,10 @@
         document.getElementById('edit_user_birth_place').value = u.birth_place || '';
         document.getElementById('edit_user_birth_date').value = u.birth_date_raw || '';
         document.getElementById('edit_user_address').value = u.address || '';
+        const classSelect = document.getElementById('edit_user_academic_class_id');
+        if (classSelect) {
+            classSelect.value = u.class_id || (u.classes && u.classes.length > 0 ? u.classes[0].id : '');
+        }
 
         const photoSec = document.getElementById('edit_user_photo_section');
         const photoPreview = document.getElementById('edit_user_avatar_preview');

@@ -81,20 +81,31 @@
                     @forelse($exams as $exam)
                         <tr class="hover:bg-default-50/80 transition-colors">
                             <td class="py-3.5 px-4 whitespace-nowrap">
-                                <a href="{{ route('staff.exams.show', $exam) }}" class="font-bold text-default-900 hover:text-primary transition block text-sm">
-                                    {{ $exam->title }}
-                                </a>
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <a href="{{ route('staff.exams.show', $exam) }}" class="font-bold text-default-900 hover:text-primary transition text-sm">
+                                        {{ $exam->title }}
+                                    </a>
+                                    @if($exam->isLanguageCertification())
+                                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                                            Bahasa
+                                        </span>
+                                    @elseif($exam->isCertification())
+                                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                                            Sertifikasi
+                                        </span>
+                                    @endif
+                                </div>
                                 <div class="text-[11px] text-default-400 font-mono mt-0.5">
                                     {{ $exam->code }} &bull; Dibuat oleh: {{ $exam->creator->name ?? 'Staf' }}
                                 </div>
                             </td>
                             <td class="py-3.5 px-4 whitespace-nowrap">
                                 <div class="font-semibold text-default-800 text-xs">{{ $exam->subject->name ?? '-' }}</div>
-                                <div class="text-[11px] text-default-500 uppercase mt-0.5">{{ $exam->exam_type }} &bull; {{ $exam->academicYear->name ?? '-' }}</div>
+                                <div class="text-[11px] text-default-500 mt-0.5">{{ $exam->getDeliveryModeLabel() }} &bull; {{ $exam->academicYear->name ?? '-' }}</div>
                             </td>
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                 <div class="font-bold text-default-800">{{ $exam->duration_minutes }} mnt</div>
-                                <div class="text-[11px] text-default-500 mt-0.5">KKM: {{ $exam->passing_grade }}</div>
+                                <div class="text-[11px] text-default-500 mt-0.5">{{ $exam->has_passing_grade ? ('KKM: ' . $exam->passing_grade) : 'Sertifikasi' }}</div>
                             </td>
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                 <div class="inline-flex items-center gap-1.5">

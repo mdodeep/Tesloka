@@ -82,6 +82,9 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::put('classes/{class}', [AcademicStructureController::class, 'updateClass'])->name('classes.update');
             Route::delete('classes/{class}', [AcademicStructureController::class, 'destroyClass'])->name('classes.destroy');
             Route::patch('classes/{class}/toggle', [AcademicStructureController::class, 'toggleClassStatus'])->name('classes.toggle');
+            Route::get('classes/{class}/students', [AcademicStructureController::class, 'getClassStudents'])->name('classes.students');
+            Route::post('classes/{class}/students', [AcademicStructureController::class, 'enrollStudent'])->name('classes.students.enroll');
+            Route::delete('classes/{class}/students/{student}', [AcademicStructureController::class, 'unenrollStudent'])->name('classes.students.unenroll');
             Route::get('classes/{class}/print-cards', [AcademicStructureController::class, 'printClassCards'])->name('classes.print-cards');
             Route::get('classes/{class}/pdf/cards', [AcademicStructureController::class, 'downloadClassCardsPdf'])->name('classes.pdf.cards');
 

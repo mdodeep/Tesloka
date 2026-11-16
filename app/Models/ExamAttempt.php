@@ -209,9 +209,14 @@ class ExamAttempt extends Model
 
     /**
      * Apakah siswa dinyatakan lulus / melampaui KKM (FULL-FEATURE 32.1).
+     * Pada mode sertifikasi bahasa atau ujian tanpa KKM, seluruh peserta dianggap tuntas/tersertifikasi.
      */
     public function isPassed(): bool
     {
+        if ($this->exam && (! $this->exam->has_passing_grade || $this->exam->isCertification())) {
+            return true;
+        }
+
         $kkm = (float) ($this->exam?->passing_grade ?? 75.0);
         $score = (float) ($this->total_score ?? 0);
 

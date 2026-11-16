@@ -13,7 +13,7 @@
         @endif
     </div>
 @endsection
-@section('page-subtitle', 'Kode: ' . $exam->code . ' • Mapel: ' . ($exam->subject->name ?? '-') . ' • Durasi: ' . $exam->duration_minutes . ' Menit • KKM: ' . $exam->passing_grade)
+@section('page-subtitle', 'Kode: ' . $exam->code . ' • Mapel: ' . ($exam->subject->name ?? '-') . ' • Durasi: ' . $exam->duration_minutes . ' Menit • ' . ($exam->has_passing_grade ? ('KKM: ' . $exam->passing_grade) : 'Mode Sertifikasi (Tanpa KKM)') . ' • ' . $exam->getDeliveryModeLabel())
 
 @section('page-actions')
     {{-- 1. Tombol Aksi Utama Sesuai Status Ujian --}}

@@ -15,7 +15,7 @@
         }
 
         &.btn-primary {
-            @apply bg-primary hover:bg-primary-hover text-white shadow-xs font-semibold;
+            @apply bg-primary hover:bg-primary-hover text-white hover:text-white shadow-xs font-semibold;
         }
 
         &.btn-secondary {
@@ -38,5 +38,4 @@
     button:disabled {
         cursor: not-allowed;
     }
-
 }

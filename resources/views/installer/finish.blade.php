@@ -2,13 +2,13 @@
 
 @section('content')
     <div style="text-align: center; margin-bottom: 2rem;">
-        <div style="width: 4rem; height: 4rem; background: #ecfdf5; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--color-success); font-size: 2rem; margin-bottom: 1rem; border: 2px solid #a7f3d0;">
-            ✓
+        <div style="width: 3.5rem; height: 3.5rem; background: #ecfdf5; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--color-success); margin-bottom: 1rem; border: 2px solid #a7f3d0;">
+            <svg style="width: 1.75rem; height: 1.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
         </div>
-        <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--color-dark); margin-bottom: 0.5rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--color-dark); margin-bottom: 0.375rem; letter-spacing: -0.01em;">
             Pemasangan Berhasil Diselesaikan!
         </h1>
-        <p style="color: var(--color-muted); font-size: 0.9375rem; max-width: 600px; margin: 0 auto;">
+        <p style="color: var(--color-muted); font-size: 0.875rem; max-width: 560px; margin: 0 auto; line-height: 1.5;">
             Selamat! TESLOKA CBT kini telah terpasang 100% dan siap digunakan untuk menyelenggarakan ujian berbasis komputer di institusi Anda.
         </p>
     </div>
@@ -18,58 +18,60 @@
     </div>
 
     <!-- Informasi Lengkap & Detail -->
-    <div style="background: var(--color-bg); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-dark);">
+    <div style="background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
+        <h2 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-dark);">
             Informasi Akses & Kredensial Sistem
         </h2>
 
-        <table class="status-table">
-            <tbody>
-                <tr>
-                    <td style="width: 35%; color: var(--color-muted);">Institusi Pendidikan</td>
-                    <td><strong>{{ $summary['institution_name'] ?? '-' }}</strong></td>
-                </tr>
-                <tr>
-                    <td style="color: var(--color-muted);">Portal Staf & Administrasi</td>
-                    <td>
-                        <a href="{{ $summary['url_staff'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
-                            {{ $summary['url_staff'] ?? '-' }} &UpperRightArrow;
-                        </a>
-                        <div class="form-hint">Digunakan oleh Admin, Proktor, Guru, dan Koordinator Ujian.</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color: var(--color-muted);">Portal Ujian Siswa</td>
-                    <td>
-                        <a href="{{ $summary['url_student'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
-                            {{ $summary['url_student'] ?? '-' }} &UpperRightArrow;
-                        </a>
-                        <div class="form-hint">Alamat pengerjaan ujian untuk seluruh peserta didik.</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color: var(--color-muted);">Portal Verifikasi Publik</td>
-                    <td>
-                        <a href="{{ $summary['url_cert'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
-                            {{ $summary['url_cert'] ?? '-' }} &UpperRightArrow;
-                        </a>
-                        <div class="form-hint">Verifikasi keaslian ijazah, SKHU, dan sertifikat ber-QR code.</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color: var(--color-muted);">Username Administrator</td>
-                    <td><code>{{ $summary['admin_username'] ?? 'admin' }}</code></td>
-                </tr>
-                <tr>
-                    <td style="color: var(--color-muted);">Email Administrator</td>
-                    <td>{{ $summary['admin_email'] ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td style="color: var(--color-muted);">Waktu Pemasangan</td>
-                    <td>{{ $summary['installed_at'] ?? date('c') }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive" style="margin-bottom: 0; background: #ffffff;">
+            <table class="status-table">
+                <tbody>
+                    <tr>
+                        <td style="width: 35%; color: var(--color-muted);">Institusi Pendidikan</td>
+                        <td><strong>{{ $summary['institution_name'] ?? '-' }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-muted);">Portal Staf & Administrasi</td>
+                        <td>
+                            <a href="{{ $summary['url_staff'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                                {{ $summary['url_staff'] ?? '-' }} &UpperRightArrow;
+                            </a>
+                            <div class="form-hint">Digunakan oleh Admin, Proktor, Guru, dan Koordinator Ujian.</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-muted);">Portal Ujian Siswa</td>
+                        <td>
+                            <a href="{{ $summary['url_student'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                                {{ $summary['url_student'] ?? '-' }} &UpperRightArrow;
+                            </a>
+                            <div class="form-hint">Alamat pengerjaan ujian untuk seluruh peserta didik.</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-muted);">Portal Verifikasi Publik</td>
+                        <td>
+                            <a href="{{ $summary['url_cert'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                                {{ $summary['url_cert'] ?? '-' }} &UpperRightArrow;
+                            </a>
+                            <div class="form-hint">Verifikasi keaslian ijazah, SKHU, dan sertifikat ber-QR code.</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-muted);">Username Administrator</td>
+                        <td><code>{{ $summary['admin_username'] ?? 'admin' }}</code></td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-muted);">Email Administrator</td>
+                        <td>{{ $summary['admin_email'] ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-muted);">Waktu Pemasangan</td>
+                        <td>{{ $summary['installed_at'] ?? date('c') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Catatan Pasca Instalasi -->
@@ -89,7 +91,7 @@
             Unduh Ringkasan (.TXT)
         </button>
 
-        <a href="{{ $summary['url_staff'] ?? route('staff.login') }}" class="btn btn-primary" style="font-size: 1rem; padding: 0.75rem 1.75rem;">
+        <a href="{{ $summary['url_staff'] ?? route('staff.login') }}" class="btn btn-primary" style="font-size: 0.9375rem; padding: 0.625rem 1.5rem;">
             <span>Buka Portal Staf & Masuk</span>
             <span>&rarr;</span>
         </a>
@@ -137,4 +139,3 @@ Hak Cipta (c) {{ date('Y') }} TESLOKA CBT.
     });
 </script>
 @endsection
-

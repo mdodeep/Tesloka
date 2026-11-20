@@ -2,10 +2,10 @@
 
 @section('content')
     <div style="margin-bottom: 1.5rem;">
-        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--color-dark); margin-bottom: 0.5rem;">
+        <h1 style="font-size: 1.375rem; font-weight: 700; color: var(--color-dark); margin-bottom: 0.375rem; letter-spacing: -0.01em;">
             Konfigurasi Basis Data & Cache
         </h1>
-        <p style="color: var(--color-muted); font-size: 0.875rem;">
+        <p style="color: var(--color-muted); font-size: 0.875rem; line-height: 1.5;">
             TESLOKA CBT menggunakan PostgreSQL sebagai sumber kebenaran data mutlak (Source of Truth) dan Redis untuk caching telemetri ujian.
         </p>
     </div>
@@ -13,8 +13,8 @@
     <form method="POST" action="{{ route('installer.database.save') }}" id="databaseForm">
         @csrf
 
-        <div style="background: var(--color-bg); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-dark);">
+        <div style="background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
+            <h2 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 0.875rem; color: var(--color-dark);">
                 A. Parameter Basis Data Utama
             </h2>
 
@@ -28,7 +28,7 @@
                 <div class="form-hint">PostgreSQL menjamin integritas transaksi autosave dan submit receipt ber-hash kriptografis SHA-256.</div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                 <div class="form-group">
                     <label class="form-label" for="db_host">Host Basis Data</label>
                     <input type="text" name="db_host" id="db_host" class="form-input" value="{{ $data['db_host'] ?? '127.0.0.1' }}" required>
@@ -45,7 +45,7 @@
                 <div class="form-hint">Pastikan basis data ini sudah dibuat terlebih dahulu di server atau aaPanel Anda.</div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                 <div class="form-group">
                     <label class="form-label" for="db_username">Nama Pengguna (Username)</label>
                     <input type="text" name="db_username" id="db_username" class="form-input" value="{{ $data['db_username'] ?? 'postgres' }}" required>
@@ -57,7 +57,7 @@
             </div>
 
             <!-- Tombol Uji Koneksi Database -->
-            <div style="display: flex; align-items: center; justify-content: flex-start; gap: 1rem; margin-top: 0.5rem;">
+            <div style="display: flex; align-items: center; justify-content: flex-start; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
                 <button type="button" id="btnTestDb" class="btn btn-secondary" style="font-size: 0.8125rem;">
                     Uji Koneksi Basis Data
                 </button>
@@ -65,9 +65,9 @@
             </div>
         </div>
 
-        <div style="background: var(--color-bg); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-                <h2 style="font-size: 1rem; font-weight: 700; color: var(--color-dark);">
+        <div style="background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.625rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h2 style="font-size: 0.9375rem; font-weight: 700; color: var(--color-dark);">
                     B. Konfigurasi Cache Redis (Disarankan)
                 </h2>
                 <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; font-weight: 600; cursor: pointer;">
@@ -75,12 +75,12 @@
                     Aktifkan Redis
                 </label>
             </div>
-            <p style="color: var(--color-muted); font-size: 0.8125rem; margin-bottom: 1rem;">
+            <p style="color: var(--color-muted); font-size: 0.8125rem; margin-bottom: 1rem; line-height: 1.4;">
                 Redis mempercepat proses validasi sesi login ratusan siswa secara bersamaan dan menjaga kestabilan server saat ujian serentak.
             </p>
 
             <div id="redisFields" style="{{ !empty($data['use_redis']) ? '' : 'display: none;' }}">
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                     <div class="form-group">
                         <label class="form-label" for="redis_host">Host Redis</label>
                         <input type="text" name="redis_host" id="redis_host" class="form-input" value="{{ $data['redis_host'] ?? '127.0.0.1' }}">
@@ -96,7 +96,7 @@
                     <input type="password" name="redis_password" id="redis_password" class="form-input" value="{{ $data['redis_password'] ?? '' }}" placeholder="Kosongkan jika default tanpa auth">
                 </div>
 
-                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 1rem; margin-top: 0.5rem;">
+                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
                     <button type="button" id="btnTestRedis" class="btn btn-secondary" style="font-size: 0.8125rem;">
                         Uji Koneksi Redis
                     </button>
@@ -220,4 +220,3 @@
     });
 </script>
 @endsection
-

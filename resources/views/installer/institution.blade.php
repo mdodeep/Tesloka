@@ -2,10 +2,10 @@
 
 @section('content')
     <div style="margin-bottom: 1.5rem;">
-        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--color-dark); margin-bottom: 0.5rem;">
+        <h1 style="font-size: 1.375rem; font-weight: 700; color: var(--color-dark); margin-bottom: 0.375rem; letter-spacing: -0.01em;">
             Identitas Institusi & Domain Portal
         </h1>
-        <p style="color: var(--color-muted); font-size: 0.875rem;">
+        <p style="color: var(--color-muted); font-size: 0.875rem; line-height: 1.5;">
             TESLOKA mengisolasi sistem menjadi tiga portal independen untuk menjamin keamanan dan kenyamanan akses peserta serta staf pengawas.
         </p>
     </div>
@@ -13,8 +13,8 @@
     <form method="POST" action="{{ route('installer.institution.save') }}">
         @csrf
 
-        <div style="background: var(--color-bg); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-dark);">
+        <div style="background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
+            <h2 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 0.875rem; color: var(--color-dark);">
                 A. Profil Institusi Pendidikan
             </h2>
 
@@ -24,7 +24,7 @@
                 <div class="form-hint">Nama ini akan dicetak pada KOP Berita Acara, Kartu Peserta Ujian, dan Sertifikat Kelulusan.</div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                 <div class="form-group">
                     <label class="form-label" for="institution_code">NPSN / Kode Institusi</label>
                     <input type="text" name="institution_code" id="institution_code" class="form-input" value="{{ old('institution_code', $data['institution_code'] ?? '') }}" placeholder="Contoh: 20101234" required>
@@ -41,11 +41,11 @@
             </div>
         </div>
 
-        <div style="background: var(--color-bg); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-dark);">
+        <div style="background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
+            <h2 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-dark);">
                 B. Alamat Domain Tiga Portal Terisolasi
             </h2>
-            <p style="color: var(--color-muted); font-size: 0.8125rem; margin-bottom: 1rem;">
+            <p style="color: var(--color-muted); font-size: 0.8125rem; margin-bottom: 1rem; line-height: 1.4;">
                 Pastikan subdomain ini sudah diarahkan (DNS Record A) ke alamat IP server Anda.
             </p>
 
@@ -78,4 +78,3 @@
         </div>
     </form>
 @endsection
-

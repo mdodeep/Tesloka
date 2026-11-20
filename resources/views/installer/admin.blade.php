@@ -2,10 +2,10 @@
 
 @section('content')
     <div style="margin-bottom: 1.5rem;">
-        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--color-dark); margin-bottom: 0.5rem;">
+        <h1 style="font-size: 1.375rem; font-weight: 700; color: var(--color-dark); margin-bottom: 0.375rem; letter-spacing: -0.01em;">
             Pembuatan Akun Administrator Utama
         </h1>
-        <p style="color: var(--color-muted); font-size: 0.875rem;">
+        <p style="color: var(--color-muted); font-size: 0.875rem; line-height: 1.5;">
             Akun ini memiliki hak akses penuh (*Super Administrator*) untuk mengelola seluruh konfigurasi ujian, bank soal, data akademik, dan staf pengawas.
         </p>
     </div>
@@ -23,13 +23,13 @@
     <form method="POST" action="{{ route('installer.admin.save') }}">
         @csrf
 
-        <div style="background: var(--color-bg); padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
+        <div style="background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid var(--color-border); margin-bottom: 1.5rem;">
             <div class="form-group">
                 <label class="form-label" for="admin_name">Nama Lengkap Administrator</label>
                 <input type="text" name="admin_name" id="admin_name" class="form-input" value="{{ old('admin_name', $data['admin_name'] ?? 'Administrator Utama TESLOKA') }}" required>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                 <div class="form-group">
                     <label class="form-label" for="admin_username">Username</label>
                     <input type="text" name="admin_username" id="admin_username" class="form-input" value="{{ old('admin_username', $data['admin_username'] ?? 'admin') }}" required>
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                 <div class="form-group">
                     <label class="form-label" for="admin_password">Kata Sandi (Password)</label>
                     <input type="password" name="admin_password" id="admin_password" class="form-input" placeholder="Minimal 8 karakter" required>
@@ -66,4 +66,3 @@
         </div>
     </form>
 @endsection
-

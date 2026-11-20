@@ -2,8 +2,8 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-20T10:38:07+00:00
- * Integrity: 5e0e893ee5dd0afda9539acb131b8b63141c4849a23f55bdef12f79d7ec768ea
+ * Timestamp: 2026-11-20T11:21:14+00:00
+ * Integrity: c5ca9863a5f42038587125ca09e11dbbb1b018adda84ca839148a097c99efded
  */
 
 namespace App\Http\Controllers;abstract class Controller{}

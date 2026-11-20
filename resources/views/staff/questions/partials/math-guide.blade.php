@@ -61,7 +61,7 @@
 
             <div class="overflow-x-auto border border-default-200 rounded-md">
                 <table class="w-full text-left text-xs border-collapse">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <thead class="bg-default-100 border-y border-default-200 text-xs font-semibold text-default-700">
                         <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="p-2.5 whitespace-nowrap">Kategori / Nama</th>
                             <th class="p-2.5 whitespace-nowrap">Sintaks KaTeX / LaTeX</th>

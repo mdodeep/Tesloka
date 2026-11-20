@@ -5,26 +5,26 @@
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6 py-6">
     <!-- Success Banner -->
-    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 sm:p-8 text-center space-y-3 shadow-xs">
-        <div class="inline-flex items-center justify-center size-16 rounded-2xl bg-emerald-100 text-emerald-600 mb-2 shadow-xs">
-            <i data-lucide="check" class="size-8"></i>
+    <div class="card bg-emerald-50/70 border border-emerald-200 rounded-xl p-5 sm:p-6 text-center space-y-2.5 shadow-2xs">
+        <div class="inline-flex items-center justify-center size-14 rounded-xl bg-emerald-100 text-emerald-600 mb-1 shadow-xs">
+            <i data-lucide="check" class="size-7"></i>
         </div>
-        <h1 class="text-2xl sm:text-3xl font-black text-default-900 tracking-tight">Ujian Berhasil Dikumpulkan</h1>
+        <h1 class="text-xl sm:text-2xl font-bold text-default-900 tracking-tight">Ujian Berhasil Dikumpulkan</h1>
         <p class="text-xs sm:text-sm text-default-600 max-w-md mx-auto leading-relaxed">
             Jawaban Anda telah tersimpan secara permanen dan sah di server CBT TESLOKA.
         </p>
     </div>
 
     <!-- Official Receipt Card -->
-    <div class="bg-white border border-default-200/90 rounded-2xl shadow-md overflow-hidden print:border-none print:shadow-none">
-        <div class="bg-slate-900 text-white p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="card bg-white border border-default-200/90 rounded-xl shadow-2xs overflow-hidden print:border-none print:shadow-none">
+        <div class="bg-secondary text-white p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-secondary-800">
             <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-primary-400">Tanda Terima Resmi CBT</span>
-                <h2 class="text-lg font-black tracking-tight text-white mt-0.5">BUKTI PENGUMPULAN UJIAN</h2>
+                <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">Tanda Terima Resmi CBT</span>
+                <h2 class="text-base sm:text-lg font-bold tracking-tight text-white mt-0.5">BUKTI PENGUMPULAN UJIAN</h2>
             </div>
-            <div class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-left sm:text-right shadow-inner">
+            <div class="bg-secondary-800/80 border border-secondary-700 px-3.5 py-2 rounded-lg text-left sm:text-right shadow-inner">
                 <span class="block text-[10px] text-default-400 uppercase tracking-wider font-semibold">Nomor Resi / Receipt Token</span>
-                <span class="font-mono text-base font-black text-emerald-400 select-all">{{ $attempt->submission_receipt ?? '-' }}</span>
+                <span class="font-mono text-sm sm:text-base font-bold text-emerald-400 select-all">{{ $attempt->submission_receipt ?? '-' }}</span>
             </div>
         </div>
 

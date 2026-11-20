@@ -8,17 +8,17 @@
 <div class="space-y-6 w-full">
 
     <!-- Header Banner -->
-    <div class="bg-slate-900 text-white rounded-md p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
+    <div class="bg-secondary text-white rounded-xl p-5 sm:p-6 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-secondary-800">
         <div>
             <div class="flex items-center gap-2 flex-wrap mb-1">
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500 text-white">
                     <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                     SFU WebRTC Live-Only &amp; Real-Time
                 </span>
-                <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 text-xs rounded font-mono">
+                <span class="px-2.5 py-0.5 bg-secondary-800 text-slate-300 text-xs rounded-md font-mono border border-secondary-700/80">
                     {{ $session->room->name ?? 'Daring / Online CBT' }} (Kapasitas: {{ $session->room->capacity ?? count($participants) }})
                 </span>
-                <span class="px-2 py-0.5 bg-slate-800 text-slate-400 text-xs rounded font-mono" id="live-sync-indicator">
+                <span class="px-2 py-0.5 bg-secondary-800 text-slate-400 text-xs rounded-md font-mono border border-secondary-700/80" id="live-sync-indicator">
                     Sinkronisasi: Aktif
                 </span>
             </div>
@@ -29,11 +29,11 @@
         </div>
 
         <div class="flex items-center gap-3 flex-wrap">
-            <button type="button" onclick="refreshCameraFeed()" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs border border-slate-700">
+            <button type="button" onclick="refreshCameraFeed()" class="btn btn-sm bg-secondary-800 hover:bg-secondary-700 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs border border-secondary-700 rounded-lg">
                 <i data-lucide="refresh-cw" class="size-4" id="refresh-icon"></i>
                 <span>Segarkan Grid</span>
             </button>
-            <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs">
+            <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs rounded-lg">
                 <i data-lucide="bar-chart-2" class="size-4"></i>
                 <span>Monitoring Teks</span>
             </a>

@@ -12,7 +12,7 @@
         @csrf
 
         <div>
-            <label for="name" class="block font-semibold text-default-800 uppercase tracking-wider mb-1">
+            <label for="name" class="block font-semibold text-default-700 mb-1">
                 Nama Lengkap Siswa / Mahasiswa <span class="text-rose-500">*</span>
             </label>
             <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus
@@ -21,7 +21,7 @@
         </div>
 
         <div>
-            <label for="identity_number" class="block font-semibold text-default-800 uppercase tracking-wider mb-1">
+            <label for="identity_number" class="block font-semibold text-default-700 mb-1">
                 Nomor Identitas (NISN / NIM / No. Peserta) <span class="text-rose-500">*</span>
             </label>
             <input type="text" id="identity_number" name="identity_number" value="{{ old('identity_number') }}" required
@@ -30,7 +30,7 @@
         </div>
 
         <div>
-            <label for="username" class="block font-semibold text-default-800 uppercase tracking-wider mb-1">
+            <label for="username" class="block font-semibold text-default-700 mb-1">
                 Username Akun Ujian <span class="text-rose-500">*</span>
             </label>
             <input type="text" id="username" name="username" value="{{ old('username') }}" required
@@ -41,7 +41,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-                <label for="email" class="block font-semibold text-default-800 uppercase tracking-wider mb-1">
+                <label for="email" class="block font-semibold text-default-700 mb-1">
                     Email (Opsional)
                 </label>
                 <input type="email" id="email" name="email" value="{{ old('email') }}"
@@ -50,7 +50,7 @@
             </div>
 
             <div>
-                <label for="phone" class="block font-semibold text-default-800 uppercase tracking-wider mb-1">
+                <label for="phone" class="block font-semibold text-default-700 mb-1">
                     No. WhatsApp / HP (Opsional)
                 </label>
                 <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
@@ -61,7 +61,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-                <label for="password" class="block font-semibold text-default-800 uppercase tracking-wider mb-1">
+                <label for="password" class="block font-semibold text-default-700 mb-1">
                     Kata Sandi <span class="text-rose-500">*</span>
                 </label>
                 <input type="password" id="password" name="password" required minlength="6"
@@ -70,7 +70,7 @@
             </div>
 
             <div>
-                <label for="password_confirmation" class="block font-semibold text-default-800 uppercase tracking-wider mb-1">
+                <label for="password_confirmation" class="block font-semibold text-default-700 mb-1">
                     Konfirmasi Sandi <span class="text-rose-500">*</span>
                 </label>
                 <input type="password" id="password_confirmation" name="password_confirmation" required minlength="6"

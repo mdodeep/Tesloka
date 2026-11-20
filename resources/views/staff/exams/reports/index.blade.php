@@ -86,7 +86,7 @@
         <x-cbt.card flush title="Karakteristik Psikometrik Butir Soal Ujian">
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[780px] divide-y divide-default-200/80 text-left text-xs" id="table-exam-psychometrics">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 w-12 text-center whitespace-nowrap">No</th>
                             <th class="px-3 py-3 whitespace-nowrap">Kode Soal</th>
@@ -150,7 +150,7 @@
         <x-cbt.card flush title="Matriks Analisis Efektivitas Pengecoh / Distraktor (Distractor Analysis)" subtitle="Evaluasi pilihan ganda: Pola sebaran pilihan Kelompok Atas (Upper 27%) vs Kelompok Bawah (Lower 27%)">
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[850px] divide-y divide-default-200/80 text-left text-xs" id="table-exam-distractors">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 w-12 text-center whitespace-nowrap">No</th>
                             <th class="px-3 py-3 whitespace-nowrap">Kode &amp; Cuplikan Soal</th>
@@ -318,7 +318,7 @@
             @endslot
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-exam-remedials">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 w-12 text-center whitespace-nowrap">No</th>
                             <th class="px-3 py-3 whitespace-nowrap">Nama Peserta</th>

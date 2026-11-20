@@ -24,7 +24,7 @@
             icon="calendar" 
             color="primary" />
         <x-cbt.stat-card 
-            title="Ujian Siap &amp; Terbit" 
+            title="Ujian Siap & Terbit" 
             value="{{ number_format($exams->whereIn('status', ['ready', 'published', 'scheduled', 'active', 'ongoing'])->count()) }}" 
             subtitle="Dapat Dijadwalkan" 
             icon="check-circle-2" 
@@ -49,7 +49,7 @@
             <div>
                 <label for="filter_search" class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Cari Ujian</label>
                 <div class="relative">
-                    <input type="text" id="filter_search" name="search" value="{{ request('search') }}" placeholder="Judul atau kode ujian..." class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary pl-9">
+                    <input type="text" id="filter_search" name="search" value="{{ request('search') }}" placeholder="Judul atau kode ujian..." class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary !pl-9">
                     <i data-lucide="search" class="size-4 text-default-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                 </div>
             </div>
@@ -93,17 +93,17 @@
     </x-cbt.card>
 
     <!-- Table of Exams -->
-    <x-cbt.card flush>
+    <x-cbt.card flush title="Daftar Paket Ujian Terdaftar" subtitle="Kelola seluruh paket soal, cetak biru ujian, penugasan pengajar, dan status penerbitan.">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[780px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs text-default-600" id="table-exams">
-                <thead class="bg-default-50/75 border-b border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Kode & Judul Ujian</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Mata Pelajaran & Tipe</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Durasi & KKM</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Blueprint / Paket</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">Aksi</th>
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
+                    <tr class="whitespace-nowrap">
+                        <th class="py-3 ps-4 sm:ps-6 pe-4 text-start font-semibold text-default-700">Kode &amp; Judul Ujian</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Mata Pelajaran &amp; Tipe</th>
+                        <th class="py-3 px-4 text-center font-semibold text-default-700">Durasi &amp; KKM</th>
+                        <th class="py-3 px-4 text-center font-semibold text-default-700">Blueprint / Paket</th>
+                        <th class="py-3 px-4 text-center font-semibold text-default-700">Status</th>
+                        <th class="py-3 ps-4 pe-4 sm:pe-6 text-end font-semibold text-default-700">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-default-200/80 dark:divide-white/14">

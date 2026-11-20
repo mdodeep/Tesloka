@@ -111,7 +111,7 @@
     <x-cbt.card flush title="Rekapitulasi Hasil Kelulusan & Yudisium Peserta">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[850px] divide-y divide-default-200/80 text-left text-xs" id="table-graduation">
-                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                     <tr>
                         <th class="ps-4 sm:ps-6 pe-3 py-3 text-center w-12 whitespace-nowrap">No</th>
                         <th class="px-3 py-3 whitespace-nowrap">Nama Siswa / Peserta</th>

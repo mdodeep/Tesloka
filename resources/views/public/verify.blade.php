@@ -44,7 +44,7 @@
     <!-- Main Verification Result Container -->
     <main class="w-full max-w-4xl mx-auto flex-1">
         @if($isValid && $attempt)
-            <div class="bg-white border border-default-200/90 rounded-2xl shadow-xl overflow-hidden space-y-6">
+            <div class="bg-white border border-default-200/90 rounded-xl shadow-2xs overflow-hidden space-y-6">
                 <!-- Status Banner: VALID -->
                 <div class="p-6 sm:p-8 bg-linear-to-r from-emerald-50 via-teal-50/60 to-white border-b border-emerald-200 flex items-start sm:items-center gap-5">
                     <div class="size-14 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
@@ -63,22 +63,22 @@
                     <!-- Participant & Exam Info -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 rounded-xl bg-default-50 border border-default-200 text-xs shadow-2xs">
                         <div>
-                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Nama Peserta Ujian:</span>
+                            <span class="text-default-500 font-semibold block text-xs">Nama Peserta Ujian:</span>
                             <span class="text-default-900 font-bold text-sm block mt-0.5">{{ $attempt->student->name }}</span>
                             <span class="text-default-500 font-mono text-[11px]">NIM/NISN: {{ $attempt->student->identity_number ?? $attempt->student->username }}</span>
                         </div>
                         <div>
-                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Lembaga Penyelenggara:</span>
+                            <span class="text-default-500 font-semibold block text-xs">Lembaga Penyelenggara:</span>
                             <span class="text-default-900 font-bold text-sm block mt-0.5">{{ $instName }}</span>
                             <span class="text-default-500 text-[11px]">{{ $institution?->address ?? 'Jl. Swakarsa IV' }}</span>
                         </div>
                         <div>
-                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Ujian &amp; Mata Pelajaran:</span>
+                            <span class="text-default-500 font-semibold block text-xs">Ujian &amp; Mata Pelajaran:</span>
                             <span class="text-default-900 font-bold text-xs block mt-0.5">{{ $attempt->exam->title }}</span>
                             <span class="text-default-500 text-[11px]">{{ $attempt->exam->subject->name ?? 'Evaluasi Terstandar' }} &bull; Kode: {{ $attempt->exam->code }}</span>
                         </div>
                         <div>
-                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Waktu Pengumpulan Sah:</span>
+                            <span class="text-default-500 font-semibold block text-xs">Waktu Pengumpulan Sah:</span>
                             <span class="text-default-900 font-bold text-xs block mt-0.5">{{ $attempt->submitted_at?->translatedFormat('d F Y, H:i') ?? '-' }} WIB</span>
                             <span class="text-default-500 text-[11px]">Tipe Kumpul: {{ ucfirst($attempt->submission_type ?? 'Resmi') }}</span>
                         </div>
@@ -87,17 +87,17 @@
                     <!-- Scores & Achievement Result -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="p-4 sm:p-5 rounded-xl bg-white border border-default-200/90 shadow-2xs text-center">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-default-400">Nilai Akhir Ujian</span>
+                            <span class="text-xs font-semibold text-default-500">Nilai Akhir Ujian</span>
                             <div class="text-3xl font-black text-primary mt-1">{{ number_format($breakdown['total_score'], 1) }}</div>
                             <span class="text-[10px] text-default-500 font-medium">Skala 0 - 100</span>
                         </div>
                         <div class="p-4 sm:p-5 rounded-xl bg-white border border-default-200/90 shadow-2xs text-center">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-default-400">Predikat Nilai</span>
+                            <span class="text-xs font-semibold text-default-500">Predikat Nilai</span>
                             <div class="text-3xl font-black text-default-800 mt-1">{{ $letterGrade }}</div>
                             <span class="text-[10px] text-default-500 font-medium">{{ $gradePredicate }}</span>
                         </div>
                         <div class="p-4 sm:p-5 rounded-xl {{ $isPassed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} border shadow-2xs text-center">
-                            <span class="text-[11px] font-bold uppercase tracking-wider {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status Kelulusan</span>
+                            <span class="text-xs font-semibold {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status Kelulusan</span>
                             <div class="text-lg font-black {{ $isPassed ? 'text-emerald-800' : 'text-rose-800' }} mt-1">
                                 {{ $isPassed ? 'LULUS' : 'REMEDIAL' }}
                             </div>
@@ -106,8 +106,8 @@
                     </div>
 
                     <!-- Cryptographic Proof Box -->
-                    <div class="p-4 rounded-md bg-slate-900 text-slate-100 font-mono text-xs space-y-2">
-                        <div class="flex items-center justify-between text-default-400 text-[10px] uppercase font-bold border-b border-slate-800 pb-2">
+                    <div class="p-4 rounded-xl bg-secondary text-slate-100 font-mono text-xs space-y-2 border border-secondary-800 shadow-2xs">
+                        <div class="flex items-center justify-between text-default-400 text-[10px] uppercase font-bold border-b border-secondary-800 pb-2">
                             <span>Integritas Kriptografis (SHA-256)</span>
                             <span class="text-emerald-400">Database Record Match</span>
                         </div>
@@ -139,9 +139,9 @@
             </div>
         @else
             <!-- Status Banner: INVALID -->
-            <div class="bg-white border border-default-200 rounded-md shadow-sm overflow-hidden space-y-6">
+            <div class="bg-white border border-default-200/90 rounded-xl shadow-2xs overflow-hidden space-y-6">
                 <div class="p-6 sm:p-8 bg-linear-to-r from-rose-50 via-red-50/60 to-white border-b border-rose-100 flex items-start sm:items-center gap-4">
-                    <div class="size-14 rounded-md bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                    <div class="size-14 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-md">
                         <i data-lucide="x" class="size-8"></i>
                     </div>
                     <div>
@@ -153,11 +153,11 @@
                 </div>
 
                 <div class="px-6 sm:px-8 space-y-6 pb-8">
-                    <div class="p-4 rounded-md bg-default-50 border border-default-200 text-xs font-mono">
+                    <div class="p-4 rounded-xl bg-default-50 border border-default-200 text-xs font-mono">
                         <span class="text-default-400">Token Diperiksa:</span> <span class="text-rose-600 font-bold">{{ $token }}</span>
                     </div>
 
-                    <div class="p-4 rounded-md bg-amber-50 border border-amber-200 text-xs text-amber-800 leading-relaxed">
+                    <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 leading-relaxed">
                         <strong>Pemberitahuan Keamanan:</strong> Pastikan Anda memindai kode QR resmi yang tercetak langsung pada lembar dokumen asli (SKHU, Tanda Terima, atau Sertifikat). Jika Anda menduga terdapat pemalsuan, hubungi bagian administrasi akademik.
                     </div>
 

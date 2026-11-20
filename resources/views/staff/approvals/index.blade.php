@@ -45,13 +45,13 @@
 
         <div class="overflow-x-auto">
             <table class="w-full min-w-[760px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs" id="table-approvals-pending">
-                <thead class="bg-default-50/75 border-b border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Tindakan Kritis</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Pemohon</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Waktu Pengajuan</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Alasan / Catatan</th>
-                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">Tindakan Penyetuju</th>
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
+                    <tr class="whitespace-nowrap">
+                        <th class="py-3 ps-4 sm:ps-6 pe-4 text-start font-semibold text-default-700">Tindakan Kritis</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Pemohon</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Waktu Pengajuan</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Alasan / Catatan</th>
+                        <th class="py-3 ps-4 pe-4 sm:pe-6 text-end font-semibold text-default-700">Tindakan Penyetuju</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-default-200/80 dark:divide-white/14">
@@ -106,14 +106,14 @@
     <x-cbt.card flush title="Riwayat Keputusan Four-Eyes" subtitle="Catatan keputusan permohonan kritis terdahulu">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[760px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs" id="table-approvals-history">
-                <thead class="bg-default-50/75 border-b border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Tindakan</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Pemohon</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Penyetuju</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Keputusan</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Waktu</th>
-                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 whitespace-nowrap">Catatan / Alasan</th>
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
+                    <tr class="whitespace-nowrap">
+                        <th class="py-3 ps-4 sm:ps-6 pe-4 text-start font-semibold text-default-700">Tindakan</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Pemohon</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Penyetuju</th>
+                        <th class="py-3 px-4 text-center font-semibold text-default-700">Keputusan</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Waktu</th>
+                        <th class="py-3 ps-4 pe-4 sm:pe-6 text-start font-semibold text-default-700">Catatan / Alasan</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-default-200/80 dark:divide-white/14">

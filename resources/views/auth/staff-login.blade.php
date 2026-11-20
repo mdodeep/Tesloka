@@ -12,7 +12,7 @@
         @csrf
 
         <div class="space-y-1.5">
-            <label for="login" class="block text-xs font-bold text-default-700 uppercase tracking-wider">
+            <label for="login" class="block text-xs font-semibold text-default-700">
                 Email / Username
             </label>
             <input type="text" id="login" name="login" value="{{ old('login') }}" required autofocus
@@ -22,7 +22,7 @@
 
         <div class="space-y-1.5">
             <div class="flex items-center justify-between">
-                <label for="password" class="block text-xs font-bold text-default-700 uppercase tracking-wider">
+                <label for="password" class="block text-xs font-semibold text-default-700">
                     Kata Sandi
                 </label>
             </div>

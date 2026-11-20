@@ -4,17 +4,17 @@
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
-    <div class="bg-white border border-default-200 rounded-md p-6 shadow-xs">
+    <div class="card bg-white border border-default-200/90 rounded-xl p-6 shadow-2xs">
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-lg font-bold text-default-800">Profil Peserta Ujian</h1>
             @if ($user->isProfileComplete())
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                <x-cbt.badge color="success">
                     Profil Lengkap
-                </span>
+                </x-cbt.badge>
             @else
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+                <x-cbt.badge color="warning">
                     Perlu Dilengkapi
-                </span>
+                </x-cbt.badge>
             @endif
         </div>
 

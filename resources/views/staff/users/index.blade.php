@@ -161,7 +161,7 @@
 
         <div class="overflow-x-auto">
             <table class="w-full min-w-[850px] divide-y divide-default-200/80 text-left text-xs" id="table-users">
-                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                     <tr>
                         <th class="w-12 ps-4 sm:ps-6 pe-3 py-3 text-center whitespace-nowrap">
                             <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="form-checkbox size-4 rounded text-primary cursor-pointer" title="Pilih Semua di Halaman Ini">

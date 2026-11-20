@@ -38,7 +38,7 @@
         <x-cbt.stat-card 
             title="Sesi Selesai" 
             value="{{ number_format($sessions->where('status', 'finished')->count()) }}" 
-            subtitle="Arsip &amp; Penilaian" 
+            subtitle="Arsip & Penilaian" 
             icon="check-check" 
             color="warning" />
     </div>
@@ -94,17 +94,17 @@
     </x-cbt.card>
 
     <!-- Table of Sessions -->
-    <x-cbt.card flush>
+    <x-cbt.card flush title="Daftar Sesi Pelaksanaan Ujian" subtitle="Pantau alokasi ruang CBT, kapasitas peserta, token rilis, dan status pengawasan live.">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[760px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs" id="table-sessions">
-                <thead class="bg-default-50/75 border-b border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Kode & Nama Sesi</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Ujian & Mapel</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Ruang & Kapasitas</th>
-                        <th class="py-3.5 px-4 whitespace-nowrap">Jadwal Waktu</th>
-                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">Aksi</th>
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
+                    <tr class="whitespace-nowrap">
+                        <th class="py-3 ps-4 sm:ps-6 pe-4 text-start font-semibold text-default-700">Kode &amp; Nama Sesi</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Ujian &amp; Mapel</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Ruang &amp; Kapasitas</th>
+                        <th class="py-3 px-4 text-start font-semibold text-default-700">Jadwal Waktu</th>
+                        <th class="py-3 px-4 text-center font-semibold text-default-700">Status</th>
+                        <th class="py-3 ps-4 pe-4 sm:pe-6 text-end font-semibold text-default-700">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-default-200/80 dark:divide-white/14">

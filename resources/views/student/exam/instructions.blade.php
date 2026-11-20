@@ -79,7 +79,7 @@
                             <span class="text-default-500 font-medium block">Browser & Sistem Operasi:</span>
                             <span id="preflightBrowser" class="font-semibold text-default-800">Mendeteksi...</span>
                         </div>
-                        <span id="badgeBrowser" class="px-2 py-0.5 bg-slate-200 text-default-600 rounded text-[10px] font-bold">Cek</span>
+                        <span id="badgeBrowser" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-default-100 text-default-700 border border-default-200">Cek</span>
                     </div>
 
                     <!-- Resolusi Layar -->
@@ -88,7 +88,7 @@
                             <span class="text-default-500 font-medium block">Resolusi Layar (Viewport):</span>
                             <span id="preflightResolution" class="font-semibold text-default-800">Mendeteksi...</span>
                         </div>
-                        <span id="badgeResolution" class="px-2 py-0.5 bg-slate-200 text-default-600 rounded text-[10px] font-bold">Cek</span>
+                        <span id="badgeResolution" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-default-100 text-default-700 border border-default-200">Cek</span>
                     </div>
 
                     <!-- Latensi Server -->
@@ -97,7 +97,7 @@
                             <span class="text-default-500 font-medium block">Koneksi Server (Latensi):</span>
                             <span id="preflightLatency" class="font-semibold text-default-800">Mengukur ping...</span>
                         </div>
-                        <span id="badgeLatency" class="px-2 py-0.5 bg-slate-200 text-default-600 rounded text-[10px] font-bold">Cek</span>
+                        <span id="badgeLatency" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-default-100 text-default-700 border border-default-200">Cek</span>
                     </div>
 
                     <!-- Mode Fullscreen -->
@@ -106,7 +106,7 @@
                             <span class="text-default-500 font-medium block">Dukungan Layar Penuh:</span>
                             <span id="preflightFullscreen" class="font-semibold text-default-800">Didukung</span>
                         </div>
-                        <span id="badgeFullscreen" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold">Tersedia</span>
+                        <span id="badgeFullscreen" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">Tersedia</span>
                     </div>
                 </div>
 
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const badgeBrowser = document.getElementById('badgeBrowser');
     if (browserEl) browserEl.textContent = `${browser} (${os})`;
     if (badgeBrowser) {
-        badgeBrowser.className = 'px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold';
+        badgeBrowser.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
         badgeBrowser.textContent = 'Kompatibel';
     }
 
@@ -212,10 +212,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (resEl) resEl.textContent = `${w} x ${h} px`;
     if (badgeRes) {
         if (w >= 1024) {
-            badgeRes.className = 'px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold';
+            badgeRes.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
             badgeRes.textContent = 'Optimal';
         } else {
-            badgeRes.className = 'px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold';
+            badgeRes.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/80';
             badgeRes.textContent = 'Cukup';
         }
     }
@@ -227,8 +227,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (fsEl) fsEl.textContent = fsSupported ? 'Didukung Penuh' : 'Terbatas';
     if (badgeFs) {
         badgeFs.className = fsSupported 
-            ? 'px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold'
-            : 'px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold';
+            ? 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80'
+            : 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/80';
         badgeFs.textContent = fsSupported ? 'Tersedia' : 'Peringatan';
     }
 
@@ -245,29 +245,29 @@ document.addEventListener('DOMContentLoaded', function() {
             if (latencyEl) latencyEl.textContent = `${ms} ms (Terhubung)`;
             if (badgeLat) {
                 if (ms < 400) {
-                    badgeLat.className = 'px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold';
+                    badgeLat.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
                     badgeLat.textContent = 'Sangat Cepat';
                 } else if (ms < 1500) {
-                    badgeLat.className = 'px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold';
+                    badgeLat.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
                     badgeLat.textContent = 'Stabil';
                 } else {
-                    badgeLat.className = 'px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold';
+                    badgeLat.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/80';
                     badgeLat.textContent = 'Lambat';
                 }
             }
             if (overallBadge) {
-                overallBadge.className = 'px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full';
+                overallBadge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
                 overallBadge.textContent = 'Perangkat Siap (100%)';
             }
         })
         .catch(err => {
             if (latencyEl) latencyEl.textContent = 'Koneksi lokal aktif';
             if (badgeLat) {
-                badgeLat.className = 'px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold';
+                badgeLat.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
                 badgeLat.textContent = 'Siap';
             }
             if (overallBadge) {
-                overallBadge.className = 'px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-full';
+                overallBadge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
                 overallBadge.textContent = 'Perangkat Siap';
             }
         });

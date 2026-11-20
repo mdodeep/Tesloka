@@ -29,62 +29,62 @@
     <!-- Metric Cards Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- PostgreSQL DB -->
-        <div class="p-4 bg-white border border-default-200 rounded shadow-xs space-y-2">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white p-4 space-y-2 hover:border-default-300 transition">
             <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-default-500">PostgreSQL Database</span>
-                <span class="px-2 py-0.5 {{ $health['db']['status'] === 'healthy' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800' }} text-[10px] font-bold rounded">
+                <span class="text-xs font-semibold text-default-600">PostgreSQL Database</span>
+                <x-cbt.badge color="{{ $health['db']['status'] === 'healthy' ? 'success' : 'danger' }}">
                     {{ strtoupper($health['db']['status']) }}
-                </span>
+                </x-cbt.badge>
             </div>
-            <div class="text-2xl font-black text-default-900 tracking-tight">
+            <div class="text-2xl font-bold text-default-800 tracking-tight">
                 {{ $health['db']['latency'] }} <span class="text-xs font-normal text-default-500">ms</span>
             </div>
-            <div class="text-[11px] text-default-500 truncate" title="{{ $health['db']['version'] }}">
+            <div class="text-xs text-default-400 truncate" title="{{ $health['db']['version'] }}">
                 {{ Str::limit($health['db']['version'], 30) }}
             </div>
         </div>
 
         <!-- Redis & Cache -->
-        <div class="p-4 bg-white border border-default-200 rounded shadow-xs space-y-2">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white p-4 space-y-2 hover:border-default-300 transition">
             <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-default-500">Cache & Memory Store</span>
-                <span class="px-2 py-0.5 {{ $health['cache']['status'] === 'healthy' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }} text-[10px] font-bold rounded">
+                <span class="text-xs font-semibold text-default-600">Cache & Memory Store</span>
+                <x-cbt.badge color="{{ $health['cache']['status'] === 'healthy' ? 'success' : 'warning' }}">
                     {{ strtoupper($health['cache']['status']) }}
-                </span>
+                </x-cbt.badge>
             </div>
-            <div class="text-2xl font-black text-default-900 tracking-tight">
+            <div class="text-2xl font-bold text-default-800 tracking-tight">
                 {{ $health['cache']['latency'] }} <span class="text-xs font-normal text-default-500">ms</span>
             </div>
-            <div class="text-[11px] text-default-500">
-                RAM Terpakai: <strong>{{ $health['server']['memory_mb'] }} MB</strong> (Peak: {{ $health['server']['memory_peak_mb'] }} MB)
+            <div class="text-xs text-default-400 truncate">
+                RAM Terpakai: {{ $health['server']['memory_mb'] }} MB (Peak: {{ $health['server']['memory_peak_mb'] }} MB)
             </div>
         </div>
 
         <!-- Background Queue -->
-        <div class="p-4 bg-white border border-default-200 rounded shadow-xs space-y-2">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white p-4 space-y-2 hover:border-default-300 transition">
             <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-default-500">Background Queue</span>
-                <span class="px-2 py-0.5 {{ $health['queue']['status'] === 'healthy' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }} text-[10px] font-bold rounded">
+                <span class="text-xs font-semibold text-default-600">Background Queue</span>
+                <x-cbt.badge color="{{ $health['queue']['status'] === 'healthy' ? 'success' : 'warning' }}">
                     {{ strtoupper($health['queue']['status']) }}
-                </span>
+                </x-cbt.badge>
             </div>
-            <div class="text-2xl font-black text-default-900 tracking-tight">
+            <div class="text-2xl font-bold text-default-800 tracking-tight">
                 {{ $health['queue']['failed_jobs'] }} <span class="text-xs font-normal text-default-500">failed</span>
             </div>
-            <div class="text-[11px] text-default-500">
+            <div class="text-xs text-default-400 truncate">
                 Pekerjaan antrean gagal terkontrol
             </div>
         </div>
 
         <!-- Disk Storage -->
-        <div class="p-4 bg-white border border-default-200 rounded shadow-xs space-y-2">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white p-4 space-y-2 hover:border-default-300 transition">
             <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-default-500">Kapasitas Disk Storage</span>
-                <span class="px-2 py-0.5 {{ $health['disk']['status'] === 'healthy' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }} text-[10px] font-bold rounded">
+                <span class="text-xs font-semibold text-default-600">Kapasitas Disk Storage</span>
+                <x-cbt.badge color="{{ $health['disk']['status'] === 'healthy' ? 'success' : 'warning' }}">
                     {{ $health['disk']['used_percentage'] }}%
-                </span>
+                </x-cbt.badge>
             </div>
-            <div class="text-2xl font-black text-default-900 tracking-tight">
+            <div class="text-2xl font-bold text-default-800 tracking-tight">
                 {{ $health['disk']['free_gb'] }} <span class="text-xs font-normal text-default-500">GB Free</span>
             </div>
             <div class="w-full bg-default-100 rounded-full h-1.5">
@@ -97,7 +97,7 @@
     <x-cbt.card flush title="Audit Kesiapan Sistem Sebelum Production">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[700px] divide-y divide-default-200/80 text-left text-xs" id="table-system-health">
-                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                     <tr>
                         <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Komponen Diperiksa</th>
                         <th class="px-3 py-3 whitespace-nowrap">Kategori</th>

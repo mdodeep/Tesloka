@@ -37,7 +37,7 @@
                     <i data-lucide="clock" class="size-5"></i>
                 </div>
                 <div>
-                    <div class="text-xs text-default-500 font-semibold uppercase tracking-wider">Pengerjaan Ujian Sedang Berlangsung</div>
+                    <div class="text-xs text-default-600 font-semibold tracking-normal">Pengerjaan Ujian Sedang Berlangsung</div>
                     <div class="text-xl font-bold {{ $activeAttemptsCount > 0 ? 'text-rose-600' : 'text-default-800' }} mt-0.5">
                         {{ $activeAttemptsCount }} Siswa
                     </div>
@@ -56,7 +56,7 @@
                     <i data-lucide="calendar" class="size-5"></i>
                 </div>
                 <div>
-                    <div class="text-xs text-default-500 font-semibold uppercase tracking-wider">Sesi Ujian Aktif Saat Ini</div>
+                    <div class="text-xs text-default-600 font-semibold tracking-normal">Sesi Ujian Aktif Saat Ini</div>
                     <div class="text-xl font-bold text-default-800 mt-0.5">{{ $activeSessionsCount }} Sesi</div>
                 </div>
             </div>

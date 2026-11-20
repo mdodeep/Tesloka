@@ -247,7 +247,7 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[500px] divide-y divide-default-200/80 text-left text-xs text-default-600">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Bank Soal</th>
                             <th class="px-3 py-3 text-center whitespace-nowrap">Jumlah</th>

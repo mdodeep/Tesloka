@@ -76,7 +76,7 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-years">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Nama Tahun Ajaran</th>
                             <th class="px-3 py-3 whitespace-nowrap">Rentang Periode</th>
@@ -145,7 +145,7 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-terms">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
                             <th class="px-3 py-3 whitespace-nowrap">Nama Semester</th>
@@ -255,7 +255,7 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-departments">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
                             <th class="px-3 py-3 whitespace-nowrap">Nama Jurusan / Prodi</th>
@@ -334,7 +334,7 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-classes">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
                             <th class="px-3 py-3 whitespace-nowrap">Nama Kelas</th>
@@ -446,7 +446,7 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-subjects">
-                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
                             <th class="px-3 py-3 whitespace-nowrap">Nama Mata Pelajaran</th>
@@ -1090,8 +1090,8 @@
                 <div class="border border-default-200 rounded-md overflow-hidden">
                     <div class="overflow-x-auto max-h-64 overflow-y-auto">
                         <table class="w-full text-left text-xs divide-y divide-default-200" id="table-enrolled-students">
-                            <thead class="bg-default-50/90 border-y border-default-200/80 sticky top-0 z-10">
-                                <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
+                            <thead class="bg-default-100 border-y border-default-200 sticky top-0 z-10 text-xs font-semibold text-default-700">
+                                <tr class="whitespace-nowrap">
                                     <th class="px-3 py-2 border-b border-default-200 text-center w-10">No</th>
                                     <th class="px-3 py-2 border-b border-default-200">Nama Siswa</th>
                                     <th class="px-3 py-2 border-b border-default-200">NIM / NISN</th>

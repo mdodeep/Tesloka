@@ -24,9 +24,9 @@
             <x-cbt.card class="flex flex-col justify-between h-full">
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 bg-primary-50 text-primary-700 font-bold rounded-lg text-xs uppercase">
+                        <x-cbt.badge color="primary">
                             {{ $ex->exam_type }}
-                        </span>
+                        </x-cbt.badge>
                         @if($isSubmitted)
                             <x-cbt.badge color="success">Sudah Selesai</x-cbt.badge>
                         @elseif($isInProgress)

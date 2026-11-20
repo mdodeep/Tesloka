@@ -98,11 +98,6 @@
                     <span>Layanan Verifikasi Cepat &amp; Terisolasi Penuh</span>
                 </div>
                 <p class="text-[11px] text-emerald-700 leading-relaxed">
-                    Sistem menggunakan indeks pencarian hash langsung ke database PostgreSQL berintegritas tinggi. Hasil verifikasi dapat langsung dicetak atau diunduh dalam format resmi.
-                </p>
-            </div>
-        </div>
-    </main>
                     Sistem verifikasi ini dilengkapi perlindungan cache Redis in-memory dan pembatasan laju request. Ratusan mahasiswa atau pihak ketiga yang melakukan pengecekan sertifikat secara bersamaan tidak akan mempengaruhi atau memperlambat sesi ujian CBT yang sedang aktif.
                 </p>
             </div>

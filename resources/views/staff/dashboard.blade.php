@@ -6,32 +6,32 @@
 @section('content')
 <div class="space-y-6 w-full">
     <!-- Hero Welcome Banner -->
-    <div class="relative overflow-hidden bg-gradient-to-r from-default-900 via-default-800 to-secondary rounded-2xl p-6 sm:p-8 text-white shadow-sm">
+    <div class="relative overflow-hidden bg-secondary rounded-xl border border-secondary-800 p-6 sm:p-7 text-white shadow-2xs">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div class="space-y-3 max-w-2xl">
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs font-semibold">
-                    <i data-lucide="sparkles" class="size-3.5 text-amber-300"></i>
+            <div class="space-y-2.5 max-w-2xl">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/10 border border-white/15 text-white/90 text-xs font-medium">
+                    <i data-lucide="shield-check" class="size-3.5 text-teal-400"></i>
                     <span>Sistem Evaluasi Terpadu &bull; Produksi Standar</span>
                 </div>
-                <h2 class="text-xl sm:text-3xl font-black text-white tracking-tight">
+                <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
                     Selamat Datang, {{ auth('staff')->user()->name }}
                 </h2>
-                <p class="text-sm text-white/80 leading-relaxed">
+                <p class="text-xs sm:text-sm text-white/80 leading-relaxed">
                     Pusat komando operasional Computer Based Test (CBT) TESLOKA. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.
                 </p>
                 <div class="flex flex-wrap gap-2.5 pt-1">
-                    <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-2 rounded-xl px-4 py-2 font-bold active:scale-[0.98]">
+                    <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
                         <i data-lucide="clock" class="size-4"></i>
                         <span>Pantau Sesi Ujian</span>
                     </a>
-                    <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 inline-flex items-center gap-2 rounded-xl px-4 py-2 font-semibold">
+                    <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
                         <i data-lucide="file-question" class="size-4"></i>
                         <span>Bank Soal &amp; Konten</span>
                     </a>
                 </div>
             </div>
 
-            <div class="hidden lg:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/5 border border-white/10 text-center min-w-[210px] backdrop-blur-xs">
+            <div class="hidden lg:flex flex-col items-center justify-center p-4 rounded-xl bg-white/5 border border-white/10 text-center min-w-[200px]">
                 <span class="text-xs text-default-300 font-semibold uppercase tracking-wider">Kapasitas Maks / Ruang</span>
                 <span class="text-3xl sm:text-4xl font-black text-white mt-1">30</span>
                 <span class="text-xs text-emerald-400 mt-1 font-bold flex items-center gap-1">
@@ -75,7 +75,7 @@
 
     <!-- Quick Navigation Hub: Penilaian, Kelulusan & Grafik -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <a href="{{ route('staff.grading.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200 rounded-lg shadow-xs flex items-center justify-between group transition">
+        <a href="{{ route('staff.grading.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
             <div class="flex items-center gap-3.5">
                 <div class="size-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
                     <i data-lucide="award" class="size-5"></i>
@@ -88,7 +88,7 @@
             <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
         </a>
 
-        <a href="{{ route('staff.graduation.index') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200 rounded-lg shadow-xs flex items-center justify-between group transition">
+        <a href="{{ route('staff.graduation.index') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
             <div class="flex items-center gap-3.5">
                 <div class="size-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                     <i data-lucide="check-check" class="size-5"></i>
@@ -101,7 +101,7 @@
             <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
         </a>
 
-        <a href="{{ route('staff.reports.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200 rounded-lg shadow-xs flex items-center justify-between group transition">
+        <a href="{{ route('staff.reports.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
             <div class="flex items-center gap-3.5">
                 <div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold">
                     <i data-lucide="bar-chart-3" class="size-5"></i>
@@ -186,7 +186,7 @@
     <x-cbt.card flush title="Aktivitas & Log Audit Sistem Terbaru" subtitle="10 peristiwa akses dan modifikasi data terkini yang tercatat pada PostgreSQL">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[700px] text-left text-xs divide-y divide-default-200/80">
-                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                     <tr>
                         <th class="ps-4 sm:ps-6 pe-3 py-3 text-left whitespace-nowrap">Waktu (WIB)</th>
                         <th class="px-3 py-3 text-left whitespace-nowrap">Pengguna</th>

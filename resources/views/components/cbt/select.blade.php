@@ -10,7 +10,7 @@
 
 <div class="space-y-1.5">
     @if ($label)
-        <label for="{{ $name }}" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">
+        <label for="{{ $name }}" class="block text-xs font-semibold text-default-700">
             {{ $label }}
             @if ($required)
                 <span class="text-danger">*</span>

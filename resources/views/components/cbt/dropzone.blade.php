@@ -16,7 +16,7 @@
 
 <div class="space-y-2">
     @if($label)
-        <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">
+        <label class="block text-xs font-semibold text-default-700">
             {{ $label }}
             @if($required)
                 <span class="text-danger">*</span>

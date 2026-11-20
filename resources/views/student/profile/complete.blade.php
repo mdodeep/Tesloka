@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">
-    <div class="bg-amber-50 border border-amber-200 rounded-md p-5 text-xs text-amber-900 flex items-start gap-3">
-        <i data-lucide="alert-triangle" class="size-6 text-amber-600 shrink-0 mt-0.5"></i>
+    <div class="card bg-amber-50/70 border border-amber-200 rounded-xl p-5 text-xs text-amber-900 flex items-start gap-3 shadow-2xs">
+        <i data-lucide="alert-triangle" class="size-5 text-amber-600 shrink-0 mt-0.5"></i>
         <div>
             <div class="font-bold text-sm text-amber-950">Pelengkapan Data Wajib Peserta Ujian</div>
             <p class="mt-1">
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="bg-white border border-default-200 rounded-md p-6 shadow-xs">
+    <div class="card bg-white border border-default-200/90 rounded-xl p-6 shadow-2xs">
         <form method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data" class="space-y-4 text-xs">
             @csrf
             @method('PUT')

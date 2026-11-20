@@ -54,7 +54,7 @@
     <x-cbt.card flush title="Daftar Ruang Ujian & Laboratorium CBT" subtitle="Kelola kapasitas komputer, lokasi fisik gedung, dan pantau status ruang pelaksanaan">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[720px] divide-y divide-default-200/80 text-left text-xs" id="table-rooms">
-                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                     <tr>
                         <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode &amp; Nama Ruang</th>
                         <th class="px-3 py-3 whitespace-nowrap">Lokasi Fisik / Gedung</th>

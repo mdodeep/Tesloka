@@ -16,54 +16,54 @@
 <div class="space-y-6 w-full">
 
     <!-- Tabel Arsip Ujian -->
-    <x-cbt.card title="Daftar Arsip Ujian Resmi (Total {{ $archives->total() }})">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-backup-archives">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode Arsip</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Judul Ujian</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Waktu Diarsipkan</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Peserta</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Rata-rata Skor</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status Legal Hold</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Checksum Manifest</th>
+    <x-cbt.card flush title="Daftar Arsip Ujian Resmi (Total {{ $archives->total() }})">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-backup-archives">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode Arsip</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Judul Ujian</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Waktu Diarsipkan</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Peserta</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Rata-rata Skor</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Status Legal Hold</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 whitespace-nowrap">Checksum Manifest</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($archives as $arc)
-                        <tr class="hover:bg-default-50 transition">
-                            <td class="py-3 px-4 font-mono font-bold text-primary-600 whitespace-nowrap">
+                        <tr class="hover:bg-default-50/60 transition-colors">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-mono font-bold text-primary whitespace-nowrap">
                                 {{ $arc->archive_code }}
                             </td>
-                            <td class="py-3 px-4 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 <div class="font-bold text-default-900">{{ $arc->exam->title ?? '-' }}</div>
                                 <div class="text-[10px] text-default-400 font-mono">Kode Ujian: {{ $arc->exam->code ?? '-' }}</div>
                             </td>
-                            <td class="py-3 px-4 text-center font-mono text-default-600 whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-mono text-default-600 whitespace-nowrap">
                                 {{ $arc->archived_at->format('d/m/Y H:i') }}
                             </td>
-                            <td class="py-3 px-4 text-center font-bold text-default-800 whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-bold text-default-800 whitespace-nowrap">
                                 {{ $arc->total_examinees }} Siswa
                             </td>
-                            <td class="py-3 px-4 text-center font-mono font-bold text-default-700 whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-mono font-bold text-default-700 whitespace-nowrap">
                                 {{ number_format($arc->average_score, 2) }}
                             </td>
-                            <td class="py-3 px-4 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if($arc->legal_hold)
                                     <x-cbt.badge color="warning">Legal Hold Aktif</x-cbt.badge>
                                 @else
-                                    <x-cbt.badge color="secondary">Standar (5 Thn)</x-cbt.badge>
+                                    <x-cbt.badge color="slate">Standar (5 Thn)</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 font-mono text-[10px] text-default-500 truncate max-w-xs whitespace-nowrap" title="{{ $arc->manifest_checksum }}">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 font-mono text-[10px] text-default-500 truncate max-w-xs whitespace-nowrap" title="{{ $arc->manifest_checksum }}">
                                 {{ substr($arc->manifest_checksum, 0, 16) }}...
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-8 text-default-400">
-                                Belum ada ujian yang diarsipkan.
+                            <td colspan="7" class="text-center py-12 px-4 sm:px-6 text-default-400">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Arsip Ujian" message="Belum ada ujian yang diarsipkan ke dalam penyimpanan arsip resmi." />
                             </td>
                         </tr>
                     @endforelse
@@ -72,7 +72,7 @@
         </div>
 
         @if($archives->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $archives->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $archives->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $archives->total() }}</span> data
                 </p>

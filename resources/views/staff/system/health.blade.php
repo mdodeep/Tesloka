@@ -94,34 +94,34 @@
     </div>
 
     <!-- Pre-Flight Checklist Table -->
-    <x-cbt.card title="Audit Kesiapan Sistem Sebelum Production">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-system-health">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Komponen Diperiksa</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kategori</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Detail & Hasil Diagnosis</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Status Kesiapan</th>
+    <x-cbt.card flush title="Audit Kesiapan Sistem Sebelum Production">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[700px] divide-y divide-default-200/80 text-left text-xs" id="table-system-health">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Komponen Diperiksa</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Kategori</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Detail & Hasil Diagnosis</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Status Kesiapan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @foreach($health['preflight'] as $item)
                         <tr class="hover:bg-default-50/50 transition">
-                            <td class="py-3 px-4 font-semibold text-default-900 whitespace-nowrap">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-semibold text-default-900 whitespace-nowrap">
                                 {{ $item['name'] }}
                             </td>
-                            <td class="py-3 px-4 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 @if($item['critical'])
                                     <x-cbt.badge color="danger">Wajib (Kritis)</x-cbt.badge>
                                 @else
                                     <x-cbt.badge color="secondary">Standar</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 text-default-600 min-w-[200px]">
+                            <td class="px-3 py-3.5 text-default-600 min-w-[200px]">
                                 {{ $item['detail'] }}
                             </td>
-                            <td class="py-3 px-4 text-right whitespace-nowrap">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 @if($item['status'] === 'passed')
                                     <x-cbt.badge color="success">
                                         <i data-lucide="check" class="size-3.5 mr-1 inline-block"></i>
@@ -142,13 +142,13 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex items-center justify-between px-4 py-3 border-t border-default-200 dark:border-white/14 text-xs text-default-500 bg-default-50/30">
+        <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-t border-default-200/80 text-xs text-default-500 bg-default-50/30">
             <span>Total: <b class="text-default-700 font-semibold">{{ count($health['preflight']) }}</b> komponen kesiapan diperiksa</span>
         </div>
     </x-cbt.card>
 
     <!-- Informasi Lingkungan Server -->
-    <div class="p-4 bg-default-50 border border-default-200 rounded">
+    <div class="p-4 sm:p-5 bg-white border border-default-200/90 rounded-xl shadow-2xs">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
             <div>
                 <span class="text-default-400 block font-medium">PHP Version:</span>

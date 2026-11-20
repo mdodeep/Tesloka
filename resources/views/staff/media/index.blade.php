@@ -49,7 +49,7 @@ Repositori Berkas & Media Terisolasi
     </div>
 
     <!-- Filter Bar -->
-    <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="card bg-white rounded-xl border border-default-200/90 p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-2 overflow-x-auto text-xs">
             <a href="{{ route('staff.media.index') }}" class="px-3.5 py-2 rounded-lg font-semibold transition shrink-0 {{ !request('category') ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-default-200' }}">
                 Semua Berkas ({{ $stats['total'] ?? 0 }})

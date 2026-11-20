@@ -44,57 +44,33 @@
 
     <!-- Stat Cards (Standardized Unified Metric Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Peserta Terdaftar</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_students']) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Siswa &amp; Peserta Ujian</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Peserta Terdaftar" 
+            value="{{ number_format($stats['total_students']) }}" 
+            subtitle="Siswa &amp; Peserta Ujian" 
+            icon="users" 
+            color="primary" />
 
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Rombel / Kelas Aktif</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_classes']) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Tahun Ajaran Aktif</div>
-                </div>
-                <div class="size-11 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
-                    <i data-lucide="graduation-cap" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Rombel / Kelas Aktif" 
+            value="{{ number_format($stats['total_classes']) }}" 
+            subtitle="Tahun Ajaran Aktif" 
+            icon="graduation-cap" 
+            color="secondary" />
 
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Bank Soal &amp; Butir</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_questions']) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Butir Soal Multi-Tipe</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="file-question" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Bank Soal &amp; Butir" 
+            value="{{ number_format($stats['total_questions']) }}" 
+            subtitle="Butir Soal Multi-Tipe" 
+            icon="file-question" 
+            color="success" />
 
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Paket Ujian Aktif</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_exams']) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Siap Dijadwalkan</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="calendar" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Paket Ujian Aktif" 
+            value="{{ number_format($stats['total_exams']) }}" 
+            subtitle="Siap Dijadwalkan" 
+            icon="calendar" 
+            color="warning" />
     </div>
 
     <!-- Quick Navigation Hub: Penilaian, Kelulusan & Grafik -->
@@ -207,32 +183,34 @@
     @endif
 
     <!-- Recent Audit Logs Table -->
-    <x-cbt.card title="Aktivitas & Log Audit Sistem Terbaru" subtitle="10 peristiwa akses dan modifikasi data terkini yang tercatat pada PostgreSQL">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[700px] text-left text-xs">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Waktu (WIB)</th>
-                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Pengguna</th>
-                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Jenis Peristiwa</th>
-                        <th class="px-3.5 py-3 text-left font-mono whitespace-nowrap">IP Address</th>
-                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Keterangan</th>
+    <x-cbt.card flush title="Aktivitas & Log Audit Sistem Terbaru" subtitle="10 peristiwa akses dan modifikasi data terkini yang tercatat pada PostgreSQL">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[700px] text-left text-xs divide-y divide-default-200/80">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 text-left whitespace-nowrap">Waktu (WIB)</th>
+                        <th class="px-3 py-3 text-left whitespace-nowrap">Pengguna</th>
+                        <th class="px-3 py-3 text-left whitespace-nowrap">Jenis Peristiwa</th>
+                        <th class="px-3 py-3 text-left font-mono whitespace-nowrap">IP Address</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-left whitespace-nowrap">Keterangan</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-default-200/70">
                     @forelse ($recentAudits as $log)
-                        <tr class="hover:bg-default-50 transition">
-                            <td class="px-3.5 py-2.5 border-y border-default-200 font-mono text-default-500 whitespace-nowrap">{{ $log->created_at->format('Y-m-d H:i:s') }}</td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-800 whitespace-nowrap">{{ $log->user?->name ?? 'Sistem / Tamu' }}</td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                        <tr class="hover:bg-default-50/60 transition-colors">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3 font-mono text-default-500 whitespace-nowrap">{{ $log->created_at->format('Y-m-d H:i:s') }}</td>
+                            <td class="px-3 py-3 font-semibold text-default-800 whitespace-nowrap">{{ $log->user?->name ?? 'Sistem / Tamu' }}</td>
+                            <td class="px-3 py-3 whitespace-nowrap">
                                 <x-cbt.badge color="slate">{{ $log->event_type }}</x-cbt.badge>
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 font-mono text-default-500 whitespace-nowrap">{{ $log->ip_address ?? '-' }}</td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $log->notes ?? '-' }}</td>
+                            <td class="px-3 py-3 font-mono text-default-500 whitespace-nowrap">{{ $log->ip_address ?? '-' }}</td>
+                            <td class="ps-3 pe-4 sm:pe-6 py-3 text-default-600 whitespace-nowrap">{{ $log->notes ?? '-' }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-8 text-center text-default-400 whitespace-nowrap">Belum ada catatan audit log.</td>
+                            <td colspan="5" class="py-10 px-4 sm:px-6 text-center text-default-400 whitespace-nowrap">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Catatan Audit" message="Belum ada riwayat aktivitas yang tercatat pada sistem." />
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>

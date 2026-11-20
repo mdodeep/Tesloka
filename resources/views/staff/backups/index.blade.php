@@ -37,98 +37,72 @@ Manajemen Cadangan & Pemulihan Sistem
 
     <!-- Stat Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div class="card">
-            <div class="card-body">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider">Total Arsip Cadangan</span>
-                    <span class="size-8 rounded bg-primary/10 text-primary flex items-center justify-center">
-                        <i data-lucide="database" class="size-4"></i>
-                    </span>
-                </div>
-                <div class="text-2xl font-bold text-default-800 mt-2">{{ $totalBackups }} Berkas</div>
-                <p class="text-xs text-default-500 mt-1">Tersimpan di direktori privat server</p>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Arsip Cadangan" 
+            value="{{ $totalBackups }} Berkas" 
+            subtitle="Tersimpan di direktori privat server" 
+            icon="database" 
+            color="primary" />
 
-        <div class="card">
-            <div class="card-body">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider">Integritas Teruji (SHA-256)</span>
-                    <span class="size-8 rounded bg-success/10 text-success flex items-center justify-center">
-                        <i data-lucide="shield-check" class="size-4"></i>
-                    </span>
-                </div>
-                <div class="text-2xl font-bold text-success mt-2">{{ $verifiedCount }} Terverifikasi</div>
-                <p class="text-xs text-default-500 mt-1">Uji verifikasi checksum valid</p>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Integritas Teruji (SHA-256)" 
+            value="{{ $verifiedCount }} Terverifikasi" 
+            subtitle="Uji verifikasi checksum valid" 
+            icon="shield-check" 
+            color="success" />
 
-        <div class="card">
-            <div class="card-body">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider">Penggunaan Ruang Disk</span>
-                    <span class="size-8 rounded bg-indigo-500/10 text-indigo-600 flex items-center justify-center">
-                        <i data-lucide="hard-drive" class="size-4"></i>
-                    </span>
-                </div>
-                <div class="text-2xl font-bold text-default-800 mt-2">
-                    @if($totalSize >= 1048576)
-                        {{ number_format($totalSize / 1048576, 2) }} MB
-                    @elseif($totalSize >= 1024)
-                        {{ number_format($totalSize / 1024, 1) }} KB
-                    @else
-                        {{ $totalSize }} B
-                    @endif
-                </div>
-                <p class="text-xs text-default-500 mt-1">Efisien &amp; terkompresi</p>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Penggunaan Ruang Disk" 
+            value="{{ $totalSize >= 1048576 ? number_format($totalSize / 1048576, 2) . ' MB' : ($totalSize >= 1024 ? number_format($totalSize / 1024, 1) . ' KB' : $totalSize . ' B') }}" 
+            subtitle="Efisien &amp; terkompresi" 
+            icon="hard-drive" 
+            color="indigo" />
     </div>
 
     <!-- Tabel Daftar Cadangan -->
-    <x-cbt.card title="Riwayat Berkas Cadangan Sistem">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-backups">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Berkas</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Tipe</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Ukuran</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Checksum SHA-256</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status Integritas</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center w-48 whitespace-nowrap">Aksi</th>
+    <x-cbt.card flush title="Riwayat Berkas Cadangan Sistem">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-backups">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 border-b border-default-200/80 whitespace-nowrap">Nama Berkas</th>
+                        <th class="px-3 py-3 border-b border-default-200/80 text-center whitespace-nowrap">Tipe</th>
+                        <th class="px-3 py-3 border-b border-default-200/80 text-center whitespace-nowrap">Ukuran</th>
+                        <th class="px-3 py-3 border-b border-default-200/80 whitespace-nowrap">Checksum SHA-256</th>
+                        <th class="px-3 py-3 border-b border-default-200/80 text-center whitespace-nowrap">Status Integritas</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 border-b border-default-200/80 text-center w-48 whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($backups as $b)
-                        <tr class="hover:bg-default-50 transition">
-                            <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-semibold text-default-800 whitespace-nowrap">
+                        <tr class="hover:bg-default-50/60 transition-colors">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3 font-mono font-semibold text-default-800 whitespace-nowrap">
                                 <div>{{ basename($b->filename) }}</div>
                                 <div class="text-[10px] text-default-400 font-normal font-sans">{{ $b->created_at->format('d/m/Y H:i:s') }} WIB</div>
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
-                                <x-cbt.badge :color="$b->backup_type === 'database' ? 'primary' : 'purple'">
+                            <td class="px-3 py-3 text-center whitespace-nowrap">
+                                <x-cbt.badge :color="$b->backup_type === 'database' ? 'primary' : 'slate'">
                                     {{ strtoupper($b->backup_type) }}
                                 </x-cbt.badge>
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono font-semibold text-default-700 whitespace-nowrap">
+                            <td class="px-3 py-3 text-center font-mono font-semibold text-default-700 whitespace-nowrap">
                                 {{ $b->formatted_size }}
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 font-mono text-[11px] text-default-500 max-w-xs truncate whitespace-nowrap" title="{{ $b->checksum_sha256 }}">
+                            <td class="px-3 py-3 font-mono text-[11px] text-default-500 max-w-xs truncate whitespace-nowrap" title="{{ $b->checksum_sha256 }}">
                                 {{ $b->checksum_sha256 ? substr($b->checksum_sha256, 0, 16) . '...' : '-' }}
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                            <td class="px-3 py-3 text-center whitespace-nowrap">
                                 @if($b->restore_verified)
                                     <x-cbt.badge color="success" title="{{ $b->restore_notes }}">
                                         Terverifikasi Utuh
                                     </x-cbt.badge>
                                 @else
-                                    <x-cbt.badge color="secondary">
+                                    <x-cbt.badge color="slate">
                                         Belum Diuji
                                     </x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3 text-center whitespace-nowrap">
                                 <div class="flex items-center justify-center gap-1.5">
                                     <!-- Uji Integritas -->
                                     <form action="{{ route('staff.backups.verify', $b) }}" method="POST">
@@ -156,8 +130,8 @@ Manajemen Cadangan & Pemulihan Sistem
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-12 text-center text-default-400">
-                                <x-cbt.empty-state title="Belum Ada Berkas Cadangan" description="Jalankan pencadangan manual pertama untuk mengamankan data PostgreSQL dan manifest media terisolasi." />
+                            <td colspan="6" class="py-12 px-4 sm:px-6 text-center text-default-400">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Berkas Cadangan" message="Jalankan pencadangan manual pertama untuk mengamankan data PostgreSQL dan manifest media terisolasi." />
                             </td>
                         </tr>
                     @endforelse
@@ -166,7 +140,7 @@ Manajemen Cadangan & Pemulihan Sistem
         </div>
 
         @if($backups->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $backups->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $backups->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $backups->total() }}</span> data
                 </p>

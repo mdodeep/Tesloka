@@ -82,35 +82,28 @@
     @endif
 
     <!-- Questions Table -->
-    <div class="bg-white border border-default-200 rounded-md p-6 shadow-xs space-y-4">
-        <div class="flex items-center justify-between border-b border-default-100 pb-4">
-            <div>
-                <h2 class="text-sm font-bold text-default-800">Daftar Butir Soal ({{ $questions->total() }})</h2>
-                <p class="text-xs text-default-400">Soal-soal yang tersimpan pada bank soal ini.</p>
-            </div>
-        </div>
-
-        <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-bank-questions">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Kode & Versi</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Tipe Soal</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Konten Pertanyaan</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Tingkat</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Bobot</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Stimulus</th>
-                        <th class="py-3.5 px-6 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+    <x-cbt.card flush title="Daftar Butir Soal ({{ $questions->total() }})" subtitle="Soal-soal yang tersimpan pada bank soal ini.">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-bank-questions">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode & Versi</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Tipe Soal</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Konten Pertanyaan</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Tingkat</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Bobot</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Stimulus</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse ($questions as $q)
-                        <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3.5 px-6 whitespace-nowrap">
+                        <tr class="hover:bg-default-50/60 transition-colors">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 whitespace-nowrap">
                                 <div class="font-mono font-bold text-default-900 whitespace-nowrap">{{ $q->code }}</div>
                                 <div class="text-[10px] text-default-400 font-medium whitespace-nowrap">Versi #{{ $q->version }}</div>
                             </td>
-                            <td class="py-3.5 px-4 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 @php
                                     $typeLabels = [
                                         'multiple_choice' => 'Pilihan Ganda',
@@ -129,7 +122,7 @@
                                     <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 ml-1">RTL Arab</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 max-w-md">
+                            <td class="px-3 py-3.5 max-w-md">
                                 <div class="text-default-800 line-clamp-2 {{ $q->is_rtl ? 'text-right font-serif' : '' }}" dir="{{ $q->is_rtl ? 'rtl' : 'ltr' }}">
                                     {{ strip_tags($q->content) }}
                                 </div>
@@ -137,7 +130,7 @@
                                     {{ $q->options->count() }} Pilihan Jawaban
                                 </div>
                             </td>
-                            <td class="py-3.5 px-4 text-center">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if ($q->difficulty === 'easy')
                                     <x-cbt.badge color="success">Mudah</x-cbt.badge>
                                 @elseif ($q->difficulty === 'hard')
@@ -146,11 +139,11 @@
                                     <x-cbt.badge color="warning">Sedang</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-center font-bold text-default-800">{{ $q->weight }}</td>
-                            <td class="py-3.5 px-4 text-default-500">
+                            <td class="px-3 py-3.5 text-center font-bold text-default-800 whitespace-nowrap">{{ $q->weight }}</td>
+                            <td class="px-3 py-3.5 text-default-500 whitespace-nowrap">
                                 {{ $q->stimulus?->title ?? '-' }}
                             </td>
-                            <td class="py-3.5 px-6 text-right">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1.5">
                                     <a href="{{ route('staff.questions.show', $q) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-primary hover:border-primary/40 hover:bg-primary/5 shadow-2xs transition" title="Pratinjau & Riwayat Versi">
                                         <i data-lucide="eye" class="size-4"></i>
@@ -179,8 +172,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-8 text-center text-default-400">
-                                <x-cbt.empty-state title="Belum Ada Butir Soal" description="Klik '+ Tambah Soal Baru' atau gunakan fitur 'Impor CSV' untuk memasukkan soal." />
+                            <td colspan="7" class="py-12 px-4 sm:px-6 text-center text-default-400">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Butir Soal" message="Klik '+ Tambah Soal Baru' atau gunakan fitur 'Impor CSV' untuk memasukkan soal." />
                             </td>
                         </tr>
                     @endforelse
@@ -189,7 +182,7 @@
         </div>
 
         <!-- Pagination & Summary Footer -->
-        <div class="pt-4 border-t border-default-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-default-500">
+        <div class="px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-default-500">
             <div>
                 Menampilkan <span class="font-bold text-default-800">{{ $questions->firstItem() ?? 0 }}</span> sampai <span class="font-bold text-default-800">{{ $questions->lastItem() ?? 0 }}</span> dari <span class="font-bold text-default-800">{{ $questions->total() }}</span> butir soal
             </div>
@@ -198,7 +191,7 @@
                 {{ $questions->links() }}
             </div>
         </div>
-    </div>
+    </x-cbt.card>
 </div>
 
 <!-- Modal Stimulus Baru -->

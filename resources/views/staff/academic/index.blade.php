@@ -66,7 +66,7 @@
     <!-- ========================================== -->
     <div id="tab-pane-years" class="tab-pane space-y-6">
         <!-- Tabel Daftar Tahun Ajaran -->
-        <x-cbt.card title="Daftar Tahun Ajaran" subtitle="Tahun ajaran terdokumentasi dalam sistem dengan opsi edit dan pengarsipan aman">
+        <x-cbt.card flush title="Daftar Tahun Ajaran" subtitle="Tahun ajaran terdokumentasi dalam sistem dengan opsi edit dan pengarsipan aman">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-year')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="size-4"></i>
@@ -74,35 +74,35 @@
                 </button>
             </x-slot:actions>
 
-            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-years">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Tahun Ajaran</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Rentang Periode</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kelas Terkait</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Semester</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-years">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Nama Tahun Ajaran</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Rentang Periode</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Kelas Terkait</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Semester</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse ($years as $y)
-                            <tr class="hover:bg-default-50 transition">
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-800 whitespace-nowrap">{{ $y->name }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 font-mono whitespace-nowrap">
+                            <tr class="hover:bg-default-50/60 transition-colors">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-semibold text-default-800 whitespace-nowrap">{{ $y->name }}</td>
+                                <td class="px-3 py-3.5 text-default-600 font-mono whitespace-nowrap">
                                     {{ $y->start_date ? $y->start_date->format('d M Y') : '-' }} s.d. {{ $y->end_date ? $y->end_date->format('d M Y') : '-' }}
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $y->classes_count }} kelas</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $y->terms_count }} semester</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center font-mono whitespace-nowrap">{{ $y->classes_count }} kelas</td>
+                                <td class="px-3 py-3.5 text-center font-mono whitespace-nowrap">{{ $y->terms_count }} semester</td>
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     @if ($y->is_active)
                                         <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
+                                        <x-cbt.badge color="slate">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditYearModal('{{ $y->id }}', '{{ addslashes($y->name) }}', '{{ $y->start_date ? $y->start_date->format('Y-m-d') : '' }}', '{{ $y->end_date ? $y->end_date->format('Y-m-d') : '' }}', {{ $y->is_active ? 'true' : 'false' }})"
@@ -124,7 +124,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-6 text-center text-default-400">Belum ada data tahun ajaran.</td>
+                                <td colspan="6" class="py-10 px-4 sm:px-6 text-center text-default-400">
+                                    <x-cbt.empty-state :bordered="false" title="Belum Ada Tahun Ajaran" message="Silakan tambah tahun ajaran baru melalui tombol di atas." />
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -133,7 +135,7 @@
         </x-cbt.card>
 
         <!-- Tabel Daftar Semester -->
-        <x-cbt.card title="Daftar Semester / Term" subtitle="Rincian semester aktif dan historis dalam tahun ajaran">
+        <x-cbt.card flush title="Daftar Semester / Term" subtitle="Rincian semester aktif dan historis dalam tahun ajaran">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-term')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="size-4"></i>
@@ -141,35 +143,35 @@
                 </button>
             </x-slot:actions>
 
-            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-terms">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Semester</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Periode</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-terms">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Nama Semester</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Tahun Ajaran</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Periode</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse ($terms as $t)
-                            <tr class="hover:bg-default-50 transition">
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $t->code }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-700 whitespace-nowrap">{{ $t->name }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $t->academicYear?->name ?? '-' }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 font-mono whitespace-nowrap">
+                            <tr class="hover:bg-default-50/60 transition-colors">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-mono font-bold text-default-800 whitespace-nowrap">{{ $t->code }}</td>
+                                <td class="px-3 py-3.5 font-semibold text-default-700 whitespace-nowrap">{{ $t->name }}</td>
+                                <td class="px-3 py-3.5 text-default-600 whitespace-nowrap">{{ $t->academicYear?->name ?? '-' }}</td>
+                                <td class="px-3 py-3.5 text-default-600 font-mono whitespace-nowrap">
                                     {{ $t->start_date ? $t->start_date->format('d/m/Y') : '-' }} - {{ $t->end_date ? $t->end_date->format('d/m/Y') : '-' }}
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     @if ($t->is_active)
                                         <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
+                                        <x-cbt.badge color="slate">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditTermModal('{{ $t->id }}', '{{ $t->academic_year_id }}', '{{ addslashes($t->name) }}', '{{ $t->code }}', '{{ $t->start_date ? $t->start_date->format('Y-m-d') : '' }}', '{{ $t->end_date ? $t->end_date->format('Y-m-d') : '' }}', {{ $t->is_active ? 'true' : 'false' }})"
@@ -191,7 +193,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-6 text-center text-default-400">Belum ada data semester.</td>
+                                <td colspan="6" class="py-10 px-4 sm:px-6 text-center text-default-400">
+                                    <x-cbt.empty-state :bordered="false" title="Belum Ada Semester" message="Silakan tambah semester baru untuk tahun ajaran aktif." />
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -205,7 +209,7 @@
     <!-- ========================================== -->
     <div id="tab-pane-departments" class="tab-pane hidden space-y-4">
         <!-- Filter Bar Jenjang (Prodi / Jurusan) -->
-        <div class="card p-3 sm:p-4 border border-default-200 bg-white">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white p-3 sm:p-4">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
                     <span class="text-default-400 font-bold uppercase tracking-wider text-[11px] mr-1 shrink-0">Filter Jenjang:</span>
@@ -241,7 +245,7 @@
             </div>
         </div>
 
-        <x-cbt.card title="Daftar Jurusan / Program Studi" subtitle="Daftar departemen yang terdaftar beserta relasi kelas dan mata pelajaran">
+        <x-cbt.card flush title="Daftar Jurusan / Program Studi" subtitle="Daftar departemen yang terdaftar beserta relasi kelas dan mata pelajaran">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-department')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="size-4"></i>
@@ -249,35 +253,35 @@
                 </button>
             </x-slot:actions>
 
-            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-departments">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Jurusan / Prodi</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jenjang</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kelas</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Mata Pelajaran</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Deskripsi</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Aksi</th>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-departments">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Nama Jurusan / Prodi</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Jenjang</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Kelas</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Mata Pelajaran</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Deskripsi</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-center w-28 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14" id="tbody-departments">
+                    <tbody class="divide-y divide-default-200/70" id="tbody-departments">
                         @forelse ($departments as $d)
-                            <tr class="hover:bg-default-50 transition dept-table-row" data-dept-level="{{ strtoupper($d->level ?? '') }}" data-dept-text="{{ strtolower($d->code . ' ' . $d->name . ' ' . ($d->level ?? '')) }}">
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $d->code }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-700 whitespace-nowrap">{{ $d->name }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                            <tr class="hover:bg-default-50/60 transition-colors dept-table-row" data-dept-level="{{ strtoupper($d->level ?? '') }}" data-dept-text="{{ strtolower($d->code . ' ' . $d->name . ' ' . ($d->level ?? '')) }}">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-mono font-bold text-default-800 whitespace-nowrap">{{ $d->code }}</td>
+                                <td class="px-3 py-3.5 font-semibold text-default-700 whitespace-nowrap">{{ $d->name }}</td>
+                                <td class="px-3 py-3.5 whitespace-nowrap">
                                     @if($d->level)
                                         <x-cbt.badge color="info">{{ $d->level }}</x-cbt.badge>
                                     @else
                                         <span class="text-default-400">-</span>
                                     @endif
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $d->classes_count }} rombel</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $d->subjects_count }} mapel</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-500 whitespace-nowrap">{{ Str::limit($d->description, 40) ?? '-' }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center font-mono whitespace-nowrap">{{ $d->classes_count }} rombel</td>
+                                <td class="px-3 py-3.5 text-center font-mono whitespace-nowrap">{{ $d->subjects_count }} mapel</td>
+                                <td class="px-3 py-3.5 text-default-500 whitespace-nowrap">{{ Str::limit($d->description, 40) ?? '-' }}</td>
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditDepartmentModal('{{ $d->id }}', '{{ $d->code }}', '{{ addslashes($d->name) }}', '{{ addslashes($d->level ?? '') }}', '{{ addslashes($d->description ?? '') }}')"
@@ -300,13 +304,13 @@
                             </tr>
                         @empty
                             <tr id="empty-row-dept">
-                                <td colspan="7" class="py-8 text-center text-default-400">
-                                    <x-cbt.empty-state title="Belum Ada Jurusan" description="Klik tombol 'Tambah Jurusan Baru' untuk membuat jurusan/prodi." />
+                                <td colspan="7" class="py-10 px-4 sm:px-6 text-center text-default-400">
+                                    <x-cbt.empty-state :bordered="false" title="Belum Ada Jurusan" message="Klik tombol 'Tambah Jurusan Baru' untuk membuat jurusan/prodi." />
                                 </td>
                             </tr>
                         @endforelse
                         <tr id="filter-empty-row-dept" class="hidden">
-                            <td colspan="7" class="py-8 text-center text-default-400">
+                            <td colspan="7" class="py-10 px-4 sm:px-6 text-center text-default-400">
                                 Tidak ada jurusan/prodi yang sesuai dengan filter jenjang atau pencarian ini.
                             </td>
                         </tr>
@@ -320,7 +324,7 @@
     <!-- TAB 3: ROMBEL & KELAS                      -->
     <!-- ========================================== -->
     <div id="tab-pane-classes" class="tab-pane hidden space-y-6">
-        <x-cbt.card title="Daftar Rombel / Kelas Terdaftar" subtitle="Kelola seluruh kelas, alokasi siswa terdaftar, pengarsipan status, dan rincian kapasitas peserta (Maks. 30)">
+        <x-cbt.card flush title="Daftar Rombel / Kelas Terdaftar" subtitle="Kelola seluruh kelas, alokasi siswa terdaftar, pengarsipan status, dan rincian kapasitas peserta (Maks. 30)">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-class')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="size-4"></i>
@@ -328,29 +332,29 @@
                 </button>
             </x-slot:actions>
 
-            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-classes">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Kelas</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jurusan</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kapasitas</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Peserta Terdaftar</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-40 whitespace-nowrap">Aksi</th>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-classes">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Nama Kelas</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Tahun Ajaran</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Jurusan</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Kapasitas</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Peserta Terdaftar</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-center w-40 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse ($classes as $c)
-                            <tr class="hover:bg-default-50 transition">
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $c->code }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-700 whitespace-nowrap">{{ $c->name }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $c->academicYear?->name ?? '-' }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $c->department?->name ?? 'Umum' }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-medium text-default-700 font-mono whitespace-nowrap">{{ $c->capacity }} peserta</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                            <tr class="hover:bg-default-50/60 transition-colors">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-mono font-bold text-default-800 whitespace-nowrap">{{ $c->code }}</td>
+                                <td class="px-3 py-3.5 font-semibold text-default-700 whitespace-nowrap">{{ $c->name }}</td>
+                                <td class="px-3 py-3.5 text-default-600 whitespace-nowrap">{{ $c->academicYear?->name ?? '-' }}</td>
+                                <td class="px-3 py-3.5 text-default-600 whitespace-nowrap">{{ $c->department?->name ?? 'Umum' }}</td>
+                                <td class="px-3 py-3.5 text-center font-medium text-default-700 font-mono whitespace-nowrap">{{ $c->capacity }} peserta</td>
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     <button type="button" 
                                             onclick="openClassStudentsModal({{ $c->id }}, '{{ addslashes($c->name) }}', '{{ $c->code }}', {{ $c->capacity }})"
                                             class="px-2.5 py-1 rounded text-[11px] font-semibold bg-primary/10 hover:bg-primary hover:text-white text-primary transition inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
@@ -359,14 +363,14 @@
                                         <span>{{ $c->students_count }} / {{ $c->capacity }} terdaftar</span>
                                     </button>
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     @if ($c->is_active)
                                         <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
+                                        <x-cbt.badge color="slate">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openClassStudentsModal({{ $c->id }}, '{{ addslashes($c->name) }}', '{{ $c->code }}', {{ $c->capacity }})"
@@ -412,8 +416,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="py-8 text-center text-default-400">
-                                    <x-cbt.empty-state title="Belum Ada Rombel / Kelas" description="Silakan klik tombol 'Tambah Kelas Baru' di atas untuk membuat kelas baru." />
+                                <td colspan="8" class="py-10 px-4 sm:px-6 text-center text-default-400">
+                                    <x-cbt.empty-state :bordered="false" title="Belum Ada Rombel / Kelas" message="Silakan klik tombol 'Tambah Kelas Baru' di atas untuk membuat kelas baru." />
                                 </td>
                             </tr>
                         @endforelse
@@ -421,7 +425,7 @@
                 </table>
             </div>
             @if($classes->hasPages())
-                <div class="mt-4 pt-3 border-t border-default-200">
+                <div class="px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                     {{ $classes->appends(request()->except('classes_page'))->links() }}
                 </div>
             @endif
@@ -432,7 +436,7 @@
     <!-- TAB 4: MATA PELAJARAN / KULIAH             -->
     <!-- ========================================== -->
     <div id="tab-pane-subjects" class="tab-pane hidden space-y-6">
-        <x-cbt.card title="Daftar Mata Pelajaran / Kuliah Terdaftar" subtitle="Kelola status aktif, edit nama/kode, dan telusuri dependensi bank soal">
+        <x-cbt.card flush title="Daftar Mata Pelajaran / Kuliah Terdaftar" subtitle="Kelola status aktif, edit nama/kode, dan telusuri dependensi bank soal">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-subject')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="size-4"></i>
@@ -440,35 +444,35 @@
                 </button>
             </x-slot:actions>
 
-            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-subjects">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Mata Pelajaran</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jurusan</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Bank Soal</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Ujian</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                            <th class="px-3.5 py-3 border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-subjects">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Nama Mata Pelajaran</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Jurusan</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Bank Soal</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Ujian</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-center w-36 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse ($subjects as $s)
-                            <tr class="hover:bg-default-50 transition">
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-mono font-bold text-default-800 whitespace-nowrap">{{ $s->code }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-700 whitespace-nowrap">{{ $s->name }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $s->department?->name ?? 'Umum' }}</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $s->question_banks_count }} bank</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $s->exams_count }} ujian</td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                            <tr class="hover:bg-default-50/60 transition-colors">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-mono font-bold text-default-800 whitespace-nowrap">{{ $s->code }}</td>
+                                <td class="px-3 py-3.5 font-semibold text-default-700 whitespace-nowrap">{{ $s->name }}</td>
+                                <td class="px-3 py-3.5 text-default-600 whitespace-nowrap">{{ $s->department?->name ?? 'Umum' }}</td>
+                                <td class="px-3 py-3.5 text-center font-mono whitespace-nowrap">{{ $s->question_banks_count }} bank</td>
+                                <td class="px-3 py-3.5 text-center font-mono whitespace-nowrap">{{ $s->exams_count }} ujian</td>
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     @if ($s->is_active)
                                         <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <x-cbt.badge color="secondary">Nonaktif</x-cbt.badge>
+                                        <x-cbt.badge color="slate">Nonaktif</x-cbt.badge>
                                     @endif
                                 </td>
-                                <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditSubjectModal('{{ $s->id }}', '{{ $s->department_id }}', '{{ $s->code }}', '{{ addslashes($s->name) }}', '{{ addslashes($s->description ?? '') }}', {{ $s->is_active ? 'true' : 'false' }})"
@@ -501,8 +505,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-8 text-center text-default-400">
-                                    <x-cbt.empty-state title="Belum Ada Mata Pelajaran" description="Klik tombol 'Tambah Mapel Baru' untuk membuat mata pelajaran." />
+                                <td colspan="7" class="py-10 px-4 sm:px-6 text-center text-default-400">
+                                    <x-cbt.empty-state :bordered="false" title="Belum Ada Mata Pelajaran" message="Klik tombol 'Tambah Mapel Baru' untuk membuat mata pelajaran." />
                                 </td>
                             </tr>
                         @endforelse
@@ -510,7 +514,7 @@
                 </table>
             </div>
             @if($subjects->hasPages())
-                <div class="mt-4 pt-3 border-t border-default-200">
+                <div class="px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                     {{ $subjects->appends(request()->except('subjects_page'))->links() }}
                 </div>
             @endif

@@ -73,10 +73,10 @@
 
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {{-- Section 1: API Keys --}}
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden flex flex-col">
-            <div class="p-5 border-b border-default-100 flex items-center justify-between">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden bg-white flex flex-col">
+            <div class="p-4 sm:px-6 border-b border-default-200/80 bg-white flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
-                    <span class="w-8 h-8 rounded bg-blue-50 text-primary flex items-center justify-center">
+                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-primary flex items-center justify-center">
                         <i data-lucide="key" class="size-4"></i>
                     </span>
                     <div>
@@ -90,24 +90,24 @@
             </div>
 
             <div class="overflow-x-auto flex-1">
-                <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-api-keys">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama & Prefix</th>
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Abilities)</th>
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status / Kadaluwarsa</th>
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Penggunaan Terakhir</th>
-                            <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[700px] divide-y divide-default-200/80 text-left text-xs" id="table-api-keys">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Nama & Prefix</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Cakupan (Abilities)</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Status / Kadaluwarsa</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Penggunaan Terakhir</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse($apiKeys as $key)
                             <tr class="hover:bg-default-50/80 transition">
-                                <td class="py-3.5 px-4">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5">
                                     <div class="font-bold text-default-800">{{ $key->name }}</div>
                                     <div class="font-mono text-[11px] text-default-400">{{ $key->prefix }}••••••••</div>
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="px-3 py-3.5">
                                     @if($key->abilities && in_array('*', $key->abilities))
                                         <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-800 text-white">Akses Penuh (*)</span>
                                     @elseif($key->abilities)
@@ -120,7 +120,7 @@
                                         <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-default-100 text-default-500">Default</span>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="px-3 py-3.5">
                                     @if($key->isValid())
                                         <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
@@ -130,10 +130,10 @@
                                         {{ $key->expires_at ? $key->expires_at->format('d M Y') : 'Tanpa Batas' }}
                                     </div>
                                 </td>
-                                <td class="py-3.5 px-4 text-default-500">
+                                <td class="px-3 py-3.5 text-default-500">
                                     {{ $key->last_used_at ? $key->last_used_at->diffForHumans() : 'Belum pernah' }}
                                 </td>
-                                <td class="py-3.5 px-4 text-right">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right">
                                     <form action="{{ route('staff.integrations.api-keys.destroy', $key) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mencabut dan menghapus API Key ini? Akses aplikasi eksternal akan langsung terputus.');" class="inline">
                                         @csrf
                                         @method('DELETE')
@@ -147,12 +147,12 @@
                             <tr>
                                 <td colspan="5" class="py-12 text-center">
                                     <div class="max-w-xs mx-auto space-y-3">
-                                        <div class="size-12 rounded-md bg-blue-50 text-primary flex items-center justify-center mx-auto">
+                                        <div class="size-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center mx-auto">
                                             <i data-lucide="key" class="size-6"></i>
                                         </div>
                                         <div class="text-xs font-bold text-default-700">Belum Ada Kunci API Dibuat</div>
                                         <p class="text-[11px] text-default-400">Buat API Key untuk menghubungkan aplikasi kelulusan eksternal secara aman.</p>
-                                        <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-[11px] font-bold rounded shadow-xs transition">
+                                        <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-[11px] font-bold rounded-lg shadow-2xs transition">
                                             + Buat API Key Pertama
                                         </button>
                                     </div>
@@ -165,10 +165,10 @@
         </div>
 
         {{-- Section 2: Webhook Subscriptions --}}
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden flex flex-col">
-            <div class="p-5 border-b border-default-100 flex items-center justify-between">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden bg-white flex flex-col">
+            <div class="p-4 sm:px-6 border-b border-default-200/80 bg-white flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
-                    <span class="w-8 h-8 rounded bg-teal-50 text-[#14bba6] flex items-center justify-center">
+                    <span class="w-8 h-8 rounded-lg bg-teal-50 text-[#14bba6] flex items-center justify-center">
                         <i data-lucide="zap" class="size-4"></i>
                     </span>
                     <div>
@@ -182,33 +182,33 @@
             </div>
 
             <div class="overflow-x-auto flex-1">
-                <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-webhooks">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama & URL Endpoint</th>
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Peristiwa</th>
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status</th>
-                            <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Riwayat</th>
-                            <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+                <table class="w-full min-w-[700px] divide-y divide-default-200/80 text-left text-xs" id="table-webhooks">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Nama & URL Endpoint</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Peristiwa</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Status</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Riwayat</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse($webhooks as $wh)
                             <tr class="hover:bg-default-50/80 transition">
-                                <td class="py-3.5 px-4">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5">
                                     <div class="font-bold text-default-800">{{ $wh->name }}</div>
                                     <div class="font-mono text-[10px] text-default-500 truncate max-w-[200px]" title="{{ $wh->url }}">
                                         {{ $wh->url }}
                                     </div>
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="px-3 py-3.5">
                                     <div class="flex flex-wrap gap-1 max-w-xs">
                                         @foreach($wh->events as $ev)
                                             <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-blue-50 text-primary border border-blue-200">{{ $ev }}</span>
                                         @endforeach
                                     </div>
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="px-3 py-3.5">
                                     @if($wh->is_active)
                                         <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
@@ -218,13 +218,13 @@
                                         <div class="text-[10px] text-rose-600 font-semibold mt-0.5">{{ $wh->failure_count }} kegagalan</div>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4 text-default-500">
+                                <td class="px-3 py-3.5 text-default-500">
                                     <div>{{ $wh->last_delivery_at ? $wh->last_delivery_at->diffForHumans() : 'Belum ada' }}</div>
                                     @if($wh->last_status_code)
                                         <div class="text-[10px]">Kode: <code>{{ $wh->last_status_code }}</code></div>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4 text-right">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right">
                                     <div class="flex items-center justify-end gap-1">
                                         <form action="{{ route('staff.integrations.webhooks.toggle', $wh) }}" method="POST" class="inline">
                                             @csrf
@@ -246,12 +246,12 @@
                             <tr>
                                 <td colspan="5" class="py-12 text-center">
                                     <div class="max-w-xs mx-auto space-y-3">
-                                        <div class="size-12 rounded-md bg-teal-50 text-[#14bba6] flex items-center justify-center mx-auto">
+                                        <div class="size-12 rounded-lg bg-teal-50 text-[#14bba6] flex items-center justify-center mx-auto">
                                             <i data-lucide="zap" class="size-6"></i>
                                         </div>
                                         <div class="text-xs font-bold text-default-700">Belum Ada Endpoint Webhook</div>
                                         <p class="text-[11px] text-default-400">Daftarkan endpoint HTTPS untuk menerima peristiwa kelulusan & hasil ujian otomatis.</p>
-                                        <button type="button" onclick="document.getElementById('createWebhookModal').classList.remove('hidden')" class="px-3.5 py-1.5 bg-[#14bba6] hover:bg-[#0f9f8d] text-white text-[11px] font-bold rounded shadow-xs transition">
+                                        <button type="button" onclick="document.getElementById('createWebhookModal').classList.remove('hidden')" class="px-3.5 py-1.5 bg-[#14bba6] hover:bg-[#0f9f8d] text-white text-[11px] font-bold rounded-lg shadow-2xs transition">
                                             + Tambah Webhook Pertama
                                         </button>
                                     </div>
@@ -265,10 +265,10 @@
     </div>
 
     {{-- Section 3: Webhook Delivery History --}}
-    <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden">
-        <div class="p-5 border-b border-default-100 flex items-center justify-between">
+    <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden bg-white">
+        <div class="p-4 sm:px-6 border-b border-default-200/80 bg-white flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <span class="w-8 h-8 rounded bg-default-100 text-default-600 flex items-center justify-center">
+                <span class="w-8 h-8 rounded-lg bg-default-100 text-default-600 flex items-center justify-center">
                     <i data-lucide="clock" class="size-4"></i>
                 </span>
                 <div>
@@ -278,37 +278,37 @@
             </div>
         </div>
 
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-webhook-deliveries">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Waktu</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Pelanggan</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Jenis Peristiwa</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status HTTP</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Percobaan</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Pesan / Respons</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-webhook-deliveries">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Waktu</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Pelanggan</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Jenis Peristiwa</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Status HTTP</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Percobaan</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Pesan / Respons</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($recentDeliveries as $deliv)
                         <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3.5 px-4 text-default-500 font-mono text-[11px]">{{ $deliv->created_at->format('d/m/Y H:i:s') }}</td>
-                            <td class="py-3.5 px-4 font-bold text-default-800">{{ $deliv->subscription ? $deliv->subscription->name : 'N/A' }}</td>
-                            <td class="py-3.5 px-4 font-mono text-[11px] text-primary"><code>{{ $deliv->event_type }}</code></td>
-                            <td class="py-3.5 px-4 text-center">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 text-default-500 font-mono text-[11px] whitespace-nowrap">{{ $deliv->created_at->format('d/m/Y H:i:s') }}</td>
+                            <td class="px-3 py-3.5 font-bold text-default-800 whitespace-nowrap">{{ $deliv->subscription ? $deliv->subscription->name : 'N/A' }}</td>
+                            <td class="px-3 py-3.5 font-mono text-[11px] text-primary whitespace-nowrap"><code>{{ $deliv->event_type }}</code></td>
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if($deliv->status === 'delivered')
                                     <x-cbt.badge color="success">Terkirim ({{ $deliv->response_status }})</x-cbt.badge>
                                 @else
                                     <x-cbt.badge color="danger">Gagal {{ $deliv->response_status ? "({$deliv->response_status})" : '' }}</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-center text-default-500">Ke-{{ $deliv->attempt_number }}</td>
-                            <td class="py-3.5 px-4 text-default-500 max-w-xs truncate" title="{{ $deliv->error_message ?: ($deliv->response_body ?: 'OK') }}">
+                            <td class="px-3 py-3.5 text-center text-default-500 whitespace-nowrap">Ke-{{ $deliv->attempt_number }}</td>
+                            <td class="px-3 py-3.5 text-default-500 max-w-xs truncate" title="{{ $deliv->error_message ?: ($deliv->response_body ?: 'OK') }}">
                                 {{ $deliv->error_message ?: ($deliv->response_body ?: 'OK') }}
                             </td>
-                            <td class="py-3.5 px-4 text-right">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 @if($deliv->status === 'failed' && $deliv->subscription)
                                     <form action="{{ route('staff.integrations.webhooks.deliveries.retry', $deliv) }}" method="POST" class="inline">
                                         @csrf
@@ -323,7 +323,7 @@
                         <tr>
                             <td colspan="7" class="py-10 text-center">
                                 <div class="max-w-xs mx-auto space-y-2">
-                                    <div class="size-10 rounded bg-default-100 text-default-400 flex items-center justify-center mx-auto">
+                                    <div class="size-10 rounded-lg bg-default-100 text-default-400 flex items-center justify-center mx-auto">
                                         <i data-lucide="clock" class="size-5"></i>
                                     </div>
                                     <div class="text-xs font-bold text-default-700">Belum Ada Riwayat Pengiriman Webhook</div>
@@ -338,7 +338,7 @@
     </div>
 
     {{-- Section 4: Panduan Integrasi Cepat (Quick API Docs) --}}
-    <div class="bg-white border border-default-200 rounded-md p-6 shadow-xs space-y-4">
+    <div class="bg-white border border-default-200/90 rounded-xl p-5 sm:p-6 shadow-2xs space-y-4">
         <div class="flex items-center gap-2.5 text-default-900 font-bold text-sm">
             <i data-lucide="code" class="size-5 text-primary"></i>
             <span>Dokumentasi Cepat Integrasi Aplikasi Sertifikat (REST API v1)</span>

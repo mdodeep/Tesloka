@@ -94,23 +94,23 @@
     </x-cbt.card>
 
     <!-- Table of Sessions -->
-    <x-cbt.card>
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0 -my-3.5 sm:-my-5">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-sessions">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
+    <x-cbt.card flush>
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs" id="table-sessions">
+                <thead class="bg-default-50/75 border-b border-default-200/80">
                     <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Kode & Nama Sesi</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Ujian & Mapel</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Ruang & Kapasitas</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Jadwal Waktu</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Kode & Nama Sesi</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Ujian & Mapel</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Ruang & Kapasitas</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Jadwal Waktu</th>
+                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Status</th>
+                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/80 dark:divide-white/14">
                     @forelse($sessions as $session)
                         <tr class="hover:bg-default-50/80 transition-colors">
-                            <td class="py-3.5 px-4 min-w-[160px] max-w-[220px]">
+                            <td class="py-3.5 ps-4 sm:ps-6 pe-4 min-w-[160px] max-w-[220px]">
                                 <a href="{{ route('staff.sessions.show', $session) }}" class="font-bold text-default-900 hover:text-primary text-sm block leading-snug">
                                     {{ $session->name }}
                                 </a>
@@ -156,7 +156,7 @@
                                     <x-cbt.badge color="slate">Selesai</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                            <td class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">
                                 <div class="inline-flex items-center gap-1.5 justify-end">
                                     @if(in_array($session->status, ['scheduled', 'active']))
                                         <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
@@ -193,7 +193,7 @@
         </div>
 
         @if($sessions->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 dark:border-white/14 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $sessions->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $sessions->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $sessions->total() }}</span> data
                 </p>

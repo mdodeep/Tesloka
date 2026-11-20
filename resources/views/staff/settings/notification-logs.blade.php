@@ -72,32 +72,32 @@
     </x-cbt.card>
 
     <!-- Table Logs -->
-    <x-cbt.card title="Riwayat Pengiriman Pesan">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs text-default-600" id="table-notification-logs">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Waktu</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Email Tujuan</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Subjek</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Catatan / Error</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+    <x-cbt.card flush title="Riwayat Pengiriman Pesan">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs text-default-600" id="table-notification-logs">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Waktu</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Email Tujuan</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Subjek</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Status</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Catatan / Error</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($logs as $log)
                         <tr class="hover:bg-default-50/80 transition-colors">
-                            <td class="py-3 px-4 font-mono text-[11px] text-default-500 whitespace-nowrap">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-mono text-[11px] text-default-500 whitespace-nowrap">
                                 {{ $log->created_at->format('Y-m-d H:i:s') }}
                             </td>
-                            <td class="py-3 px-4 font-medium text-default-800 whitespace-nowrap">
+                            <td class="px-3 py-3.5 font-medium text-default-800 whitespace-nowrap">
                                 {{ $log->recipient_email }}
                             </td>
-                            <td class="py-3 px-4 text-default-700 max-w-xs truncate whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-default-700 max-w-xs truncate whitespace-nowrap">
                                 {{ $log->subject }}
                             </td>
-                            <td class="py-3 px-4 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 @if($log->status === 'sent')
                                     <x-cbt.badge color="success">Terkirim</x-cbt.badge>
                                 @elseif($log->status === 'failed')
@@ -106,10 +106,10 @@
                                     <x-cbt.badge color="warning">Pending</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 max-w-xs truncate text-default-500 text-[11px] whitespace-nowrap">
+                            <td class="px-3 py-3.5 max-w-xs truncate text-default-500 text-[11px] whitespace-nowrap">
                                 {{ $log->error_message ?? '-' }}
                             </td>
-                            <td class="py-3 px-4 text-right whitespace-nowrap">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 @if($log->status === 'failed')
                                     <form action="{{ route('staff.settings.notification-logs.retry', $log) }}" method="POST" class="inline">
                                         @csrf
@@ -125,8 +125,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-default-400">
-                                Belum ada riwayat pengiriman email transaksional.
+                            <td colspan="6" class="p-0">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Riwayat" message="Belum ada riwayat pengiriman email transaksional." />
                             </td>
                         </tr>
                     @endforelse
@@ -135,7 +135,7 @@
         </div>
 
         @if($logs->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $logs->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $logs->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $logs->total() }}</span> data
                 </p>

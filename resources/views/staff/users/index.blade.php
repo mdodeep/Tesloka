@@ -115,56 +115,59 @@
 
     <!-- Users Table with Batch Selection -->
     <x-cbt.card 
+        flush
         title="Daftar Pengguna Sistem ({{ $currentTab === 'staff' ? 'Staf & Pengawas' : ($currentTab === 'student' ? 'Peserta Ujian' : 'Seluruh Pengguna') }})" 
         subtitle="Kelola data akun, informasi identitas (NIM/NIK), serta lakukan aksi massal terintegrasi.">
         
         <!-- Bilah Aksi Massal Terintegrasi Langsung di Atas Tabel (Tanpa Pop-up Mengambang) -->
-        <div id="batchActionBar" class="mb-4 p-3 rounded-md border transition-all duration-200 bg-default-50 border-default-200">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-2.5">
-                    <span class="inline-flex size-6 rounded-full bg-default-200 text-default-700 font-bold text-xs items-center justify-center transition-colors" id="selectedCountBadge">0</span>
-                    <span class="font-medium text-default-700">
-                        <span id="selectedCountText">0</span> pengguna dipilih
-                    </span>
-                    <button type="button" id="clearSelectionBtn" onclick="clearAllSelections()" class="hidden ml-1 text-default-500 hover:text-danger underline cursor-pointer text-[11px] transition">
-                        Batal Pilih
-                    </button>
-                </div>
+        <div class="p-4 sm:px-6 border-b border-default-200/80 bg-white">
+            <div id="batchActionBar" class="p-3 rounded-md border transition-all duration-200 bg-default-50 border-default-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-2.5">
+                        <span class="inline-flex size-6 rounded-full bg-default-200 text-default-700 font-bold text-xs items-center justify-center transition-colors" id="selectedCountBadge">0</span>
+                        <span class="font-medium text-default-700">
+                            <span id="selectedCountText">0</span> pengguna dipilih
+                        </span>
+                        <button type="button" id="clearSelectionBtn" onclick="clearAllSelections()" class="hidden ml-1 text-default-500 hover:text-danger underline cursor-pointer text-[11px] transition">
+                            Batal Pilih
+                        </button>
+                    </div>
 
-                <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                    <span class="text-default-500 font-medium text-xs hidden md:inline whitespace-nowrap">Aksi Massal:</span>
-                    
-                    <!-- Dropdown Ubah Status Massal -->
-                    <select id="bulkStatusSelect" disabled class="form-select text-xs h-9 py-1 px-3 rounded-md bg-default-100 border border-default-200 text-default-400 disabled:cursor-not-allowed transition">
-                        <option value="">-- Ubah Status --</option>
-                        <option value="active">Jadikan Aktif</option>
-                        <option value="inactive">Jadikan Nonaktif</option>
-                        <option value="locked">Kunci Akun</option>
-                    </select>
+                    <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                        <span class="text-default-500 font-medium text-xs hidden md:inline whitespace-nowrap">Aksi Massal:</span>
+                        
+                        <!-- Dropdown Ubah Status Massal -->
+                        <select id="bulkStatusSelect" disabled class="form-select text-xs h-9 py-1 px-3 rounded-md bg-default-100 border border-default-200 text-default-400 disabled:cursor-not-allowed transition">
+                            <option value="">-- Ubah Status --</option>
+                            <option value="active">Jadikan Aktif</option>
+                            <option value="inactive">Jadikan Nonaktif</option>
+                            <option value="locked">Kunci Akun</option>
+                        </select>
 
-                    <button type="button" id="applyStatusBtn" disabled onclick="executeBulkStatus()" class="btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5">
-                        <i data-lucide="check" class="size-4 shrink-0"></i>
-                        <span class="whitespace-nowrap">Terapkan</span>
-                    </button>
+                        <button type="button" id="applyStatusBtn" disabled onclick="executeBulkStatus()" class="btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5">
+                            <i data-lucide="check" class="size-4 shrink-0"></i>
+                            <span class="whitespace-nowrap">Terapkan</span>
+                        </button>
 
-                    <!-- Hapus Terpilih -->
-                    <button type="button" id="bulkDeleteBtn" disabled onclick="openBulkDeleteModal()" class="btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5">
-                        <i data-lucide="trash-2" class="size-4 shrink-0"></i>
-                        <span class="whitespace-nowrap">Hapus Terpilih</span>
-                    </button>
+                        <!-- Hapus Terpilih -->
+                        <button type="button" id="bulkDeleteBtn" disabled onclick="openBulkDeleteModal()" class="btn btn-sm h-9 px-3.5 rounded-md whitespace-nowrap bg-default-100 text-default-400 border border-default-200 font-semibold shadow-none cursor-not-allowed transition-all inline-flex items-center justify-center gap-1.5">
+                            <i data-lucide="trash-2" class="size-4 shrink-0"></i>
+                            <span class="whitespace-nowrap">Hapus Terpilih</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[850px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-users">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="w-10 px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[850px] divide-y divide-default-200/80 text-left text-xs" id="table-users">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="w-12 ps-4 sm:ps-6 pe-3 py-3 text-center whitespace-nowrap">
                             <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="form-checkbox size-4 rounded text-primary cursor-pointer" title="Pilih Semua di Halaman Ini">
                         </th>
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama &amp; Username</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">
+                        <th class="px-3 py-3 whitespace-nowrap">Nama &amp; Username</th>
+                        <th class="px-3 py-3 whitespace-nowrap">
                             @if($currentTab === 'student')
                                 NIM / NIK
                             @elseif($currentTab === 'staff')
@@ -173,30 +176,30 @@
                                 Identitas (NIM / NIP / NIK)
                             @endif
                         </th>
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Email &amp; Kontak</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">
+                        <th class="px-3 py-3 whitespace-nowrap">Email &amp; Kontak</th>
+                        <th class="px-3 py-3 whitespace-nowrap">
                             @if($currentTab === 'student')
                                 Rombel / Kelas
                             @else
                                 Peran &amp; Akses
                             @endif
                         </th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Profil</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Profil</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse ($users as $u)
-                        <tr class="hover:bg-default-50 transition" id="user-row-{{ $u->id }}">
-                            <td class="w-10 px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                        <tr class="hover:bg-default-50/60 transition-colors" id="user-row-{{ $u->id }}">
+                            <td class="w-12 ps-4 sm:ps-6 pe-3 py-3.5 text-center whitespace-nowrap">
                                 @if ($u->id !== auth('staff')->id())
                                     <input type="checkbox" name="user_ids[]" value="{{ $u->id }}" data-id="{{ $u->id }}" data-name="{{ $u->name }}" onchange="handleRowCheckboxChange()" class="user-checkbox form-checkbox size-4 rounded text-primary cursor-pointer">
                                 @else
                                     <span class="text-default-300 text-[11px]" title="Akun Anda Sendiri">-</span>
                                 @endif
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 <div class="flex items-center gap-2.5">
                                     <img src="{{ $u->photo_url }}" alt="{{ $u->name }}" class="size-8 rounded-full object-cover border border-default-200 shrink-0">
                                     <div>
@@ -205,19 +208,19 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 <div class="font-mono font-medium text-default-700">{{ $u->identity_number ?? '-' }}</div>
                                 @if($u->nik)
                                     <div class="text-[10px] text-default-400 font-mono">NIK: {{ $u->maskedNik() }}</div>
                                 @endif
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 <div class="text-default-600">{{ $u->email }}</div>
                                 @if($u->phone)
                                     <div class="text-[10px] text-default-400">{{ $u->phone }}</div>
                                 @endif
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 @if($u->isStudent())
                                     @if($u->classes->isNotEmpty())
                                         @foreach($u->classes as $c)
@@ -232,16 +235,16 @@
                                     @endforeach
                                 @endif
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if ($u->status === 'active')
                                     <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                 @elseif ($u->status === 'locked')
                                     <x-cbt.badge color="danger">Terkunci</x-cbt.badge>
                                 @else
-                                    <x-cbt.badge color="secondary">Nonaktif</x-cbt.badge>
+                                    <x-cbt.badge color="slate">Nonaktif</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if ($u->isStudent())
                                     @if ($u->isProfileComplete())
                                         <span class="text-success font-semibold inline-flex items-center gap-1">
@@ -255,7 +258,7 @@
                                     <span class="text-default-400">-</span>
                                 @endif
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-right whitespace-nowrap">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1.5">
                                     <!-- View User Detail -->
                                     <button type="button" 
@@ -316,8 +319,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-3.5 py-8 text-center text-default-400">
-                                <x-cbt.empty-state title="Tidak Ada Pengguna" description="Tidak ditemukan pengguna yang sesuai dengan kriteria filter saat ini." />
+                            <td colspan="8" class="py-12 px-4 sm:px-6 text-center text-default-400">
+                                <x-cbt.empty-state :bordered="false" title="Tidak Ada Pengguna" message="Tidak ditemukan pengguna yang sesuai dengan kriteria filter saat ini." />
                             </td>
                         </tr>
                     @endforelse
@@ -325,7 +328,7 @@
             </table>
         </div>
         @if($users->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $users->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $users->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $users->total() }}</span> data
                 </p>

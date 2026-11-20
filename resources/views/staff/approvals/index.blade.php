@@ -36,28 +36,28 @@
     </div>
 
     <!-- Pending Requests -->
-    <x-cbt.card title="Permohonan Menunggu Persetujuan" subtitle="Daftar tindakan administratif kritis yang memerlukan persetujuan pihak kedua">
+    <x-cbt.card flush title="Permohonan Menunggu Persetujuan" subtitle="Daftar tindakan administratif kritis yang memerlukan persetujuan pihak kedua">
         <x-slot:actions>
             <span class="px-2.5 py-1 bg-amber-50 text-amber-800 font-bold text-[11px] rounded-lg border border-amber-200">
                 {{ $pendingRequests->count() }} Menunggu
             </span>
         </x-slot:actions>
 
-        <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-approvals-pending">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs" id="table-approvals-pending">
+                <thead class="bg-default-50/75 border-b border-default-200/80">
                     <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Tindakan Kritis</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Pemohon</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Waktu Pengajuan</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Alasan / Catatan</th>
-                        <th class="py-3.5 px-6 border-b border-default-200 text-right whitespace-nowrap">Tindakan Penyetuju</th>
+                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Tindakan Kritis</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Pemohon</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Waktu Pengajuan</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Alasan / Catatan</th>
+                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">Tindakan Penyetuju</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/80 dark:divide-white/14">
                     @forelse ($pendingRequests as $req)
                         <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3.5 px-6 whitespace-nowrap">
+                            <td class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">
                                 <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] bg-rose-50 text-rose-700 border border-rose-200 font-semibold">
                                     {{ $req->action_type }}
                                 </span>
@@ -65,7 +65,7 @@
                             <td class="py-3.5 px-4 font-semibold text-default-800 whitespace-nowrap">{{ $req->requester?->name }}</td>
                             <td class="py-3.5 px-4 font-mono text-default-500 whitespace-nowrap">{{ $req->created_at->format('Y-m-d H:i') }}</td>
                             <td class="py-3.5 px-4 text-default-600 max-w-xs truncate">{{ $req->reason ?? '-' }}</td>
-                            <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                            <td class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">
                                 @if (! auth('staff')->user()?->isAdmin() && auth('staff')->id() === $req->requester_id)
                                     <span class="text-default-400 italic text-[11px]">(Anda adalah pemohon - Four Eyes)</span>
                                 @else
@@ -92,7 +92,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-8 text-center text-default-400">
+                            <td colspan="5" class="py-12 px-4 text-center text-default-400">
                                 <x-cbt.empty-state title="Tidak Ada Permohonan Tertunda" description="Semua permohonan tindakan kritis telah diproses dan diputuskan." />
                             </td>
                         </tr>
@@ -103,23 +103,23 @@
     </x-cbt.card>
 
     <!-- History Requests -->
-    <x-cbt.card title="Riwayat Keputusan Four-Eyes" subtitle="Catatan keputusan permohonan kritis terdahulu">
-        <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-approvals-history">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
+    <x-cbt.card flush title="Riwayat Keputusan Four-Eyes" subtitle="Catatan keputusan permohonan kritis terdahulu">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs" id="table-approvals-history">
+                <thead class="bg-default-50/75 border-b border-default-200/80">
                     <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Tindakan</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Pemohon</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Penyetuju</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Keputusan</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Waktu</th>
-                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Catatan / Alasan</th>
+                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Tindakan</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Pemohon</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Penyetuju</th>
+                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Keputusan</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Waktu</th>
+                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 whitespace-nowrap">Catatan / Alasan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/80 dark:divide-white/14">
                     @forelse ($historyRequests as $hist)
                         <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3.5 px-6 font-mono font-bold text-default-800 whitespace-nowrap">{{ $hist->action_type }}</td>
+                            <td class="py-3.5 ps-4 sm:ps-6 pe-4 font-mono font-bold text-default-800 whitespace-nowrap">{{ $hist->action_type }}</td>
                             <td class="py-3.5 px-4 font-semibold text-default-700 whitespace-nowrap">{{ $hist->requester?->name }}</td>
                             <td class="py-3.5 px-4 font-semibold text-default-700 whitespace-nowrap">{{ $hist->approver?->name ?? '-' }}</td>
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
@@ -130,11 +130,11 @@
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 font-mono text-default-500 whitespace-nowrap">{{ $hist->updated_at->format('Y-m-d H:i') }}</td>
-                            <td class="py-3.5 px-6 text-default-600">{{ $hist->rejection_reason ?? $hist->reason ?? '-' }}</td>
+                            <td class="py-3.5 ps-4 pe-4 sm:pe-6 text-default-600">{{ $hist->rejection_reason ?? $hist->reason ?? '-' }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-default-400">
+                            <td colspan="6" class="py-12 px-4 text-center text-default-400">
                                 <x-cbt.empty-state title="Belum Ada Riwayat" description="Belum ada riwayat permohonan yang disetujui atau ditolak." />
                             </td>
                         </tr>

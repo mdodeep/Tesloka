@@ -43,30 +43,30 @@
     </div>
 
     <!-- Delegasi yang Diberikan -->
-    <x-cbt.card title="Delegasi yang Anda Berikan" subtitle="Daftar wewenang yang Anda limpahkan kepada rekan sejawat">
-        <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-delegations-given">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Penerima Wewenang</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Scope)</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Masa Berlaku</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Alasan</th>
-                        <th class="py-3.5 px-6 border-b border-default-200 text-right whitespace-nowrap">Tindakan</th>
+    <x-cbt.card flush title="Delegasi yang Anda Berikan" subtitle="Daftar wewenang yang Anda limpahkan kepada rekan sejawat">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-delegations-given">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Penerima Wewenang</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Cakupan (Scope)</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Masa Berlaku</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Alasan</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Tindakan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse ($delegationsGiven as $del)
                         <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3.5 px-6 font-semibold text-default-900 whitespace-nowrap">{{ $del->delegatee?->name ?? 'User #'.$del->delegatee_id }}</td>
-                            <td class="py-3.5 px-4 whitespace-nowrap">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-semibold text-default-900 whitespace-nowrap">{{ $del->delegatee?->name ?? 'User #'.$del->delegatee_id }}</td>
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] bg-primary/10 text-primary border border-primary/20 font-semibold">
                                     {{ $del->scope }}
                                 </span>
                             </td>
-                            <td class="py-3.5 px-4 font-mono text-default-600 whitespace-nowrap">{{ $del->start_date->format('Y-m-d') }} s.d. {{ $del->end_date->format('Y-m-d') }}</td>
-                            <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 font-mono text-default-600 whitespace-nowrap">{{ $del->start_date->format('Y-m-d') }} s.d. {{ $del->end_date->format('Y-m-d') }}</td>
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if ($del->status === 'active' && $del->isValidNow())
                                     <x-cbt.badge color="success">Aktif Berlaku</x-cbt.badge>
                                 @elseif ($del->status === 'revoked')
@@ -75,8 +75,8 @@
                                     <x-cbt.badge color="secondary">Kedaluwarsa</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-default-600 max-w-xs truncate">{{ $del->reason }}</td>
-                            <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-default-600 max-w-xs truncate">{{ $del->reason }}</td>
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 @if ($del->status === 'active')
                                     <form method="POST" action="{{ route('staff.delegations.revoke', $del) }}" class="inline" onsubmit="return confirm('Cabut delegasi ini?')">
                                         @csrf
@@ -92,8 +92,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-default-400">
-                                <x-cbt.empty-state title="Belum Ada Delegasi yang Diberikan" description="Anda belum pernah memberikan pelimpahan kewenangan kepada staf lain." />
+                            <td colspan="6" class="p-0">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Delegasi yang Diberikan" message="Anda belum pernah memberikan pelimpahan kewenangan kepada staf lain." />
                             </td>
                         </tr>
                     @endforelse
@@ -103,29 +103,29 @@
     </x-cbt.card>
 
     <!-- Delegasi yang Diterima -->
-    <x-cbt.card title="Delegasi yang Anda Terima dari Staf Lain" subtitle="Kewenangan tambahan yang dilimpahkan rekan sejawat kepada Anda">
-        <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-delegations-received">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Pemberi Wewenang</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Scope)</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Masa Berlaku</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Alasan</th>
+    <x-cbt.card flush title="Delegasi yang Anda Terima dari Staf Lain" subtitle="Kewenangan tambahan yang dilimpahkan rekan sejawat kepada Anda">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-delegations-received">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Pemberi Wewenang</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Cakupan (Scope)</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Masa Berlaku</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 whitespace-nowrap">Alasan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse ($delegationsReceived as $del)
                         <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3.5 px-6 font-semibold text-default-900 whitespace-nowrap">{{ $del->delegator?->name ?? 'User #'.$del->delegator_id }}</td>
-                            <td class="py-3.5 px-4 whitespace-nowrap">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-semibold text-default-900 whitespace-nowrap">{{ $del->delegator?->name ?? 'User #'.$del->delegator_id }}</td>
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] bg-primary/10 text-primary border border-primary/20 font-semibold">
                                     {{ $del->scope }}
                                 </span>
                             </td>
-                            <td class="py-3.5 px-4 font-mono text-default-600 whitespace-nowrap">{{ $del->start_date->format('Y-m-d') }} s.d. {{ $del->end_date->format('Y-m-d') }}</td>
-                            <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 font-mono text-default-600 whitespace-nowrap">{{ $del->start_date->format('Y-m-d') }} s.d. {{ $del->end_date->format('Y-m-d') }}</td>
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if ($del->status === 'active' && $del->isValidNow())
                                     <x-cbt.badge color="success">Aktif Berlaku</x-cbt.badge>
                                 @elseif ($del->status === 'revoked')
@@ -134,12 +134,12 @@
                                     <x-cbt.badge color="secondary">Kedaluwarsa</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-6 text-default-600">{{ $del->reason }}</td>
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-default-600">{{ $del->reason }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-8 text-center text-default-400">
-                                <x-cbt.empty-state title="Tidak Ada Delegasi yang Diterima" description="Saat ini Anda tidak memiliki delegasi kewenangan aktif dari pengguna lain." />
+                            <td colspan="5" class="p-0">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Delegasi yang Diterima" message="Belum ada wewenang yang dilimpahkan dari staf lain kepada Anda." />
                             </td>
                         </tr>
                     @endforelse

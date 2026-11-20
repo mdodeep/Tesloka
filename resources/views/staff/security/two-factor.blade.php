@@ -8,11 +8,11 @@
 @section('content')
 <div class="space-y-5 w-full">
     <!-- Header Status Card -->
-    <div class="card">
-        <div class="card-body">
+    <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white overflow-hidden">
+        <div class="card-body p-4 sm:p-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div class="flex items-start gap-4">
-                    <div class="size-12 rounded {{ $isEnabled ? 'bg-success/10 text-success border border-success/20' : 'bg-warning/10 text-warning border border-warning/20' }} flex items-center justify-center shrink-0">
+                    <div class="size-12 rounded-xl {{ $isEnabled ? 'bg-success/10 text-success border border-success/20' : 'bg-warning/10 text-warning border border-warning/20' }} flex items-center justify-center shrink-0">
                         @if($isEnabled)
                             <i data-lucide="shield-check" class="size-6"></i>
                         @else
@@ -22,14 +22,14 @@
 
                     <div>
                         <div class="flex items-center gap-3 flex-wrap">
-                            <h3 class="text-base font-semibold text-default-900 tracking-tight">Status Perlindungan Akun</h3>
+                            <h3 class="text-base font-bold text-default-900 tracking-tight">Status Perlindungan Akun</h3>
                             @if($isEnabled)
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-semibold bg-success/10 text-success border border-success/20">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-success/10 text-success border border-success/20">
                                     <span class="size-1.5 rounded-full bg-success animate-pulse"></span>
                                     Aktif &amp; Terlindungi
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-semibold bg-warning/10 text-warning border border-warning/20">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-warning/10 text-warning border border-warning/20">
                                     <span class="size-1.5 rounded-full bg-warning"></span>
                                     Belum Diaktifkan
                                 </span>
@@ -43,12 +43,12 @@
 
                 <div class="shrink-0 w-full sm:w-auto">
                     @if(! $isEnabled)
-                        <a href="{{ route('staff.security.two-factor.setup') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
+                        <a href="{{ route('staff.security.two-factor.setup') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-2xs inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto rounded-lg">
                             <i data-lucide="plus" class="size-4"></i>
                             <span>Aktifkan 2FA Sekarang</span>
                         </a>
                     @else
-                        <button type="button" onclick="document.getElementById('modal-disable-2fa').classList.remove('hidden')" class="btn btn-sm bg-danger/10 hover:bg-danger text-danger hover:text-white rounded border border-danger/20 transition cursor-pointer inline-flex items-center justify-center gap-1.5 w-full sm:w-auto">
+                        <button type="button" onclick="document.getElementById('modal-disable-2fa').classList.remove('hidden')" class="btn btn-sm bg-danger/10 hover:bg-danger text-danger hover:text-white rounded-lg border border-danger/20 transition cursor-pointer inline-flex items-center justify-center gap-1.5 w-full sm:w-auto">
                             <i data-lucide="shield-off" class="size-4"></i>
                             <span>Nonaktifkan 2FA</span>
                         </button>
@@ -61,54 +61,48 @@
     @if(! $isEnabled)
         <!-- Grid Keunggulan 2FA -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div class="card">
-                <div class="card-body flex flex-col justify-between">
-                    <div>
-                        <div class="size-10 rounded bg-primary/10 text-primary flex items-center justify-center mb-3">
-                            <i data-lucide="lock" class="size-5"></i>
-                        </div>
-                        <h4 class="text-sm font-semibold text-default-800">Proteksi Brute Force</h4>
-                        <p class="text-xs text-default-500 mt-2 leading-relaxed">
-                            Mencegah pembajakan akun dan serangan credential stuffing. Meskipun kata sandi Anda bocor, pihak luar tidak dapat masuk tanpa akses fisik ke aplikasi autentikator.
-                        </p>
+            <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white overflow-hidden p-5 flex flex-col justify-between">
+                <div>
+                    <div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3">
+                        <i data-lucide="lock" class="size-5"></i>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-default-200 text-xs font-semibold text-primary">
-                        Keamanan Tingkat Lanjut &rarr;
-                    </div>
+                    <h4 class="text-sm font-bold text-default-800">Proteksi Brute Force</h4>
+                    <p class="text-xs text-default-500 mt-2 leading-relaxed">
+                        Mencegah pembajakan akun dan serangan credential stuffing. Meskipun kata sandi Anda bocor, pihak luar tidak dapat masuk tanpa akses fisik ke aplikasi autentikator.
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-default-200/70 text-xs font-semibold text-primary">
+                    Keamanan Tingkat Lanjut &rarr;
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-body flex flex-col justify-between">
-                    <div>
-                        <div class="size-10 rounded bg-teal-500/10 text-teal-600 flex items-center justify-center mb-3">
-                            <i data-lucide="clock" class="size-5"></i>
-                        </div>
-                        <h4 class="text-sm font-semibold text-default-800">Standar RFC 6238 TOTP</h4>
-                        <p class="text-xs text-default-500 mt-2 leading-relaxed">
-                            Menggunakan algoritma Time-based One-Time Password standar industri yang berganti setiap 30 detik tanpa memerlukan koneksi internet pada perangkat ponsel cerdas Anda.
-                        </p>
+            <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white overflow-hidden p-5 flex flex-col justify-between">
+                <div>
+                    <div class="size-10 rounded-lg bg-teal-500/10 text-teal-600 flex items-center justify-center mb-3">
+                        <i data-lucide="clock" class="size-5"></i>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-default-200 text-xs font-semibold text-teal-600">
-                        Kompatibilitas Standar Universal &rarr;
-                    </div>
+                    <h4 class="text-sm font-bold text-default-800">Standar RFC 6238 TOTP</h4>
+                    <p class="text-xs text-default-500 mt-2 leading-relaxed">
+                        Menggunakan algoritma Time-based One-Time Password standar industri yang berganti setiap 30 detik tanpa memerlukan koneksi internet pada perangkat ponsel cerdas Anda.
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-default-200/70 text-xs font-semibold text-teal-600">
+                    Kompatibilitas Standar Universal &rarr;
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-body flex flex-col justify-between">
-                    <div>
-                        <div class="size-10 rounded bg-indigo-500/10 text-indigo-600 flex items-center justify-center mb-3">
-                            <i data-lucide="key" class="size-5"></i>
-                        </div>
-                        <h4 class="text-sm font-semibold text-default-800">8 Kode Pemulihan Darurat</h4>
-                        <p class="text-xs text-default-500 mt-2 leading-relaxed">
-                            Sistem menyediakan 8 kode pemulihan darurat satu kali pakai yang dapat Anda simpan atau cetak untuk mengakses akun bila ponsel Anda rusak atau hilang.
-                        </p>
+            <div class="card rounded-xl border border-default-200/90 shadow-2xs bg-white overflow-hidden p-5 flex flex-col justify-between">
+                <div>
+                    <div class="size-10 rounded-lg bg-indigo-500/10 text-indigo-600 flex items-center justify-center mb-3">
+                        <i data-lucide="key" class="size-5"></i>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-default-200 text-xs font-semibold text-indigo-600">
-                        Akses Aman Terjamin &rarr;
-                    </div>
+                    <h4 class="text-sm font-bold text-default-800">8 Kode Pemulihan Darurat</h4>
+                    <p class="text-xs text-default-500 mt-2 leading-relaxed">
+                        Sistem menyediakan 8 kode pemulihan darurat satu kali pakai yang dapat Anda simpan atau cetak untuk mengakses akun bila ponsel Anda rusak atau hilang.
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-default-200/70 text-xs font-semibold text-indigo-600">
+                    Akses Aman Terjamin &rarr;
                 </div>
             </div>
         </div>

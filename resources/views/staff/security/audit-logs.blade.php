@@ -122,32 +122,32 @@
     </x-cbt.card>
 
     <!-- Tabel Audit Logs -->
-    <x-cbt.card title="Daftar Rekaman Audit (Total {{ $logs->total() }})">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-audit-logs">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3 px-4 border-b border-default-200 w-12 text-center whitespace-nowrap">ID</th>
-                        <th class="py-3 px-4 border-b border-default-200 w-36 whitespace-nowrap">Waktu Kejadian</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Tipe Event</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Aktor Pengguna</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Alamat IP</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Catatan Aktivitas</th>
+    <x-cbt.card flush title="Daftar Rekaman Audit (Total {{ $logs->total() }})">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-audit-logs">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 w-12 text-center whitespace-nowrap">ID</th>
+                        <th class="px-3 py-3 w-36 whitespace-nowrap">Waktu Kejadian</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Tipe Event</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Aktor Pengguna</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Alamat IP</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 whitespace-nowrap">Catatan Aktivitas</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($logs as $log)
-                        <tr class="hover:bg-default-50 transition">
-                            <td class="py-3 px-4 text-center font-mono text-default-400 whitespace-nowrap">#{{ $log->id }}</td>
-                            <td class="py-3 px-4 text-default-600 whitespace-nowrap font-mono">
+                        <tr class="hover:bg-default-50/80 transition">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 text-center font-mono text-default-400 whitespace-nowrap">#{{ $log->id }}</td>
+                            <td class="px-3 py-3.5 text-default-600 whitespace-nowrap font-mono">
                                 {{ $log->created_at->format('d/m/Y H:i:s') }}
                             </td>
-                            <td class="py-3 px-4 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 <span class="px-2.5 py-0.5 rounded-md font-mono font-semibold text-[11px] bg-default-100 text-default-800 border border-default-200/90">
                                     {{ $log->event_type }}
                                 </span>
                             </td>
-                            <td class="py-3 px-4 whitespace-nowrap">
+                            <td class="px-3 py-3.5 whitespace-nowrap">
                                 @if($log->user)
                                     <div class="font-bold text-default-900">{{ $log->user->name }}</div>
                                     <div class="text-[10px] text-default-400 font-mono">{{ $log->user->username }}</div>
@@ -155,17 +155,17 @@
                                     <span class="text-default-400 italic">Sistem Otonom</span>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 font-mono text-default-600 whitespace-nowrap">
+                            <td class="px-3 py-3.5 font-mono text-default-600 whitespace-nowrap">
                                 {{ $log->ip_address ?? '-' }}
                             </td>
-                            <td class="py-3 px-4 text-default-700 min-w-[200px]">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-default-700 min-w-[200px]">
                                 {{ $log->notes ?? '-' }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-8 text-default-400">
-                                Belum ada data audit log yang sesuai dengan filter.
+                            <td colspan="6" class="p-0">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Rekaman Audit" message="Belum ada data audit log yang sesuai dengan filter pencarian Anda." />
                             </td>
                         </tr>
                     @endforelse
@@ -174,7 +174,7 @@
         </div>
 
         @if($logs->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $logs->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $logs->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $logs->total() }}</span> data
                 </p>

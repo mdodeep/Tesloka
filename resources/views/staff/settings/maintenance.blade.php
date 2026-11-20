@@ -31,7 +31,7 @@
 
     <!-- Active Exams Safety Guard Notice -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
+        <div class="card bg-white rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold shrink-0">
                     <i data-lucide="clock" class="size-5"></i>
@@ -50,7 +50,7 @@
             @endif
         </div>
 
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
+        <div class="card bg-white rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center font-bold shrink-0">
                     <i data-lucide="calendar" class="size-5"></i>

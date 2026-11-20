@@ -68,23 +68,23 @@
     </div>
 
     <!-- Tabel Ujian & Tautan Analisis Psikometri Terperinci -->
-    <x-cbt.card title="Daftar Paket Ujian & Analisis Psikometri Butir Soal">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-reports-overview">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode & Judul Ujian</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Standar KKM</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Peserta Dinilai</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Status Hasil</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Laporan & Analisis Butir</th>
+    <x-cbt.card flush title="Daftar Paket Ujian & Analisis Psikometri Butir Soal">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-reports-overview">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode & Judul Ujian</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Mata Pelajaran</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Standar KKM</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Peserta Dinilai</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Status Hasil</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Laporan & Analisis Butir</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($allExams as $ex)
                         <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3.5 px-4 font-medium whitespace-nowrap">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-medium whitespace-nowrap">
                                 <x-cbt.badge color="primary" class="font-mono mr-1">
                                     {{ $ex->code }}
                                 </x-cbt.badge>
@@ -93,23 +93,23 @@
                                     Tipe: {{ ucfirst($ex->exam_type) }} &bull; Durasi: {{ $ex->duration_minutes }} Menit
                                 </div>
                             </td>
-                            <td class="py-3.5 px-4 text-default-700 font-medium whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-default-700 font-medium whitespace-nowrap">
                                 {{ $ex->subject->name ?? '-' }}
                             </td>
-                            <td class="py-3.5 px-4 text-center font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">
                                 {{ $ex->passing_grade ?? 75 }}
                             </td>
-                            <td class="py-3.5 px-4 text-center font-bold text-indigo-600 whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-bold text-indigo-600 whitespace-nowrap">
                                 {{ $ex->graded_count }} Peserta
                             </td>
-                            <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if($ex->show_result_on_finish)
                                     <x-cbt.badge color="success">Terpublikasi</x-cbt.badge>
                                 @else
                                     <x-cbt.badge color="warning">Draft / Internal</x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right space-x-1.5 whitespace-nowrap">
                                 <a href="{{ route('staff.exams.reports.index', $ex) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
                                     <i data-lucide="bar-chart-2" class="size-3.5"></i>
                                     <span>Analisis Butir & Psikometri</span>
@@ -124,15 +124,15 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-8 text-default-400">
-                                Belum ada ujian terdaftar untuk ditampilkan laporan statistiknya.
+                            <td colspan="6" class="p-0">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Ujian" message="Belum ada ujian terdaftar untuk ditampilkan laporan statistiknya." />
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="flex items-center justify-between px-4 py-3 border-t border-default-200 dark:border-white/14 text-xs text-default-500 bg-default-50/30">
+        <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-t border-default-200/80 text-xs text-default-500 bg-default-50/30">
             <span>Total: <b class="text-default-700 font-semibold">{{ count($allExams) }}</b> paket ujian</span>
         </div>
     </x-cbt.card>

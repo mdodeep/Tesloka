@@ -203,77 +203,79 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Widget 1: Cetak Biru (Blueprint) Kisi-Kisi Soal -->
-        <x-cbt.card title="Cetak Biru (Blueprint) Kisi-Kisi Soal">
-            <p class="text-xs text-default-500 mb-4">Tentukan distribusi jumlah butir soal yang ditarik dari bank soal terkait.</p>
+        <x-cbt.card flush title="Cetak Biru (Blueprint) Kisi-Kisi Soal">
+            <div class="p-4 sm:px-6 border-b border-default-200/80 bg-white">
+                <p class="text-xs text-default-500 {{ in_array($exam->status, ['draft', 'pending_approval']) ? 'mb-4' : '' }}">Tentukan distribusi jumlah butir soal yang ditarik dari bank soal terkait.</p>
 
-            @if(in_array($exam->status, ['draft', 'pending_approval']))
-                <form action="{{ route('staff.exams.blueprints.store', $exam) }}" method="POST" class="p-3.5 bg-default-50/80 border border-default-200 rounded mb-4 space-y-3">
-                    @csrf
-                    <div class="text-[11px] font-bold text-default-700 uppercase tracking-wider">Tambah Aturan Blueprint:</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Pilih Bank Soal *</label>
-                            <select name="question_bank_id" class="form-select w-full text-xs h-10 rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
-                                <option value="">-- Pilih Bank Soal --</option>
-                                @foreach($questionBanks as $bank)
-                                    <option value="{{ $bank->id }}">{{ $bank->name }} ({{ $bank->code }})</option>
-                                @endforeach
-                            </select>
+                @if(in_array($exam->status, ['draft', 'pending_approval']))
+                    <form action="{{ route('staff.exams.blueprints.store', $exam) }}" method="POST" class="p-3.5 bg-default-50/80 border border-default-200/90 rounded-xl space-y-3">
+                        @csrf
+                        <div class="text-[11px] font-bold text-default-700 uppercase tracking-wider">Tambah Aturan Blueprint:</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Pilih Bank Soal *</label>
+                                <select name="question_bank_id" class="form-select w-full text-xs h-10 rounded-lg border-default-200/90 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
+                                    <option value="">-- Pilih Bank Soal --</option>
+                                    @foreach($questionBanks as $bank)
+                                        <option value="{{ $bank->id }}">{{ $bank->name }} ({{ $bank->code }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Target Jumlah Butir *</label>
+                                <input type="number" min="1" max="100" name="total_questions" value="10" class="form-input w-full text-xs h-10 rounded-lg border-default-200/90 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Filter Kesulitan</label>
+                                <select name="difficulty" class="form-select w-full text-xs h-10 rounded-lg border-default-200/90 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                    <option value="">Semua Tingkat Kesulitan</option>
+                                    <option value="easy">Hanya Mudah</option>
+                                    <option value="medium">Hanya Sedang</option>
+                                    <option value="hard">Hanya Sukar</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="btn btn-sm w-full h-10 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 shadow-2xs transition">
+                                    <i data-lucide="plus" class="size-4"></i>
+                                    Tambah Aturan
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Target Jumlah Butir *</label>
-                            <input type="number" min="1" max="100" name="total_questions" value="10" class="form-input w-full text-xs h-10 rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Filter Kesulitan</label>
-                            <select name="difficulty" class="form-select w-full text-xs h-10 rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
-                                <option value="">Semua Tingkat Kesulitan</option>
-                                <option value="easy">Hanya Mudah</option>
-                                <option value="medium">Hanya Sedang</option>
-                                <option value="hard">Hanya Sukar</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="submit" class="btn btn-sm w-full h-10 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition">
-                                <i data-lucide="plus" class="size-4"></i>
-                                Tambah Aturan
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            @endif
+                    </form>
+                @endif
+            </div>
 
-            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[700px] text-left text-xs text-default-600">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="py-2.5 px-3 whitespace-nowrap">Bank Soal</th>
-                            <th class="py-2.5 px-3 text-center whitespace-nowrap">Jumlah</th>
-                            <th class="py-2.5 px-3 text-center whitespace-nowrap">Tingkat</th>
-                            <th class="py-2.5 px-3 text-right whitespace-nowrap">Aksi</th>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[500px] divide-y divide-default-200/80 text-left text-xs text-default-600">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Bank Soal</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Jumlah</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Tingkat</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse($exam->blueprints as $bp)
                             <tr class="hover:bg-default-50/80 transition-colors">
-                                <td class="py-2.5 px-3 whitespace-nowrap">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5 whitespace-nowrap">
                                     <strong class="text-default-800 block text-xs font-semibold">{{ $bp->questionBank->name ?? '-' }}</strong>
                                     <span class="text-[11px] text-default-400 font-mono">{{ $bp->questionBank->code ?? '-' }}</span>
                                 </td>
-                                <td class="py-2.5 px-3 text-center font-bold text-default-800 whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center font-bold text-default-800 whitespace-nowrap">
                                     {{ $bp->total_questions }}
                                 </td>
-                                <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     <span class="px-2 py-0.5 bg-default-100 text-default-700 rounded-full text-[10px] uppercase font-semibold">
                                         {{ $bp->difficulty ?: 'Semua' }}
                                     </span>
                                 </td>
-                                <td class="py-2.5 px-3 text-right whitespace-nowrap">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                     @if(in_array($exam->status, ['draft', 'pending_approval']))
                                         <form action="{{ route('staff.exams.blueprints.destroy', $bp) }}" method="POST" class="inline" onsubmit="return confirm('Hapus aturan blueprint ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-icon size-7 text-default-400 hover:text-rose-600 hover:bg-rose-50 rounded transition" title="Hapus Aturan">
+                                            <button type="submit" class="btn btn-icon size-7 text-default-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Hapus Aturan">
                                                 <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>
@@ -284,8 +286,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="py-6 text-center text-default-400">
-                                    Belum ada aturan cetak biru kisi-kisi.
+                                <td colspan="4" class="p-0">
+                                    <x-cbt.empty-state :bordered="false" title="Belum Ada Blueprint" message="Belum ada aturan cetak biru kisi-kisi." />
                                 </td>
                             </tr>
                         @endforelse

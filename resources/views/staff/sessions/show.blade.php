@@ -263,27 +263,27 @@
             </x-cbt.card>
 
             <!-- Table of Enrolled Participants -->
-            <x-cbt.card title="Daftar Peserta Ujian">
-                <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                    <table class="w-full min-w-[760px] text-left text-xs text-default-600">
-                        <thead class="bg-default-50/75 border-y border-default-200/80">
-                            <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                                <th class="py-3 px-3.5 whitespace-nowrap">No. Kursi</th>
-                                <th class="py-3 px-3.5 whitespace-nowrap">Nama Siswa / NISN</th>
-                                <th class="py-3 px-3.5 whitespace-nowrap">Paket Soal</th>
-                                <th class="py-3 px-3.5 text-center whitespace-nowrap">Kehadiran</th>
-                                <th class="py-3 px-3.5 text-right whitespace-nowrap">Ubah Status</th>
+            <x-cbt.card flush title="Daftar Peserta Ujian">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs text-default-600">
+                        <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                            <tr>
+                                <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">No. Kursi</th>
+                                <th class="px-3 py-3 whitespace-nowrap">Nama Siswa / NISN</th>
+                                <th class="px-3 py-3 whitespace-nowrap">Paket Soal</th>
+                                <th class="px-3 py-3 text-center whitespace-nowrap">Kehadiran</th>
+                                <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Ubah Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-default-200/70">
                             @forelse($session->participants as $ptc)
                                 <tr class="hover:bg-default-50/80 transition-colors">
-                                    <td class="py-3 px-3.5 whitespace-nowrap">
+                                    <td class="ps-4 sm:ps-6 pe-3 py-3.5 whitespace-nowrap">
                                         <span class="inline-block px-2.5 py-1 bg-default-100 font-mono font-bold text-default-800 rounded-lg text-xs whitespace-nowrap">
                                             {{ $ptc->seat_number ?? '-' }}
                                         </span>
                                     </td>
-                                    <td class="py-3 px-3.5 whitespace-nowrap">
+                                    <td class="px-3 py-3.5 whitespace-nowrap">
                                         <div class="flex items-center gap-2.5">
                                             <img src="{{ $ptc->student->photo_url }}" alt="{{ $ptc->student->name }}" class="size-7 rounded-full object-cover border border-default-200 shrink-0">
                                             <div>
@@ -306,12 +306,12 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td class="py-3 px-3.5 whitespace-nowrap">
+                                    <td class="px-3 py-3.5 whitespace-nowrap">
                                         <span class="inline-block px-2.5 py-1 bg-purple-50 text-purple-700 font-semibold rounded-full text-[11px] border border-purple-200/60 whitespace-nowrap">
                                             {{ $ptc->package->name ?? 'Paket Default' }}
                                         </span>
                                     </td>
-                                    <td class="py-3 px-3.5 text-center whitespace-nowrap">
+                                    <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                         @if($ptc->status === 'checked_in')
                                             <span class="inline-block px-2.5 py-0.5 bg-emerald-50 text-emerald-700 font-semibold rounded-full text-[11px] border border-emerald-200/60 whitespace-nowrap">Hadir</span>
                                         @elseif($ptc->status === 'absent')
@@ -320,7 +320,7 @@
                                             <span class="inline-block px-2.5 py-0.5 bg-default-100 text-default-600 rounded-full text-[11px] border border-default-200 whitespace-nowrap">Terdaftar</span>
                                         @endif
                                     </td>
-                                    <td class="py-3 px-3.5 text-right whitespace-nowrap">
+                                    <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                         <div class="inline-flex items-center gap-1.5 whitespace-nowrap">
                                             <button type="button" onclick="openAccommodationModal({{ $ptc->id }}, '{{ addslashes($ptc->student->name) }}', {{ $ptc->time_extension_percent ?? 0 }}, {{ $ptc->needs_scribe ? 'true' : 'false' }}, '{{ addslashes($ptc->scribe_name ?? '') }}', '{{ addslashes($ptc->scribe_nik ?? '') }}', '{{ addslashes($ptc->scribe_phone ?? '') }}', '{{ addslashes($ptc->scribe_pledge ?? '') }}', '{{ addslashes($ptc->accommodation_notes ?? ($ptc->accommodations['notes'] ?? '')) }}')" class="btn btn-sm btn-icon bg-default-100 hover:bg-primary-50 text-default-500 hover:text-primary rounded-md transition" title="Atur Akomodasi Disabilitas & Scribe">
                                                 <i data-lucide="user-check" class="size-4"></i>
@@ -346,8 +346,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="py-8 text-center text-default-400">
-                                        Belum ada peserta yang ditugaskan ke sesi ini.
+                                    <td colspan="5" class="p-0">
+                                        <x-cbt.empty-state :bordered="false" title="Belum Ada Peserta" message="Belum ada peserta yang ditugaskan ke sesi ini." />
                                     </td>
                                 </tr>
                             @endforelse

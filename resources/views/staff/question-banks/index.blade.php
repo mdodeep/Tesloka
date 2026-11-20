@@ -100,29 +100,29 @@
     <!-- VIEW 1: TABLE VIEW (DEFAULT & RECOMMENDED) -->
     <!-- ========================================== -->
     <div id="view-table" class="space-y-4">
-        <x-cbt.card title="Daftar Bank Soal Terdaftar" subtitle="Kelola butir soal, stimulus bacaan/audio, dan ekspor duplikasi bank soal">
-            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-                <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs text-default-600" id="table-question-banks">
-                    <thead class="bg-default-50/75 border-y border-default-200/80">
-                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                            <th class="px-4 py-3 border-b border-default-200 w-36 whitespace-nowrap">Kode Bank</th>
-                            <th class="px-4 py-3 border-b border-default-200 whitespace-nowrap">Nama Bank Soal &amp; Deskripsi</th>
-                            <th class="px-4 py-3 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>
-                            <th class="px-4 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Butir Soal</th>
-                            <th class="px-4 py-3 border-b border-default-200 text-center w-28 whitespace-nowrap">Stimulus</th>
-                            <th class="px-4 py-3 border-b border-default-200 text-center w-24 whitespace-nowrap">Status</th>
-                            <th class="px-4 py-3 border-b border-default-200 text-center w-36 whitespace-nowrap">Aksi</th>
+        <x-cbt.card flush title="Daftar Bank Soal Terdaftar" subtitle="Kelola butir soal, stimulus bacaan/audio, dan ekspor duplikasi bank soal">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs text-default-600" id="table-question-banks">
+                    <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                        <tr>
+                            <th class="ps-4 sm:ps-6 pe-3 py-3 w-36 whitespace-nowrap">Kode Bank</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Nama Bank Soal &amp; Deskripsi</th>
+                            <th class="px-3 py-3 whitespace-nowrap">Mata Pelajaran</th>
+                            <th class="px-3 py-3 text-center w-28 whitespace-nowrap">Butir Soal</th>
+                            <th class="px-3 py-3 text-center w-28 whitespace-nowrap">Stimulus</th>
+                            <th class="px-3 py-3 text-center w-24 whitespace-nowrap">Status</th>
+                            <th class="ps-3 pe-4 sm:pe-6 py-3 text-center w-36 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                    <tbody class="divide-y divide-default-200/70">
                         @forelse ($banks as $bank)
-                            <tr class="hover:bg-default-50/70 transition">
-                                <td class="px-4 py-3 font-mono font-bold whitespace-nowrap">
+                            <tr class="hover:bg-default-50/60 transition-colors">
+                                <td class="ps-4 sm:ps-6 pe-3 py-3.5 font-mono font-bold whitespace-nowrap">
                                     <span class="px-2.5 py-1 rounded text-[11px] bg-primary/10 text-primary border border-primary/20 block text-center whitespace-nowrap">
                                         {{ $bank->code }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3">
+                                <td class="px-3 py-3.5">
                                     <a href="{{ route('staff.question-banks.show', $bank) }}" class="font-bold text-default-800 hover:text-primary transition line-clamp-1 text-sm block">
                                         {{ $bank->name }}
                                     </a>
@@ -132,30 +132,30 @@
                                         <p class="text-xs text-default-300 italic mt-0.5">Tidak ada catatan silabus</p>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 font-medium text-default-700 whitespace-nowrap">
+                                <td class="px-3 py-3.5 font-medium text-default-700 whitespace-nowrap">
                                     <div class="flex items-center gap-1.5 whitespace-nowrap">
                                         <i data-lucide="book-open" class="size-3.5 text-default-400 shrink-0"></i>
                                         <span>{{ $bank->subject?->name ?? 'Mata Pelajaran Umum' }}</span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     <span class="px-2.5 py-0.5 rounded text-[11px] font-bold font-mono bg-primary/10 text-primary whitespace-nowrap inline-block">
                                         {{ $bank->questions_count }} butir
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     <span class="text-xs text-default-600 font-mono whitespace-nowrap inline-block">
                                         {{ $bank->stimuli_count }} stimulus
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center whitespace-nowrap">
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                     @if ($bank->is_active)
                                         <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
+                                        <x-cbt.badge color="slate">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-center whitespace-nowrap">
+                                <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5 whitespace-nowrap">
                                         <a href="{{ route('staff.question-banks.show', $bank) }}" 
                                            class="btn btn-sm h-8 px-3 rounded-lg bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-2xs inline-flex items-center gap-1.5 transition"
@@ -183,19 +183,15 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-8 text-center text-default-400">
-                                    <x-cbt.empty-state title="Belum Ada Bank Soal" description="Klik tombol 'Buat Bank Soal Baru' di atas untuk mulai membuat bank soal.">
-                                        <x-cbt.button type="button" variant="primary" size="sm" onclick="document.getElementById('modal-create-bank').classList.remove('hidden')">
-                                            + Buat Bank Soal
-                                        </x-cbt.button>
-                                    </x-cbt.empty-state>
+                                <td colspan="7" class="py-12 px-4 sm:px-6 text-center text-default-400">
+                                    <x-cbt.empty-state :bordered="false" title="Belum Ada Bank Soal" message="Klik tombol 'Buat Bank Soal Baru' di atas untuk mulai membuat bank soal." />
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            <div class="flex items-center justify-between px-4 py-3 border-t border-default-200 dark:border-white/14 text-xs text-default-500 bg-default-50/30">
+            <div class="flex items-center justify-between px-4 sm:px-6 py-3.5 border-t border-default-200/80 text-xs text-default-500 bg-default-50/30">
                 <span>Total: <b class="text-default-700 font-semibold">{{ count($banks) }}</b> bank soal</span>
             </div>
         </x-cbt.card>
@@ -207,7 +203,7 @@
     <div id="view-grid" class="hidden">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             @forelse ($banks as $bank)
-                <div class="card hover:border-primary/50 transition-all flex flex-col h-full bg-card border border-default-200 rounded-md overflow-hidden shadow-2xs">
+                <div class="card hover:border-primary/50 transition-all flex flex-col h-full bg-white border border-default-200/90 rounded-xl overflow-hidden shadow-2xs">
                     <!-- Card Top Header & Body -->
                     <div class="p-5 flex-1 flex flex-col">
                         <div class="flex items-start justify-between gap-2 mb-3">

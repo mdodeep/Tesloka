@@ -25,7 +25,7 @@
             color="primary" />
         <x-cbt.stat-card 
             title="Ujian Siap &amp; Terbit" 
-            value="{{ number_format($exams->whereIn('status', ['ready', 'scheduled', 'active'])->count()) }}" 
+            value="{{ number_format($exams->whereIn('status', ['ready', 'published', 'scheduled', 'active', 'ongoing'])->count()) }}" 
             subtitle="Dapat Dijadwalkan" 
             icon="check-circle-2" 
             color="success" />
@@ -93,23 +93,23 @@
     </x-cbt.card>
 
     <!-- Table of Exams -->
-    <x-cbt.card>
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[780px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs text-default-600" id="table-exams">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
+    <x-cbt.card flush>
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[780px] divide-y divide-default-200/80 dark:divide-white/14 text-left text-xs text-default-600" id="table-exams">
+                <thead class="bg-default-50/75 border-b border-default-200/80">
                     <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Kode & Judul Ujian</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Mata Pelajaran & Tipe</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Durasi & KKM</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Blueprint / Paket</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="py-3.5 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+                        <th class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">Kode & Judul Ujian</th>
+                        <th class="py-3.5 px-4 whitespace-nowrap">Mata Pelajaran & Tipe</th>
+                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Durasi & KKM</th>
+                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Blueprint / Paket</th>
+                        <th class="py-3.5 px-4 text-center whitespace-nowrap">Status</th>
+                        <th class="py-3.5 ps-4 pe-4 sm:pe-6 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/80 dark:divide-white/14">
                     @forelse($exams as $exam)
                         <tr class="hover:bg-default-50/80 transition-colors">
-                            <td class="py-3.5 px-4 whitespace-nowrap">
+                            <td class="py-3.5 ps-4 sm:ps-6 pe-4 whitespace-nowrap">
                                 <div class="flex items-center gap-1.5 flex-wrap">
                                     <a href="{{ route('staff.exams.show', $exam) }}" class="font-bold text-default-900 hover:text-primary transition text-sm">
                                         {{ $exam->title }}
@@ -135,24 +135,26 @@
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                 <div class="inline-flex items-center gap-1.5">
                                     <x-cbt.badge color="primary">{{ $exam->blueprints_count }} BP</x-cbt.badge>
-                                    <x-cbt.badge color="purple">{{ $exam->packages_count }} Pkg</x-cbt.badge>
+                                    <x-cbt.badge color="slate">{{ $exam->packages_count }} Pkg</x-cbt.badge>
                                 </div>
                             </td>
                             <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                 @if($exam->status === 'draft')
-                                    <x-cbt.badge color="secondary">Draf</x-cbt.badge>
+                                    <x-cbt.badge color="slate">Draf</x-cbt.badge>
                                 @elseif($exam->status === 'pending_approval')
                                     <x-cbt.badge color="warning">Menunggu Persetujuan</x-cbt.badge>
-                                @elseif($exam->status === 'ready')
+                                @elseif(in_array($exam->status, ['ready', 'published']))
                                     <x-cbt.badge color="success">Siap / Terbit</x-cbt.badge>
                                 @elseif($exam->status === 'scheduled')
                                     <x-cbt.badge color="info">Terjadwal</x-cbt.badge>
-                                @elseif($exam->status === 'active')
+                                @elseif(in_array($exam->status, ['active', 'ongoing']))
                                     <x-cbt.badge color="primary">Sedang Aktif</x-cbt.badge>
+                                @elseif($exam->status === 'finished')
+                                    <x-cbt.badge color="slate">Selesai</x-cbt.badge>
                                 @elseif($exam->status === 'archived')
-                                    <x-cbt.badge color="secondary">Diarsipkan</x-cbt.badge>
+                                    <x-cbt.badge color="slate">Diarsipkan</x-cbt.badge>
                                 @else
-                                    <x-cbt.badge color="secondary">{{ ucfirst($exam->status) }}</x-cbt.badge>
+                                    <x-cbt.badge color="slate">{{ ucfirst($exam->status) }}</x-cbt.badge>
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-right whitespace-nowrap">
@@ -187,7 +189,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-default-400">
+                            <td colspan="6" class="py-12 text-center text-default-400">
                                 <x-cbt.empty-state title="Belum Ada Rancangan Ujian" description="Mulai dengan membuat rancangan ujian baru dan menyusun cetak biru soal." />
                             </td>
                         </tr>
@@ -197,7 +199,7 @@
         </div>
 
         @if($exams->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 dark:border-white/14 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $exams->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $exams->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $exams->total() }}</span> data
                 </p>

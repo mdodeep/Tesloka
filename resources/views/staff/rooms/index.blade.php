@@ -51,43 +51,43 @@
     </div>
 
     <!-- Table of Rooms -->
-    <x-cbt.card>
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[720px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-rooms">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode &amp; Nama Ruang</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Lokasi Fisik / Gedung</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kapasitas Maksimal</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Total Sesi Terjadwal</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Status</th>
-                        <th class="px-3.5 py-3 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+    <x-cbt.card flush title="Daftar Ruang Ujian & Laboratorium CBT" subtitle="Kelola kapasitas komputer, lokasi fisik gedung, dan pantau status ruang pelaksanaan">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[720px] divide-y divide-default-200/80 text-left text-xs" id="table-rooms">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Kode &amp; Nama Ruang</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Lokasi Fisik / Gedung</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Kapasitas Maksimal</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Total Sesi Terjadwal</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Status</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($rooms as $room)
-                        <tr class="hover:bg-default-50 transition-colors">
-                            <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
+                        <tr class="hover:bg-default-50/60 transition-colors">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 whitespace-nowrap">
                                 <strong class="text-default-900 font-semibold block">{{ $room->name }}</strong>
                                 <span class="text-xs font-mono text-default-400">{{ $room->code }}</span>
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-default-600 whitespace-nowrap">
                                 {{ $room->location ?? 'Gedung Utama' }}
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 <x-cbt.badge color="primary">
                                     {{ $room->capacity }} Peserta
                                 </x-cbt.badge>
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-semibold text-default-700 whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-semibold text-default-700 whitespace-nowrap">
                                 {{ $room->sessions_count }} Sesi
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
-                                <x-cbt.badge color="{{ $room->is_active ? 'success' : 'secondary' }}">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
+                                <x-cbt.badge color="{{ $room->is_active ? 'success' : 'slate' }}">
                                     {{ $room->is_active ? 'Aktif' : 'Nonaktif' }}
                                 </x-cbt.badge>
                             </td>
-                            <td class="px-3.5 py-2.5 border-y border-default-200 text-right whitespace-nowrap">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-2">
                                     <form action="{{ route('staff.rooms.destroy', $room) }}" method="POST" class="inline" onsubmit="return confirm('Hapus atau nonaktifkan ruang ujian ini?')">
                                         @csrf
@@ -101,8 +101,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-default-400">
-                                <x-cbt.empty-state title="Belum Ada Ruang Ujian" description="Silakan buat ruang ujian baru untuk menampung sesi pelaksanaan ujian." />
+                            <td colspan="6" class="py-12 px-4 sm:px-6 text-center text-default-400">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Ruang Ujian" message="Silakan buat ruang ujian baru untuk menampung sesi pelaksanaan ujian." />
                             </td>
                         </tr>
                     @endforelse
@@ -111,7 +111,7 @@
         </div>
 
         @if($rooms->hasPages())
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-default-200 dark:border-white/14 bg-default-50/30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-t border-default-200/80 bg-default-50/30">
                 <p class="text-xs text-default-500">
                     Menampilkan <span class="font-semibold text-default-700">{{ $rooms->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-default-700">{{ $rooms->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-default-700">{{ $rooms->total() }}</span> data
                 </p>

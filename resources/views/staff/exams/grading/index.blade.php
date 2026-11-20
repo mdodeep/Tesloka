@@ -74,25 +74,25 @@
     </div>
 
     <!-- Results Table with Ranking -->
-    <x-cbt.card title="Rekapitulasi Nilai & Pemeringkatan Peserta (Ranking)">
-        <div class="overflow-x-auto -mx-3.5 sm:mx-0">
-            <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-grading-recap">
-                <thead class="bg-default-50/75 border-y border-default-200/80">
-                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
-                        <th class="py-3 px-4 border-b border-default-200 text-center w-12 whitespace-nowrap">Peringkat</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama Peserta</th>
-                        <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">NISN / Username</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Skor Perolehan</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Persentase</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Predikat</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Kelulusan KKM</th>
-                        <th class="py-3 px-4 border-b border-default-200 text-right whitespace-nowrap">Aksi</th>
+    <x-cbt.card flush title="Rekapitulasi Nilai & Pemeringkatan Peserta (Ranking)">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] divide-y divide-default-200/80 text-left text-xs" id="table-grading-recap">
+                <thead class="bg-default-50/75 border-b border-default-200/80 text-[11px] font-bold text-default-600 uppercase tracking-wider">
+                    <tr>
+                        <th class="ps-4 sm:ps-6 pe-3 py-3 text-center w-12 whitespace-nowrap">Peringkat</th>
+                        <th class="px-3 py-3 whitespace-nowrap">Nama Peserta</th>
+                        <th class="px-3 py-3 whitespace-nowrap">NISN / Username</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Skor Perolehan</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Persentase</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Predikat</th>
+                        <th class="px-3 py-3 text-center whitespace-nowrap">Kelulusan KKM</th>
+                        <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-default-200 dark:divide-white/14">
+                <tbody class="divide-y divide-default-200/70">
                     @forelse($results as $rank => $res)
                         <tr class="hover:bg-default-50/80 transition">
-                            <td class="py-3 px-4 text-center font-bold text-default-700 whitespace-nowrap">
+                            <td class="ps-4 sm:ps-6 pe-3 py-3.5 text-center font-bold text-default-700 whitespace-nowrap">
                                 @if($rank === 0)
                                     <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-amber-800 font-black">1</span>
                                 @elseif($rank === 1)
@@ -103,24 +103,24 @@
                                     {{ $rank + 1 }}
                                 @endif
                             </td>
-                            <td class="py-3 px-4 font-bold text-default-900 whitespace-nowrap">
+                            <td class="px-3 py-3.5 font-bold text-default-900 whitespace-nowrap">
                                 {{ $res->student->name }}
                             </td>
-                            <td class="py-3 px-4 font-mono text-default-500 whitespace-nowrap">
+                            <td class="px-3 py-3.5 font-mono text-default-500 whitespace-nowrap">
                                 {{ $res->student->nisn ?? $res->student->username }}
                             </td>
-                            <td class="py-3 px-4 text-center font-mono font-bold text-default-800 text-sm whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-mono font-bold text-default-800 text-sm whitespace-nowrap">
                                 {{ number_format($res->total_score, 1) }} / {{ number_format($res->max_score, 1) }}
                             </td>
-                            <td class="py-3 px-4 text-center font-bold whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center font-bold whitespace-nowrap">
                                 {{ number_format($res->percentage, 1) }}%
                             </td>
-                            <td class="py-3 px-4 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 <x-cbt.badge :color="$res->final_grade_letter === 'A' ? 'success' : ($res->final_grade_letter === 'B' ? 'info' : 'secondary')">
                                     {{ $res->final_grade_letter ?? '-' }}
                                 </x-cbt.badge>
                             </td>
-                            <td class="py-3 px-4 text-center whitespace-nowrap">
+                            <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if($res->is_passed)
                                     <x-cbt.badge color="success">
                                         TUNTAS
@@ -131,7 +131,7 @@
                                     </x-cbt.badge>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 text-right whitespace-nowrap">
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 <a href="{{ route('staff.exams.grading.attempt', [$exam, $res->exam_attempt_id]) }}" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold inline-flex items-center gap-1.5 shadow-2xs">
                                     <i data-lucide="eye" class="size-3.5"></i>
                                     <span>Periksa & Koreksi</span>
@@ -140,15 +140,15 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center py-8 text-default-400">
-                                Belum ada peserta yang mengumpulkan atau dinilai pada ujian ini.
+                            <td colspan="8" class="p-0">
+                                <x-cbt.empty-state :bordered="false" title="Belum Ada Nilai Peserta" message="Belum ada peserta yang mengumpulkan atau dinilai pada ujian ini." />
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="flex items-center justify-between px-4 py-3 border-t border-default-200 dark:border-white/14 text-xs text-default-500 bg-default-50/30">
+        <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-t border-default-200/80 text-xs text-default-500 bg-default-50/30">
             <span>Total: <b class="text-default-700 font-semibold">{{ count($results) }}</b> peserta terdaftar dalam pemeringkatan</span>
         </div>
     </x-cbt.card>

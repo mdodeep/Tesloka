@@ -1,25 +1,26 @@
 @layer components {
     .btn {
-        @apply cursor-pointer inline-flex items-center gap-x-2 justify-center text-center rounded border border-transparent px-4 py-1.75 text-sm transition-all font-medium;
+        @apply cursor-pointer inline-flex items-center gap-x-2 justify-center text-center rounded-lg border border-transparent px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all duration-150 select-none;
+        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 active:scale-[0.98];
 
         &.btn-lg {
-            @apply px-5 py-3 text-base;
+            @apply px-5 py-2.5 text-sm sm:text-base rounded-lg;
         }
 
         &.btn-sm {
-            @apply px-3.5 py-1.5 text-xs;
+            @apply px-3 py-1.5 text-xs rounded-md;
         }
 
         &.btn-icon {
-            @apply size-9.25 p-0;
+            @apply size-9 p-0 rounded-lg;
         }
 
         &.btn-primary {
-            @apply bg-primary hover:bg-primary-hover text-white hover:text-white shadow-xs font-semibold;
+            @apply bg-primary hover:bg-primary-hover text-white shadow-xs font-semibold;
         }
 
         &.btn-secondary {
-            @apply bg-white hover:bg-default-50 text-default-700 border border-default-200 shadow-2xs font-semibold;
+            @apply bg-white hover:bg-default-100 text-default-700 border border-default-200 shadow-2xs font-semibold;
         }
 
         &.btn-dark {

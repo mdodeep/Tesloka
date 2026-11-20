@@ -15,7 +15,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Tahun Ajaran</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $years->count() }}</div>
                 </div>
-                <div class="size-11 rounded bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <i data-lucide="calendar" class="size-5.5"></i>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Jurusan / Prodi</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $departments->count() }}</div>
                 </div>
-                <div class="size-11 rounded bg-info/10 text-info flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
                     <i data-lucide="building" class="size-5.5"></i>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Rombel / Kelas</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $classes->total() }}</div>
                 </div>
-                <div class="size-11 rounded bg-success/10 text-success flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
                     <i data-lucide="users" class="size-5.5"></i>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Mata Pelajaran</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $subjects->total() }}</div>
                 </div>
-                <div class="size-11 rounded bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
                     <i data-lucide="book-open" class="size-5.5"></i>
                 </div>
             </div>
@@ -117,26 +117,26 @@
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $y->terms_count }} semester</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     @if ($y->is_active)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-success/10 text-success border border-success/20">Aktif</span>
+                                        <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-default-200 text-default-600">Arsip</span>
+                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditYearModal('{{ $y->id }}', '{{ addslashes($y->name) }}', '{{ $y->start_date ? $y->start_date->format('Y-m-d') : '' }}', '{{ $y->end_date ? $y->end_date->format('Y-m-d') : '' }}', {{ $y->is_active ? 'true' : 'false' }})"
-                                                class="size-7 rounded bg-default-100 hover:bg-default-200 text-default-700 flex items-center justify-center transition cursor-pointer"
+                                                class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:text-info hover:border-info/30 text-default-600 transition cursor-pointer"
                                                 title="Edit Tahun Ajaran">
-                                            <i data-lucide="edit-3" class="size-3.5"></i>
+                                            <i data-lucide="edit-3" class="size-4"></i>
                                         </button>
                                         <form method="POST" action="{{ route('staff.academic.years.destroy', $y) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tahun ajaran {{ $y->name }}?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="size-7 rounded bg-danger/10 hover:bg-danger/20 text-danger flex items-center justify-center transition cursor-pointer"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-danger/10 hover:text-danger hover:border-danger/30 text-default-600 transition cursor-pointer"
                                                     title="Hapus Tahun Ajaran">
-                                                <i data-lucide="trash-2" class="size-3.5"></i>
+                                                <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>
                                     </div>
@@ -184,26 +184,26 @@
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     @if ($t->is_active)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-success/10 text-success border border-success/20">Aktif</span>
+                                        <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-default-200 text-default-600">Arsip</span>
+                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditTermModal('{{ $t->id }}', '{{ $t->academic_year_id }}', '{{ addslashes($t->name) }}', '{{ $t->code }}', '{{ $t->start_date ? $t->start_date->format('Y-m-d') : '' }}', '{{ $t->end_date ? $t->end_date->format('Y-m-d') : '' }}', {{ $t->is_active ? 'true' : 'false' }})"
-                                                class="size-7 rounded bg-default-100 hover:bg-default-200 text-default-700 flex items-center justify-center transition cursor-pointer"
+                                                class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:text-info hover:border-info/30 text-default-600 transition cursor-pointer"
                                                 title="Edit Semester">
-                                            <i data-lucide="edit-3" class="size-3.5"></i>
+                                            <i data-lucide="edit-3" class="size-4"></i>
                                         </button>
                                         <form method="POST" action="{{ route('staff.academic.terms.destroy', $t) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semester {{ $t->name }}?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="size-7 rounded bg-danger/10 hover:bg-danger/20 text-danger flex items-center justify-center transition cursor-pointer"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-danger/10 hover:text-danger hover:border-danger/30 text-default-600 transition cursor-pointer"
                                                     title="Hapus Semester">
-                                                <i data-lucide="trash-2" class="size-3.5"></i>
+                                                <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>
                                     </div>
@@ -289,7 +289,7 @@
                                 <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-700 whitespace-nowrap">{{ $d->name }}</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
                                     @if($d->level)
-                                        <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-info/10 text-info border border-info/20">{{ $d->level }}</span>
+                                        <x-cbt.badge color="info">{{ $d->level }}</x-cbt.badge>
                                     @else
                                         <span class="text-default-400">-</span>
                                     @endif
@@ -301,18 +301,18 @@
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditDepartmentModal('{{ $d->id }}', '{{ $d->code }}', '{{ addslashes($d->name) }}', '{{ addslashes($d->level ?? '') }}', '{{ addslashes($d->description ?? '') }}')"
-                                                class="size-7 rounded bg-default-100 hover:bg-default-200 text-default-700 flex items-center justify-center transition cursor-pointer"
+                                                class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:text-info hover:border-info/30 text-default-600 transition cursor-pointer"
                                                 title="Edit Jurusan">
-                                            <i data-lucide="edit-3" class="size-3.5"></i>
+                                            <i data-lucide="edit-3" class="size-4"></i>
                                         </button>
                                         <form method="POST" action="{{ route('staff.academic.departments.destroy', $d) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jurusan {{ $d->name }}?')">
                                             @csrf
                                             @method('DELETE')
                                             <input type="hidden" name="active_tab" value="departments">
                                             <button type="submit" 
-                                                    class="size-7 rounded bg-danger/10 hover:bg-danger/20 text-danger flex items-center justify-center transition cursor-pointer"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-danger/10 hover:text-danger hover:border-danger/30 text-default-600 transition cursor-pointer"
                                                     title="Hapus Jurusan">
-                                                <i data-lucide="trash-2" class="size-3.5"></i>
+                                                <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>
                                     </div>
@@ -381,29 +381,29 @@
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     @if ($c->is_active)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-success/10 text-success border border-success/20">Aktif</span>
+                                        <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-default-200 text-default-600 border border-default-300">Arsip</span>
+                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openClassStudentsModal({{ $c->id }}, '{{ addslashes($c->name) }}', '{{ $c->code }}', {{ $c->capacity }})"
-                                                class="size-7 rounded bg-primary/10 hover:bg-primary hover:text-white text-primary flex items-center justify-center transition cursor-pointer"
+                                                class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-primary/10 hover:text-primary hover:border-primary/30 text-default-600 flex items-center justify-center transition cursor-pointer"
                                                 title="Kelola Peserta Didik (Daftarkan / Keluarkan Siswa)">
-                                            <i data-lucide="user-plus" class="size-3.5"></i>
+                                            <i data-lucide="user-plus" class="size-4"></i>
                                         </button>
                                         <a href="{{ route('staff.academic.classes.print-cards', $c) }}" target="_blank"
-                                           class="size-7 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 flex items-center justify-center transition cursor-pointer"
+                                           class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 text-default-600 flex items-center justify-center transition cursor-pointer"
                                            title="Cetak Kartu Ujian Massal Siswa Kelas Ini (A4)">
-                                            <i data-lucide="printer" class="size-3.5"></i>
+                                            <i data-lucide="printer" class="size-4"></i>
                                         </a>
                                         <button type="button" 
                                                 onclick="openEditClassModal('{{ $c->id }}', '{{ $c->academic_year_id }}', '{{ $c->department_id }}', '{{ addslashes($c->name) }}', '{{ $c->code }}', '{{ $c->capacity }}', {{ $c->is_active ? 'true' : 'false' }})"
-                                                class="size-7 rounded bg-default-100 hover:bg-default-200 text-default-700 flex items-center justify-center transition cursor-pointer"
+                                                class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:text-info hover:border-info/30 text-default-600 flex items-center justify-center transition cursor-pointer"
                                                 title="Edit Kelas">
-                                            <i data-lucide="edit-3" class="size-3.5"></i>
+                                            <i data-lucide="edit-3" class="size-4"></i>
                                         </button>
 
                                         <form method="POST" action="{{ route('staff.academic.classes.toggle', $c) }}" class="inline">
@@ -411,9 +411,9 @@
                                             @method('PATCH')
                                             <input type="hidden" name="active_tab" value="classes">
                                             <button type="submit" 
-                                                    class="size-7 rounded {{ $c->is_active ? 'bg-warning/10 hover:bg-warning/20 text-warning' : 'bg-success/10 hover:bg-success/20 text-success' }} flex items-center justify-center transition cursor-pointer"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-warning/10 hover:text-warning hover:border-warning/30 text-default-600 flex items-center justify-center transition cursor-pointer"
                                                     title="{{ $c->is_active ? 'Nonaktifkan / Arsipkan' : 'Aktifkan Kembali' }}">
-                                                <i data-lucide="{{ $c->is_active ? 'pause' : 'play' }}" class="size-3.5"></i>
+                                                <i data-lucide="{{ $c->is_active ? 'pause' : 'play' }}" class="size-4"></i>
                                             </button>
                                         </form>
 
@@ -422,9 +422,9 @@
                                             @method('DELETE')
                                             <input type="hidden" name="active_tab" value="classes">
                                             <button type="submit" 
-                                                    class="size-7 rounded bg-danger/10 hover:bg-danger/20 text-danger flex items-center justify-center transition cursor-pointer"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-danger/10 hover:text-danger hover:border-danger/30 text-default-600 flex items-center justify-center transition cursor-pointer"
                                                     title="Hapus Kelas">
-                                                <i data-lucide="trash-2" class="size-3.5"></i>
+                                                <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>
                                     </div>
@@ -483,27 +483,27 @@
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono whitespace-nowrap">{{ $s->exams_count }} ujian</td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     @if ($s->is_active)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-success/10 text-success border border-success/20">Aktif</span>
+                                        <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-default-200 text-default-600 border border-default-300">Nonaktif</span>
+                                        <x-cbt.badge color="secondary">Nonaktif</x-cbt.badge>
                                     @endif
                                 </td>
                                 <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <button type="button" 
                                                 onclick="openEditSubjectModal('{{ $s->id }}', '{{ $s->department_id }}', '{{ $s->code }}', '{{ addslashes($s->name) }}', '{{ addslashes($s->description ?? '') }}', {{ $s->is_active ? 'true' : 'false' }})"
-                                                class="size-7 rounded bg-default-100 hover:bg-default-200 text-default-700 flex items-center justify-center transition cursor-pointer"
+                                                class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:text-info hover:border-info/30 text-default-600 flex items-center justify-center transition cursor-pointer"
                                                 title="Edit Mata Pelajaran">
-                                            <i data-lucide="edit-3" class="size-3.5"></i>
+                                            <i data-lucide="edit-3" class="size-4"></i>
                                         </button>
 
                                         <form method="POST" action="{{ route('staff.academic.subjects.toggle', $s) }}" class="inline">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" 
-                                                    class="size-7 rounded {{ $s->is_active ? 'bg-warning/10 hover:bg-warning/20 text-warning' : 'bg-success/10 hover:bg-success/20 text-success' }} flex items-center justify-center transition cursor-pointer"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-warning/10 hover:text-warning hover:border-warning/30 text-default-600 flex items-center justify-center transition cursor-pointer"
                                                     title="{{ $s->is_active ? 'Nonaktifkan' : 'Aktifkan Kembali' }}">
-                                                <i data-lucide="{{ $s->is_active ? 'pause' : 'play' }}" class="size-3.5"></i>
+                                                <i data-lucide="{{ $s->is_active ? 'pause' : 'play' }}" class="size-4"></i>
                                             </button>
                                         </form>
 
@@ -511,9 +511,9 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="size-7 rounded bg-danger/10 hover:bg-danger/20 text-danger flex items-center justify-center transition cursor-pointer"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-danger/10 hover:text-danger hover:border-danger/30 text-default-600 flex items-center justify-center transition cursor-pointer"
                                                     title="Hapus Mata Pelajaran">
-                                                <i data-lucide="trash-2" class="size-3.5"></i>
+                                                <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>
                                     </div>

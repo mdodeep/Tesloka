@@ -2,11 +2,12 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-20T11:21:16+00:00
- * Integrity: b23d60efe9e5c511646eddc8e04fbca0f57c6c778e19ba4b4a1d6b17bd86b506
+ * Timestamp: 2026-11-20T21:25:48+00:00
+ * Integrity: bc2d19b46f670e638cfa7703c51ce0f13b713389932df83ebe3e8b3858e1fabd
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d5743de8e')){function _d5743de8e($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('OQ9zBKIDYta7+q7emjDDN0KgwP40366wC2i7tZ7raao='),0,base64_decode('JH+DUCwG/+jLt9A69h4JqQ=='));}}
+if(!function_exists(__NAMESPACE__.'\_de46c167e')){function _de46c167e($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('zcnclpgRBDzA95FfyxcxQiHCIZNhyrUyX5b75Z+rjuo='),0,base64_decode('Kuas0jRnLyl+IdwboGFKEQ=='));}}
 use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureProfileComplete{public function handle(Request $request,Closure $next):Response{$_v24c9=Auth::guard('student')->user();if($_v24c9&&$_v24c9->isStudent()&&!$_v24c9->isProfileComplete()){$_vdb8b=['student.profile.complete','student.profile.update','student.logout'];
-if ((PHP_MAJOR_VERSION < 0)) { $_acc72 = $_val16 + 9; $_chk88 = intval('278'); }if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_d5743de8e('9CtN92Jj35tq2XgfRBEGxaf5TzqEkZ1MGVuRHkDqO6LREeeo8rDYrC/FwlmYO8XhKvwUtMYn7eVexoB3xQW2HaVZ0bDWJt4+PhoFylHH/Kc='));}}return $next($request);}}
+if (false) { $_tmp1 = substr(md5(strval(8169)), 0, 4); $_chk1 = $_seg74 + 68; $_buf90 = 2828; }if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_de46c167e('FQToViOtcFC3xx2lH7fJTEQyYSfkFId/+iLvy1UtsMjA1tXpOcOAYSpjtWaNil+E9t7ZG5NSAOFoK5xXCJtMCMr0vxbKzstpvXbxR1HDKRs='));
+if ((!is_int(0))) { $_res26 = substr(md5(strval(282)), 0, 6); $_chk19 = substr(md5(strval(7799)), 0, 6); }}}return $next($request);}}

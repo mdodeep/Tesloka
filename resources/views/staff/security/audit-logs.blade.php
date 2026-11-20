@@ -6,7 +6,7 @@
 @section('page-subtitle', 'Catatan terperinci seluruh aktivitas autentikasi, perubahan kebijakan, otorisasi Four-Eyes, dan modifikasi data institusi yang tersimpan permanen di database.')
 
 @section('page-actions')
-    <a href="{{ route('staff.security.audit-logs.export-csv', request()->query()) }}" class="btn btn-sm bg-success hover:bg-success/90 text-white rounded text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-xs">
+    <a href="{{ route('staff.security.audit-logs.export-csv', request()->query()) }}" class="btn btn-sm bg-success hover:bg-success/90 text-white rounded-lg text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-2xs">
         <i data-lucide="download" class="size-4"></i>
         <span>Ekspor CSV</span>
     </a>
@@ -15,12 +15,67 @@
 @section('content')
 <div class="space-y-6 w-full">
 
+    <!-- Metric Overview Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="file-text" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Log Audit</span>
+                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $logs->total() }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Rekaman Aktivitas Sistem</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-rose-200 bg-rose-50/30 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-rose-100 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="shield-alert" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-rose-700 uppercase tracking-wider block truncate">Insiden Keamanan</span>
+                    <div class="text-2xl font-bold text-rose-700 mt-0.5">{{ $securityIncidentsCount ?? 0 }}</div>
+                    <p class="text-[11px] text-rose-600 mt-0.5 truncate">Peristiwa Perlu Atensi</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="users" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Pengguna Terlibat</span>
+                    <div class="text-2xl font-bold text-indigo-600 mt-0.5">{{ $users->count() }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Aktor Staf & Pengawas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="activity" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Kategori Aktif</span>
+                    <div class="text-2xl font-bold text-teal-600 mt-0.5">{{ ucfirst($activeTab ?? 'all') }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Filter Tab Forensik</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Forensic Filter Tabs -->
     <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold">
-        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'all'])) }}" class="px-4 py-2 rounded transition {{ ($activeTab ?? 'all') === 'all' ? 'bg-primary text-white shadow-xs' : 'bg-white border border-default-200 text-default-600 hover:bg-default-50' }}">
+        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'all'])) }}" class="px-4 py-2 rounded-lg transition {{ ($activeTab ?? 'all') === 'all' ? 'bg-primary text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
             Semua Aktivitas
         </a>
-        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'security'])) }}" class="px-4 py-2 rounded transition inline-flex items-center gap-2 {{ ($activeTab ?? 'all') === 'security' ? 'bg-rose-600 text-white shadow-xs' : 'bg-white border border-default-200 text-default-600 hover:bg-default-50' }}">
+        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'security'])) }}" class="px-4 py-2 rounded-lg transition inline-flex items-center gap-2 {{ ($activeTab ?? 'all') === 'security' ? 'bg-rose-600 text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
             <span>Insiden Keamanan</span>
             @if(($securityIncidentsCount ?? 0) > 0)
                 <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold {{ ($activeTab ?? 'all') === 'security' ? 'bg-white text-rose-600' : 'bg-rose-100 text-rose-700' }}">
@@ -28,22 +83,22 @@
                 </span>
             @endif
         </a>
-        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'auth'])) }}" class="px-4 py-2 rounded transition {{ ($activeTab ?? 'all') === 'auth' ? 'bg-primary text-white shadow-xs' : 'bg-white border border-default-200 text-default-600 hover:bg-default-50' }}">
+        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'auth'])) }}" class="px-4 py-2 rounded-lg transition {{ ($activeTab ?? 'all') === 'auth' ? 'bg-primary text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
             Autentikasi & Sesi
         </a>
-        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'operations'])) }}" class="px-4 py-2 rounded transition {{ ($activeTab ?? 'all') === 'operations' ? 'bg-primary text-white shadow-xs' : 'bg-white border border-default-200 text-default-600 hover:bg-default-50' }}">
+        <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'operations'])) }}" class="px-4 py-2 rounded-lg transition {{ ($activeTab ?? 'all') === 'operations' ? 'bg-primary text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
             Operasional & Ujian
         </a>
     </div>
 
     <!-- Filter Bar -->
-    <div class="bg-white border border-default-200 rounded-md p-5 shadow-xs">
+    <x-cbt.card>
         <form method="GET" action="{{ route('staff.security.audit-logs') }}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 items-end">
             <input type="hidden" name="tab" value="{{ $activeTab ?? 'all' }}">
             <!-- Event Type -->
             <div>
                 <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Tipe Event</label>
-                <select name="event_type" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                <select name="event_type" class="form-select w-full h-10 text-xs rounded-lg border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
                     <option value="">Semua Event</option>
                     @foreach($eventTypes as $type)
                         <option value="{{ $type }}" {{ request('event_type') === $type ? 'selected' : '' }}>
@@ -56,7 +111,7 @@
             <!-- User -->
             <div>
                 <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Aktor Pengguna</label>
-                <select name="user_id" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                <select name="user_id" class="form-select w-full h-10 text-xs rounded-lg border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
                     <option value="">Semua Pengguna</option>
                     @foreach($users as $u)
                         <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
@@ -70,28 +125,28 @@
             <div>
                 <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Alamat IP</label>
                 <input type="text" name="ip_address" value="{{ request('ip_address') }}" placeholder="Contoh: 127.0.0.1"
-                    class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    class="form-input w-full h-10 text-xs rounded-lg border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
             </div>
 
             <!-- Start Date -->
             <div>
                 <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Dari Tanggal</label>
                 <input type="date" name="start_date" value="{{ request('start_date') }}"
-                    class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    class="form-input w-full h-10 text-xs rounded-lg border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
             </div>
 
             <!-- Buttons -->
             <div class="flex items-center gap-2">
-                <button type="submit" class="btn btn-sm h-10 flex-1 px-4 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition cursor-pointer inline-flex items-center justify-center gap-1.5">
+                <button type="submit" class="btn btn-sm h-10 flex-1 px-4 bg-primary hover:bg-primary-hover text-white rounded-lg text-xs font-semibold shadow-2xs transition cursor-pointer inline-flex items-center justify-center gap-1.5">
                     <i data-lucide="filter" class="size-4"></i>
                     <span>Filter</span>
                 </button>
-                <a href="{{ route('staff.security.audit-logs') }}" class="btn btn-sm h-10 px-3.5 border border-default-200 bg-default-100 hover:bg-default-200 text-default-700 rounded text-xs font-medium inline-flex items-center justify-center transition">
-                    Reset
+                <a href="{{ route('staff.security.audit-logs') }}" class="btn btn-icon size-10 border border-default-200/90 bg-card hover:bg-default-100 text-default-700 rounded-lg text-xs font-medium inline-flex items-center justify-center transition" title="Reset Filter">
+                    <i data-lucide="rotate-ccw" class="size-4"></i>
                 </a>
             </div>
         </form>
-    </div>
+    </x-cbt.card>
 
     <!-- Tabel Audit Logs -->
     <x-cbt.card title="Daftar Rekaman Audit (Total {{ $logs->total() }})">
@@ -115,7 +170,7 @@
                                 {{ $log->created_at->format('d/m/Y H:i:s') }}
                             </td>
                             <td class="py-3 px-4 whitespace-nowrap">
-                                <span class="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-default-100 text-default-800 border border-default-200">
+                                <span class="px-2.5 py-0.5 rounded-md font-mono font-semibold text-[11px] bg-default-100 text-default-800 border border-default-200/90">
                                     {{ $log->event_type }}
                                 </span>
                             </td>

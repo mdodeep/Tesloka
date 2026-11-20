@@ -6,11 +6,11 @@
 @section('page-subtitle', 'Kelola API Keys antarsistem, sinkronisasi sertifikat kelulusan, dan siaran peristiwa webhook.')
 
 @section('page-actions')
-    <button type="button" onclick="document.getElementById('createWebhookModal').classList.remove('hidden')" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 rounded text-xs font-semibold shadow-2xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
+    <button type="button" onclick="document.getElementById('createWebhookModal').classList.remove('hidden')" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg text-xs font-semibold shadow-2xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
         <i data-lucide="zap" class="size-4 text-default-500"></i>
         <span>Tambah Webhook</span>
     </button>
-    <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
+    <button type="button" onclick="document.getElementById('createApiKeyModal').classList.remove('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white rounded-lg text-xs font-semibold shadow-2xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
         <i data-lucide="key" class="size-4"></i>
         <span>Buat API Key Baru</span>
     </button>
@@ -18,6 +18,61 @@
 
 @section('content')
 <div class="space-y-6 w-full">
+
+    <!-- Metric Overview Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="key" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total API Keys</span>
+                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $apiKeys->count() }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Kunci Akses Terdaftar</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/30 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="shield-check" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Kunci Aktif</span>
+                    <div class="text-2xl font-bold text-emerald-700 mt-0.5">{{ $apiKeys->filter->isValid()->count() }}</div>
+                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Berlaku Valid</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="zap" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Webhook</span>
+                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $webhooks->count() }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Langganan Peristiwa</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-indigo-200 bg-indigo-50/30 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-indigo-100 border border-indigo-200 text-indigo-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="activity" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-indigo-700 uppercase tracking-wider block truncate">Webhook Aktif</span>
+                    <div class="text-2xl font-bold text-indigo-700 mt-0.5">{{ $webhooks->where('is_active', true)->count() }}</div>
+                    <p class="text-[11px] text-indigo-600 mt-0.5 truncate">Siaran Siap Kirim</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @if(session('error'))
         <x-cbt.alert type="danger" :message="session('error')" />
@@ -45,7 +100,7 @@
 
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {{-- Section 1: API Keys --}}
-        <div class="bg-white border border-default-200 rounded-md shadow-xs overflow-hidden flex flex-col">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden flex flex-col">
             <div class="p-5 border-b border-default-100 flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <span class="w-8 h-8 rounded bg-blue-50 text-primary flex items-center justify-center">
@@ -94,9 +149,9 @@
                                 </td>
                                 <td class="py-3.5 px-4">
                                     @if($key->isValid())
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span>
+                                        <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Kadaluwarsa</span>
+                                        <x-cbt.badge color="danger">Kedaluwarsa</x-cbt.badge>
                                     @endif
                                     <div class="text-[10px] text-default-400 mt-0.5">
                                         {{ $key->expires_at ? $key->expires_at->format('d M Y') : 'Tanpa Batas' }}
@@ -137,7 +192,7 @@
         </div>
 
         {{-- Section 2: Webhook Subscriptions --}}
-        <div class="bg-white border border-default-200 rounded-md shadow-xs overflow-hidden flex flex-col">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden flex flex-col">
             <div class="p-5 border-b border-default-100 flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <span class="w-8 h-8 rounded bg-teal-50 text-[#14bba6] flex items-center justify-center">
@@ -182,9 +237,9 @@
                                 </td>
                                 <td class="py-3.5 px-4">
                                     @if($wh->is_active)
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span>
+                                        <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-default-100 text-default-500">Nonaktif</span>
+                                        <x-cbt.badge color="secondary">Nonaktif</x-cbt.badge>
                                     @endif
                                     @if($wh->failure_count > 0)
                                         <div class="text-[10px] text-rose-600 font-semibold mt-0.5">{{ $wh->failure_count }} kegagalan</div>
@@ -237,7 +292,7 @@
     </div>
 
     {{-- Section 3: Webhook Delivery History --}}
-    <div class="bg-white border border-default-200 rounded-md shadow-xs overflow-hidden">
+    <div class="card rounded-xl border border-default-200/90 shadow-2xs overflow-hidden">
         <div class="p-5 border-b border-default-100 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
                 <span class="w-8 h-8 rounded bg-default-100 text-default-600 flex items-center justify-center">
@@ -271,9 +326,9 @@
                             <td class="py-3.5 px-4 font-mono text-[11px] text-primary"><code>{{ $deliv->event_type }}</code></td>
                             <td class="py-3.5 px-4 text-center">
                                 @if($deliv->status === 'delivered')
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Terkirim ({{ $deliv->response_status }})</span>
+                                    <x-cbt.badge color="success">Terkirim ({{ $deliv->response_status }})</x-cbt.badge>
                                 @else
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Gagal {{ $deliv->response_status ? "({$deliv->response_status})" : '' }}</span>
+                                    <x-cbt.badge color="danger">Gagal {{ $deliv->response_status ? "({$deliv->response_status})" : '' }}</x-cbt.badge>
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-center text-default-500">Ke-{{ $deliv->attempt_number }}</td>

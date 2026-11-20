@@ -21,21 +21,56 @@
 
     <!-- KPI Stats -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="bg-white border border-default-200 rounded-md p-4 shadow-2xs">
-            <span class="text-xs font-semibold text-default-500 uppercase tracking-wider block mb-1">Total Terkirim</span>
-            <div class="text-2xl font-bold text-default-900 font-mono">{{ $stats['total'] }}</div>
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="mail" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Pesan</span>
+                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $stats['total'] }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Seluruh Log Transaksional</p>
+                </div>
+            </div>
         </div>
-        <div class="bg-white border border-default-200 rounded-md p-4 shadow-2xs">
-            <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider block mb-1">Berhasil (Sent)</span>
-            <div class="text-2xl font-bold text-emerald-700 font-mono">{{ $stats['sent'] }}</div>
+
+        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/30 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="check-circle-2" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Berhasil (Sent)</span>
+                    <div class="text-2xl font-bold text-emerald-700 mt-0.5">{{ $stats['sent'] }}</div>
+                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Diterima Mail Server</p>
+                </div>
+            </div>
         </div>
-        <div class="bg-white border border-default-200 rounded-md p-4 shadow-2xs">
-            <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider block mb-1">Gagal (Failed)</span>
-            <div class="text-2xl font-bold text-rose-700 font-mono">{{ $stats['failed'] }}</div>
+
+        <div class="card rounded-xl border border-rose-200 bg-rose-50/30 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-rose-100 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="x-circle" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-rose-700 uppercase tracking-wider block truncate">Gagal (Failed)</span>
+                    <div class="text-2xl font-bold text-rose-700 mt-0.5">{{ $stats['failed'] }}</div>
+                    <p class="text-[11px] text-rose-600 mt-0.5 truncate">Kendala Jaringan / SMTP</p>
+                </div>
+            </div>
         </div>
-        <div class="bg-white border border-default-200 rounded-md p-4 shadow-2xs">
-            <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider block mb-1">Dalam Antrean</span>
-            <div class="text-2xl font-bold text-amber-700 font-mono">{{ $stats['pending'] }}</div>
+
+        <div class="card rounded-xl border border-amber-200 bg-amber-50/30 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-amber-100 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="clock" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block truncate">Dalam Antrean</span>
+                    <div class="text-2xl font-bold text-amber-700 mt-0.5">{{ $stats['pending'] }}</div>
+                    <p class="text-[11px] text-amber-600 mt-0.5 truncate">Menunggu Pengiriman</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -53,11 +88,12 @@
                     <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs">
-                Filter
+            <button type="submit" class="btn btn-sm bg-primary text-white hover:bg-primary-hover rounded-lg shadow-2xs text-xs font-semibold px-4 inline-flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="filter" class="size-4"></i>
+                <span>Filter</span>
             </button>
-            <a href="{{ route('staff.settings.notification-logs.index') }}" class="btn btn-sm border border-default-200 text-default-600 hover:bg-default-100">
-                Reset
+            <a href="{{ route('staff.settings.notification-logs.index') }}" class="btn btn-icon size-9 border border-default-200/90 bg-card hover:bg-default-100 text-default-700 rounded-lg text-xs font-medium inline-flex items-center justify-center transition" title="Reset Filter">
+                <i data-lucide="rotate-ccw" class="size-4"></i>
             </a>
         </form>
     </x-cbt.card>
@@ -90,11 +126,11 @@
                             </td>
                             <td class="py-3 px-4 whitespace-nowrap">
                                 @if($log->status === 'sent')
-                                    <span class="inline-block px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-[10px] whitespace-nowrap">Terkirim</span>
+                                    <x-cbt.badge color="success">Terkirim</x-cbt.badge>
                                 @elseif($log->status === 'failed')
-                                    <span class="inline-block px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-semibold text-[10px] whitespace-nowrap">Gagal</span>
+                                    <x-cbt.badge color="danger">Gagal</x-cbt.badge>
                                 @else
-                                    <span class="inline-block px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-semibold text-[10px] whitespace-nowrap">Pending</span>
+                                    <x-cbt.badge color="warning">Pending</x-cbt.badge>
                                 @endif
                             </td>
                             <td class="py-3 px-4 max-w-xs truncate text-default-500 text-[11px] whitespace-nowrap">
@@ -104,12 +140,13 @@
                                 @if($log->status === 'failed')
                                     <form action="{{ route('staff.settings.notification-logs.retry', $log) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded text-xs font-semibold transition whitespace-nowrap cursor-pointer" title="Kirim Ulang Email">
-                                            Kirim Ulang
+                                        <button type="submit" class="btn btn-sm bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg text-xs font-semibold transition whitespace-nowrap cursor-pointer inline-flex items-center gap-1" title="Kirim Ulang Email">
+                                            <i data-lucide="refresh-cw" class="size-3"></i>
+                                            <span>Kirim Ulang</span>
                                         </button>
                                     </form>
                                 @else
-                                    <span class="text-default-400 text-[11px]">&bull;&bull;&bull;</span>
+                                    <span class="text-default-400 text-xs">-</span>
                                 @endif
                             </td>
                         </tr>

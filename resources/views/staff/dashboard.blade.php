@@ -4,88 +4,95 @@
 @section('page-title', 'Dashboard')
 
 @section('content')
-<div class="space-y-5 w-full">
+<div class="space-y-6 w-full">
     <!-- Hero Welcome Banner -->
-    <div class="relative overflow-hidden bg-gradient-to-r from-default-900 via-default-800 to-secondary rounded-md p-6 text-white shadow-sm">
+    <div class="relative overflow-hidden bg-gradient-to-r from-default-900 via-default-800 to-secondary rounded-2xl p-6 sm:p-8 text-white shadow-sm">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-3 max-w-2xl">
-                <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs font-semibold">
+                    <i data-lucide="sparkles" class="size-3.5 text-amber-300"></i>
+                    <span>Sistem Evaluasi Terpadu &bull; Produksi Standar</span>
+                </div>
+                <h2 class="text-xl sm:text-3xl font-black text-white tracking-tight">
                     Selamat Datang, {{ auth('staff')->user()->name }}
                 </h2>
-                <p class="text-sm text-white/70">
+                <p class="text-sm text-white/80 leading-relaxed">
                     Pusat komando operasional Computer Based Test (CBT) TESLOKA. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.
                 </p>
                 <div class="flex flex-wrap gap-2.5 pt-1">
-                    <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5">
+                    <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-2 rounded-xl px-4 py-2 font-bold active:scale-[0.98]">
                         <i data-lucide="clock" class="size-4"></i>
                         <span>Pantau Sesi Ujian</span>
                     </a>
-                    <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 inline-flex items-center gap-1.5">
+                    <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 inline-flex items-center gap-2 rounded-xl px-4 py-2 font-semibold">
                         <i data-lucide="file-question" class="size-4"></i>
-                        <span>Bank Soal & Konten</span>
+                        <span>Bank Soal &amp; Konten</span>
                     </a>
                 </div>
             </div>
 
-            <div class="hidden lg:flex flex-col items-center justify-center p-4 rounded bg-white/5 border border-white/10 text-center min-w-[200px]">
-                <span class="text-xs text-default-300 font-medium">Kapasitas Maks/Ruang</span>
-                <span class="text-3xl font-extrabold text-white mt-1">30</span>
-                <span class="text-xs text-success mt-1 font-semibold">Peserta Terjadwal</span>
+            <div class="hidden lg:flex flex-col items-center justify-center p-5 rounded-2xl bg-white/5 border border-white/10 text-center min-w-[210px] backdrop-blur-xs">
+                <span class="text-xs text-default-300 font-semibold uppercase tracking-wider">Kapasitas Maks / Ruang</span>
+                <span class="text-3xl sm:text-4xl font-black text-white mt-1">30</span>
+                <span class="text-xs text-emerald-400 mt-1 font-bold flex items-center gap-1">
+                    <i data-lucide="users" class="size-3.5"></i>
+                    <span>Peserta Terjadwal</span>
+                </span>
             </div>
         </div>
     </div>
 
-    <!-- Stat Cards (Modern Style) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="card">
-            <div class="card-body">
-                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-primary/10">
-                    <i data-lucide="users" class="size-6 text-primary"></i>
+    <!-- Stat Cards (Standardized Unified Metric Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Peserta Terdaftar</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_students']) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Siswa &amp; Peserta Ujian</div>
                 </div>
-                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
-                    {{ number_format($stats['total_students']) }}
-                </h5>
-                <p class="text-center text-sm text-default-700 font-semibold">Total Peserta Terdaftar</p>
-                <p class="text-center text-xs text-default-400 mt-0.5">Siswa &amp; Peserta Ujian</p>
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="users" class="size-5.5"></i>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-body">
-                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-secondary/10">
-                    <i data-lucide="graduation-cap" class="size-6 text-secondary"></i>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Rombel / Kelas Aktif</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_classes']) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Tahun Ajaran Aktif</div>
                 </div>
-                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
-                    {{ number_format($stats['total_classes']) }}
-                </h5>
-                <p class="text-center text-sm text-default-700 font-semibold">Rombel / Kelas Aktif</p>
-                <p class="text-center text-xs text-default-400 mt-0.5">Tahun Ajaran Aktif</p>
+                <div class="size-11 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                    <i data-lucide="graduation-cap" class="size-5.5"></i>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-body">
-                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-success/10">
-                    <i data-lucide="file-question" class="size-6 text-success"></i>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Bank Soal &amp; Butir</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_questions']) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Butir Soal Multi-Tipe</div>
                 </div>
-                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
-                    {{ number_format($stats['total_questions']) }}
-                </h5>
-                <p class="text-center text-sm text-default-700 font-semibold">Bank Soal &amp; Butir</p>
-                <p class="text-center text-xs text-default-400 mt-0.5">Butir Soal Multi-Tipe</p>
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
+                    <i data-lucide="file-question" class="size-5.5"></i>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-body">
-                <div class="flex items-center justify-center mx-auto rounded-full size-14 bg-warning/10">
-                    <i data-lucide="calendar" class="size-6 text-warning"></i>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Paket Ujian Aktif</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total_exams']) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Siap Dijadwalkan</div>
                 </div>
-                <h5 class="mt-4 text-center mb-1 text-default-800 font-bold text-2xl">
-                    {{ number_format($stats['total_exams']) }}
-                </h5>
-                <p class="text-center text-sm text-default-700 font-semibold">Paket Ujian Aktif</p>
-                <p class="text-center text-xs text-default-400 mt-0.5">Siap Dijadwalkan</p>
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                    <i data-lucide="calendar" class="size-5.5"></i>
+                </div>
             </div>
         </div>
     </div>

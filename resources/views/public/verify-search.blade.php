@@ -49,7 +49,7 @@
 
     <!-- Main Container -->
     <main class="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-center py-6">
-        <div class="bg-white border border-default-200 rounded-xl shadow-xs p-6 sm:p-10 space-y-6">
+        <div class="bg-white border border-default-200/90 rounded-2xl shadow-xl p-6 sm:p-10 space-y-6">
             <div class="text-center space-y-2">
                 <div class="size-16 rounded-2xl bg-primary/10 text-primary mx-auto flex items-center justify-center shadow-xs">
                     <i data-lucide="award" class="size-8"></i>
@@ -76,7 +76,7 @@
                             placeholder="Contoh: CERT/CBT/EXAM-01/000001 atau RCP-XXXX-XXXX-XXXX"
                             required
                             autofocus
-                            class="w-full px-4 py-3 rounded-lg border border-default-300 focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-mono text-default-800 shadow-2xs transition"
+                            class="w-full px-4 py-3 rounded-xl border border-default-300 focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-mono text-default-900 shadow-2xs transition"
                         >
                     </div>
                     @error('token')
@@ -84,7 +84,7 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="w-full py-3 px-4 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
+                <button type="submit" class="w-full py-3.5 px-4 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm shadow-xs transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]">
                     <div id="btn-spinner" class="hidden inline-block border-2 rounded-full size-4 animate-spin border-s-transparent border-white"></div>
                     <i id="btn-icon" data-lucide="search" class="size-4"></i>
                     <span>Cari &amp; Verifikasi Sertifikat Sekarang</span>
@@ -92,12 +92,17 @@
             </form>
 
             <!-- Informasi Keamanan & Isolasi Beban Server -->
-            <div class="p-4 rounded-lg bg-emerald-50/60 border border-emerald-200 text-emerald-900 text-xs space-y-1.5">
+            <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 text-emerald-900 text-xs space-y-1.5 shadow-2xs">
                 <div class="flex items-center gap-2 font-bold text-emerald-800">
                     <i data-lucide="zap" class="size-4 text-emerald-600 shrink-0"></i>
                     <span>Layanan Verifikasi Cepat &amp; Terisolasi Penuh</span>
                 </div>
                 <p class="text-[11px] text-emerald-700 leading-relaxed">
+                    Sistem menggunakan indeks pencarian hash langsung ke database PostgreSQL berintegritas tinggi. Hasil verifikasi dapat langsung dicetak atau diunduh dalam format resmi.
+                </p>
+            </div>
+        </div>
+    </main>
                     Sistem verifikasi ini dilengkapi perlindungan cache Redis in-memory dan pembatasan laju request. Ratusan mahasiswa atau pihak ketiga yang melakukan pengecekan sertifikat secara bersamaan tidak akan mempengaruhi atau memperlambat sesi ujian CBT yang sedang aktif.
                 </p>
             </div>

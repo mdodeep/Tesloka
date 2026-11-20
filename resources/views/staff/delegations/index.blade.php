@@ -7,8 +7,63 @@
 
 @section('content')
 <div class="space-y-6">
+    <!-- Metric Overview Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="send" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Delegasi Diberikan</span>
+                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $delegationsGiven->count() }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Wewenang Dilimpahkan</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="inbox" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Delegasi Diterima</span>
+                    <div class="text-2xl font-bold text-indigo-600 mt-0.5">{{ $delegationsReceived->count() }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Kewenangan Tambahan</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/30 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="check-circle-2" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Aktif Berlaku</span>
+                    <div class="text-2xl font-bold text-emerald-700 mt-0.5">{{ $delegationsGiven->where('status', 'active')->count() + $delegationsReceived->where('status', 'active')->count() }}</div>
+                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Dapat Digunakan</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-lg bg-default-100 border border-default-200 text-default-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="clock" class="size-5"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Riwayat Nonaktif</span>
+                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $delegationsGiven->where('status', '!=', 'active')->count() + $delegationsReceived->where('status', '!=', 'active')->count() }}</div>
+                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Dicabut / Kedaluwarsa</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="flex items-center justify-end">
-        <button onclick="document.getElementById('modal-delegation').classList.toggle('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-xs flex items-center justify-center gap-2 cursor-pointer transition w-full sm:w-auto">
+        <button onclick="document.getElementById('modal-delegation').classList.toggle('hidden')" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg shadow-2xs flex items-center justify-center gap-2 cursor-pointer transition w-full sm:w-auto">
             <i data-lucide="plus" class="size-4"></i>
             <span>Berikan Delegasi Wewenang</span>
         </button>
@@ -53,7 +108,7 @@
                                     <form method="POST" action="{{ route('staff.delegations.revoke', $del) }}" class="inline" onsubmit="return confirm('Cabut delegasi ini?')">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 rounded text-xs font-semibold transition cursor-pointer">
+                                        <button type="submit" class="btn btn-sm bg-danger/10 hover:bg-danger/20 text-danger border border-danger/20 rounded-lg text-xs font-semibold transition cursor-pointer">
                                             Cabut
                                         </button>
                                     </form>

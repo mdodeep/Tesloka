@@ -44,10 +44,10 @@
     <!-- Main Verification Result Container -->
     <main class="w-full max-w-4xl mx-auto flex-1">
         @if($isValid && $attempt)
-            <div class="bg-white border border-default-200 rounded-md shadow-sm overflow-hidden space-y-6">
+            <div class="bg-white border border-default-200/90 rounded-2xl shadow-xl overflow-hidden space-y-6">
                 <!-- Status Banner: VALID -->
-                <div class="p-6 sm:p-8 bg-linear-to-r from-emerald-50 via-teal-50/60 to-white border-b border-emerald-100 flex items-start sm:items-center gap-4">
-                    <div class="size-14 rounded-md bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                <div class="p-6 sm:p-8 bg-linear-to-r from-emerald-50 via-teal-50/60 to-white border-b border-emerald-200 flex items-start sm:items-center gap-5">
+                    <div class="size-14 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
                         <i data-lucide="check" class="size-8"></i>
                     </div>
                     <div>
@@ -61,24 +61,24 @@
                 <!-- Document Details Grid -->
                 <div class="px-6 sm:px-8 space-y-6 pb-8">
                     <!-- Participant & Exam Info -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-md bg-default-50 border border-default-200 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 rounded-xl bg-default-50 border border-default-200 text-xs shadow-2xs">
                         <div>
-                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Nama Peserta Ujian:</span>
+                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Nama Peserta Ujian:</span>
                             <span class="text-default-900 font-bold text-sm block mt-0.5">{{ $attempt->student->name }}</span>
                             <span class="text-default-500 font-mono text-[11px]">NIM/NISN: {{ $attempt->student->identity_number ?? $attempt->student->username }}</span>
                         </div>
                         <div>
-                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Lembaga Penyelenggara:</span>
+                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Lembaga Penyelenggara:</span>
                             <span class="text-default-900 font-bold text-sm block mt-0.5">{{ $instName }}</span>
                             <span class="text-default-500 text-[11px]">{{ $institution?->address ?? 'Jl. Swakarsa IV' }}</span>
                         </div>
                         <div>
-                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Ujian & Mata Pelajaran:</span>
+                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Ujian &amp; Mata Pelajaran:</span>
                             <span class="text-default-900 font-bold text-xs block mt-0.5">{{ $attempt->exam->title }}</span>
                             <span class="text-default-500 text-[11px]">{{ $attempt->exam->subject->name ?? 'Evaluasi Terstandar' }} &bull; Kode: {{ $attempt->exam->code }}</span>
                         </div>
                         <div>
-                            <span class="text-default-400 font-semibold block text-[11px] uppercase">Waktu Pengumpulan Sah:</span>
+                            <span class="text-default-400 font-bold block text-[11px] uppercase tracking-wider">Waktu Pengumpulan Sah:</span>
                             <span class="text-default-900 font-bold text-xs block mt-0.5">{{ $attempt->submitted_at?->translatedFormat('d F Y, H:i') ?? '-' }} WIB</span>
                             <span class="text-default-500 text-[11px]">Tipe Kumpul: {{ ucfirst($attempt->submission_type ?? 'Resmi') }}</span>
                         </div>
@@ -86,18 +86,18 @@
 
                     <!-- Scores & Achievement Result -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="p-4 rounded-md bg-white border border-default-200 shadow-2xs text-center">
-                            <span class="text-[11px] font-bold uppercase text-default-400">Nilai Akhir Ujian</span>
-                            <div class="text-2xl font-black text-primary mt-1">{{ number_format($breakdown['total_score'], 1) }}</div>
-                            <span class="text-[10px] text-default-500">Skala 0 - 100</span>
+                        <div class="p-4 sm:p-5 rounded-xl bg-white border border-default-200/90 shadow-2xs text-center">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-default-400">Nilai Akhir Ujian</span>
+                            <div class="text-3xl font-black text-primary mt-1">{{ number_format($breakdown['total_score'], 1) }}</div>
+                            <span class="text-[10px] text-default-500 font-medium">Skala 0 - 100</span>
                         </div>
-                        <div class="p-4 rounded-md bg-white border border-default-200 shadow-2xs text-center">
-                            <span class="text-[11px] font-bold uppercase text-default-400">Predikat Nilai</span>
-                            <div class="text-2xl font-black text-default-800 mt-1">{{ $letterGrade }}</div>
-                            <span class="text-[10px] text-default-500">{{ $gradePredicate }}</span>
+                        <div class="p-4 sm:p-5 rounded-xl bg-white border border-default-200/90 shadow-2xs text-center">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-default-400">Predikat Nilai</span>
+                            <div class="text-3xl font-black text-default-800 mt-1">{{ $letterGrade }}</div>
+                            <span class="text-[10px] text-default-500 font-medium">{{ $gradePredicate }}</span>
                         </div>
-                        <div class="p-4 rounded-md {{ $isPassed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} border shadow-2xs text-center">
-                            <span class="text-[11px] font-bold uppercase {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status Kelulusan</span>
+                        <div class="p-4 sm:p-5 rounded-xl {{ $isPassed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} border shadow-2xs text-center">
+                            <span class="text-[11px] font-bold uppercase tracking-wider {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status Kelulusan</span>
                             <div class="text-lg font-black {{ $isPassed ? 'text-emerald-800' : 'text-rose-800' }} mt-1">
                                 {{ $isPassed ? 'LULUS' : 'REMEDIAL' }}
                             </div>

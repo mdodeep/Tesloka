@@ -31,41 +31,41 @@
 
     <!-- Active Exams Safety Guard Notice -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-white border border-default-200 rounded-md p-5 shadow-sm flex items-center justify-between">
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold shrink-0">
                     <i data-lucide="clock" class="size-5"></i>
                 </div>
                 <div>
-                    <div class="text-xs text-default-500">Pengerjaan Ujian Sedang Berlangsung</div>
-                    <div class="text-xl font-black {{ $activeAttemptsCount > 0 ? 'text-rose-600' : 'text-default-800' }}">
+                    <div class="text-xs text-default-500 font-semibold uppercase tracking-wider">Pengerjaan Ujian Sedang Berlangsung</div>
+                    <div class="text-xl font-bold {{ $activeAttemptsCount > 0 ? 'text-rose-600' : 'text-default-800' }} mt-0.5">
                         {{ $activeAttemptsCount }} Siswa
                     </div>
                 </div>
             </div>
             @if($activeAttemptsCount > 0)
-                <span class="px-2 py-1 bg-rose-50 text-rose-700 text-[11px] font-semibold rounded-lg border border-rose-200">
+                <span class="px-2.5 py-1 bg-rose-50 text-rose-700 text-[11px] font-semibold rounded-lg border border-rose-200">
                     Perhatian Khusus
                 </span>
             @else
-                <span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-semibold rounded-lg border border-emerald-200">
+                <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-semibold rounded-lg border border-emerald-200">
                     Aman
                 </span>
             @endif
         </div>
 
-        <div class="bg-white border border-default-200 rounded-md p-5 shadow-sm flex items-center justify-between">
+        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center font-bold shrink-0">
                     <i data-lucide="calendar" class="size-5"></i>
                 </div>
                 <div>
-                    <div class="text-xs text-default-500">Sesi Ujian Aktif Saat Ini</div>
-                    <div class="text-xl font-black text-default-800">{{ $activeSessionsCount }} Sesi</div>
+                    <div class="text-xs text-default-500 font-semibold uppercase tracking-wider">Sesi Ujian Aktif Saat Ini</div>
+                    <div class="text-xl font-bold text-default-800 mt-0.5">{{ $activeSessionsCount }} Sesi</div>
                 </div>
             </div>
             <div class="text-right text-xs text-default-400">
-                IP Anda: <code class="font-mono text-default-600 bg-default-100 px-1.5 py-0.5 rounded">{{ $clientIp }}</code>
+                IP Anda: <code class="font-mono text-default-700 bg-default-100 px-2 py-0.5 rounded-md border border-default-200/60">{{ $clientIp }}</code>
             </div>
         </div>
     </div>

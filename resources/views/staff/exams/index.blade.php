@@ -14,6 +14,59 @@
 
 @section('content')
 <div class="space-y-6 w-full">
+
+    <!-- Quick Stats Grid (Unified Metric Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Paket Ujian</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($exams->total()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Seluruh Kategori Ujian</div>
+                </div>
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="calendar" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Ujian Siap &amp; Terbit</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($exams->whereIn('status', ['ready', 'scheduled', 'active'])->count()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Dapat Dijadwalkan</div>
+                </div>
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
+                    <i data-lucide="check-circle-2" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Blueprint Terdaftar</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($exams->sum('blueprints_count')) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Komposisi Butir Soal</div>
+                </div>
+                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
+                    <i data-lucide="layers" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Mata Pelajaran Aktif</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($subjects->count()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Mata Uji Terdaftar</div>
+                </div>
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                    <i data-lucide="book-open" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Filter & Search Bar (Design System) -->
     <x-cbt.card>
         <form method="GET" action="{{ route('staff.exams.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -54,7 +107,7 @@
             <div class="flex items-center gap-2">
                 <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition flex-1 h-10">
                     <i data-lucide="filter" class="size-4"></i>
-                    <span>Terapkan Filter</span>
+                    <span>Filter</span>
                 </button>
                 <a href="{{ route('staff.exams.index') }}" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 text-xs font-medium rounded inline-flex items-center justify-center transition h-10 px-3.5" title="Reset Filter">
                     Reset
@@ -132,28 +185,28 @@
                             </td>
                             <td class="py-3.5 px-4 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('staff.exams.grading.index', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50 transition" title="Penilaian &amp; Hasil Siswa">
+                                    <a href="{{ route('staff.exams.grading.index', $exam) }}" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-white hover:text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50 transition" title="Penilaian & Hasil Siswa">
                                         <i data-lucide="check-square" class="size-4"></i>
                                     </a>
-                                    <a href="{{ route('staff.exams.reports.index', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition" title="Grafik, Psikometri &amp; Analisis">
+                                    <a href="{{ route('staff.exams.reports.index', $exam) }}" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-white hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition" title="Grafik, Psikometri & Analisis">
                                         <i data-lucide="bar-chart-2" class="size-4"></i>
                                     </a>
-                                    <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition" title="Detail & Kelola Blueprint">
+                                    <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-white hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition" title="Detail & Kelola Blueprint">
                                         <i data-lucide="eye" class="size-4"></i>
                                     </a>
-                                    <a href="{{ route('staff.exams.edit', $exam) }}" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-amber-600 hover:border-amber-300 hover:bg-amber-50 transition" title="Edit Konfigurasi">
+                                    <a href="{{ route('staff.exams.edit', $exam) }}" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-white hover:text-amber-600 hover:border-amber-300 hover:bg-amber-50 transition" title="Edit Konfigurasi">
                                         <i data-lucide="edit" class="size-4"></i>
                                     </a>
                                     <form action="{{ route('staff.exams.duplicate', $exam) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition" title="Gandakan Ujian">
+                                        <button type="submit" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-white hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition" title="Gandakan Ujian">
                                             <i data-lucide="copy" class="size-4"></i>
                                         </button>
                                     </form>
                                     <form action="{{ route('staff.exams.destroy', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus/mengarsipkan ujian ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-white hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 transition" title="Hapus Ujian">
+                                        <button type="submit" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-white hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 transition" title="Hapus Ujian">
                                             <i data-lucide="trash-2" class="size-4"></i>
                                         </button>
                                     </form>

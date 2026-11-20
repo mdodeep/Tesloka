@@ -23,7 +23,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Bank Soal</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['total_banks'] ?? $banks->total() }}</div>
                 </div>
-                <div class="size-11 rounded bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <i data-lucide="layers" class="size-5.5"></i>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Butir Soal Terdaftar</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['total_questions'] ?? 0 }}</div>
                 </div>
-                <div class="size-11 rounded bg-success/10 text-success flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
                     <i data-lucide="help-circle" class="size-5.5"></i>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Stimulus Media</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['total_stimuli'] ?? 0 }}</div>
                 </div>
-                <div class="size-11 rounded bg-info/10 text-info flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
                     <i data-lucide="image" class="size-5.5"></i>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                     <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Bank Soal Aktif</div>
                     <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['active_banks'] ?? 0 }}</div>
                 </div>
-                <div class="size-11 rounded bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
                     <i data-lucide="check-circle-2" class="size-5.5"></i>
                 </div>
             </div>
@@ -170,33 +170,33 @@
                                 </td>
                                 <td class="px-4 py-3 text-center whitespace-nowrap">
                                     @if ($bank->is_active)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-success/10 text-success border border-success/20 whitespace-nowrap inline-block">Aktif</span>
+                                        <x-cbt.badge color="success">Aktif</x-cbt.badge>
                                     @else
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-default-200 text-default-600 border border-default-300 whitespace-nowrap inline-block">Arsip</span>
+                                        <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1.5 whitespace-nowrap">
                                         <a href="{{ route('staff.question-banks.show', $bank) }}" 
-                                           class="btn btn-sm bg-primary text-white hover:bg-primary-hover px-2.5 py-1 text-xs inline-flex items-center gap-1 shadow-2xs"
+                                           class="btn btn-sm h-8 px-3 rounded-lg bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-2xs inline-flex items-center gap-1.5 transition"
                                            title="Buka Bank Soal">
                                             <span>Buka</span>
-                                            <i data-lucide="arrow-right" class="size-3"></i>
+                                            <i data-lucide="arrow-right" class="size-3.5"></i>
                                         </a>
 
                                         <form method="POST" action="{{ route('staff.question-banks.duplicate', $bank) }}" class="inline" onsubmit="return confirm('Duplikasi bank soal ini beserta seluruh soal dan stimulus?')">
                                             @csrf
                                             <button type="submit" 
-                                                    class="size-7 rounded bg-default-100 hover:bg-default-200 text-default-700 flex items-center justify-center transition cursor-pointer" 
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-secondary/10 hover:text-secondary hover:border-secondary/30 text-default-600 flex items-center justify-center transition cursor-pointer" 
                                                     title="Duplikasi Bank Soal">
-                                                <i data-lucide="copy" class="size-3.5"></i>
+                                                <i data-lucide="copy" class="size-4"></i>
                                             </button>
                                         </form>
 
                                         <a href="{{ route('staff.question-banks.export-csv', $bank) }}" 
-                                           class="size-7 rounded bg-success/10 hover:bg-success/20 text-success flex items-center justify-center transition cursor-pointer"
+                                           class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 text-default-600 flex items-center justify-center transition cursor-pointer"
                                            title="Ekspor CSV">
-                                            <i data-lucide="download" class="size-3.5"></i>
+                                            <i data-lucide="download" class="size-4"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -235,9 +235,9 @@
                                 {{ $bank->code }}
                             </span>
                             @if ($bank->is_active)
-                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-success/10 text-success border border-success/20">Aktif</span>
+                                <x-cbt.badge color="success">Aktif</x-cbt.badge>
                             @else
-                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-default-200 text-default-600 border border-default-300">Arsip</span>
+                                <x-cbt.badge color="secondary">Arsip</x-cbt.badge>
                             @endif
                         </div>
 

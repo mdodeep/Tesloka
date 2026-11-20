@@ -5,12 +5,12 @@
     'footer' => null,
 ])
 
-<div {{ $attributes->merge(['class' => 'card']) }}>
+<div {{ $attributes->merge(['class' => 'card rounded-xl border border-default-200/90 shadow-2xs bg-white']) }}>
     @if ($title || $actions)
-        <div class="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:px-5 border-b border-default-200">
+        <div class="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:px-5 border-b border-default-200/80">
             <div class="min-w-0">
                 @if ($title)
-                    <h4 class="card-title">{{ $title }}</h4>
+                    <h4 class="card-title text-sm sm:text-base font-bold text-default-900 tracking-tight">{{ $title }}</h4>
                 @endif
                 @if ($subtitle)
                     <p class="text-xs text-default-500 mt-0.5 leading-relaxed">{{ $subtitle }}</p>
@@ -24,12 +24,12 @@
         </div>
     @endif
 
-    <div class="card-body p-3.5 sm:p-5">
+    <div class="card-body p-4 sm:p-5">
         {{ $slot }}
     </div>
 
     @if ($footer)
-        <div class="card-footer flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:px-5 border-t border-default-200">
+        <div class="card-footer flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:px-5 border-t border-default-200/80 bg-default-50/40">
             {{ $footer }}
         </div>
     @endif

@@ -15,6 +15,58 @@
 @section('content')
 <div class="space-y-6 w-full">
 
+    <!-- Quick Stats Grid (Unified Metric Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Sesi Ujian</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->total()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Sesi Terdaftar Sistem</div>
+                </div>
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="clock" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Aktif</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->where('status', 'active')->count()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Sedang Berlangsung</div>
+                </div>
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
+                    <i data-lucide="activity" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Terjadwal</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->where('status', 'scheduled')->count()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Menunggu Pelaksanaan</div>
+                </div>
+                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
+                    <i data-lucide="calendar" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Selesai</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->where('status', 'finished')->count()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Arsip &amp; Penilaian</div>
+                </div>
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                    <i data-lucide="check-check" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Filter Bar (Design System) -->
     <x-cbt.card>
         <form method="GET" action="{{ route('staff.sessions.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -131,12 +183,12 @@
                             <td class="py-3.5 px-4 text-right whitespace-nowrap">
                                 <div class="inline-flex items-center gap-1.5 justify-end">
                                     @if(in_array($session->status, ['scheduled', 'active']))
-                                        <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
+                                        <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
                                             <i data-lucide="bar-chart-2" class="size-3.5"></i>
                                             <span>Monitoring</span>
                                         </a>
                                     @endif
-                                    <a href="{{ route('staff.sessions.show', $session) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200 rounded inline-flex items-center gap-1.5 shadow-2xs transition" title="Kelola Sesi, Peserta & Pengawas">
+                                    <a href="{{ route('staff.sessions.show', $session) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg inline-flex items-center gap-1.5 shadow-2xs transition" title="Kelola Sesi, Peserta & Pengawas">
                                         <i data-lucide="settings" class="size-3.5 text-default-500"></i>
                                         <span>Kelola Sesi</span>
                                     </a>

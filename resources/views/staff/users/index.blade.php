@@ -23,6 +23,58 @@
 @section('content')
 <div class="space-y-5">
 
+    <!-- Quick Stats Grid (Unified Metric Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Pengguna</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($countAll) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Akun Terdaftar Sistem</div>
+                </div>
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="users" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Staf &amp; Pengawas</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($countStaff) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Hak Akses Manajemen</div>
+                </div>
+                <div class="size-11 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                    <i data-lucide="shield-check" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Peserta Ujian (Siswa)</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($countStudent) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Peserta Terjadwal</div>
+                </div>
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
+                    <i data-lucide="graduation-cap" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Akun Aktif</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($users->where('status', 'active')->count()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Status Aktif Berjalan</div>
+                </div>
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                    <i data-lucide="check-circle-2" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Segmented Navigation Tabs: Pemisahan Staf & Peserta Ujian -->
     <div class="flex items-center gap-2 border-b border-default-200 pb-3 overflow-x-auto text-xs">
         <a href="{{ route('staff.users.index', array_merge(request()->except('page', 'tab'), ['tab' => 'all'])) }}"
@@ -193,18 +245,14 @@
                                 @if($u->isStudent())
                                     @if($u->classes->isNotEmpty())
                                         @foreach($u->classes as $c)
-                                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-teal-50 text-teal-700 border border-teal-200">
-                                                {{ $c->name }}
-                                            </span>
+                                            <x-cbt.badge color="info">{{ $c->name }}</x-cbt.badge>
                                         @endforeach
                                     @else
                                         <span class="text-default-400 italic text-[11px]">Belum Ada Kelas</span>
                                     @endif
                                 @else
                                     @foreach ($u->roles as $r)
-                                        <span class="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary border border-primary/20">
-                                            {{ $r->display_name }}
-                                        </span>
+                                        <x-cbt.badge color="primary">{{ $r->display_name }}</x-cbt.badge>
                                     @endforeach
                                 @endif
                             </td>
@@ -250,7 +298,7 @@
                                                 'last_login_at' => $u->last_login_at ? $u->last_login_at->format('d M Y H:i') : 'Belum pernah login',
                                                 'last_login_ip' => $u->last_login_ip ?? '-',
                                             ]) }})"
-                                            class="btn btn-icon size-8 rounded border border-default-200 bg-card hover:bg-primary/10 text-default-600 hover:text-primary transition cursor-pointer" 
+                                            class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-primary/10 hover:border-primary/30 text-default-600 hover:text-primary transition cursor-pointer" 
                                             title="Lihat Detail Pengguna">
                                         <i data-lucide="eye" class="size-4"></i>
                                     </button>
@@ -264,7 +312,7 @@
                                                 'has_custom_photo' => $u->hasCustomPhoto(),
                                                 'photo_url' => $u->photo_url,
                                             ]) }})"
-                                            class="btn btn-icon size-8 rounded border border-default-200 bg-card hover:bg-info/10 text-default-600 hover:text-info transition cursor-pointer" 
+                                            class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:border-info/30 text-default-600 hover:text-info transition cursor-pointer" 
                                             title="Edit Data Pengguna">
                                         <i data-lucide="edit-3" class="size-4"></i>
                                     </button>
@@ -272,7 +320,7 @@
                                     <!-- Reset Password -->
                                     <form method="POST" action="{{ route('staff.users.reset-password', $u) }}" class="inline" onsubmit="return confirm('Reset password akun ini ke password sementara acak?')">
                                         @csrf
-                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-card hover:bg-warning/10 text-default-600 hover:text-warning transition cursor-pointer" title="Reset Password Acak">
+                                        <button type="submit" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-warning/10 hover:border-warning/30 text-default-600 hover:text-warning transition cursor-pointer" title="Reset Password Acak">
                                             <i data-lucide="key" class="size-4"></i>
                                         </button>
                                     </form>
@@ -282,7 +330,7 @@
                                         <form method="POST" action="{{ route('staff.users.destroy', $u) }}" class="inline" onsubmit="return confirm('Hapus pengguna {{ addslashes($u->name) }} secara permanen?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-card hover:bg-danger/10 text-default-600 hover:text-danger transition cursor-pointer" title="Hapus Pengguna">
+                                            <button type="submit" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-danger/10 hover:border-danger/30 text-default-600 hover:text-danger transition cursor-pointer" title="Hapus Pengguna">
                                                 <i data-lucide="trash-2" class="size-4"></i>
                                             </button>
                                         </form>

@@ -28,10 +28,10 @@
 </head>
 <body class="min-h-screen bg-default-50 flex flex-col text-default-800 antialiased font-body text-sm">
     <!-- Student Header (Tailwind Topbar Style) -->
-    <header class="app-header bg-card border-b border-default-200 sticky top-0 z-30 min-h-topbar-height flex items-center">
+    <header class="app-header bg-white/95 backdrop-blur-md border-b border-default-200/90 sticky top-0 z-30 min-h-topbar-height flex items-center">
         <div class="w-full px-3.5 sm:px-6 lg:px-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <a href="{{ route('student.dashboard') }}" class="flex items-center gap-2">
+                <a href="{{ route('student.dashboard') }}" class="flex items-center gap-2 hover:opacity-90 transition">
                     <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-7 sm:h-8 max-w-[150px] sm:max-w-[180px] object-contain">
                 </a>
             </div>
@@ -46,7 +46,7 @@
                     </button>
 
                     <!-- Popover Dropdown -->
-                    <div id="studentNotifDropdown" class="hidden absolute end-0 mt-2 w-84 sm:w-96 bg-card border border-default-200 rounded-md shadow-xl z-50 overflow-hidden divide-y divide-default-100" role="menu">
+                    <div id="studentNotifDropdown" class="hidden absolute end-0 mt-2 w-84 sm:w-96 bg-card border border-default-200 rounded-xl shadow-xl z-50 overflow-hidden divide-y divide-default-100" role="menu">
                         <div class="p-3.5 sm:p-4 bg-card border-b border-default-200 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="font-semibold text-sm sm:text-base text-default-800">{{ __('Notifikasi Peserta') }}</span>
@@ -67,23 +67,23 @@
 
                 <!-- Accessibility Quick Menu (Section 11) -->
                 <div class="relative" id="studentA11yContainer">
-                    <button type="button" onclick="document.getElementById('studentA11yMenu').classList.toggle('hidden')" class="btn btn-icon size-9 bg-default-100 hover:bg-default-200 rounded text-default-600" title="{{ __('Aksesibilitas & Akomodasi') }}">
+                    <button type="button" onclick="document.getElementById('studentA11yMenu').classList.toggle('hidden')" class="btn btn-icon size-9 bg-default-100 hover:bg-default-200 rounded-lg text-default-600 cursor-pointer" title="{{ __('Aksesibilitas & Akomodasi') }}">
                         <i data-lucide="eye" class="size-4.5"></i>
                     </button>
-                    <div id="studentA11yMenu" class="hidden absolute right-0 mt-2 w-56 bg-card border border-default-200 rounded-md shadow-lg z-50 p-3 space-y-2 text-xs">
+                    <div id="studentA11yMenu" class="hidden absolute right-0 mt-2 w-56 bg-card border border-default-200 rounded-xl shadow-lg z-50 p-3 space-y-2 text-xs">
                         <div class="font-bold text-default-800 pb-1 border-b border-default-100 flex items-center justify-between">
                             <span>Aksesibilitas</span>
                             <span class="text-[10px] text-default-400 font-normal">Sec. 11</span>
                         </div>
-                        <button type="button" onclick="toggleStudentDyslexic()" class="w-full text-left px-2.5 py-1.5 rounded hover:bg-default-100 flex items-center justify-between">
+                        <button type="button" onclick="toggleStudentDyslexic()" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-default-100 flex items-center justify-between cursor-pointer">
                             <span>Font Ramah Disleksia</span>
                             <i data-lucide="type" class="size-3.5 text-primary"></i>
                         </button>
-                        <button type="button" onclick="cycleStudentFontSize()" class="w-full text-left px-2.5 py-1.5 rounded hover:bg-default-100 flex items-center justify-between">
+                        <button type="button" onclick="cycleStudentFontSize()" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-default-100 flex items-center justify-between cursor-pointer">
                             <span>Ukuran Teks (<span id="portalScaleLabel">Normal</span>)</span>
                             <i data-lucide="zoom-in" class="size-3.5 text-primary"></i>
                         </button>
-                        <button type="button" onclick="toggleStudentContrast()" class="w-full text-left px-2.5 py-1.5 rounded hover:bg-default-100 flex items-center justify-between">
+                        <button type="button" onclick="toggleStudentContrast()" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-default-100 flex items-center justify-between cursor-pointer">
                             <span>Kontras Tinggi</span>
                             <i data-lucide="sun-medium" class="size-3.5 text-primary"></i>
                         </button>
@@ -103,7 +103,7 @@
 
                 <form method="POST" action="{{ route('student.logout') }}" class="inline">
                     @csrf
-                    <button type="submit" class="btn btn-sm bg-danger/10 text-danger hover:bg-danger hover:text-white rounded inline-flex items-center gap-1.5 h-9 px-2.5 sm:px-3" title="Keluar">
+                    <button type="submit" class="btn btn-sm bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg inline-flex items-center gap-1.5 h-9 px-2.5 sm:px-3 font-semibold transition cursor-pointer" title="Keluar">
                         <i data-lucide="log-out" class="size-3.5"></i>
                         <span class="hidden sm:inline">Keluar</span>
                     </button>

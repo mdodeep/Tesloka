@@ -40,43 +40,43 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <x-cbt.branding-styles />
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 {{ $bgFile ? 'bg-default-900/60 backdrop-blur-xs' : 'bg-default-50' }}">
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 {{ $bgFile ? 'bg-default-900/60 backdrop-blur-xs' : 'bg-default-50' }}">
     <div class="w-full max-w-md z-10 mx-auto">
-        <!-- Logo -->
+        <!-- Logo & Brand Header -->
         <div class="text-center mb-6">
-            <a href="/" class="inline-block">
-                <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-10 mx-auto object-contain max-w-[220px]">
+            <a href="/" class="inline-block hover:opacity-95 transition">
+                <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-10 sm:h-11 mx-auto object-contain max-w-[220px]">
             </a>
         </div>
 
         @if($customInstructions)
-            <div class="mb-4 p-3 bg-info/10 border border-info/30 rounded text-xs text-info leading-relaxed">
+            <div class="mb-4 p-3.5 bg-sky-50 border border-sky-200 rounded-xl text-xs text-sky-900 leading-relaxed shadow-2xs">
                 {!! nl2br(e($customInstructions)) !!}
             </div>
         @endif
 
         <!-- Flash Messages -->
         @if (session('success'))
-            <div class="mb-4 p-4 rounded bg-success/10 border border-success/30 text-success text-sm flex items-center gap-2">
-                <i data-lucide="check-circle" class="size-5 shrink-0 text-success"></i>
-                <span>{{ session('success') }}</span>
+            <div class="mb-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm flex items-center gap-3 shadow-2xs">
+                <i data-lucide="check-circle" class="size-5 shrink-0 text-emerald-600"></i>
+                <span class="font-medium text-xs sm:text-sm">{{ session('success') }}</span>
             </div>
         @endif
 
         @if (session('warning'))
-            <div class="mb-4 p-4 rounded bg-warning/10 border border-warning/30 text-warning text-sm flex items-center gap-2">
-                <i data-lucide="alert-triangle" class="size-5 shrink-0 text-warning"></i>
-                <span>{{ session('warning') }}</span>
+            <div class="mb-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm flex items-center gap-3 shadow-2xs">
+                <i data-lucide="alert-triangle" class="size-5 shrink-0 text-amber-600"></i>
+                <span class="font-medium text-xs sm:text-sm">{{ session('warning') }}</span>
             </div>
         @endif
 
         @if (isset($errors) && $errors->any())
-            <div class="mb-4 p-4 rounded bg-danger/10 border border-danger/30 text-danger text-sm">
-                <div class="font-semibold mb-1 flex items-center gap-2">
-                    <i data-lucide="alert-octagon" class="size-5 shrink-0 text-danger"></i>
-                    Terjadi Kesalahan
+            <div class="mb-4 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm shadow-2xs">
+                <div class="font-bold mb-1.5 flex items-center gap-2 text-xs sm:text-sm">
+                    <i data-lucide="alert-octagon" class="size-5 shrink-0 text-rose-600"></i>
+                    <span>Terdapat Kesalahan Input</span>
                 </div>
-                <ul class="list-disc list-inside space-y-1 text-xs">
+                <ul class="list-disc list-inside space-y-1 text-xs text-rose-800">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -85,13 +85,13 @@
         @endif
 
         <!-- Card Container -->
-        <div class="card shadow-sm">
+        <div class="card rounded-2xl shadow-xl border border-default-200/90 bg-white overflow-hidden">
             <div class="card-body p-6 sm:p-8">
                 @yield('content')
             </div>
         </div>
 
-        <div class="mt-6 text-center text-xs text-default-400">
+        <div class="mt-6 text-center text-xs text-default-400 font-medium">
             &copy; {{ date('Y') }} {{ $systemInstName }} &bull; TESLOKA CBT
         </div>
     </div>

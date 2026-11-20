@@ -15,7 +15,59 @@
 @section('content')
 <div class="space-y-5 w-full">
 
-    <div class="p-4 bg-primary/5 border border-primary/20 rounded flex items-start gap-3">
+    <!-- Quick Stats Grid (Unified Metric Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Ruang Ujian</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->total()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Laboratorium &amp; Ruang CBT</div>
+                </div>
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="building" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Daya Tampung</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->sum('capacity')) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Kapasitas Maksimal Siswa</div>
+                </div>
+                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
+                    <i data-lucide="users" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Ruang Siap &amp; Aktif</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->where('is_active', true)->count()) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Operasional Standar</div>
+                </div>
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
+                    <i data-lucide="check-circle-2" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Terjadwal</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->sum('sessions_count')) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Alokasi Pelaksanaan</div>
+                </div>
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                    <i data-lucide="clock" class="size-5.5"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4 bg-primary/5 border border-primary/20 rounded-xl flex items-start gap-3">
         <i data-lucide="info" class="size-5 text-primary shrink-0 mt-0.5"></i>
         <div class="text-xs text-default-700 leading-relaxed">
             <strong>Standar Operasional Ruang Pengawasan:</strong> Kapasitas tiap ruang ujian dibatasi maksimal 20–30 peserta untuk menjamin kelancaran koneksi streaming video pengawas proctoring dan ketertiban ruang.
@@ -47,9 +99,9 @@
                                 {{ $room->location ?? 'Gedung Utama' }}
                             </td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
-                                <span class="px-2 py-0.5 bg-primary/10 text-primary font-semibold rounded text-xs">
+                                <x-cbt.badge color="primary">
                                     {{ $room->capacity }} Peserta
-                                </span>
+                                </x-cbt.badge>
                             </td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-semibold text-default-700 whitespace-nowrap">
                                 {{ $room->sessions_count }} Sesi
@@ -64,7 +116,7 @@
                                     <form action="{{ route('staff.rooms.destroy', $room) }}" method="POST" class="inline" onsubmit="return confirm('Hapus atau nonaktifkan ruang ujian ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-icon size-8 rounded border border-default-200 bg-card hover:bg-danger/10 text-default-500 hover:text-danger transition" title="Hapus / Nonaktifkan">
+                                        <button type="submit" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-danger/10 hover:text-danger hover:border-danger/30 text-default-600 transition cursor-pointer" title="Hapus / Nonaktifkan">
                                             <i data-lucide="trash-2" class="size-4"></i>
                                         </button>
                                     </form>

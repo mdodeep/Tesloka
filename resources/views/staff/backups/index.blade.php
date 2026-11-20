@@ -119,13 +119,13 @@ Manajemen Cadangan & Pemulihan Sistem
                             </td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
                                 @if($b->restore_verified)
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-success/10 text-success border border-success/20" title="{{ $b->restore_notes }}">
+                                    <x-cbt.badge color="success" title="{{ $b->restore_notes }}">
                                         Terverifikasi Utuh
-                                    </span>
+                                    </x-cbt.badge>
                                 @else
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-default-100 text-default-500">
+                                    <x-cbt.badge color="secondary">
                                         Belum Diuji
-                                    </span>
+                                    </x-cbt.badge>
                                 @endif
                             </td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
@@ -133,13 +133,13 @@ Manajemen Cadangan & Pemulihan Sistem
                                     <!-- Uji Integritas -->
                                     <form action="{{ route('staff.backups.verify', $b) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm bg-success/10 text-success hover:bg-success hover:text-white rounded" title="Uji Checksum SHA-256">
+                                        <button type="submit" class="btn btn-sm bg-success/10 text-success hover:bg-success hover:text-white rounded-lg transition" title="Uji Checksum SHA-256">
                                             Uji SHA-256
                                         </button>
                                     </form>
 
                                     <!-- Unduh -->
-                                    <a href="{{ route('staff.backups.download', $b) }}" class="btn btn-sm border border-default-200 bg-card hover:bg-default-100 text-default-700 rounded">
+                                    <a href="{{ route('staff.backups.download', $b) }}" class="btn btn-sm border border-default-200/90 bg-card hover:bg-default-100 text-default-700 rounded-lg transition">
                                         Unduh
                                     </a>
 
@@ -147,7 +147,7 @@ Manajemen Cadangan & Pemulihan Sistem
                                     <form action="{{ route('staff.backups.destroy', $b) }}" method="POST" onsubmit="return confirm('Hapus berkas cadangan ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm bg-danger/10 text-danger hover:bg-danger hover:text-white rounded" title="Hapus Berkas">
+                                        <button type="submit" class="btn btn-sm bg-danger/10 text-danger hover:bg-danger hover:text-white rounded-lg transition" title="Hapus Berkas">
                                             Hapus
                                         </button>
                                     </form>

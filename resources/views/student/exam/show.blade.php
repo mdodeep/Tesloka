@@ -17,11 +17,11 @@
 </head>
 <body class="bg-default-100 text-default-800 font-sans min-h-screen flex flex-col no-select">
     <!-- Top Bar Navigation (Fixed) -->
-    <header class="sticky top-0 z-40 bg-white border-b border-default-200 shadow-xs">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-default-200/90 shadow-2xs">
         <div class="w-full px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
             <!-- Left: Exam & Student Meta -->
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                <span class="w-8 sm:w-9 h-8 sm:h-9 rounded bg-primary text-white font-extrabold flex items-center justify-center text-xs sm:text-sm shadow-xs shrink-0">
+                <span class="size-8 sm:size-9 rounded-xl bg-primary text-white font-black flex items-center justify-center text-xs sm:text-sm shadow-xs shrink-0">
                     T
                 </span>
                 <div class="min-w-0 flex-1">
@@ -29,14 +29,14 @@
                         {{ $attempt->exam->title }}
                     </h1>
                     <div class="text-[10px] sm:text-[11px] text-default-500 font-mono truncate">
-                        {{ $attempt->student->name }} &bull; Kursi: <strong>{{ $attempt->participant->seat_number ?? '-' }}</strong>
+                        {{ $attempt->student->name }} &bull; Kursi: <strong class="text-default-800">{{ $attempt->participant->seat_number ?? '-' }}</strong>
                     </div>
                 </div>
             </div>
 
             <!-- Center: Real-time Autosave Sync Status -->
             <div class="hidden md:flex items-center gap-2 text-xs shrink-0">
-                <span id="saveStatusIndicator" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200">
+                <span id="saveStatusIndicator" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 shadow-2xs">
                     <i data-lucide="check-circle" class="size-4 text-emerald-600"></i>
                     <span id="saveStatusText">Tersimpan di Server</span>
                 </span>
@@ -44,29 +44,29 @@
 
             <!-- Right: Server Timer & Palette Trigger -->
             <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
-                <div class="bg-slate-900 text-white px-2 sm:px-3.5 py-1 sm:py-1.5 rounded font-mono text-xs sm:text-sm font-bold tracking-wider flex items-center gap-1 sm:gap-2 shadow-xs shrink-0">
+                <div class="bg-slate-900 text-amber-400 px-3 sm:px-3.5 py-1.5 rounded-xl font-mono text-xs sm:text-sm font-bold tracking-wider flex items-center gap-1.5 sm:gap-2 shadow-inner shrink-0 border border-slate-800">
                     <i data-lucide="clock" class="size-3.5 sm:size-4 text-amber-400"></i>
                     <span id="cbtTimerDisplay">00:00:00</span>
                 </div>
 
                 <!-- Accessibility Toolbar -->
-                <div class="hidden sm:flex items-center gap-1 bg-default-100 p-1 rounded text-xs font-semibold">
-                    <button type="button" onclick="toggleDyslexicFont()" class="px-2 py-1 rounded-lg hover:bg-white text-default-700 transition" title="Toggle Font Ramah Disleksia (OpenDyslexic)">
+                <div class="hidden sm:flex items-center gap-1 bg-default-100 p-1 rounded-xl text-xs font-semibold">
+                    <button type="button" onclick="toggleDyslexicFont()" class="px-2.5 py-1 rounded-lg hover:bg-white text-default-700 transition cursor-pointer" title="Toggle Font Ramah Disleksia (OpenDyslexic)">
                         Dyslexic
                     </button>
-                    <button type="button" onclick="cycleFontSize()" class="px-2 py-1 rounded-lg hover:bg-white text-default-700 font-mono transition" title="Ubah Ukuran Teks">
+                    <button type="button" onclick="cycleFontSize()" class="px-2.5 py-1 rounded-lg hover:bg-white text-default-700 font-mono transition cursor-pointer" title="Ubah Ukuran Teks">
                         <span id="fontSizeLabel">A</span>
                     </button>
-                    <button type="button" onclick="toggleHighContrast()" class="px-2 py-1 rounded-lg hover:bg-white text-default-700 transition" title="Mode Kontras Tinggi">
+                    <button type="button" onclick="toggleHighContrast()" class="px-2.5 py-1 rounded-lg hover:bg-white text-default-700 transition cursor-pointer" title="Mode Kontras Tinggi">
                         Kontras
                     </button>
                 </div>
 
-                <button type="button" onclick="toggleFullscreen()" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-600 hidden sm:inline-flex" title="Layar Penuh">
+                <button type="button" onclick="toggleFullscreen()" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-600 hidden sm:inline-flex rounded-xl" title="Layar Penuh">
                     <i data-lucide="maximize" class="size-4"></i>
                 </button>
 
-                <button type="button" onclick="document.getElementById('paletteSidebar').classList.toggle('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-700 lg:hidden shrink-0" title="Daftar Soal">
+                <button type="button" onclick="document.getElementById('paletteSidebar').classList.toggle('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-700 lg:hidden shrink-0 rounded-xl" title="Daftar Soal">
                     <i data-lucide="layout-grid" class="size-4"></i>
                 </button>
             </div>
@@ -103,35 +103,35 @@
                     <p id="announcementMessage" class="text-xs text-amber-800 leading-relaxed"></p>
                 </div>
 
-                <div class="bg-white border border-default-200 rounded-md p-4 sm:p-6 lg:p-8 shadow-xs min-h-[500px] flex flex-col justify-between">
+                <div class="bg-white border border-default-200/90 rounded-2xl p-5 sm:p-7 lg:p-8 shadow-2xs min-h-[520px] flex flex-col justify-between">
                     <!-- Top Question Meta -->
                     <div>
                         <div class="flex items-center justify-between pb-4 border-b border-default-100 mb-6">
                             <div class="flex items-center gap-2">
-                                <span class="px-3 py-1 bg-primary-50 text-primary-700 font-bold text-xs rounded-lg uppercase">
+                                <span class="px-3 py-1 bg-primary-50 text-primary-700 font-bold text-xs rounded-xl uppercase tracking-wider border border-primary-200/50">
                                     Soal Nomor <span id="currentQuestionNum">1</span>
                                 </span>
-                                <span class="text-xs text-default-400">dari {{ count($orderedQuestions) }} Soal</span>
+                                <span class="text-xs text-default-500 font-medium">dari {{ count($orderedQuestions) }} Soal</span>
                             </div>
                             <div>
-                                <span id="questionTypeBadge" class="px-2.5 py-0.5 bg-default-100 text-default-600 font-mono text-[11px] rounded uppercase">
+                                <span id="questionTypeBadge" class="px-3 py-1 bg-default-100 text-default-700 font-mono text-[11px] font-bold rounded-lg uppercase border border-default-200/80">
                                     Pilihan Ganda
                                 </span>
                             </div>
                         </div>
 
                         <!-- Stimulus Wacana Bacaan (Jika ada) -->
-                        <div id="stimulusContainer" class="hidden p-4 bg-default-50 border border-default-200 rounded mb-6">
-                            <div class="text-xs font-bold text-default-500 uppercase tracking-wide mb-1 flex items-center gap-1.5">
+                        <div id="stimulusContainer" class="hidden p-4 sm:p-5 bg-default-50/80 border border-default-200 rounded-xl mb-6 shadow-2xs">
+                            <div class="text-xs font-bold text-default-600 uppercase tracking-wider mb-1.5 flex items-center gap-2">
                                 <i data-lucide="file-text" class="size-4 text-primary"></i>
                                 <span id="stimulusTitle">Stimulus</span>
                             </div>
-                            <div id="stimulusContent" class="text-sm text-default-700 leading-relaxed prose prose-sm max-w-none"></div>
+                            <div id="stimulusContent" class="text-sm text-default-800 leading-relaxed prose prose-sm max-w-none"></div>
                         </div>
 
                         <!-- Teks Pokok Soal -->
                         <div class="mb-8">
-                            <div id="questionContent" class="text-base text-default-900 leading-relaxed font-sans">
+                            <div id="questionContent" class="text-base sm:text-lg text-default-900 leading-relaxed font-sans font-medium">
                                 <!-- Konten pertanyaan dimuat via JS -->
                             </div>
                         </div>
@@ -144,22 +144,22 @@
 
                     <!-- Bottom Navigation Buttons -->
                     <div class="pt-6 border-t border-default-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <button type="button" id="btnPrev" onclick="navigateQuestion(-1)" class="w-full sm:w-auto btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                        <button type="button" id="btnPrev" onclick="navigateQuestion(-1)" class="w-full sm:w-auto btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-bold text-xs rounded-xl inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer px-4 py-2.5 transition">
                             <i data-lucide="chevron-left" class="size-4"></i>
                             <span>Soal Sebelumnya</span>
                         </button>
 
-                        <button type="button" id="btnFlag" onclick="toggleCurrentFlag()" class="w-full sm:w-auto btn btn-sm bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-xs rounded border border-amber-200 inline-flex items-center justify-center gap-2 cursor-pointer">
+                        <button type="button" id="btnFlag" onclick="toggleCurrentFlag()" class="w-full sm:w-auto btn btn-sm bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs rounded-xl border border-amber-200 inline-flex items-center justify-center gap-2 cursor-pointer px-4 py-2.5 transition">
                             <i data-lucide="flag" class="size-4 text-amber-600"></i>
                             <span id="btnFlagText">Ragu-ragu</span>
                         </button>
 
                         <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <button type="button" id="btnNext" onclick="navigateQuestion(1)" class="flex-1 sm:flex-none btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
+                            <button type="button" id="btnNext" onclick="navigateQuestion(1)" class="flex-1 sm:flex-none btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer px-4 py-2.5 transition active:scale-[0.98]">
                                 <span>Soal Berikutnya</span>
                                 <i data-lucide="chevron-right" class="size-4"></i>
                             </button>
-                            <button type="button" onclick="openFinishModal()" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
+                            <button type="button" onclick="openFinishModal()" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer px-4 py-2.5 transition active:scale-[0.98]">
                                 <i data-lucide="check" class="size-4"></i>
                                 <span>Selesai</span>
                             </button>
@@ -170,7 +170,7 @@
 
             <!-- Kolom Kanan: Palet Nomor Soal & Ringkasan (1 Kolom) -->
             <div id="paletteSidebar" class="hidden lg:block fixed inset-0 lg:static z-50 lg:z-auto bg-black/40 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none flex items-center justify-center lg:items-stretch lg:justify-start p-3 sm:p-4 lg:p-0">
-                <div class="bg-white border border-default-200 rounded-md p-4 sm:p-5 shadow-2xl lg:shadow-xs space-y-4 sm:space-y-5 w-full max-w-sm lg:max-w-none max-h-[90vh] lg:max-h-none overflow-y-auto">
+                <div class="bg-white border border-default-200/90 rounded-2xl p-5 shadow-2xl lg:shadow-2xs space-y-4 sm:space-y-5 w-full max-w-sm lg:max-w-none max-h-[90vh] lg:max-h-none overflow-y-auto">
 
                     @if($attempt->exam->isCameraProctoringEnabled())
                         <!-- Widget Kamera Pengawas Peserta (Live Proctoring & Anti-Cheat) -->
@@ -276,44 +276,44 @@
     </div>
 
     <!-- Modal Konfirmasi Pengumpulan Ujian -->
-    <div id="finishModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
-        <div class="card max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+    <div id="finishModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/60 backdrop-blur-xs hidden p-3 sm:p-4 transition-opacity">
+        <div class="card max-w-md w-full p-5 sm:p-7 shadow-2xl rounded-2xl border border-default-200/90 space-y-4 max-h-[90vh] flex flex-col bg-white animate-in fade-in zoom-in-95 duration-150">
             <div class="text-center space-y-2 shrink-0">
-                <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl font-bold">
-                    <i data-lucide="check" class="size-6"></i>
+                <div class="size-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto text-2xl font-bold shadow-xs">
+                    <i data-lucide="check-circle" class="size-7"></i>
                 </div>
-                <h3 class="text-lg font-bold text-default-900">Konfirmasi Selesai Ujian</h3>
-                <p class="text-xs text-default-500">Apakah Anda yakin ingin mengumpulkan lembar jawaban ujian sekarang?</p>
+                <h3 class="text-lg font-black text-default-900 tracking-tight">Konfirmasi Selesai Ujian</h3>
+                <p class="text-xs text-default-500 max-w-xs mx-auto leading-relaxed">Apakah Anda yakin ingin mengumpulkan seluruh lembar jawaban ujian sekarang?</p>
             </div>
 
             <div class="overflow-y-auto space-y-3 pr-1">
-                <div class="p-4 bg-default-50 rounded space-y-2 border border-default-200 text-xs">
-                    <div class="flex justify-between py-1 border-b border-default-200">
-                        <span class="text-default-500">Total Butir Soal:</span>
-                        <strong class="text-default-800">{{ count($orderedQuestions) }} Soal</strong>
+                <div class="p-4 bg-default-50 rounded-xl space-y-2.5 border border-default-200 text-xs shadow-2xs">
+                    <div class="flex justify-between py-1 border-b border-default-200/70">
+                        <span class="text-default-500 font-medium">Total Butir Soal:</span>
+                        <strong class="text-default-900">{{ count($orderedQuestions) }} Soal</strong>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-default-200">
-                        <span class="text-default-500">Sudah Dijawab:</span>
-                        <strong class="text-emerald-700" id="modalAnsweredCount">0</strong>
+                    <div class="flex justify-between py-1 border-b border-default-200/70">
+                        <span class="text-default-500 font-medium">Sudah Dijawab:</span>
+                        <strong class="text-emerald-700 font-bold" id="modalAnsweredCount">0</strong>
                     </div>
                     <div class="flex justify-between py-1">
-                        <span class="text-default-500">Belum Dijawab:</span>
-                        <strong class="text-rose-600" id="modalUnansweredCount">0</strong>
+                        <span class="text-default-500 font-medium">Belum Dijawab:</span>
+                        <strong class="text-rose-600 font-bold" id="modalUnansweredCount">0</strong>
                     </div>
                 </div>
 
-                <div id="unansweredWarning" class="hidden p-3 bg-rose-50 border border-rose-200 rounded text-xs text-rose-800 flex items-start gap-2">
-                    <i data-lucide="alert-triangle" class="size-4 text-rose-600 shrink-0 mt-0.5"></i>
-                    <span><strong>Peringatan:</strong> Masih ada butir soal yang belum Anda jawab. Jawaban kosong bernilai 0.</span>
+                <div id="unansweredWarning" class="hidden p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800 flex items-start gap-2.5 shadow-2xs">
+                    <i data-lucide="alert-triangle" class="size-4.5 text-rose-600 shrink-0 mt-0.5"></i>
+                    <span class="leading-relaxed"><strong>Peringatan:</strong> Masih ada butir soal yang belum Anda jawab. Jawaban kosong bernilai 0.</span>
                 </div>
             </div>
 
             <form action="{{ route('student.exam.submit', $attempt) }}" method="POST" id="submitExamForm" class="pt-2 flex flex-col-reverse sm:flex-row gap-2 justify-end shrink-0">
                 @csrf
-                <button type="button" onclick="document.getElementById('finishModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded cursor-pointer text-center justify-center w-full sm:w-auto">
+                <button type="button" onclick="document.getElementById('finishModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-bold text-xs rounded-xl cursor-pointer text-center justify-center w-full sm:w-auto px-4 py-2.5 transition">
                     Periksa Kembali
                 </button>
-                <button type="submit" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
+                <button type="submit" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto px-4 py-2.5 transition active:scale-[0.98]">
                     <i data-lucide="check" class="size-4"></i>
                     <span>Ya, Kumpulkan Sekarang</span>
                 </button>
@@ -437,13 +437,13 @@
                 q.options.forEach(opt => {
                     const isChecked = q.currentAnswer === opt.key;
                     const div = document.createElement('div');
-                    div.className = `p-3.5 rounded border transition-all cursor-pointer flex items-center gap-3 ${isChecked ? 'bg-primary/5 border-primary shadow-xs' : 'bg-white border-default-200 hover:bg-default-50'}`;
+                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
                     div.onclick = () => selectSingleOption(opt.key);
                     div.innerHTML = `
-                        <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${isChecked ? 'bg-primary text-white' : 'bg-default-100 text-default-700'}">
+                        <span class="size-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
                             ${opt.display_key || opt.key}
                         </span>
-                        <span class="text-sm text-default-800 ${q.isRtl ? 'text-right font-serif' : ''}">${opt.content}</span>
+                        <span class="text-sm sm:text-base text-default-900 leading-snug font-medium ${q.isRtl ? 'text-right font-serif' : ''}">${opt.content}</span>
                     `;
                     optBox.appendChild(div);
                 });
@@ -452,14 +452,14 @@
                 q.options.forEach(opt => {
                     const isChecked = currentArr.includes(opt.key);
                     const div = document.createElement('div');
-                    div.className = `p-3.5 rounded border transition-all cursor-pointer flex items-center gap-3 ${isChecked ? 'bg-primary/5 border-primary' : 'bg-white border-default-200 hover:bg-default-50'}`;
+                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
                     div.onclick = () => toggleComplexOption(opt.key);
                     div.innerHTML = `
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} class="w-4 h-4 rounded text-primary pointer-events-none">
-                        <span class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${isChecked ? 'bg-primary text-white' : 'bg-default-100 text-default-700'}">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} class="size-4.5 rounded text-primary pointer-events-none mt-1 sm:mt-0">
+                        <span class="size-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
                             ${opt.display_key || opt.key}
                         </span>
-                        <span class="text-sm text-default-800">${opt.content}</span>
+                        <span class="text-sm sm:text-base text-default-900 leading-snug font-medium">${opt.content}</span>
                     `;
                     optBox.appendChild(div);
                 });

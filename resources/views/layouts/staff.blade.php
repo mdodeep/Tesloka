@@ -397,14 +397,18 @@
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-5">
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5 text-[11px] font-medium text-default-400 mb-1 flex-wrap">
-                                <a href="{{ route('staff.dashboard') }}" class="text-default-500 hover:text-primary transition">Dashboard</a>
-                                @hasSection('page-parent')
-                                    <i data-lucide="chevron-right" class="size-3 text-default-300"></i>
-                                    <span class="text-default-500">@yield('page-parent')</span>
-                                @endif
-                                @hasSection('page-title')
-                                    <i data-lucide="chevron-right" class="size-3 text-default-300"></i>
-                                    <span class="text-default-700 font-semibold truncate max-w-xs sm:max-w-md md:max-w-xl">@yield('page-title')</span>
+                                @if(request()->routeIs('staff.dashboard'))
+                                    <span class="text-default-700 font-semibold">Dashboard</span>
+                                @else
+                                    <a href="{{ route('staff.dashboard') }}" class="text-default-500 hover:text-primary transition">Dashboard</a>
+                                    @hasSection('page-parent')
+                                        <i data-lucide="chevron-right" class="size-3 text-default-300"></i>
+                                        <span class="text-default-500">@yield('page-parent')</span>
+                                    @endif
+                                    @hasSection('page-title')
+                                        <i data-lucide="chevron-right" class="size-3 text-default-300"></i>
+                                        <span class="text-default-700 font-semibold truncate max-w-xs sm:max-w-md md:max-w-xl">@yield('page-title')</span>
+                                    @endif
                                 @endif
                             </div>
                             <h4 class="text-default-900 text-lg font-semibold break-words">@yield('page-title', 'Dashboard')</h4>

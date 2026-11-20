@@ -17,58 +17,70 @@ Repositori Berkas & Media Terisolasi
 @section('content')
 <div class="space-y-6 w-full">
     <!-- Stat Ringkasan Repositori -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
-            <div>
-                <p class="text-[11px] uppercase tracking-wider font-bold text-default-400">Total Berkas</p>
-                <h3 class="text-xl sm:text-2xl font-black text-default-900 mt-0.5">{{ number_format($stats['total'] ?? 0) }}</h3>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <i data-lucide="folder" class="size-5"></i>
-            </div>
-        </div>
-        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
-            <div>
-                <p class="text-[11px] uppercase tracking-wider font-bold text-indigo-500">Audio Listening</p>
-                <h3 class="text-xl sm:text-2xl font-black text-indigo-950 mt-0.5">{{ number_format($stats['audio'] ?? 0) }}</h3>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                <i data-lucide="volume-2" class="size-5"></i>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Berkas</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total'] ?? 0) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Media Terisolasi</div>
+                </div>
+                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <i data-lucide="folder" class="size-5.5"></i>
+                </div>
             </div>
         </div>
-        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
-            <div>
-                <p class="text-[11px] uppercase tracking-wider font-bold text-emerald-500">Gambar & Wacana</p>
-                <h3 class="text-xl sm:text-2xl font-black text-emerald-950 mt-0.5">{{ number_format($stats['image'] ?? 0) }}</h3>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                <i data-lucide="image" class="size-5"></i>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Audio Listening</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['audio'] ?? 0) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Berkas Ujian Suara</div>
+                </div>
+                <div class="size-11 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                    <i data-lucide="volume-2" class="size-5.5"></i>
+                </div>
             </div>
         </div>
-        <div class="bg-white border border-default-200 rounded-md p-3 sm:p-4 shadow-xs flex items-center justify-between">
-            <div>
-                <p class="text-[11px] uppercase tracking-wider font-bold text-amber-500">Dokumen / PDF</p>
-                <h3 class="text-xl sm:text-2xl font-black text-amber-950 mt-0.5">{{ number_format($stats['document'] ?? 0) }}</h3>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Gambar &amp; Wacana</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['image'] ?? 0) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Stimulus Visual &amp; Opsi</div>
+                </div>
+                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
+                    <i data-lucide="image" class="size-5.5"></i>
+                </div>
             </div>
-            <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-                <i data-lucide="file-text" class="size-5"></i>
+        </div>
+        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
+            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Dokumen / PDF</div>
+                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['document'] ?? 0) }}</div>
+                    <div class="text-xs text-default-400 mt-0.5">Lampiran Pendukung</div>
+                </div>
+                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                    <i data-lucide="file-text" class="size-5.5"></i>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Filter Bar -->
-    <div class="bg-white border border-default-200 rounded-md p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-2 overflow-x-auto text-xs">
-            <a href="{{ route('staff.media.index') }}" class="px-3 py-1.5 rounded font-semibold transition {{ !request('category') ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
+            <a href="{{ route('staff.media.index') }}" class="px-3.5 py-2 rounded-lg font-semibold transition shrink-0 {{ !request('category') ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-default-200' }}">
                 Semua Berkas ({{ $stats['total'] ?? 0 }})
             </a>
-            <a href="{{ route('staff.media.index', ['category' => 'image']) }}" class="px-3 py-1.5 rounded font-semibold transition {{ request('category') === 'image' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
+            <a href="{{ route('staff.media.index', ['category' => 'image']) }}" class="px-3.5 py-2 rounded-lg font-semibold transition shrink-0 {{ request('category') === 'image' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-default-200' }}">
                 Gambar ({{ $stats['image'] ?? 0 }})
             </a>
-            <a href="{{ route('staff.media.index', ['category' => 'audio']) }}" class="px-3 py-1.5 rounded font-semibold transition {{ request('category') === 'audio' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
+            <a href="{{ route('staff.media.index', ['category' => 'audio']) }}" class="px-3.5 py-2 rounded-lg font-semibold transition shrink-0 {{ request('category') === 'audio' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-default-200' }}">
                 Audio Listening ({{ $stats['audio'] ?? 0 }})
             </a>
-            <a href="{{ route('staff.media.index', ['category' => 'document']) }}" class="px-3 py-1.5 rounded font-semibold transition {{ request('category') === 'document' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-slate-200' }}">
+            <a href="{{ route('staff.media.index', ['category' => 'document']) }}" class="px-3.5 py-2 rounded-lg font-semibold transition shrink-0 {{ request('category') === 'document' ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-600 hover:bg-default-200' }}">
                 Dokumen ({{ $stats['document'] ?? 0 }})
             </a>
         </div>
@@ -78,10 +90,16 @@ Repositori Berkas & Media Terisolasi
                 <input type="hidden" name="category" value="{{ request('category') }}">
             @endif
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama berkas..."
-                class="form-input flex-1 sm:w-60 h-9 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
-            <button type="submit" class="h-9 px-3.5 bg-primary hover:bg-primary-hover text-white rounded text-xs font-semibold shadow-xs transition cursor-pointer">
-                Cari
+                class="form-input flex-1 sm:w-60 h-9 text-xs rounded-lg border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+            <button type="submit" class="btn btn-sm h-9 px-3.5 bg-primary hover:bg-primary-hover text-white rounded-lg text-xs font-semibold shadow-xs transition cursor-pointer">
+                <i data-lucide="search" class="size-3.5"></i>
+                <span>Cari</span>
             </button>
+            @if(request('search') || request('category'))
+                <a href="{{ route('staff.media.index') }}" class="btn btn-sm h-9 px-3 bg-default-100 hover:bg-default-200 text-default-700 rounded-lg text-xs font-medium border border-default-200 inline-flex items-center transition" title="Reset Filter">
+                    Reset
+                </a>
+            @endif
         </form>
     </div>
 

@@ -245,8 +245,8 @@
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[700px] text-left text-xs text-default-600">
-                    <thead class="bg-default-50 font-semibold text-default-500 border-b border-default-200 uppercase text-[11px]">
-                        <tr>
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="py-2.5 px-3 whitespace-nowrap">Bank Soal</th>
                             <th class="py-2.5 px-3 text-center whitespace-nowrap">Jumlah</th>
                             <th class="py-2.5 px-3 text-center whitespace-nowrap">Tingkat</th>

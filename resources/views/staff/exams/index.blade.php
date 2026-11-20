@@ -17,54 +17,30 @@
 
     <!-- Quick Stats Grid (Unified Metric Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Paket Ujian</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($exams->total()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Seluruh Kategori Ujian</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="calendar" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Ujian Siap &amp; Terbit</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($exams->whereIn('status', ['ready', 'scheduled', 'active'])->count()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Dapat Dijadwalkan</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Blueprint Terdaftar</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($exams->sum('blueprints_count')) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Komposisi Butir Soal</div>
-                </div>
-                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
-                    <i data-lucide="layers" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Mata Pelajaran Aktif</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($subjects->count()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Mata Uji Terdaftar</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="book-open" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Paket Ujian" 
+            value="{{ number_format($exams->total()) }}" 
+            subtitle="Seluruh Kategori Ujian" 
+            icon="calendar" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Ujian Siap &amp; Terbit" 
+            value="{{ number_format($exams->whereIn('status', ['ready', 'scheduled', 'active'])->count()) }}" 
+            subtitle="Dapat Dijadwalkan" 
+            icon="check-circle-2" 
+            color="success" />
+        <x-cbt.stat-card 
+            title="Blueprint Terdaftar" 
+            value="{{ number_format($exams->sum('blueprints_count')) }}" 
+            subtitle="Komposisi Butir Soal" 
+            icon="layers" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Mata Pelajaran Aktif" 
+            value="{{ number_format($subjects->count()) }}" 
+            subtitle="Mata Uji Terdaftar" 
+            icon="book-open" 
+            color="warning" />
     </div>
 
     <!-- Filter & Search Bar (Design System) -->
@@ -120,8 +96,8 @@
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[780px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs text-default-600" id="table-exams">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Kode & Judul Ujian</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Mata Pelajaran & Tipe</th>
                         <th class="py-3.5 px-4 border-b border-default-200 text-center whitespace-nowrap">Durasi & KKM</th>
@@ -139,13 +115,9 @@
                                         {{ $exam->title }}
                                     </a>
                                     @if($exam->isLanguageCertification())
-                                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
-                                            Bahasa
-                                        </span>
+                                        <x-cbt.badge color="info">Bahasa</x-cbt.badge>
                                     @elseif($exam->isCertification())
-                                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">
-                                            Sertifikasi
-                                        </span>
+                                        <x-cbt.badge color="purple">Sertifikasi</x-cbt.badge>
                                     @endif
                                 </div>
                                 <div class="text-[11px] text-default-400 font-mono mt-0.5">

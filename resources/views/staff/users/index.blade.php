@@ -25,54 +25,30 @@
 
     <!-- Quick Stats Grid (Unified Metric Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Pengguna</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($countAll) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Akun Terdaftar Sistem</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Staf &amp; Pengawas</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($countStaff) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Hak Akses Manajemen</div>
-                </div>
-                <div class="size-11 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
-                    <i data-lucide="shield-check" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Peserta Ujian (Siswa)</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($countStudent) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Peserta Terjadwal</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="graduation-cap" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Akun Aktif</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($users->where('status', 'active')->count()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Status Aktif Berjalan</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Pengguna" 
+            value="{{ number_format($countAll) }}" 
+            subtitle="Akun Terdaftar Sistem" 
+            icon="users" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Staf &amp; Pengawas" 
+            value="{{ number_format($countStaff) }}" 
+            subtitle="Hak Akses Manajemen" 
+            icon="shield-check" 
+            color="secondary" />
+        <x-cbt.stat-card 
+            title="Peserta Ujian (Siswa)" 
+            value="{{ number_format($countStudent) }}" 
+            subtitle="Peserta Terjadwal" 
+            icon="graduation-cap" 
+            color="teal" />
+        <x-cbt.stat-card 
+            title="Akun Aktif" 
+            value="{{ number_format($users->where('status', 'active')->count()) }}" 
+            subtitle="Status Aktif Berjalan" 
+            icon="check-circle-2" 
+            color="success" />
     </div>
 
     <!-- Segmented Navigation Tabs: Pemisahan Staf & Peserta Ujian -->
@@ -182,8 +158,8 @@
 
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[850px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-users">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="w-10 px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">
                             <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="form-checkbox size-4 rounded text-primary cursor-pointer" title="Pilih Semua di Halaman Ini">
                         </th>

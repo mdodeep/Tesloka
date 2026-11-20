@@ -18,54 +18,34 @@ Repositori Berkas & Media Terisolasi
 <div class="space-y-6 w-full">
     <!-- Stat Ringkasan Repositori -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Berkas</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['total'] ?? 0) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Media Terisolasi</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="folder" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Audio Listening</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['audio'] ?? 0) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Berkas Ujian Suara</div>
-                </div>
-                <div class="size-11 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
-                    <i data-lucide="volume-2" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Gambar &amp; Wacana</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['image'] ?? 0) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Stimulus Visual &amp; Opsi</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="image" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Dokumen / PDF</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($stats['document'] ?? 0) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Lampiran Pendukung</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="file-text" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card
+            title="Total Berkas"
+            :value="number_format($stats['total'] ?? 0)"
+            subtitle="Media Terisolasi"
+            icon="folder"
+            color="primary"
+        />
+        <x-cbt.stat-card
+            title="Audio Listening"
+            :value="number_format($stats['audio'] ?? 0)"
+            subtitle="Berkas Ujian Suara"
+            icon="volume-2"
+            color="secondary"
+        />
+        <x-cbt.stat-card
+            title="Gambar & Wacana"
+            :value="number_format($stats['image'] ?? 0)"
+            subtitle="Stimulus Visual & Opsi"
+            icon="image"
+            color="success"
+        />
+        <x-cbt.stat-card
+            title="Dokumen / PDF"
+            :value="number_format($stats['document'] ?? 0)"
+            subtitle="Lampiran Pendukung"
+            icon="file-text"
+            color="warning"
+        />
     </div>
 
     <!-- Filter Bar -->

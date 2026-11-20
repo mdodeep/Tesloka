@@ -17,54 +17,30 @@
 
     <!-- Quick Stats Grid (Unified Metric Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Ruang Ujian</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->total()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Laboratorium &amp; Ruang CBT</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="building" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Daya Tampung</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->sum('capacity')) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Kapasitas Maksimal Siswa</div>
-                </div>
-                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Ruang Siap &amp; Aktif</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->where('is_active', true)->count()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Operasional Standar</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Terjadwal</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($rooms->sum('sessions_count')) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Alokasi Pelaksanaan</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="clock" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Ruang Ujian" 
+            value="{{ number_format($rooms->total()) }}" 
+            subtitle="Laboratorium &amp; Ruang CBT" 
+            icon="building" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Total Daya Tampung" 
+            value="{{ number_format($rooms->sum('capacity')) }}" 
+            subtitle="Kapasitas Maksimal Siswa" 
+            icon="users" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Ruang Siap &amp; Aktif" 
+            value="{{ number_format($rooms->where('is_active', true)->count()) }}" 
+            subtitle="Operasional Standar" 
+            icon="check-circle-2" 
+            color="success" />
+        <x-cbt.stat-card 
+            title="Sesi Terjadwal" 
+            value="{{ number_format($rooms->sum('sessions_count')) }}" 
+            subtitle="Alokasi Pelaksanaan" 
+            icon="clock" 
+            color="warning" />
     </div>
 
     <div class="p-4 bg-primary/5 border border-primary/20 rounded-xl flex items-start gap-3">
@@ -78,8 +54,8 @@
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[720px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-rooms">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode &amp; Nama Ruang</th>
                         <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Lokasi Fisik / Gedung</th>
                         <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kapasitas Maksimal</th>

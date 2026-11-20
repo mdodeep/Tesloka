@@ -17,54 +17,30 @@
 
     <!-- Quick Stats Grid (Unified Metric Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Sesi Ujian</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->total()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Sesi Terdaftar Sistem</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="clock" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Aktif</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->where('status', 'active')->count()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Sedang Berlangsung</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="activity" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Terjadwal</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->where('status', 'scheduled')->count()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Menunggu Pelaksanaan</div>
-                </div>
-                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
-                    <i data-lucide="calendar" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card rounded-xl border border-default-200/90 shadow-2xs hover:shadow-xs transition">
-            <div class="card-body p-4 sm:p-5 flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Sesi Selesai</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ number_format($sessions->where('status', 'finished')->count()) }}</div>
-                    <div class="text-xs text-default-400 mt-0.5">Arsip &amp; Penilaian</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="check-check" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Sesi Ujian" 
+            value="{{ number_format($sessions->total()) }}" 
+            subtitle="Sesi Terdaftar Sistem" 
+            icon="clock" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Sesi Aktif" 
+            value="{{ number_format($sessions->where('status', 'active')->count()) }}" 
+            subtitle="Sedang Berlangsung" 
+            icon="activity" 
+            color="success" />
+        <x-cbt.stat-card 
+            title="Sesi Terjadwal" 
+            value="{{ number_format($sessions->where('status', 'scheduled')->count()) }}" 
+            subtitle="Menunggu Pelaksanaan" 
+            icon="calendar" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Sesi Selesai" 
+            value="{{ number_format($sessions->where('status', 'finished')->count()) }}" 
+            subtitle="Arsip &amp; Penilaian" 
+            icon="check-check" 
+            color="warning" />
     </div>
 
     <!-- Filter Bar (Design System) -->
@@ -121,8 +97,8 @@
     <x-cbt.card>
         <div class="overflow-x-auto -mx-3.5 sm:mx-0 -my-3.5 sm:-my-5">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-sessions">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Kode & Nama Sesi</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Ujian & Mapel</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Ruang & Kapasitas</th>
@@ -147,13 +123,13 @@
                             <td class="py-3.5 px-4 whitespace-nowrap">
                                 <div class="flex items-center gap-1.5 font-semibold text-default-800 text-sm">
                                     @if($session->isOnline() || ! $session->exam_room_id)
-                                        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                                        <x-cbt.badge color="info">
                                             <i data-lucide="globe" class="size-3"></i> Daring
-                                        </span>
+                                        </x-cbt.badge>
                                     @else
-                                        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                        <x-cbt.badge color="primary">
                                             <i data-lucide="building" class="size-3"></i> Lab CBT
-                                        </span>
+                                        </x-cbt.badge>
                                     @endif
                                     <span>{{ $session->room->name ?? 'Daring (Online CBT)' }}</span>
                                 </div>

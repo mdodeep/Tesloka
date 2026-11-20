@@ -210,13 +210,13 @@
     <x-cbt.card title="Aktivitas & Log Audit Sistem Terbaru" subtitle="10 peristiwa akses dan modifikasi data terkini yang tercatat pada PostgreSQL">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[700px] text-left text-xs">
-                <thead>
-                    <tr>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Waktu (WIB)</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Pengguna</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Jenis Peristiwa</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 font-mono whitespace-nowrap">IP Address</th>
-                        <th class="px-3.5 py-2.5 font-semibold border-b border-default-200 whitespace-nowrap">Keterangan</th>
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
+                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Waktu (WIB)</th>
+                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Pengguna</th>
+                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Jenis Peristiwa</th>
+                        <th class="px-3.5 py-3 text-left font-mono whitespace-nowrap">IP Address</th>
+                        <th class="px-3.5 py-3 text-left whitespace-nowrap">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -225,9 +225,7 @@
                             <td class="px-3.5 py-2.5 border-y border-default-200 font-mono text-default-500 whitespace-nowrap">{{ $log->created_at->format('Y-m-d H:i:s') }}</td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 font-semibold text-default-800 whitespace-nowrap">{{ $log->user?->name ?? 'Sistem / Tamu' }}</td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 whitespace-nowrap">
-                                <span class="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-default-100 text-default-700 border border-default-200 whitespace-nowrap">
-                                    {{ $log->event_type }}
-                                </span>
+                                <x-cbt.badge color="slate">{{ $log->event_type }}</x-cbt.badge>
                             </td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 font-mono text-default-500 whitespace-nowrap">{{ $log->ip_address ?? '-' }}</td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 text-default-600 whitespace-nowrap">{{ $log->notes ?? '-' }}</td>

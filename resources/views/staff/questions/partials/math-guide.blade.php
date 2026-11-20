@@ -61,12 +61,12 @@
 
             <div class="overflow-x-auto border border-default-200 rounded-md">
                 <table class="w-full text-left text-xs border-collapse">
-                    <thead class="bg-default-50 border-b border-default-200 text-default-600 font-bold uppercase text-[10px]">
-                        <tr>
-                            <th class="p-2.5">Kategori / Nama</th>
-                            <th class="p-2.5">Sintaks KaTeX / LaTeX</th>
-                            <th class="p-2.5">Tampilan yang Dihasilkan</th>
-                            <th class="p-2.5 text-right">Aksi</th>
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
+                            <th class="p-2.5 whitespace-nowrap">Kategori / Nama</th>
+                            <th class="p-2.5 whitespace-nowrap">Sintaks KaTeX / LaTeX</th>
+                            <th class="p-2.5 whitespace-nowrap">Tampilan yang Dihasilkan</th>
+                            <th class="p-2.5 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-default-100 text-default-700">

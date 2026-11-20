@@ -19,10 +19,10 @@
             </button>
         </form>
     @else
-        <span class="inline-flex items-center px-3 py-1.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+        <x-cbt.badge color="success" class="text-xs font-bold px-3 py-1.5">
             <span class="size-2 rounded-full bg-emerald-500 mr-1.5"></span>
             Normal (Aktif)
-        </span>
+        </x-cbt.badge>
     @endif
 @endsection
 
@@ -44,13 +44,9 @@
                 </div>
             </div>
             @if($activeAttemptsCount > 0)
-                <span class="px-2.5 py-1 bg-rose-50 text-rose-700 text-[11px] font-semibold rounded-lg border border-rose-200">
-                    Perhatian Khusus
-                </span>
+                <x-cbt.badge color="danger">Perhatian Khusus</x-cbt.badge>
             @else
-                <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-semibold rounded-lg border border-emerald-200">
-                    Aman
-                </span>
+                <x-cbt.badge color="success">Aman</x-cbt.badge>
             @endif
         </div>
 

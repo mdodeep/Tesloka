@@ -166,8 +166,8 @@
                     </p>
                     <div class="overflow-x-auto -mx-2 sm:mx-0">
                         <table class="w-full min-w-[360px] text-left border-collapse">
-                            <thead>
-                                <tr class="border-b border-default-200 text-default-500 text-[11px] uppercase tracking-wider">
+                            <thead class="bg-default-50/75 border-y border-default-200/80">
+                                <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                                     <th class="py-2 px-3 font-semibold whitespace-nowrap">Tag Variabel</th>
                                     <th class="py-2 px-3 font-semibold whitespace-nowrap">Nilai Contoh (Sample Value)</th>
                                 </tr>

@@ -21,57 +21,30 @@
 
     <!-- Top Statistical Metric Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="file-text" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Ujian Terdaftar</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $stats['total_exams'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Paket Ujian Institusi</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Peserta Terevaluasi</span>
-                    <div class="text-2xl font-bold text-indigo-600 mt-0.5">{{ $stats['total_evaluated_students'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Lembar Jawaban Dinilai</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="trending-up" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Rata-rata Skor Institusi</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $stats['overall_avg_score'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Rerata Nilai Seluruh Ujian</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/20 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="award" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Tingkat Kelulusan</span>
-                    <div class="text-2xl font-bold text-emerald-600 mt-0.5">{{ $stats['pass_rate'] }}%</div>
-                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Tuntas Standar KKM</p>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Ujian Terdaftar" 
+            value="{{ $stats['total_exams'] }}" 
+            subtitle="Paket Ujian Institusi" 
+            icon="file-text" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Peserta Terevaluasi" 
+            value="{{ $stats['total_evaluated_students'] }}" 
+            subtitle="Lembar Jawaban Dinilai" 
+            icon="users" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Rata-rata Skor Institusi" 
+            value="{{ $stats['overall_avg_score'] }}" 
+            subtitle="Rerata Nilai Seluruh Ujian" 
+            icon="trending-up" 
+            color="teal" />
+        <x-cbt.stat-card 
+            title="Tingkat Kelulusan" 
+            value="{{ $stats['pass_rate'] }}%" 
+            subtitle="Tuntas Standar KKM" 
+            icon="award" 
+            color="success" />
     </div>
 
     <!-- Interactive Visual Analytics Charts (Grid 2x2) -->
@@ -98,8 +71,8 @@
     <x-cbt.card title="Daftar Paket Ujian & Analisis Psikometri Butir Soal">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-reports-overview">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode & Judul Ujian</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>
                         <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Standar KKM</th>
@@ -112,9 +85,9 @@
                     @forelse($allExams as $ex)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-4 font-medium whitespace-nowrap">
-                                <span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-mono text-[11px] font-bold uppercase mr-1">
+                                <x-cbt.badge color="primary" class="font-mono mr-1">
                                     {{ $ex->code }}
-                                </span>
+                                </x-cbt.badge>
                                 <span class="text-default-900 font-bold text-xs">{{ $ex->title }}</span>
                                 <div class="text-[11px] text-default-400 mt-0.5">
                                     Tipe: {{ ucfirst($ex->exam_type) }} &bull; Durasi: {{ $ex->duration_minutes }} Menit

@@ -86,8 +86,8 @@
         <x-cbt.card title="Karakteristik Psikometrik Butir Soal Ujian">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[780px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-exam-psychometrics">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="py-3 px-3.5 border-b border-default-200 w-12 text-center whitespace-nowrap">No</th>
                             <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Kode Soal</th>
                             <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Tipe Soal</th>
@@ -150,8 +150,8 @@
         <x-cbt.card title="Matriks Analisis Efektivitas Pengecoh / Distraktor (Distractor Analysis)" subtitle="Evaluasi pilihan ganda: Pola sebaran pilihan Kelompok Atas (Upper 27%) vs Kelompok Bawah (Lower 27%)">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[850px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-exam-distractors">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="py-3 px-3.5 border-b border-default-200 w-12 text-center whitespace-nowrap">No</th>
                             <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Kode &amp; Cuplikan Soal</th>
                             <th class="py-3 px-3.5 border-b border-default-200 text-center whitespace-nowrap">Opsi</th>
@@ -318,8 +318,8 @@
             @endslot
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-exam-remedials">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="py-3 px-3.5 border-b border-default-200 w-12 text-center whitespace-nowrap">No</th>
                             <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">Nama Peserta</th>
                             <th class="py-3 px-3.5 border-b border-default-200 whitespace-nowrap">NISN</th>

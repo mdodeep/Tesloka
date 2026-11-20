@@ -92,8 +92,8 @@
 
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-bank-questions">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Kode & Versi</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Tipe Soal</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Konten Pertanyaan</th>

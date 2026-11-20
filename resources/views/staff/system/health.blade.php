@@ -97,8 +97,8 @@
     <x-cbt.card title="Audit Kesiapan Sistem Sebelum Production">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-system-health">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Komponen Diperiksa</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kategori</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Detail & Hasil Diagnosis</th>
@@ -113,9 +113,9 @@
                             </td>
                             <td class="py-3 px-4 whitespace-nowrap">
                                 @if($item['critical'])
-                                    <span class="px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded text-[10px] font-bold">Wajib (Kritis)</span>
+                                    <x-cbt.badge color="danger">Wajib (Kritis)</x-cbt.badge>
                                 @else
-                                    <span class="px-2 py-0.5 bg-default-100 text-default-600 rounded text-[10px] font-medium">Standar</span>
+                                    <x-cbt.badge color="secondary">Standar</x-cbt.badge>
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-default-600 min-w-[200px]">
@@ -123,18 +123,18 @@
                             </td>
                             <td class="py-3 px-4 text-right whitespace-nowrap">
                                 @if($item['status'] === 'passed')
-                                    <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-lg inline-flex items-center gap-1">
-                                        <i data-lucide="check" class="size-3.5 text-emerald-600"></i>
+                                    <x-cbt.badge color="success">
+                                        <i data-lucide="check" class="size-3.5 mr-1 inline-block"></i>
                                         Lolos
-                                    </span>
+                                    </x-cbt.badge>
                                 @elseif($item['status'] === 'warning')
-                                    <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-[11px] font-bold rounded-lg inline-flex items-center gap-1">
+                                    <x-cbt.badge color="warning">
                                         Peringatan
-                                    </span>
+                                    </x-cbt.badge>
                                 @else
-                                    <span class="px-2.5 py-1 bg-rose-100 text-rose-800 text-[11px] font-bold rounded-lg inline-flex items-center gap-1">
+                                    <x-cbt.badge color="danger">
                                         Gagal Kritis
-                                    </span>
+                                    </x-cbt.badge>
                                 @endif
                             </td>
                         </tr>

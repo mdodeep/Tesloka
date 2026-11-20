@@ -24,57 +24,30 @@ Manajemen Sesi & Perangkat Aktif
 
     <!-- Metric Overview Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="shield" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Sesi</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $totalCount }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Seluruh Perangkat</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Aktif Sekarang</span>
-                    <div class="text-2xl font-bold text-emerald-700 mt-0.5">{{ $activeCount }}</div>
-                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Sesi Terotentikasi</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-amber-200 bg-amber-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-amber-100 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="monitor" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block truncate">Perangkat Lain</span>
-                    <div class="text-2xl font-bold text-amber-700 mt-0.5">{{ $otherActiveCount ?? 0 }}</div>
-                    <p class="text-[11px] text-amber-600 mt-0.5 truncate">Di Luar Peramban Ini</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-default-100 border border-default-200 text-default-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="log-out" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Dicabut Keluar</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $revokedCount }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Sesi Telah Ditutup</p>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Sesi" 
+            value="{{ $totalCount }}" 
+            subtitle="Seluruh Perangkat" 
+            icon="shield" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Aktif Sekarang" 
+            value="{{ $activeCount }}" 
+            subtitle="Sesi Terotentikasi" 
+            icon="check-circle-2" 
+            color="success" />
+        <x-cbt.stat-card 
+            title="Perangkat Lain" 
+            value="{{ $otherActiveCount ?? 0 }}" 
+            subtitle="Di Luar Peramban Ini" 
+            icon="monitor" 
+            color="warning" />
+        <x-cbt.stat-card 
+            title="Dicabut Keluar" 
+            value="{{ $revokedCount }}" 
+            subtitle="Sesi Telah Ditutup" 
+            icon="log-out" 
+            color="secondary" />
     </div>
 
     <!-- Daftar Perangkat Sesi Aktif -->

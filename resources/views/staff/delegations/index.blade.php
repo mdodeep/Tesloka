@@ -9,57 +9,30 @@
 <div class="space-y-6">
     <!-- Metric Overview Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="send" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Delegasi Diberikan</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $delegationsGiven->count() }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Wewenang Dilimpahkan</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="inbox" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Delegasi Diterima</span>
-                    <div class="text-2xl font-bold text-indigo-600 mt-0.5">{{ $delegationsReceived->count() }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Kewenangan Tambahan</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Aktif Berlaku</span>
-                    <div class="text-2xl font-bold text-emerald-700 mt-0.5">{{ $delegationsGiven->where('status', 'active')->count() + $delegationsReceived->where('status', 'active')->count() }}</div>
-                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Dapat Digunakan</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-default-100 border border-default-200 text-default-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="clock" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Riwayat Nonaktif</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $delegationsGiven->where('status', '!=', 'active')->count() + $delegationsReceived->where('status', '!=', 'active')->count() }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Dicabut / Kedaluwarsa</p>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Delegasi Diberikan" 
+            value="{{ $delegationsGiven->count() }}" 
+            subtitle="Wewenang Dilimpahkan" 
+            icon="send" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Delegasi Diterima" 
+            value="{{ $delegationsReceived->count() }}" 
+            subtitle="Kewenangan Tambahan" 
+            icon="inbox" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Aktif Berlaku" 
+            value="{{ $delegationsGiven->where('status', 'active')->count() + $delegationsReceived->where('status', 'active')->count() }}" 
+            subtitle="Dapat Digunakan" 
+            icon="check-circle-2" 
+            color="success" />
+        <x-cbt.stat-card 
+            title="Riwayat Nonaktif" 
+            value="{{ $delegationsGiven->where('status', '!=', 'active')->count() + $delegationsReceived->where('status', '!=', 'active')->count() }}" 
+            subtitle="Dicabut / Kedaluwarsa" 
+            icon="clock" 
+            color="secondary" />
     </div>
 
     <div class="flex items-center justify-end">
@@ -73,8 +46,8 @@
     <x-cbt.card title="Delegasi yang Anda Berikan" subtitle="Daftar wewenang yang Anda limpahkan kepada rekan sejawat">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-delegations-given">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Penerima Wewenang</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Scope)</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Masa Berlaku</th>
@@ -133,8 +106,8 @@
     <x-cbt.card title="Delegasi yang Anda Terima dari Staf Lain" subtitle="Kewenangan tambahan yang dilimpahkan rekan sejawat kepada Anda">
         <div class="overflow-x-auto -mx-3.5 sm:-mx-6 -my-4">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-delegations-received">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3.5 px-6 border-b border-default-200 whitespace-nowrap">Pemberi Wewenang</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Scope)</th>
                         <th class="py-3.5 px-4 border-b border-default-200 whitespace-nowrap">Masa Berlaku</th>

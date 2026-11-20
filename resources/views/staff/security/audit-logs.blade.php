@@ -17,57 +17,30 @@
 
     <!-- Metric Overview Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="file-text" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Log Audit</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $logs->total() }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Rekaman Aktivitas Sistem</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-rose-200 bg-rose-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-rose-100 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="shield-alert" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-rose-700 uppercase tracking-wider block truncate">Insiden Keamanan</span>
-                    <div class="text-2xl font-bold text-rose-700 mt-0.5">{{ $securityIncidentsCount ?? 0 }}</div>
-                    <p class="text-[11px] text-rose-600 mt-0.5 truncate">Peristiwa Perlu Atensi</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Pengguna Terlibat</span>
-                    <div class="text-2xl font-bold text-indigo-600 mt-0.5">{{ $users->count() }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Aktor Staf & Pengawas</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="activity" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Kategori Aktif</span>
-                    <div class="text-2xl font-bold text-teal-600 mt-0.5">{{ ucfirst($activeTab ?? 'all') }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Filter Tab Forensik</p>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Log Audit" 
+            value="{{ $logs->total() }}" 
+            subtitle="Rekaman Aktivitas Sistem" 
+            icon="file-text" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Insiden Keamanan" 
+            value="{{ $securityIncidentsCount ?? 0 }}" 
+            subtitle="Peristiwa Perlu Atensi" 
+            icon="shield-alert" 
+            color="danger" />
+        <x-cbt.stat-card 
+            title="Pengguna Terlibat" 
+            value="{{ $users->count() }}" 
+            subtitle="Aktor Staf &amp; Pengawas" 
+            icon="users" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Kategori Aktif" 
+            value="{{ ucfirst($activeTab ?? 'all') }}" 
+            subtitle="Filter Tab Forensik" 
+            icon="activity" 
+            color="teal" />
     </div>
 
     <!-- Forensic Filter Tabs -->
@@ -152,8 +125,8 @@
     <x-cbt.card title="Daftar Rekaman Audit (Total {{ $logs->total() }})">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-audit-logs">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3 px-4 border-b border-default-200 w-12 text-center whitespace-nowrap">ID</th>
                         <th class="py-3 px-4 border-b border-default-200 w-36 whitespace-nowrap">Waktu Kejadian</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Tipe Event</th>

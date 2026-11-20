@@ -65,38 +65,20 @@
 
     <!-- Statistical Metrics Overview -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div class="bg-white border border-default-200 rounded p-4 shadow-sm text-center">
-            <span class="block text-2xl font-black text-default-800">{{ $stats['total_participants'] }}</span>
-            <span class="text-xs text-default-500 font-medium">Total Peserta</span>
-        </div>
-        <div class="bg-white border border-emerald-200 rounded p-4 shadow-sm text-center">
-            <span class="block text-2xl font-black text-emerald-600">{{ number_format($stats['highest_score'], 1) }}</span>
-            <span class="text-xs text-emerald-700 font-medium">Skor Tertinggi</span>
-        </div>
-        <div class="bg-white border border-rose-200 rounded p-4 shadow-sm text-center">
-            <span class="block text-2xl font-black text-rose-600">{{ number_format($stats['lowest_score'], 1) }}</span>
-            <span class="text-xs text-rose-700 font-medium">Skor Terendah</span>
-        </div>
-        <div class="bg-white border border-blue-200 rounded p-4 shadow-sm text-center">
-            <span class="block text-2xl font-black text-blue-600">{{ number_format($stats['average_score'], 1) }}</span>
-            <span class="text-xs text-blue-700 font-medium">Nilai Rata-rata</span>
-        </div>
-        <div class="bg-white border border-emerald-200 rounded p-4 shadow-sm text-center">
-            <span class="block text-2xl font-black text-emerald-600">{{ $stats['passed_count'] }}</span>
-            <span class="text-xs text-emerald-700 font-medium">Tuntas KKM</span>
-        </div>
-        <div class="bg-white border border-amber-200 rounded p-4 shadow-sm text-center">
-            <span class="block text-2xl font-black text-amber-600">{{ $stats['pass_percentage'] }}%</span>
-            <span class="text-xs text-amber-700 font-medium">Persentase Lulus</span>
-        </div>
+        <x-cbt.stat-card title="Total Peserta" :value="$stats['total_participants']" icon="users" color="secondary" />
+        <x-cbt.stat-card title="Skor Tertinggi" :value="number_format($stats['highest_score'], 1)" icon="award" color="success" />
+        <x-cbt.stat-card title="Skor Terendah" :value="number_format($stats['lowest_score'], 1)" icon="alert-circle" color="danger" />
+        <x-cbt.stat-card title="Nilai Rata-rata" :value="number_format($stats['average_score'], 1)" icon="bar-chart-3" color="primary" />
+        <x-cbt.stat-card title="Tuntas KKM" :value="$stats['passed_count']" icon="check-circle" color="success" />
+        <x-cbt.stat-card title="Persentase Lulus" :value="$stats['pass_percentage'] . '%'" icon="percent" color="warning" />
     </div>
 
     <!-- Results Table with Ranking -->
     <x-cbt.card title="Rekapitulasi Nilai & Pemeringkatan Peserta (Ranking)">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-grading-recap">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3 px-4 border-b border-default-200 text-center w-12 whitespace-nowrap">Peringkat</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama Peserta</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">NISN / Username</th>
@@ -134,19 +116,19 @@
                                 {{ number_format($res->percentage, 1) }}%
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
-                                <span class="px-2 py-0.5 rounded font-black font-mono {{ $res->final_grade_letter === 'A' ? 'bg-emerald-100 text-emerald-800' : ($res->final_grade_letter === 'B' ? 'bg-blue-100 text-blue-800' : 'bg-default-100 text-default-700') }}">
+                                <x-cbt.badge :color="$res->final_grade_letter === 'A' ? 'success' : ($res->final_grade_letter === 'B' ? 'info' : 'secondary')">
                                     {{ $res->final_grade_letter ?? '-' }}
-                                </span>
+                                </x-cbt.badge>
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
                                 @if($res->is_passed)
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                    <x-cbt.badge color="success">
                                         TUNTAS
-                                    </span>
+                                    </x-cbt.badge>
                                 @else
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
+                                    <x-cbt.badge color="danger">
                                         REMEDIAL
-                                    </span>
+                                    </x-cbt.badge>
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-right whitespace-nowrap">

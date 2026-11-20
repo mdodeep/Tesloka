@@ -15,52 +15,32 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- Quick Stats Grid (Metric Cards) -->
+    <!-- Quick Stats Grid (Unified Metric Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Total Bank Soal</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['total_banks'] ?? $banks->total() }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="layers" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Butir Soal Terdaftar</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['total_questions'] ?? 0 }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="help-circle" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Stimulus Media</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['total_stimuli'] ?? 0 }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
-                    <i data-lucide="image" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Bank Soal Aktif</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $stats['active_banks'] ?? 0 }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Bank Soal" 
+            value="{{ $stats['total_banks'] ?? $banks->total() }}" 
+            subtitle="Paket Bank Soal" 
+            icon="layers" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Butir Soal Terdaftar" 
+            value="{{ $stats['total_questions'] ?? 0 }}" 
+            subtitle="Butir Soal Multi-Tipe" 
+            icon="help-circle" 
+            color="teal" />
+        <x-cbt.stat-card 
+            title="Stimulus Media" 
+            value="{{ $stats['total_stimuli'] ?? 0 }}" 
+            subtitle="Teks, Gambar &amp; Audio" 
+            icon="image" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Bank Soal Aktif" 
+            value="{{ $stats['active_banks'] ?? 0 }}" 
+            subtitle="Siap Digunakan Ujian" 
+            icon="check-circle-2" 
+            color="warning" />
     </div>
 
     <!-- Filter & View Switcher Card -->
@@ -123,8 +103,8 @@
         <x-cbt.card title="Daftar Bank Soal Terdaftar" subtitle="Kelola butir soal, stimulus bacaan/audio, dan ekspor duplikasi bank soal">
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs text-default-600" id="table-question-banks">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="px-4 py-3 border-b border-default-200 w-36 whitespace-nowrap">Kode Bank</th>
                             <th class="px-4 py-3 border-b border-default-200 whitespace-nowrap">Nama Bank Soal &amp; Deskripsi</th>
                             <th class="px-4 py-3 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>

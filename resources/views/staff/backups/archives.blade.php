@@ -19,8 +19,8 @@
     <x-cbt.card title="Daftar Arsip Ujian Resmi (Total {{ $archives->total() }})">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-backup-archives">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode Arsip</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Judul Ujian</th>
                         <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">Waktu Diarsipkan</th>
@@ -51,13 +51,9 @@
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
                                 @if($arc->legal_hold)
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                                        Legal Hold Aktif
-                                    </span>
+                                    <x-cbt.badge color="warning">Legal Hold Aktif</x-cbt.badge>
                                 @else
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-default-100 text-default-600">
-                                        Standar (5 Thn)
-                                    </span>
+                                    <x-cbt.badge color="secondary">Standar (5 Thn)</x-cbt.badge>
                                 @endif
                             </td>
                             <td class="py-3 px-4 font-mono text-[10px] text-default-500 truncate max-w-xs whitespace-nowrap" title="{{ $arc->manifest_checksum }}">

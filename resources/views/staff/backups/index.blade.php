@@ -89,8 +89,8 @@ Manajemen Cadangan & Pemulihan Sistem
     <x-cbt.card title="Riwayat Berkas Cadangan Sistem">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-backups">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Berkas</th>
                         <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Tipe</th>
                         <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Ukuran</th>
@@ -107,9 +107,9 @@ Manajemen Cadangan & Pemulihan Sistem
                                 <div class="text-[10px] text-default-400 font-normal font-sans">{{ $b->created_at->format('d/m/Y H:i:s') }} WIB</div>
                             </td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 text-center whitespace-nowrap">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold uppercase {{ $b->backup_type === 'database' ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-purple-500/10 text-purple-700 border border-purple-200' }}">
-                                    {{ $b->backup_type }}
-                                </span>
+                                <x-cbt.badge :color="$b->backup_type === 'database' ? 'primary' : 'purple'">
+                                    {{ strtoupper($b->backup_type) }}
+                                </x-cbt.badge>
                             </td>
                             <td class="px-3.5 py-2.5 border-y border-default-200 text-center font-mono font-semibold text-default-700 whitespace-nowrap">
                                 {{ $b->formatted_size }}

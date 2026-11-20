@@ -266,8 +266,8 @@
             <x-cbt.card title="Daftar Peserta Ujian">
                 <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                     <table class="w-full min-w-[760px] text-left text-xs text-default-600">
-                        <thead class="bg-default-50 font-semibold text-default-500 border-b border-default-200 uppercase text-[11px]">
-                            <tr>
+                        <thead class="bg-default-50/75 border-y border-default-200/80">
+                            <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                                 <th class="py-3 px-3.5 whitespace-nowrap">No. Kursi</th>
                                 <th class="py-3 px-3.5 whitespace-nowrap">Nama Siswa / NISN</th>
                                 <th class="py-3 px-3.5 whitespace-nowrap">Paket Soal</th>

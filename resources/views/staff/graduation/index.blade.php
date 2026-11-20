@@ -21,70 +21,36 @@
 
     <!-- Metric Overview Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Dinilai</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $stats['total_evaluated'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Seluruh Nilai Akhir</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Lulus / Tuntas KKM</span>
-                    <div class="text-2xl font-bold text-emerald-700 mt-0.5">{{ $stats['total_passed'] }}</div>
-                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Memenuhi KKM</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-rose-200 bg-rose-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-rose-100 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="alert-triangle" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-rose-700 uppercase tracking-wider block truncate">Tidak Lulus / Remedial</span>
-                    <div class="text-2xl font-bold text-rose-700 mt-0.5">{{ $stats['total_remedial'] }}</div>
-                    <p class="text-[11px] text-rose-600 mt-0.5 truncate">Di Bawah Batas KKM</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="percent" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Tingkat Lulus</span>
-                    <div class="text-2xl font-bold text-teal-600 mt-0.5">{{ $stats['pass_rate'] }}%</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Rasio Lulus Institusi</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="trending-up" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Skor Rata-rata</span>
-                    <div class="text-2xl font-bold text-indigo-600 mt-0.5">{{ $stats['avg_score'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Rerata Nilai Siswa</p>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Dinilai" 
+            value="{{ $stats['total_evaluated'] }}" 
+            subtitle="Seluruh Nilai Akhir" 
+            icon="users" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Lulus / Tuntas KKM" 
+            value="{{ $stats['total_passed'] }}" 
+            subtitle="Memenuhi KKM" 
+            icon="check-circle-2" 
+            color="success" />
+        <x-cbt.stat-card 
+            title="Tidak Lulus / Remedial" 
+            value="{{ $stats['total_remedial'] }}" 
+            subtitle="Di Bawah Batas KKM" 
+            icon="alert-triangle" 
+            color="danger" />
+        <x-cbt.stat-card 
+            title="Tingkat Lulus" 
+            value="{{ $stats['pass_rate'] }}%" 
+            subtitle="Rasio Lulus Institusi" 
+            icon="percent" 
+            color="teal" />
+        <x-cbt.stat-card 
+            title="Skor Rata-rata" 
+            value="{{ $stats['avg_score'] }}" 
+            subtitle="Rerata Nilai Siswa" 
+            icon="trending-up" 
+            color="info" />
     </div>
 
     <!-- Visual Charts: Donut Rasio Kelulusan & Sebaran Mutu Nilai -->
@@ -145,8 +111,8 @@
     <x-cbt.card title="Rekapitulasi Hasil Kelulusan & Yudisium Peserta">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[850px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-graduation">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3 px-4 border-b border-default-200 text-center w-12 whitespace-nowrap">No</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama Siswa / Peserta</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Ujian & Mata Pelajaran</th>
@@ -190,9 +156,9 @@
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
-                                <span class="px-2 py-0.5 rounded font-black font-mono {{ $res->final_grade_letter === 'A' ? 'bg-emerald-100 text-emerald-800' : ($res->final_grade_letter === 'B' ? 'bg-blue-100 text-blue-800' : ($res->final_grade_letter === 'C' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800')) }}">
+                                <x-cbt.badge color="{{ $res->final_grade_letter === 'A' ? 'success' : ($res->final_grade_letter === 'B' ? 'info' : ($res->final_grade_letter === 'C' ? 'warning' : 'danger')) }}" class="font-black font-mono">
                                     {{ $res->final_grade_letter ?? '-' }}
-                                </span>
+                                </x-cbt.badge>
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
                                 @if($res->exam && (!($res->exam->has_passing_grade ?? true) || $res->exam->isCertification()))

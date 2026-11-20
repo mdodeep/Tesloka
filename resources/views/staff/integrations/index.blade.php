@@ -21,57 +21,30 @@
 
     <!-- Metric Overview Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="key" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total API Keys</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $apiKeys->count() }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Kunci Akses Terdaftar</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-emerald-200 bg-emerald-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="shield-check" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider block truncate">Kunci Aktif</span>
-                    <div class="text-2xl font-bold text-emerald-700 mt-0.5">{{ $apiKeys->filter->isValid()->count() }}</div>
-                    <p class="text-[11px] text-emerald-600 mt-0.5 truncate">Berlaku Valid</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="zap" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Webhook</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $webhooks->count() }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Langganan Peristiwa</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-indigo-200 bg-indigo-50/30 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-indigo-100 border border-indigo-200 text-indigo-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="activity" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-indigo-700 uppercase tracking-wider block truncate">Webhook Aktif</span>
-                    <div class="text-2xl font-bold text-indigo-700 mt-0.5">{{ $webhooks->where('is_active', true)->count() }}</div>
-                    <p class="text-[11px] text-indigo-600 mt-0.5 truncate">Siaran Siap Kirim</p>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total API Keys" 
+            value="{{ $apiKeys->count() }}" 
+            subtitle="Kunci Akses Terdaftar" 
+            icon="key" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Kunci Aktif" 
+            value="{{ $apiKeys->filter->isValid()->count() }}" 
+            subtitle="Berlaku Valid" 
+            icon="shield-check" 
+            color="success" />
+        <x-cbt.stat-card 
+            title="Total Webhook" 
+            value="{{ $webhooks->count() }}" 
+            subtitle="Langganan Peristiwa" 
+            icon="zap" 
+            color="teal" />
+        <x-cbt.stat-card 
+            title="Webhook Aktif" 
+            value="{{ $webhooks->where('is_active', true)->count() }}" 
+            subtitle="Siaran Siap Kirim" 
+            icon="activity" 
+            color="info" />
     </div>
 
     @if(session('error'))
@@ -118,8 +91,8 @@
 
             <div class="overflow-x-auto flex-1">
                 <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-api-keys">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama & Prefix</th>
                             <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Cakupan (Abilities)</th>
                             <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status / Kadaluwarsa</th>
@@ -210,8 +183,8 @@
 
             <div class="overflow-x-auto flex-1">
                 <table class="w-full min-w-[700px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-webhooks">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Nama & URL Endpoint</th>
                             <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Peristiwa</th>
                             <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Status</th>

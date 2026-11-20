@@ -8,51 +8,31 @@
 @section('content')
 <div class="space-y-6">
     <!-- Quick Stats Grid (Metric Cards) -->
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Tahun Ajaran</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $years->count() }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="calendar" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Jurusan / Prodi</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $departments->count() }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
-                    <i data-lucide="building" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Rombel / Kelas</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $classes->total() }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body flex items-center justify-between">
-                <div>
-                    <div class="text-xs text-default-400 font-semibold uppercase tracking-wider">Mata Pelajaran</div>
-                    <div class="text-2xl font-bold text-default-800 mt-1">{{ $subjects->total() }}</div>
-                </div>
-                <div class="size-11 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
-                    <i data-lucide="book-open" class="size-5.5"></i>
-                </div>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <x-cbt.stat-card 
+            title="Tahun Ajaran" 
+            value="{{ $years->count() }}" 
+            subtitle="Tahun Ajaran Aktif" 
+            icon="calendar" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Jurusan / Prodi" 
+            value="{{ $departments->count() }}" 
+            subtitle="Program Studi Aktif" 
+            icon="building" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Rombel / Kelas" 
+            value="{{ $classes->total() }}" 
+            subtitle="Rombongan Belajar" 
+            icon="users" 
+            color="teal" />
+        <x-cbt.stat-card 
+            title="Mata Pelajaran" 
+            value="{{ $subjects->total() }}" 
+            subtitle="Kurikulum Terdaftar" 
+            icon="book-open" 
+            color="warning" />
     </div>
 
     <!-- Navigation Tabs -->
@@ -96,8 +76,8 @@
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-years">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Tahun Ajaran</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Rentang Periode</th>
                             <th class="px-3.5 py-3 border-b border-default-200 text-center whitespace-nowrap">Kelas Terkait</th>
@@ -163,8 +143,8 @@
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-terms">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Semester</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
@@ -271,8 +251,8 @@
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-departments">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Jurusan / Prodi</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jenjang</th>
@@ -350,8 +330,8 @@
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-classes">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Kelas</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Tahun Ajaran</th>
@@ -462,8 +442,8 @@
 
             <div class="overflow-x-auto -mx-3.5 sm:mx-0">
                 <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-subjects">
-                    <thead class="bg-default-150">
-                        <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                    <thead class="bg-default-50/75 border-y border-default-200/80">
+                        <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Kode</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Nama Mata Pelajaran</th>
                             <th class="px-3.5 py-3 border-b border-default-200 whitespace-nowrap">Jurusan</th>
@@ -1106,8 +1086,8 @@
                 <div class="border border-default-200 rounded-md overflow-hidden">
                     <div class="overflow-x-auto max-h-64 overflow-y-auto">
                         <table class="w-full text-left text-xs divide-y divide-default-200" id="table-enrolled-students">
-                            <thead class="bg-default-100 sticky top-0 z-10">
-                                <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap">
+                            <thead class="bg-default-50/90 border-y border-default-200/80 sticky top-0 z-10">
+                                <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                                     <th class="px-3 py-2 border-b border-default-200 text-center w-10">No</th>
                                     <th class="px-3 py-2 border-b border-default-200">Nama Siswa</th>
                                     <th class="px-3 py-2 border-b border-default-200">NIM / NISN</th>

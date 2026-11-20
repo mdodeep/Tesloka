@@ -21,70 +21,36 @@
 
     <!-- Metric Overview Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
-                    <i data-lucide="file-text" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Total Ujian</span>
-                    <div class="text-2xl font-bold text-default-800 mt-0.5">{{ $stats['total_exams'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Seluruh Paket Terdaftar</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Ujian Ada Nilai</span>
-                    <div class="text-2xl font-bold text-indigo-600 mt-0.5">{{ $stats['exams_with_results'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Memiliki Lembar Jawaban</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Peserta Dinilai</span>
-                    <div class="text-2xl font-bold text-emerald-600 mt-0.5">{{ $stats['total_graded_participants'] }}</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Nilai Akhir Ditetapkan</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-amber-200 bg-amber-50/40 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-amber-100 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
-                    <i data-lucide="edit-3" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider block truncate">Antrean Koreksi Esai</span>
-                    <div class="text-2xl font-bold text-amber-700 mt-0.5">{{ $stats['pending_essays'] }}</div>
-                    <p class="text-[11px] text-amber-600 mt-0.5 truncate">Perlu Penilaian Manual</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card rounded-xl border border-default-200/90 p-4 shadow-2xs">
-            <div class="flex items-center gap-3">
-                <div class="size-11 rounded-lg bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="award" class="size-5"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="text-xs font-semibold text-default-400 uppercase tracking-wider block truncate">Kelulusan Rerata</span>
-                    <div class="text-2xl font-bold text-teal-600 mt-0.5">{{ $stats['overall_pass_rate'] }}%</div>
-                    <p class="text-[11px] text-default-500 mt-0.5 truncate">Tuntas KKM Institusi</p>
-                </div>
-            </div>
-        </div>
+        <x-cbt.stat-card 
+            title="Total Ujian" 
+            value="{{ $stats['total_exams'] }}" 
+            subtitle="Seluruh Paket Terdaftar" 
+            icon="file-text" 
+            color="primary" />
+        <x-cbt.stat-card 
+            title="Ujian Ada Nilai" 
+            value="{{ $stats['exams_with_results'] }}" 
+            subtitle="Memiliki Lembar Jawaban" 
+            icon="check-circle-2" 
+            color="info" />
+        <x-cbt.stat-card 
+            title="Peserta Dinilai" 
+            value="{{ $stats['total_graded_participants'] }}" 
+            subtitle="Nilai Akhir Ditetapkan" 
+            icon="users" 
+            color="teal" />
+        <x-cbt.stat-card 
+            title="Antrean Koreksi Esai" 
+            value="{{ $stats['pending_essays'] }}" 
+            subtitle="Perlu Penilaian Manual" 
+            icon="edit-3" 
+            color="warning" />
+        <x-cbt.stat-card 
+            title="Kelulusan Rerata" 
+            value="{{ $stats['overall_pass_rate'] }}%" 
+            subtitle="Tuntas KKM Institusi" 
+            icon="award" 
+            color="success" />
     </div>
 
     @if($stats['pending_essays'] > 0)
@@ -106,8 +72,8 @@
     <x-cbt.card title="Daftar Ujian & Status Penilaian" id="tabel-ujian">
         <div class="overflow-x-auto -mx-3.5 sm:mx-0">
             <table class="w-full min-w-[760px] divide-y divide-default-200 dark:divide-white/14 text-left text-xs" id="table-grading-overview">
-                <thead class="bg-default-150">
-                    <tr class="text-xs uppercase font-semibold text-default-600 whitespace-nowrap tracking-wider">
+                <thead class="bg-default-50/75 border-y border-default-200/80">
+                    <tr class="text-[11px] font-semibold uppercase tracking-wider text-default-500 whitespace-nowrap">
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Kode & Judul Ujian</th>
                         <th class="py-3 px-4 border-b border-default-200 whitespace-nowrap">Mata Pelajaran</th>
                         <th class="py-3 px-4 border-b border-default-200 text-center whitespace-nowrap">KKM</th>
@@ -121,9 +87,9 @@
                     @forelse($exams as $exam)
                         <tr class="hover:bg-default-50/80 transition">
                             <td class="py-3.5 px-4 font-medium whitespace-nowrap">
-                                <span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-mono text-[11px] font-bold uppercase mr-1">
+                                <x-cbt.badge color="primary" class="font-mono mr-1">
                                     {{ $exam->code }}
-                                </span>
+                                </x-cbt.badge>
                                 <span class="text-default-900 font-bold text-xs">{{ $exam->title }}</span>
                                 <div class="text-[11px] text-default-400 mt-0.5">
                                     Tipe: {{ ucfirst($exam->exam_type) }} &bull; Durasi: {{ $exam->duration_minutes }} Menit

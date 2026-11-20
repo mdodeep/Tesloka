@@ -1,11 +1,9 @@
 <?php
 /*
- * Protected by PHP Obfuscator
- * Author: Muhammad Dody Pratama
- * Email: me@dodypratama.my.id
- * Version: 1.0.0
- * Timestamp: 2026-11-16T17:23:07+00:00
- * Integrity: 6257913a8058ab37f849ade4e0e882bb7abc5dd484c35a27bbda9f73d24f4594
+ * Protected by Obfuscatorin PHP
+ * Author: Mdodeep
+ * Timestamp: 2026-11-20T10:38:07+00:00
+ * Integrity: 5e0e893ee5dd0afda9539acb131b8b63141c4849a23f55bdef12f79d7ec768ea
  */
 
 namespace App\Http\Controllers;abstract class Controller{}

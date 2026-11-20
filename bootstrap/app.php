@@ -7,6 +7,7 @@ use App\Http\Middleware\EnsureProfileComplete;
 use App\Http\Middleware\EnsureSafeExamBrowser;
 use App\Http\Middleware\EnsureUserActive;
 use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -33,8 +34,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->replace(
-            \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
-            \App\Http\Middleware\PreventRequestsDuringMaintenance::class
+            Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
+            PreventRequestsDuringMaintenance::class
         );
 
         $middleware->alias([

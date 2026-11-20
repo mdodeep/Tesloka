@@ -189,7 +189,7 @@ class Exam extends Model
                 // Periksa ketersediaan kunci jawaban pada soal objektif
                 foreach ($availableQuestions as $q) {
                     if (in_array($q->type, ['multiple_choice', 'true_false'])) {
-                        $hasCorrect = $q->options->contains(fn($opt) => (bool) $opt->is_correct);
+                        $hasCorrect = $q->options->contains(fn ($opt) => (bool) $opt->is_correct);
                         if (! $hasCorrect) {
                             $criticalErrors[] = "Soal {$q->code} dalam bank '{$bank->name}' belum memiliki kunci jawaban benar.";
                         }
@@ -211,8 +211,8 @@ class Exam extends Model
 
         $hasBaseConfig = ! empty($this->title) && $this->duration_minutes > 0 && (! $this->has_passing_grade || ($this->passing_grade >= 0 && $this->passing_grade <= 100));
         $hasBlueprints = $blueprints->isNotEmpty() && ($totalBlueprintQuestions ?? 0) > 0;
-        $hasSufficientQuota = $blueprints->isNotEmpty() && ! collect($criticalErrors)->contains(fn($err) => str_contains($err, 'kurang dari kebutuhan blueprint'));
-        $hasAnswerKeys = ! collect($criticalErrors)->contains(fn($err) => str_contains($err, 'belum memiliki kunci jawaban benar'));
+        $hasSufficientQuota = $blueprints->isNotEmpty() && ! collect($criticalErrors)->contains(fn ($err) => str_contains($err, 'kurang dari kebutuhan blueprint'));
+        $hasAnswerKeys = ! collect($criticalErrors)->contains(fn ($err) => str_contains($err, 'belum memiliki kunci jawaban benar'));
         $hasPackages = $this->packages()->exists();
 
         $checklist = [
@@ -267,7 +267,7 @@ class Exam extends Model
 
         DB::transaction(function () use ($packageCount, $blueprints, $packageLetters, &$createdPackages, $shuffleOptions) {
             for ($pIdx = 0; $pIdx < $packageCount; $pIdx++) {
-                $packageLetter = $packageLetters[$pIdx] ?? ('V' . ($pIdx + 1));
+                $packageLetter = $packageLetters[$pIdx] ?? ('V'.($pIdx + 1));
                 $packageCode = "{$this->code}-PKG-{$packageLetter}";
 
                 // Hapus paket dengan kode yang sama jika ada sebelumnya untuk regenerasi bersih
@@ -384,7 +384,7 @@ class Exam extends Model
             'published_at',
         ]);
 
-        $clone->code = 'EXAM-' . strtoupper(Str::random(6));
+        $clone->code = 'EXAM-'.strtoupper(Str::random(6));
         $clone->title = "{$this->title} (Salinan)";
         $clone->status = 'draft';
         $clone->save();

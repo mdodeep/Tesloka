@@ -161,4 +161,3 @@ class InstallCommand extends Command
         }
     }
 }
-

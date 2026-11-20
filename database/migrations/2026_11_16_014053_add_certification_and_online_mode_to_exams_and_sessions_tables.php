@@ -41,7 +41,7 @@ return new class extends Migration
         // Jadikan exam_room_id nullable untuk mengakomodasi ujian online / jarak jauh
         try {
             DB::statement('ALTER TABLE exam_sessions ALTER COLUMN exam_room_id DROP NOT NULL;');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Fallback schema builder jika bukan PostgreSQL
             Schema::table('exam_sessions', function (Blueprint $table) {
                 $table->unsignedBigInteger('exam_room_id')->nullable()->change();
@@ -70,7 +70,7 @@ return new class extends Migration
 
         try {
             DB::statement('ALTER TABLE exam_sessions ALTER COLUMN exam_room_id SET NOT NULL;');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             //
         }
     }

@@ -332,6 +332,7 @@
         }
         .status-table {
             width: 100%;
+            min-width: 580px;
             border-collapse: collapse;
             font-size: 0.8125rem;
         }

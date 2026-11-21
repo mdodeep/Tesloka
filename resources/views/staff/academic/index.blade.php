@@ -1102,7 +1102,7 @@
 
                 <div class="border border-default-200/90 rounded-xl overflow-hidden shadow-2xs">
                     <div class="overflow-x-auto max-h-64 overflow-y-auto">
-                        <table class="w-full text-left text-xs divide-y divide-default-200" id="table-enrolled-students">
+                        <table class="w-full min-w-[600px] text-left text-xs divide-y divide-default-200" id="table-enrolled-students">
                             <thead class="bg-default-100 border-b border-default-200 sticky top-0 z-10 text-xs font-semibold text-default-700">
                                 <tr class="whitespace-nowrap">
                                     <th class="px-3 py-2.5 text-center w-12">No</th>

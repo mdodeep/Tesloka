@@ -92,7 +92,11 @@
         </div>
 
         <div class="mt-6 text-center text-xs text-default-400 font-medium">
-            &copy; {{ date('Y') }} {{ $systemInstName }} &bull; TESLOKA CBT
+            @if(app(\App\Services\LicenseService::class)->shouldHideBranding())
+                &copy; {{ date('Y') }} {{ $systemInstName }}
+            @else
+                &copy; {{ date('Y') }} {{ $systemInstName }} &bull; TESLOKA CBT Community
+            @endif
         </div>
     </div>
 </body>

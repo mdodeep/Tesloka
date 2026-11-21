@@ -128,8 +128,9 @@
         $certShowScore = (bool) \App\Models\SystemSetting::get('branding.cert_show_score', true);
         $certDualSignatures = (bool) \App\Models\SystemSetting::get('branding.cert_dual_signatures', true);
 
-        // Blangko Kustom A4
-        $certBgSetting = \App\Models\SystemSetting::get('branding.certificate_bg');
+        // Blangko Kustom A4 (Khusus Supporter License)
+        $isSupporter = app(\App\Services\LicenseService::class)->isSupporter();
+        $certBgSetting = $isSupporter ? \App\Models\SystemSetting::get('branding.certificate_bg') : null;
         $certBgUrl = $certBgSetting ? asset('storage/' . $certBgSetting) : null;
         
         // URL Tombol Kembali

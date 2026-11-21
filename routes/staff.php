@@ -22,6 +22,7 @@ use App\Http\Controllers\Staff\ExamSessionController;
 use App\Http\Controllers\Staff\GlobalSearchController;
 use App\Http\Controllers\Staff\GraduationController;
 use App\Http\Controllers\Staff\IntegrationController;
+use App\Http\Controllers\Staff\LicenseController;
 use App\Http\Controllers\Staff\MaintenanceController;
 use App\Http\Controllers\Staff\NotificationLogController;
 use App\Http\Controllers\Staff\NotificationTemplateController;
@@ -359,6 +360,13 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
             Route::post('maintenance/enable', [MaintenanceController::class, 'enable'])->name('maintenance.enable');
             Route::post('maintenance/disable', [MaintenanceController::class, 'disable'])->name('maintenance.disable');
+
+            // Supporter License & 1-Click Auto-Updates
+            Route::get('license', [LicenseController::class, 'index'])->name('license.index');
+            Route::post('license/activate', [LicenseController::class, 'activate'])->name('license.activate');
+            Route::post('license/deactivate', [LicenseController::class, 'deactivate'])->name('license.deactivate');
+            Route::match(['get', 'post'], 'license/check-update', [LicenseController::class, 'checkUpdate'])->name('license.check-update');
+            Route::post('license/perform-update', [LicenseController::class, 'performUpdate'])->name('license.perform-update');
         });
 
         // In-App Notification Center (FULL-FEATURE 40.7)

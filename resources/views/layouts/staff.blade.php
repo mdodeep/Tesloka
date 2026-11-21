@@ -226,6 +226,15 @@
                                     <span class="menu-text">Mode Pemeliharaan</span>
                                 </a>
                             </li>
+                            <li class="menu-item">
+                                <a href="{{ route('staff.settings.license.index') }}" class="menu-link {{ request()->routeIs('staff.settings.license*') ? 'active !bg-primary !text-white' : '' }}">
+                                    <span class="menu-icon"><i data-lucide="shield-check" class="size-4.5"></i></span>
+                                    <span class="menu-text">Lisensi &amp; Pembaruan</span>
+                                    @if(app(\App\Services\LicenseService::class)->isSupporter())
+                                        <span class="ms-auto inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">SUPPORTER</span>
+                                    @endif
+                                </a>
+                            </li>
                         @endif
 
                         <!-- 8. AKUN & KEAMANAN SAYA -->
@@ -519,8 +528,12 @@
             <!-- App Footer -->
             <footer class="mt-auto footer flex items-center py-4 border-t border-default-200">
                 <div class="px-6 w-full flex justify-between items-center text-xs text-default-500">
-                    <div>{{ date('Y') }} &copy; {{ $systemInstName }} &bull; TESLOKA CBT On-Premise Single-Tenant</div>
-                    <div class="font-medium text-primary">v1.0.0-PROD</div>
+                    @if(app(\App\Services\LicenseService::class)->shouldHideBranding())
+                        <div>{{ date('Y') }} &copy; {{ $systemInstName }}</div>
+                    @else
+                        <div>{{ date('Y') }} &copy; {{ $systemInstName }} &bull; TESLOKA CBT Community</div>
+                    @endif
+                    <div class="font-medium text-primary">v{{ app(\App\Services\UpdateService::class)->getCurrentVersion() }}</div>
                 </div>
             </footer>
         </div>

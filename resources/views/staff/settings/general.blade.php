@@ -306,6 +306,42 @@
                     </div>
                 </div>
             </x-cbt.card>
+
+            <!-- Sub 4: Opsi White-Labeling (Supporter License) -->
+            <x-cbt.card title="Opsi White-Labeling &amp; Watermark Komunitas" subtitle="Pengaturan visibilitas label ekosistem TESLOKA pada footer portal ujian dan portal staf.">
+                @php
+                    $isSupporter = app(\App\Services\LicenseService::class)->isSupporter();
+                @endphp
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border {{ $isSupporter ? 'border-default-200 bg-card' : 'border-default-200 bg-default-50/70' }}">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-xs font-bold text-default-900">Sembunyikan Watermark Footer Komunitas (White-Labeling)</h4>
+                            @if($isSupporter)
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">SUPPORTER AKTIF</span>
+                            @else
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-default-200 text-default-700">SUPPORTER ONLY</span>
+                            @endif
+                        </div>
+                        <p class="text-xs text-default-500 mt-1 max-w-xl">
+                            Menghilangkan label footer &quot;TESLOKA CBT Community&quot; pada portal peserta ujian, portal staf, dan halaman login, sehingga institusi Anda tampil mandiri sepenuhnya.
+                        </p>
+                    </div>
+
+                    <div>
+                        @if($isSupporter)
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="hide_footer_branding" value="1" {{ old('hide_footer_branding', $settings['hide_footer_branding'] ?? false) ? 'checked' : '' }} class="rounded border-default-300 text-primary focus:ring-primary size-4.5">
+                                <span class="text-xs font-semibold text-default-700">Sembunyikan Watermark</span>
+                            </label>
+                        @else
+                            <a href="{{ route('staff.settings.license.index') }}" class="px-3.5 py-2 rounded-lg border border-primary text-primary hover:bg-primary hover:text-white text-xs font-bold transition shadow-xs inline-flex items-center gap-1.5">
+                                <i data-lucide="shield" class="size-3.5"></i>
+                                <span>Buka Supporter License</span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </x-cbt.card>
         </div>
 
         <!-- ========================================== -->
@@ -443,10 +479,17 @@
                     <div class="pt-4 border-t border-default-200">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                             <div>
-                                <h5 class="text-xs font-semibold text-default-800 uppercase tracking-wider">Desain Blangko Khusus Institusi A4 Landscape (Opsional)</h5>
+                                <div class="flex items-center gap-2">
+                                    <h5 class="text-xs font-semibold text-default-800 uppercase tracking-wider">Desain Blangko Khusus Institusi A4 Landscape</h5>
+                                    @if($isSupporter)
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">SUPPORTER AKTIF</span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">SUPPORTER ONLY</span>
+                                    @endif
+                                </div>
                                 <p class="text-xs text-default-500 mt-0.5">Jika institusi Anda telah memiliki desain blangko siap cetak berukuran A4 Landscape dari tim desainer grafis, unggah di sini. Teks nama, nomor, nilai, dan QR verifikasi akan otomatis dicetak presisi di atas blangko tersebut.</p>
                             </div>
-                            @if($settings['certificate_bg'])
+                            @if($isSupporter && $settings['certificate_bg'])
                                 <div class="flex items-center gap-3 shrink-0">
                                     <a href="{{ $settings['certificate_bg'] }}" target="_blank" class="px-2.5 py-1 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">Lihat Blangko Aktif</a>
                                     <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
@@ -457,15 +500,31 @@
                             @endif
                         </div>
 
-                        <x-cbt.dropzone
-                            name="certificate_bg"
-                            id="certificate_bg_dropzone"
-                            label="Unggah Template Blangko Sertifikat A4"
-                            accept="image/png,image/jpeg,image/webp"
-                            maxSize="5MB"
-                            :currentUrl="$settings['certificate_bg']"
-                            hint="Format: PNG, JPG, atau WebP ukuran A4 Landscape (Maks. 5MB). Otomatis dikonversi ke WebP untuk performa rendering cetak optimal."
-                        />
+                        @if($isSupporter)
+                            <x-cbt.dropzone
+                                name="certificate_bg"
+                                id="certificate_bg_dropzone"
+                                label="Unggah Template Blangko Sertifikat A4"
+                                accept="image/png,image/jpeg,image/webp"
+                                maxSize="5MB"
+                                :currentUrl="$settings['certificate_bg']"
+                                hint="Format: PNG, JPG, atau WebP ukuran A4 Landscape (Maks. 5MB). Otomatis dikonversi ke WebP untuk performa rendering cetak optimal."
+                            />
+                        @else
+                            <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                                <div class="flex items-start gap-3">
+                                    <i data-lucide="lock" class="size-5 text-amber-600 shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <strong class="font-bold text-amber-900 block">Kustomisasi Latar Belakang Khusus untuk Supporter License</strong>
+                                        <span class="text-amber-800">Institusi Anda saat ini menggunakan <strong>Desain Bingkai Resmi Bawaan</strong> yang elegan, profesional, dan presisi A4. Untuk mengunggah berkas blangko gambar kustom institusi Anda, silakan aktifkan Supporter License melalui donasi resmi.</span>
+                                    </div>
+                                </div>
+                                <a href="{{ route('staff.settings.license.index') }}" class="px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shrink-0 shadow-xs inline-flex items-center gap-1.5">
+                                    <i data-lucide="shield" class="size-3.5"></i>
+                                    <span>Aktifkan Lisensi</span>
+                                </a>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Template Blangko Kertas Surat Resmi A4 Portret (SKL, Transkrip, Daftar Hadir, Berita Acara, & Dokumen Evaluasi) -->

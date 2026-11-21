@@ -191,7 +191,11 @@
     <footer class="mt-auto footer flex items-center py-5 border-t border-default-200 bg-card">
         <div class="w-full px-6 lg:px-8 flex md:justify-between justify-center gap-4 text-xs text-default-500">
             <div>
-                © {{ date('Y') }} {{ $systemInstName }} &bull; TESLOKA CBT
+                @if(app(\App\Services\LicenseService::class)->shouldHideBranding())
+                    © {{ date('Y') }} {{ $systemInstName }}
+                @else
+                    © {{ date('Y') }} {{ $systemInstName }} &bull; TESLOKA CBT Community
+                @endif
             </div>
             <div class="md:flex hidden gap-2 items-center text-default-400">
                 Portal Pelaksanaan Ujian Terstandar

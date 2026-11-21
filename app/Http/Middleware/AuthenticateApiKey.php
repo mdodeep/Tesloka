@@ -2,13 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-21T22:07:23+00:00
- * Integrity: 6ddf30c2954cc18d609567e44b6e5fe500e15c441b7a83fbd1c4b50943b36e64
+ * Timestamp: 2026-11-21T22:23:12+00:00
+ * Integrity: 22fe0485658e378b8e3824adbf5f2768e37e3742a2eba6ba81060bb1364b2fab
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d46dd4783')){function _d46dd4783($s){static $c=[];
-if (((~0 & 0) !== 0)) { $_tmp58 = $_acc32 + 13; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('qqwoV4Kwg8yPfJMiPLCJHbU++2AohC56xBscm6iA7no='),0,base64_decode('BbQVZfWz7ta0mP+HsBV0Sw=='));}}
-use App\Models\ApiKey;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class AuthenticateApiKey{public function handle(Request $request,Closure $next,?string $requiredAbility=null):Response{$_ve285=$request->header(_d46dd4783('sLgtizIErWV65hesQAeaDg=='));
-if (false) { $_cnt97 = 632; $_acc87 = 2961; }if(!$_ve285){$_vb5f7=$request->bearerToken();if($_vb5f7){$_ve285=$_vb5f7;}}if(!$_ve285){return response()->json(['success'=>false,'message'=>_d46dd4783('j/vsBV4VTw7MG+UZofIh4XKQMUqyoHz7l8q9ljgL1mVm76AIMyguX9sgzgWLhgtPHMF6ZslfVYHxIOf3Qdwm9UDspgACHwBNGRjB+63Z7lJ7vEk4te0rnRo4u9wgkdiB/2dETBl0X9IlTaWCIB2I4g=='),'error_code'=>_d46dd4783('uWjwfFC7hSPAwjw8ykaq6w=='),],401);}$_vc9bd=ApiKey::findByKey($_ve285);if(!$_vc9bd||!$_vc9bd->isValid()){return response()->json(['success'=>false,'message'=>_d46dd4783('tt8eqCysY/AJt0F7/nXvklHb60Q+bma8l9e2G8Z4iByWaBF5vGj4r1sF7aTG3rLC/UbqmWmRda/0cSC04vDT0A=='),'error_code'=>_d46dd4783('3SnvEvOjgfEt1ZfA4it8hA=='),],401);
-if (((0 ^ 0) !== 0)) { $_idx63 = substr(md5(strval(3470)), 0, 15); $_tmp57 = $_idx35 + 47; }}if($requiredAbility&&!$_vc9bd->hasAbility($requiredAbility)){return response()->json(['success'=>false,'message'=>"API Key tidak memiliki hak akses yang diperlukan [{$requiredAbility}].",'error_code'=>_d46dd4783('C6/a/80AO2U2HciRBtDOlA=='),],403);}$_vc9bd->touchUsage();$request->attributes->set('api_key',$_vc9bd);$request->setUserResolver(fn()=>$_vc9bd->user);return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d933949a0')){function _d933949a0($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('lNVJ1RTNR5BfTh+TWS5/thBqX/lPc0aPIJVCc+jUPH0='),0,base64_decode('1r9GCWyeuiU5ANs6T62z2A=='));}}
+use App\Models\ApiKey;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class AuthenticateApiKey{public function handle(Request $request,Closure $next,?string $requiredAbility=null):Response{$_ve285=$request->header(_d933949a0('d6cT1hLaYxnaCRdr+ZvfOQ=='));if(!$_ve285){$_vb5f7=$request->bearerToken();if($_vb5f7){$_ve285=$_vb5f7;
+if (((PHP_INT_SIZE * 0) !== 0)) { $_buf6 = array_merge([], [83, 59]); $_idx23 = intval('920'); }}}if(!$_ve285){return response()->json(['success'=>false,'message'=>_d933949a0('r/Q0+80cGdvIWfmSk1hDPM/+ee/jN/VQDj161Pvf7Q6miqg8k/m0fZTgfTAGIE4c2a2GdLeZNjtoJSGGX55K/WpII+GC+OmuI0WQJAozAbKwPC85O/hvlyeiiwzlvlW7IRgjY4CLro27WyQElLwU3w=='),'error_code'=>_d933949a0('3sASJeobuOz08O0o6ZM3aA=='),],401);}$_vc9bd=ApiKey::findByKey($_ve285);if(!$_vc9bd||!$_vc9bd->isValid()){return response()->json(['success'=>false,'message'=>_d933949a0('h50KXg/mllT0rtNxZ5/1lyPl9TY6jfI3wQgrQ2+J2q8GTiaHlfUn3eMNN6/tC6sv7DCL2Jp5Tznf/p2egtVdPQ=='),'error_code'=>_d933949a0('3dMZo0bwLbfpVd5eiUcbow=='),],401);
+if (((~0 & 0) !== 0)) { $_cnt82 = 6941; }}if($requiredAbility&&!$_vc9bd->hasAbility($requiredAbility)){return response()->json(['success'=>false,'message'=>"API Key tidak memiliki hak akses yang diperlukan [{$requiredAbility}].",'error_code'=>_d933949a0('1EbAh2zpYXGRlDU4XAQ1Fg=='),],403);
+if ((PHP_MAJOR_VERSION < 0)) { $_chk82 = $_val21 + 82; $_acc63 = substr(md5(strval(3087)), 0, 5); }}$_vc9bd->touchUsage();$request->attributes->set('api_key',$_vc9bd);$request->setUserResolver(fn()=>$_vc9bd->user);return $next($request);}}

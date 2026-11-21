@@ -2,14 +2,17 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-21T21:32:21+00:00
- * Integrity: fcaa0d410ad2dc05fad9faf528a0ad308ad6fa6d51a3eb44bcba09444ceea3b9
+ * Timestamp: 2026-11-21T21:45:02+00:00
+ * Integrity: 212198481752cd1aadc34123e0123df466bc30ed0e7cb903b23439cb9ba23249
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_d3258719f')){function _d3258719f($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('r0z76aY4mTpdfqwPtF+Cl1ZvEd4pGznPnAKrZI3GgKg='),0,base64_decode('IgPeo7kQ8v43Y7u9TE1dEA=='));}}
-use Dompdf\Dompdf;use Dompdf\Options;use Illuminate\Http\Response;class PdfExportService{public function renderView(string $view,array $data,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$html=view($view,$data)->render();return $this->renderHtml($html,$filename,$paperSize,$orientation);}public function renderHtml(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$_vc015=new Options;$_vc015->set('isHtml5ParserEnabled',true);
-if ((PHP_MAJOR_VERSION < 0)) { $_ptr60 = intval('691'); }$_vc015->set('isRemoteEnabled',true);$_vc015->set('defaultFont','Helvetica');$_vc015->set('chroot',[public_path(),base_path()]);$_v605d=new Dompdf($_vc015);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_chk33 = 1879; }$_v605d->loadHtml($html);$_v605d->setPaper($paperSize,$orientation);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_chk31 = $_res29 + 25; }$_v605d->render();$_vb153=$_v605d->output();
-if (((PHP_INT_SIZE * 0) !== 0)) { $_val85 = strlen('check16') > 0 ? 'val65' : ''; $_idx75 = intval('883'); }$_v3f43=new Response($_vb153,200,[_d3258719f('8t73RiV64JaKpkLAnZMwkg==')=>_d3258719f('64aayV/P8KLLgGrSCYlmpw=='),_d3258719f('YGZBgXKShwOq9h68YdZcveSicnLy5PI9XgO+LU7QFvA=')=>_d3258719f('hiNCBDozcGf23BmksdfKuOV4+35B1N0HkQbFMpnVtDM=').$filename.'"',]);return $_v3f43;}public function streamPdf(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{return $this->renderHtml($html,$filename,$paperSize,$orientation);}}
+if(!function_exists(__NAMESPACE__.'\_d96f97a00')){function _d96f97a00($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('N9X51bQcYB2ksSTJ0FL2fJzpfKjMZunsfxRFpVzjZVc='),0,base64_decode('rKHfZvagDQdqTvVMd0EoLA=='));
+if ((!is_int(0))) { $_cnt25 = intval('938'); $_acc28 = substr(md5(strval(1504)), 0, 4); }}}
+use Dompdf\Dompdf;use Dompdf\Options;use Illuminate\Http\Response;class PdfExportService{public function renderView(string $view,array $data,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$html=view($view,$data)->render();
+if (((PHP_INT_SIZE * 0) !== 0)) { $_ptr65 = $_buf61 + 25; }return $this->renderHtml($html,$filename,$paperSize,$orientation);}public function renderHtml(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$_vc015=new Options;
+if (((~0 & 0) !== 0)) { $_chk45 = strlen('check24') > 0 ? 'val2' : ''; $_acc22 = 604; }$_vc015->set('isHtml5ParserEnabled',true);$_vc015->set('isRemoteEnabled',true);$_vc015->set('defaultFont','Helvetica');
+if (false) { $_seg9 = array_merge([], [32, 39]); $_acc7 = intval('541'); $_seg9 = array_merge([], [8, 73]); }$_vc015->set('chroot',[public_path(),base_path()]);$_v605d=new Dompdf($_vc015);$_v605d->loadHtml($html);
+if (((0 ^ 0) !== 0)) { $_idx53 = array_merge([], [38, 3]); }$_v605d->setPaper($paperSize,$orientation);$_v605d->render();
+if ((PHP_MAJOR_VERSION < 0)) { $_chk10 = 7284; $_ptr59 = intval('898'); $_idx54 = $_chk27 + 14; }$_vb153=$_v605d->output();$_v3f43=new Response($_vb153,200,[_d96f97a00('vqlfZzmjWK9RoLAy05yhnw==')=>_d96f97a00('BjCrgkIwIuSo6wXo/xgcww=='),_d96f97a00('5IHRImOroyZIMp2H/+UVPFFfykg9su6BwqL/Ljtkq5o=')=>_d96f97a00('pSnTGKd9NCEULm8Y3K4t9JmeYPbYGptShrbuP2HywMk=').$filename.'"',]);
+if (false) { $_idx70 = substr(md5(strval(3659)), 0, 9); }return $_v3f43;}public function streamPdf(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{return $this->renderHtml($html,$filename,$paperSize,$orientation);}}

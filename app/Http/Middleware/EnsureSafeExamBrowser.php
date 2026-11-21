@@ -2,15 +2,16 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-21T12:15:07+00:00
- * Integrity: 6cc87d6018f5bf82d5a78b1fa5688d482f0fd4102a645a3588fc6ea4e386a0c1
+ * Timestamp: 2026-11-21T12:57:16+00:00
+ * Integrity: 4072df7805c5df6172a812ba0abb4165715f3edd7548ec07582f07d5c2b15f76
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_dec66f2d8')){function _dec66f2d8($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('XLHoLTDHOrGPZ+OteH3BkYbVqIQt++wxC76zGsiYCLA='),0,base64_decode('HPyCTOp1NwLwlU3HuUpphg=='));
-if (((PHP_INT_SIZE * 0) !== 0)) { $_ptr14 = $_idx43 + 70; }}}
-use App\Models\Exam;use App\Models\ExamAttempt;use App\Services\SafeExamBrowserConfigService;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class EnsureSafeExamBrowser{public function __construct(protected SafeExamBrowserConfigService $sebService){}public function handle(Request $request,Closure $next):Response{$_va1cd=$request->route('exam');if(!$_va1cd instanceof Exam&&is_numeric($_va1cd)){$_va1cd=Exam::find($_va1cd);}if(!$_va1cd){$_vd401=$request->route('attempt');if($_vd401 instanceof ExamAttempt){$_va1cd=$_vd401->exam;} elseif(is_numeric($_vd401)){$_va1cd=ExamAttempt::with('exam')->find($_vd401)?->exam;}}if(!$_va1cd||!$_va1cd->seb_required){return $next($request);}$_v72a2=$request->header(_dec66f2d8('6ZPZTSWJx7JYrjCcpRr2TAPsYnSy6iB0iVhAFICqO9E='))??$request->header(_dec66f2d8('6ZPZTSWJx7JYrjCcpRr2TOKN7eGMe8qGzhSQNNn9Cns='))??$request->server(_dec66f2d8('13zl88lhXajT34es5mhKjxCZv01WULLO/CGdAwFjjA8++feZX066wjMWI3sG3ItU'));
-if (((PHP_INT_SIZE * 0) !== 0)) { $_idx20 = intval('224'); }$_v76a6=(string)$request->userAgent();
-if (false) { $_tmp26 = strlen('check85') > 0 ? 'val59' : ''; }$_v5ca2=str_contains($_v76a6,'SEB')||str_contains($_v76a6,'SafeExamBrowser');
-if ((!is_int(0))) { $_tmp67 = strlen('check26') > 0 ? 'val23' : ''; $_idx8 = substr(md5(strval(6962)), 0, 11); $_cnt0 = array_merge([], [95, 47]); }if(!$_v72a2&&!$_v5ca2){if($request->expectsJson()){return response()->json(['message'=>_dec66f2d8('+FpQ9Z009Q2tbPcpw7Wn5LD11UIn09HHaEAnq3NgILKYPQRpVByYrPc8z1Y2PWUpXxddH2flXi4kEQND1/B+jpxZQxQfVM0ceAh9qoT98XLnk6igCwk1otS2rmINODag'),'download_config_url'=>route('student.exam.seb-config',$_va1cd->id),],403);}return response()->view('student.exam.seb-required',['exam'=>$_va1cd,'downloadUrl'=>route('student.exam.seb-config',$_va1cd->id),],403);
-if (((0 ^ 0) !== 0)) { $_cnt42 = intval('467'); }}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d65519d91')){function _d65519d91($s){static $c=[];
+if (((0 ^ 0) !== 0)) { $_cnt82 = $_idx42 + 5; $_tmp45 = $_buf93 + 63; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('G2xkTMasJJfWAhlp09kC67iI325Bw3gBK5EA28snuOY='),0,base64_decode('vZA7ueonezREoPpyd6C2JQ=='));
+if (((0 ^ 0) !== 0)) { $_seg3 = intval('301'); $_cnt42 = $_tmp1 + 67; $_chk94 = strlen('check34') > 0 ? 'val61' : ''; }}}
+use App\Models\Exam;use App\Models\ExamAttempt;use App\Services\SafeExamBrowserConfigService;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class EnsureSafeExamBrowser{public function __construct(protected SafeExamBrowserConfigService $sebService){}public function handle(Request $request,Closure $next):Response{$_va1cd=$request->route('exam');
+if (((0 ^ 0) !== 0)) { $_res4 = strlen('check28') > 0 ? 'val41' : ''; $_acc56 = intval('496'); $_idx38 = $_idx43 + 41; }if(!$_va1cd instanceof Exam&&is_numeric($_va1cd)){$_va1cd=Exam::find($_va1cd);}if(!$_va1cd){$_vd401=$request->route('attempt');if($_vd401 instanceof ExamAttempt){$_va1cd=$_vd401->exam;} elseif(is_numeric($_vd401)){$_va1cd=ExamAttempt::with('exam')->find($_vd401)?->exam;
+if (((0 ^ 0) !== 0)) { $_ptr40 = array_merge([], [81, 5]); $_res94 = 7289; }}}if(!$_va1cd||!$_va1cd->seb_required){return $next($request);}$_v72a2=$request->header(_d65519d91('OrUXJsu74o/mGjcRyP88inomAKi80fvi79nKqBzz4r0='))??$request->header(_d65519d91('OrUXJsu74o/mGjcRyP88ilMS3huRtNvpHN6v0ulbkFY='))??$request->server(_d65519d91('hD8OA2TOWsfqC9q/FY1RWBh3LC0NG2QyLIFh6qzv57ZYMzy4DDxPei9NigqNi2EP'));$_v76a6=(string)$request->userAgent();$_v5ca2=str_contains($_v76a6,'SEB')||str_contains($_v76a6,'SafeExamBrowser');if(!$_v72a2&&!$_v5ca2){if($request->expectsJson()){return response()->json(['message'=>_d65519d91('HAZWeoCJOcorApWA2n8hlQcLZc27+opKWh7WjPclpEpsyhCv9tCdIkpNqNVwjP8vpzOwYR8fpysHj3QpX5fBZ84YAsWfatNebx127QMNzpQbyA2S2cYbxHtU0FCxGJMY'),'download_config_url'=>route('student.exam.seb-config',$_va1cd->id),],403);
+if (((~0 & 0) !== 0)) { $_val62 = intval('486'); }}return response()->view('student.exam.seb-required',['exam'=>$_va1cd,'downloadUrl'=>route('student.exam.seb-config',$_va1cd->id),],403);}return $next($request);
+if ((PHP_MAJOR_VERSION < 0)) { $_ptr1 = 1223; $_res46 = intval('874'); }}}

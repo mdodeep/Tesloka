@@ -1389,8 +1389,8 @@
                 <td class="px-3 py-2.5 font-mono text-default-600">${escapeHtml(s.identity_number || '-')}</td>
                 <td class="px-3 py-2.5 text-default-500">${escapeHtml(s.email)}</td>
                 <td class="px-3 py-2.5 text-center">
-                    <button type="button" onclick="handleUnenrollStudent(${classId}, ${s.id}, '${escapeHtml(s.name)}')" class="size-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 inline-flex items-center justify-center transition cursor-pointer" title="Keluarkan dari Rombel" aria-label="Keluarkan ${escapeHtml(s.name)}">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button type="button" onclick="handleUnenrollStudent(${classId}, ${s.id}, '${escapeHtml(s.name)}')" class="rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 inline-flex items-center justify-center transition cursor-pointer" title="Keluarkan dari Rombel" aria-label="Keluarkan ${escapeHtml(s.name)}" style="width: 28px; height: 28px;">
+                        <svg style="width: 14px; height: 14px; min-width: 14px; min-height: 14px; display: block; stroke: currentColor;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
                         </svg>
                     </button>

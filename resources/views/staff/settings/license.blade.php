@@ -15,11 +15,11 @@
                 <span class="text-default-800 font-semibold">Lisensi &amp; Pembaruan</span>
             </nav>
             <h1 class="text-xl sm:text-2xl font-bold text-default-900 tracking-tight">Lisensi &amp; Pusat Pembaruan</h1>
-            <p class="text-xs text-default-500 mt-0.5">Kelola status lisensi Supporter, hak kepemilikan seumur hidup, dan pembaruan otomatis 1-klik.</p>
+            <p class="text-xs text-default-500 mt-0.5">Kelola status lisensi resmi institusi, pendataan komunitas, dan pembaruan otomatis 1-klik.</p>
         </div>
         <div class="flex items-center gap-2.5">
-            <a href="{{ $donateServerUrl }}" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-xs">
-                <span>Server Donasi &amp; Lisensi</span>
+            <a href="{{ $donateServerUrl }}" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs">
+                <span>Portal Anggota &amp; Lisensi</span>
                 <i data-lucide="external-link" class="size-3.5"></i>
             </a>
         </div>
@@ -41,45 +41,59 @@
     @endif
 
     <!-- 1. KARTU STATUS LISENSI SAAT INI -->
-    <div class="rounded-2xl border {{ $license['is_supporter'] ? 'border-emerald-200 bg-white' : 'border-default-200 bg-white' }} p-6 shadow-xs">
+    <div class="rounded-2xl border {{ $license['is_supporter'] ? 'border-amber-200 bg-white' : ($license['is_community'] ? 'border-emerald-200 bg-white' : 'border-default-200 bg-white') }} p-6 shadow-2xs">
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl {{ $license['is_supporter'] ? 'bg-emerald-100 text-emerald-600' : 'bg-default-100 text-default-600' }} flex items-center justify-center shrink-0">
-                    <i data-lucide="{{ $license['is_supporter'] ? 'shield-check' : 'shield' }}" class="size-6"></i>
+                <div class="w-12 h-12 rounded-xl {{ $license['is_supporter'] ? 'bg-amber-100 text-amber-700' : ($license['is_community'] ? 'bg-emerald-100 text-emerald-600' : 'bg-default-100 text-default-600') }} flex items-center justify-center shrink-0">
+                    <i data-lucide="{{ $license['is_supporter'] ? 'award' : ($license['is_community'] ? 'shield-check' : 'shield-alert') }}" class="size-6"></i>
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold {{ $license['is_supporter'] ? 'bg-emerald-100 text-emerald-800' : 'bg-default-100 text-default-700' }}">
-                            {{ $license['is_supporter'] ? 'Supporter License Aktif' : 'Versi Komunitas (Gratis)' }}
-                        </span>
-                        <span class="text-xs text-default-400">&bull; Versi {{ $currentVersion }}</span>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        @if($license['is_supporter'])
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                <i data-lucide="star" class="size-3 text-amber-600 fill-amber-500"></i>
+                                Supporter License Aktif
+                            </span>
+                        @elseif($license['is_community'])
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                <i data-lucide="check" class="size-3 text-emerald-600"></i>
+                                Lisensi Komunitas Resmi Terdaftar
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-default-100 text-default-700">
+                                Belum Terdaftar Lisensi Resmi
+                            </span>
+                        @endif
+                        <span class="text-xs text-default-400">&bull; Aplikasi Versi {{ $currentVersion }}</span>
                     </div>
 
                     <h2 class="text-lg font-bold text-default-900 mt-1">
-                        {{ $license['institution_name'] ?? 'Instalasi TESLOKA CBT Komunitas' }}
+                        {{ $license['institution_name'] ?? 'Instalasi Belum Terdaftar' }}
                     </h2>
 
-                    <p class="text-xs text-default-500 mt-1 max-w-xl">
+                    <p class="text-xs text-default-500 mt-1 max-w-xl leading-relaxed">
                         @if($license['is_supporter'])
-                            Institusi Anda telah mendukung ekosistem mandiri TESLOKA CBT melalui donasi resmi. Seluruh fitur eksklusif termasuk Update Otomatis 1-Klik dan Kustomisasi Sertifikat aktif tanpa batas.
+                            Institusi Anda resmi terdaftar sebagai Supporter TESLOKA CBT. Hak pembaruan otomatis 1-klik, unggah template sertifikat kustom, dan white-labeling aktif seutuhnya.
+                        @elseif($license['is_community'])
+                            Institusi Anda resmi terdata menggunakan Lisensi Komunitas. Seluruh fitur CBT (kapasitas siswa, rombel, bank soal, dan ujian tanpa batas) bebas digunakan seumur hidup.
                         @else
-                            Aplikasi TESLOKA CBT ini gratis digunakan selamanya dengan kapasitas siswa dan ujian tanpa batas. Anda dapat berdonasi minimal Rp 200.000 untuk mendapatkan Supporter License resmi.
+                            Instalasi ini belum dihubungkan dengan lisensi resmi. Daftarkan akun institusi Anda secara gratis di portal resmi untuk mendapatkan Lisensi Komunitas Resmi instan agar server CBT terverifikasi offline.
                         @endif
                     </p>
                 </div>
             </div>
 
-            @if($license['is_supporter'])
-                <form action="{{ route('staff.settings.license.deactivate') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan lisensi Supporter pada server ini?')">
+            @if($license['is_activated'])
+                <form action="{{ route('staff.settings.license.deactivate') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin melepas lisensi pada server ini?')">
                     @csrf
-                    <button type="submit" class="px-3 py-1.5 rounded-lg border border-default-200 text-default-600 hover:text-danger hover:border-danger text-xs font-semibold transition">
+                    <button type="submit" class="px-3 py-1.5 rounded-lg border border-default-200 text-default-600 hover:text-danger hover:border-danger text-xs font-semibold transition cursor-pointer">
                         Lepas Lisensi
                     </button>
                 </form>
             @endif
         </div>
 
-        @if($license['is_supporter'])
+        @if($license['is_activated'])
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-6 pt-5 border-t border-default-100 text-xs">
                 <div class="p-3 rounded-xl bg-default-50 border border-default-100">
                     <span class="text-default-400 block font-medium">Kunci Lisensi:</span>
@@ -91,32 +105,48 @@
                 </div>
                 <div class="p-3 rounded-xl bg-default-50 border border-default-100">
                     <span class="text-default-400 block font-medium">Masa Akses Pembaruan:</span>
-                    @if($license['is_update_eligible'])
-                        <span class="font-bold text-emerald-600">{{ $license['expires_at'] }} ({{ $license['days_remaining'] }} hari)</span>
+                    @if($license['is_supporter'])
+                        @if($license['is_update_eligible'])
+                            <span class="font-bold text-emerald-600">{{ $license['expires_at'] }} ({{ $license['days_remaining'] }} hari)</span>
+                        @else
+                            <span class="font-bold text-rose-600">Berakhir pada {{ $license['expires_at'] }}</span>
+                        @endif
                     @else
-                        <span class="font-bold text-rose-600">Berakhir pada {{ $license['expires_at'] }}</span>
+                        <span class="font-semibold text-default-600">Manual via Git (Komunitas)</span>
                     @endif
                 </div>
                 <div class="p-3 rounded-xl bg-default-50 border border-default-100">
-                    <span class="text-default-400 block font-medium">Verifikasi Keamanan:</span>
+                    <span class="text-default-400 block font-medium">Verifikasi Kriptografis:</span>
                     <span class="font-bold text-default-800">RSA-2048 Digital Offline</span>
                 </div>
             </div>
-        @else
-            <div class="mt-5 pt-4 border-t border-default-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-default-50/70 p-4 rounded-xl">
-                <div>
-                    <h4 class="text-xs font-bold text-default-900">Ingin Mengaktifkan Update Otomatis &amp; Fitur Lengkap?</h4>
-                    <p class="text-[11px] text-default-500 mt-0.5">Donasi minimal Rp 200.000 / tahun untuk mendukung kelangsungan rilis dan mendapatkan Supporter License resmi.</p>
+
+            @if($license['is_community'])
+                <div class="mt-5 pt-4 border-t border-default-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-primary/5 border border-primary/20 p-4 rounded-xl">
+                    <div>
+                        <h4 class="text-xs font-bold text-default-900">Tingkatkan ke Supporter License (Akses Auto-Update 1-Klik)</h4>
+                        <p class="text-[11px] text-default-600 mt-0.5">Dukung pemeliharaan ekosistem TESLOKA mulai Rp 200.000 untuk menikmati pembaruan otomatis 1-klik dan kustomisasi latar sertifikat.</p>
+                    </div>
+                    <a href="{{ $donateServerUrl }}/dashboard" target="_blank" class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shrink-0 shadow-2xs">
+                        Upgrade ke Supporter
+                    </a>
                 </div>
-                <a href="{{ $donateServerUrl }}" target="_blank" class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shrink-0 shadow-xs">
-                    Berdonasi &amp; Dapatkan Lisensi
+            @endif
+        @else
+            <div class="mt-5 pt-4 border-t border-default-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-amber-50/70 border border-amber-200 p-4 rounded-xl">
+                <div>
+                    <h4 class="text-xs font-bold text-amber-900">Dapatkan Lisensi Komunitas Resmi Secara Gratis</h4>
+                    <p class="text-[11px] text-amber-700 mt-0.5">Daftarkan institusi Anda di portal resmi (100% Bebas Biaya) agar instalasi sekolah Anda terdata dan terverifikasi.</p>
+                </div>
+                <a href="{{ $donateServerUrl }}/register" target="_blank" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition shrink-0 shadow-2xs">
+                    Daftar Lisensi Gratis Sekarang
                 </a>
             </div>
         @endif
     </div>
 
     <!-- 2. PUSAT PEMBARUAN SISTEM 1-KLIK (AUTO-UPDATE ENGINE) -->
-    <div class="rounded-2xl border border-default-200 bg-white p-6 shadow-xs space-y-5">
+    <div class="rounded-2xl border border-default-200 bg-white p-6 shadow-2xs space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-default-100 pb-4">
             <div>
                 <h3 class="font-bold text-base text-default-900 flex items-center gap-2">
@@ -128,7 +158,7 @@
             <div class="flex items-center gap-2">
                 <form action="{{ route('staff.settings.license.check-update') }}" method="POST">
                     @csrf
-                    <button type="submit" class="px-3.5 py-2 rounded-lg border border-default-200 hover:bg-default-50 text-default-700 font-semibold text-xs transition flex items-center gap-1.5 shadow-xs">
+                    <button type="submit" class="px-3.5 py-2 rounded-lg border border-default-200 hover:bg-default-50 text-default-700 font-semibold text-xs transition flex items-center gap-1.5 shadow-2xs cursor-pointer">
                         <i data-lucide="search" class="size-3.5"></i>
                         <span>Periksa Pembaruan</span>
                     </button>
@@ -176,7 +206,7 @@
                     <form action="{{ route('staff.settings.license.perform-update') }}" method="POST" onsubmit="return confirm('Mulai proses pembaruan otomatis ke v{{ $updateAvailable['latest_version'] }}? Sistem akan membuat snapshot database sebelum memperbarui.')">
                         @csrf
                         <input type="hidden" name="target_version" value="{{ $updateAvailable['latest_version'] }}">
-                        <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-extrabold text-xs transition flex items-center justify-center gap-2 shadow-sm">
+                        <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-extrabold text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer">
                             <i data-lucide="download" class="size-4"></i>
                             <span>Perbarui Sekarang Secara Aman (1-Klik)</span>
                         </button>
@@ -190,8 +220,8 @@
                                 Masa pembaruan lisensi Anda telah berakhir. Perpanjang donasi untuk menikmati update 1-klik otomatis.
                             @endif
                         </div>
-                        <a href="{{ $donateServerUrl }}" target="_blank" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-xs transition shrink-0">
-                            Berdonasi untuk Akses Update 1-Klik
+                        <a href="{{ $donateServerUrl }}/dashboard" target="_blank" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-xs transition shrink-0">
+                            Upgrade ke Supporter untuk Update 1-Klik
                         </a>
                     </div>
                 @endif
@@ -207,14 +237,14 @@
     </div>
 
     <!-- 3. FORMULIR AKTIVASI LISENSI -->
-    <div class="rounded-2xl border border-default-200 bg-white p-6 shadow-xs space-y-4">
+    <div class="rounded-2xl border border-default-200 bg-white p-6 shadow-2xs space-y-4">
         <div class="border-b border-default-100 pb-3">
             <h3 class="font-bold text-base text-default-900 flex items-center gap-2">
                 <i data-lucide="key" class="size-4.5 text-primary"></i>
-                <span>{{ $license['is_supporter'] ? 'Perbarui atau Ganti Kunci Lisensi' : 'Aktivasi Supporter License' }}</span>
+                <span>{{ $license['is_activated'] ? 'Perbarui atau Ganti Kunci Lisensi' : 'Aktivasi Lisensi Resmi (Komunitas / Supporter)' }}</span>
             </h3>
             <p class="text-xs text-default-500 mt-0.5">
-                Masukkan Kunci Lisensi (<code class="font-mono text-primary font-bold">TESLOKA-SUPP-XXXX-XXXX-XXXX</code>) atau Token Digital Kriptografis lengkap yang diperoleh dari server donasi.
+                Masukkan Kunci Lisensi (<code class="font-mono text-primary font-bold">TESLOKA-COMM-XXXX</code> atau <code class="font-mono text-primary font-bold">TESLOKA-SUPP-XXXX</code>) atau Token Digital Kriptografis lengkap yang diperoleh dari portal resmi.
             </p>
         </div>
 
@@ -226,19 +256,19 @@
                 </label>
                 <textarea id="license_input" name="license_input" rows="3" required
                     class="w-full px-3.5 py-2.5 text-xs font-mono rounded-xl border border-default-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
-                    placeholder="Tempelkan Kunci Lisensi (e.g. TESLOKA-SUPP-XXXX-XXXX-XXXX) atau Token Digital lengkap..."></textarea>
+                    placeholder="Tempelkan Kunci Lisensi (e.g. TESLOKA-COMM-XXXX atau TESLOKA-SUPP-XXXX) atau Token Digital lengkap..."></textarea>
                 <p class="text-[11px] text-default-400 mt-1">
-                    Mendukung verifikasi online otomatis atau verifikasi offline tanda tangan digital RSA-2048 tanpa internet.
+                    Mendukung verifikasi online otomatis atau verifikasi offline tanda tangan digital RSA-2048 tanpa butuh koneksi internet.
                 </p>
             </div>
 
-            <div class="flex items-center gap-3">
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5">
+            <div class="flex items-center gap-3 flex-wrap">
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="check" class="size-4"></i>
-                    <span>Aktifkan Lisensi Supporter</span>
+                    <span>Simpan &amp; Verifikasi Lisensi</span>
                 </button>
-                <a href="{{ $donateServerUrl }}" target="_blank" class="px-4 py-2.5 rounded-xl border border-default-200 hover:bg-default-50 text-default-700 font-semibold text-xs transition">
-                    Belum Punya Lisensi? Donasi di Sini
+                <a href="{{ $donateServerUrl }}/register" target="_blank" class="px-4 py-2.5 rounded-xl border border-default-200 hover:bg-default-50 text-default-700 font-semibold text-xs transition">
+                    Belum Punya Lisensi? Dapatkan Gratis di Sini
                 </a>
             </div>
         </form>

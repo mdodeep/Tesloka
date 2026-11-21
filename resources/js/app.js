@@ -7,6 +7,11 @@ import "quill/dist/quill.snow.css";
 
 window.ApexCharts = ApexCharts;
 window.Quill = Quill;
+window.lucide = {
+    createIcons: (options = {}) => createIcons({ icons, ...options }),
+    icons,
+};
+window.createIcons = (options = {}) => createIcons({ icons, ...options });
 
 document.addEventListener("DOMContentLoaded", () => {
     createIcons({ icons });

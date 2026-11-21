@@ -360,7 +360,7 @@
                                             class="px-2.5 py-1 rounded text-[11px] font-semibold bg-primary/10 hover:bg-primary hover:text-white text-primary transition inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
                                             title="Klik untuk Kelola Anggota Siswa (Tambah/Hapus Siswa)">
                                         <i data-lucide="users" class="size-3.5"></i>
-                                        <span>{{ $c->students_count }} / {{ $c->capacity }} terdaftar</span>
+                                        <span id="class-students-count-{{ $c->id }}">{{ $c->students_count }} / {{ $c->capacity }} terdaftar</span>
                                     </button>
                                 </td>
                                 <td class="px-3 py-3.5 text-center whitespace-nowrap">
@@ -1026,7 +1026,7 @@
 
 <!-- 11. MODAL KELOLA PESERTA DIDIK ROMBEL / KELAS -->
 <div id="modal-class-students" class="fixed inset-0 z-50 hidden bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-md max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl border border-default-200 overflow-hidden">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0 bg-default-50">
             <div>
                 <h4 class="text-sm font-bold text-default-900 flex items-center gap-2">
@@ -1040,66 +1040,79 @@
             </button>
         </div>
 
-        <div class="p-4 sm:p-5 overflow-y-auto space-y-5">
+        <div class="p-4 sm:p-5 overflow-y-auto space-y-4">
+            <!-- Dynamic Action Feedback Alert -->
+            <div id="class-students-alert" class="hidden rounded-lg px-4 py-2.5 text-xs font-semibold flex items-center justify-between gap-2 transition-all"></div>
+
             <!-- Kapasitas & Status Card -->
-            <div class="bg-default-50 rounded-lg p-3.5 border border-default-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="space-y-0.5">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-default-400">Status Kapasitas Kelas (DEC-001)</span>
-                    <div class="flex items-center gap-2">
-                        <span id="class-capacity-badge" class="px-2.5 py-0.5 rounded text-xs font-bold bg-primary/10 text-primary">0 / 30 Peserta</span>
+            <div class="bg-default-50/80 rounded-xl p-4 border border-default-200/90 space-y-2.5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xs font-semibold text-default-700">Status Kuota Rombel:</span>
+                        <span id="class-capacity-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">0 / 30 Peserta</span>
                         <span id="class-capacity-desc" class="text-xs text-default-500">Tersedia kuota untuk siswa baru.</span>
                     </div>
+                    <div class="text-xs font-mono font-semibold text-default-600" id="class-capacity-percent-text">0% Terisi</div>
                 </div>
-                <div id="class-capacity-bar-container" class="w-full sm:w-48 bg-default-200 h-2 rounded-full overflow-hidden">
-                    <div id="class-capacity-bar" class="bg-primary h-full transition-all duration-300" style="width: 0%"></div>
+                <div id="class-capacity-bar-container" class="w-full bg-default-200 h-2 rounded-full overflow-hidden">
+                    <div id="class-capacity-bar" class="bg-primary h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
                 </div>
             </div>
 
             <!-- Bagian 1: Daftarkan Siswa Baru ke Kelas Ini -->
-            <div id="enroll-form-container" class="border border-default-200 rounded-lg p-3.5 bg-white space-y-3">
-                <h5 class="text-xs font-bold text-default-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <i data-lucide="user-plus" class="size-3.5 text-primary"></i>
-                    <span>Daftarkan Siswa ke Kelas Ini</span>
-                </h5>
-                <form id="form-enroll-student" method="POST" action="" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div id="enroll-form-container" class="border border-default-200/90 rounded-xl p-4 bg-white space-y-3">
+                <div class="flex items-center justify-between flex-wrap gap-1">
+                    <h5 class="text-xs font-bold text-default-800 flex items-center gap-1.5">
+                        <i data-lucide="user-plus" class="size-4 text-primary"></i>
+                        <span>Daftarkan Siswa ke Rombel</span>
+                    </h5>
+                    <span class="text-[11px] text-default-400">Pilih dari akun siswa aktif yang belum memiliki rombel</span>
+                </div>
+                <form id="form-enroll-student" method="POST" action="" onsubmit="handleEnrollStudentSubmit(event)" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                     @csrf
                     <input type="hidden" name="active_tab" value="classes">
                     <div class="flex-1">
-                        <select id="select-enroll-student" name="student_id" required class="form-select w-full h-9 text-xs rounded border-default-200 bg-white">
-                            <option value="">-- Pilih Siswa yang Belum Terdaftar --</option>
+                        <select id="select-enroll-student" name="student_id" required class="form-select w-full h-9 text-xs rounded-lg border-default-200 bg-white">
+                            <option value="">-- Pilih Siswa untuk Didaftarkan --</option>
                         </select>
                     </div>
-                    <button type="submit" id="btn-submit-enroll" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs shrink-0 cursor-pointer inline-flex items-center justify-center gap-1.5 h-9">
-                        <i data-lucide="plus" class="size-3.5"></i>
+                    <button type="submit" id="btn-submit-enroll" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold shadow-xs shrink-0 cursor-pointer inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="plus" class="size-4"></i>
                         <span>Daftarkan</span>
                     </button>
                 </form>
-                <p id="enroll-empty-notice" class="text-xs text-default-400 italic hidden">Seluruh siswa aktif telah terdaftar atau belum ada akun siswa tersedia.</p>
+                <div id="enroll-empty-notice" class="hidden p-3 rounded-lg bg-default-50 border border-default-200 text-xs text-default-600 flex items-center gap-2">
+                    <i data-lucide="info" class="size-4 text-default-400 shrink-0"></i>
+                    <span id="enroll-empty-notice-text">Seluruh siswa aktif telah terdaftar ke kelas ini.</span>
+                </div>
             </div>
 
             <!-- Bagian 2: Tabel Siswa Terdaftar -->
             <div class="space-y-2">
-                <div class="flex items-center justify-between">
-                    <h5 class="text-xs font-bold text-default-800 uppercase tracking-wider flex items-center gap-1.5">
-                        <i data-lucide="list" class="size-3.5 text-primary"></i>
+                <div class="flex items-center justify-between gap-3 flex-wrap">
+                    <h5 class="text-xs font-bold text-default-800 flex items-center gap-1.5">
+                        <i data-lucide="list" class="size-4 text-primary"></i>
                         <span>Daftar Siswa Terdaftar (<span id="enrolled-count-header">0</span>)</span>
                     </h5>
-                    <input type="text" id="filterEnrolledStudentsInput" onkeyup="filterEnrolledStudentsTable()" placeholder="Cari siswa terdaftar..." class="form-input text-xs h-7.5 w-44 rounded border-default-200">
+                    <div class="relative w-full sm:w-56">
+                        <i data-lucide="search" class="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-default-400 pointer-events-none"></i>
+                        <input type="text" id="filterEnrolledStudentsInput" oninput="filterEnrolledStudentsTable()" placeholder="Cari siswa terdaftar..." class="form-input text-xs h-8 pl-8 pr-3 w-full rounded-lg border-default-200">
+                    </div>
                 </div>
 
-                <div class="border border-default-200 rounded-md overflow-hidden">
+                <div class="border border-default-200/90 rounded-xl overflow-hidden shadow-2xs">
                     <div class="overflow-x-auto max-h-64 overflow-y-auto">
                         <table class="w-full text-left text-xs divide-y divide-default-200" id="table-enrolled-students">
-                            <thead class="bg-default-100 border-y border-default-200 sticky top-0 z-10 text-xs font-semibold text-default-700">
+                            <thead class="bg-default-100 border-b border-default-200 sticky top-0 z-10 text-xs font-semibold text-default-700">
                                 <tr class="whitespace-nowrap">
-                                    <th class="px-3 py-2 border-b border-default-200 text-center w-10">No</th>
-                                    <th class="px-3 py-2 border-b border-default-200">Nama Siswa</th>
-                                    <th class="px-3 py-2 border-b border-default-200">NIM / NISN</th>
-                                    <th class="px-3 py-2 border-b border-default-200">Email</th>
-                                    <th class="px-3 py-2 border-b border-default-200 text-center w-24">Aksi</th>
+                                    <th class="px-3 py-2.5 text-center w-12">No</th>
+                                    <th class="px-3 py-2.5">Nama Siswa</th>
+                                    <th class="px-3 py-2.5">NIM / NISN</th>
+                                    <th class="px-3 py-2.5">Email</th>
+                                    <th class="px-3 py-2.5 text-center w-20">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="enrolled-students-body" class="divide-y divide-default-200 bg-white">
+                            <tbody id="enrolled-students-body" class="divide-y divide-default-200/70 bg-white">
                                 <tr>
                                     <td colspan="5" class="py-6 text-center text-default-400">Memuat data siswa...</td>
                                 </tr>
@@ -1111,8 +1124,8 @@
         </div>
 
         <div class="px-5 py-3 border-t border-default-200 bg-default-50 flex items-center justify-between shrink-0">
-            <span class="text-xs text-default-400">Perubahan pendaftaran siswa langsung tersimpan aman ke database.</span>
-            <button type="button" onclick="closeModal('modal-class-students')" class="btn btn-sm border border-default-200 bg-white hover:bg-default-100 text-default-700 font-semibold cursor-pointer">
+            <span class="text-xs text-default-500">Perubahan rombel tersimpan aman secara otomatis.</span>
+            <button type="button" onclick="closeModal('modal-class-students')" class="btn btn-sm border border-default-200 bg-white hover:bg-default-100 text-default-700 font-semibold cursor-pointer rounded-lg px-4">
                 Tutup
             </button>
         </div>
@@ -1231,23 +1244,52 @@
     // Kelola Peserta Didik Rombel / Kelas
     let currentManageClassId = null;
 
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function showClassAlert(type, message) {
+        const el = document.getElementById('class-students-alert');
+        if (!el) return;
+        el.className = type === 'success' 
+            ? 'rounded-lg px-4 py-2.5 text-xs font-semibold bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between gap-2'
+            : 'rounded-lg px-4 py-2.5 text-xs font-semibold bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between gap-2';
+        el.innerHTML = `<span>${escapeHtml(message)}</span><button type="button" onclick="this.parentElement.classList.add('hidden')" class="cursor-pointer text-current opacity-70 hover:opacity-100">&times;</button>`;
+        el.classList.remove('hidden');
+    }
+
     function openClassStudentsModal(classId, className, classCode, capacity) {
         currentManageClassId = classId;
-        document.getElementById('class-students-subtitle').innerText = `Kelas ${className} (${classCode}) • Kapasitas: ${capacity} Peserta`;
+        const displayClassName = className.toLowerCase().startsWith('kelas ') ? className : `Kelas ${className}`;
+        document.getElementById('class-students-subtitle').innerText = `${displayClassName} (${classCode}) • Kapasitas: ${capacity} Peserta`;
         document.getElementById('form-enroll-student').action = `/staff/academic/classes/${classId}/students`;
+
+        const alertEl = document.getElementById('class-students-alert');
+        if (alertEl) alertEl.classList.add('hidden');
+
+        const searchInput = document.getElementById('filterEnrolledStudentsInput');
+        if (searchInput) searchInput.value = '';
 
         openModal('modal-class-students');
 
         const tbody = document.getElementById('enrolled-students-body');
         tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-default-400">Memuat data peserta didik...</td></tr>`;
 
-        fetch(`/staff/academic/classes/${classId}/students`)
+        fetch(`/staff/academic/classes/${classId}/students`, {
+            headers: { 'Accept': 'application/json' }
+        })
             .then(res => res.json())
             .then(data => {
                 renderClassStudentsData(data);
             })
             .catch(err => {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-danger font-medium">Gagal memuat data siswa: ${err.message}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-danger font-medium">Gagal memuat data siswa: ${escapeHtml(err.message)}</td></tr>`;
             });
     }
 
@@ -1261,19 +1303,27 @@
         const desc = document.getElementById('class-capacity-desc');
         const bar = document.getElementById('class-capacity-bar');
         const headerCount = document.getElementById('enrolled-count-header');
+        const percentText = document.getElementById('class-capacity-percent-text');
 
         if (badge) badge.innerText = `${cls.enrolled_count} / ${cls.capacity} Peserta`;
         if (headerCount) headerCount.innerText = cls.enrolled_count;
 
+        // Also update background table row count badge if present
+        const bgTableCount = document.getElementById(`class-students-count-${cls.id}`);
+        if (bgTableCount) {
+            bgTableCount.innerText = `${cls.enrolled_count} / ${cls.capacity} terdaftar`;
+        }
+
         const percent = Math.min(100, Math.round((cls.enrolled_count / cls.capacity) * 100));
+        if (percentText) percentText.innerText = `${percent}% Terisi`;
         if (bar) {
             bar.style.width = `${percent}%`;
             if (percent >= 100) {
-                bar.className = 'bg-danger h-full transition-all duration-300';
+                bar.className = 'bg-danger h-full transition-all duration-300 rounded-full';
             } else if (percent >= 80) {
-                bar.className = 'bg-warning h-full transition-all duration-300';
+                bar.className = 'bg-warning h-full transition-all duration-300 rounded-full';
             } else {
-                bar.className = 'bg-primary h-full transition-all duration-300';
+                bar.className = 'bg-primary h-full transition-all duration-300 rounded-full';
             }
         }
 
@@ -1290,6 +1340,7 @@
         const select = document.getElementById('select-enroll-student');
         const btnSubmit = document.getElementById('btn-submit-enroll');
         const notice = document.getElementById('enroll-empty-notice');
+        const noticeText = document.getElementById('enroll-empty-notice-text');
 
         if (select) {
             select.innerHTML = '<option value="">-- Pilih Siswa untuk Didaftarkan --</option>';
@@ -1305,7 +1356,11 @@
                 if (btnSubmit) btnSubmit.disabled = true;
                 if (notice) {
                     notice.classList.remove('hidden');
-                    notice.innerText = isFull ? 'Kelas telah penuh. Tidak dapat menambahkan siswa lagi.' : 'Seluruh siswa aktif telah terdaftar ke kelas ini.';
+                    if (noticeText) {
+                        noticeText.innerText = isFull 
+                            ? 'Kelas telah penuh sesuai kuota batas kapasitas (30 peserta).' 
+                            : 'Seluruh siswa aktif telah terdaftar ke kelas ini.';
+                    }
                 }
             } else {
                 select.disabled = false;
@@ -1327,42 +1382,140 @@
             return;
         }
 
-        const csrfToken = '{{ csrf_token() }}';
-
         tbody.innerHTML = students.map((s, idx) => `
-            <tr class="hover:bg-default-50 transition enrolled-student-row" data-name="${(s.name || '').toLowerCase()}" data-nim="${(s.identity_number || '').toLowerCase()}">
-                <td class="px-3 py-2 text-default-500 font-mono text-center">${idx + 1}</td>
-                <td class="px-3 py-2 font-semibold text-default-800">${s.name}</td>
-                <td class="px-3 py-2 font-mono text-default-600">${s.identity_number || '-'}</td>
-                <td class="px-3 py-2 text-default-500">${s.email}</td>
-                <td class="px-3 py-2 text-center">
-                    <form method="POST" action="/staff/academic/classes/${classId}/students/${s.id}" class="inline" onsubmit="return confirm('Keluarkan siswa ${s.name} dari rombel ini?')">
-                        <input type="hidden" name="_token" value="${csrfToken}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="active_tab" value="classes">
-                        <button type="submit" class="size-6.5 rounded bg-danger/10 hover:bg-danger/20 text-danger inline-flex items-center justify-center transition cursor-pointer" title="Keluarkan dari Rombel">
-                            <i data-lucide="trash-2" class="size-3.5"></i>
-                        </button>
-                    </form>
+            <tr class="hover:bg-default-50/80 transition enrolled-student-row" data-name="${escapeHtml((s.name || '').toLowerCase())}" data-nim="${escapeHtml((s.identity_number || '').toLowerCase())}" data-email="${escapeHtml((s.email || '').toLowerCase())}">
+                <td class="px-3 py-2.5 text-default-500 font-mono text-center">${idx + 1}</td>
+                <td class="px-3 py-2.5 font-semibold text-default-800">${escapeHtml(s.name)}</td>
+                <td class="px-3 py-2.5 font-mono text-default-600">${escapeHtml(s.identity_number || '-')}</td>
+                <td class="px-3 py-2.5 text-default-500">${escapeHtml(s.email)}</td>
+                <td class="px-3 py-2.5 text-center">
+                    <button type="button" onclick="handleUnenrollStudent(${classId}, ${s.id}, '${escapeHtml(s.name)}')" class="size-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 inline-flex items-center justify-center transition cursor-pointer" title="Keluarkan dari Rombel" aria-label="Keluarkan ${escapeHtml(s.name)}">
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
+                        </svg>
+                    </button>
                 </td>
             </tr>
-        `).join('');
+        `).join('') + `
+            <tr id="enrolled-students-search-empty" class="hidden">
+                <td colspan="5" class="py-6 text-center text-default-400">Tidak ada siswa terdaftar yang cocok dengan filter pencarian.</td>
+            </tr>
+        `;
 
-        if (window.lucide) lucide.createIcons();
+        if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+    }
+
+    function handleEnrollStudentSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const select = document.getElementById('select-enroll-student');
+        const btnSubmit = document.getElementById('btn-submit-enroll');
+
+        if (!select || !select.value) {
+            showClassAlert('danger', 'Silakan pilih siswa yang akan didaftarkan.');
+            return;
+        }
+
+        const originalBtnHtml = btnSubmit ? btnSubmit.innerHTML : '';
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<span>Menyimpan...</span>`;
+        }
+
+        const formData = new FormData(form);
+        const csrfToken = '{{ csrf_token() }}';
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData
+        })
+        .then(res => res.json().then(data => ({ status: res.status, ok: res.ok, data })))
+        .then(({ ok, data }) => {
+            if (ok && data.success) {
+                showClassAlert('success', data.message || 'Siswa berhasil didaftarkan ke rombel.');
+                if (data.data) {
+                    renderClassStudentsData(data.data);
+                }
+            } else {
+                showClassAlert('danger', data.message || 'Gagal mendaftarkan siswa ke rombel.');
+            }
+        })
+        .catch(err => {
+            showClassAlert('danger', `Terjadi kesalahan: ${err.message}`);
+        })
+        .finally(() => {
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalBtnHtml;
+            }
+            if (window.lucide && window.lucide.createIcons) {
+                window.lucide.createIcons();
+            }
+        });
+    }
+
+    function handleUnenrollStudent(classId, studentId, studentName) {
+        if (!confirm(`Keluarkan siswa ${studentName} dari rombel ini?`)) {
+            return;
+        }
+
+        const csrfToken = '{{ csrf_token() }}';
+        const url = `/staff/academic/classes/${classId}/students/${studentId}`;
+
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(res => res.json().then(data => ({ status: res.status, ok: res.ok, data })))
+        .then(({ ok, data }) => {
+            if (ok && data.success) {
+                showClassAlert('success', data.message || `Siswa ${studentName} berhasil dikeluarkan dari rombel.`);
+                if (data.data) {
+                    renderClassStudentsData(data.data);
+                }
+            } else {
+                showClassAlert('danger', data.message || 'Gagal mengeluarkan siswa dari rombel.');
+            }
+        })
+        .catch(err => {
+            showClassAlert('danger', `Terjadi kesalahan: ${err.message}`);
+        });
     }
 
     function filterEnrolledStudentsTable() {
         const query = (document.getElementById('filterEnrolledStudentsInput')?.value || '').toLowerCase().trim();
         const rows = document.querySelectorAll('.enrolled-student-row');
+        let matchCount = 0;
+
         rows.forEach(r => {
             const name = r.getAttribute('data-name') || '';
             const nim = r.getAttribute('data-nim') || '';
-            if (name.includes(query) || nim.includes(query)) {
+            const email = r.getAttribute('data-email') || '';
+            if (name.includes(query) || nim.includes(query) || email.includes(query)) {
                 r.classList.remove('hidden');
+                matchCount++;
             } else {
                 r.classList.add('hidden');
             }
         });
+
+        const emptyRow = document.getElementById('enrolled-students-search-empty');
+        if (emptyRow) {
+            if (matchCount === 0 && rows.length > 0) {
+                emptyRow.classList.remove('hidden');
+            } else {
+                emptyRow.classList.add('hidden');
+            }
+        }
     }
 
     // Filter Jurusan berdasarkan Jenjang & Search

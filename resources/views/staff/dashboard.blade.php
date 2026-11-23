@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Dashboard Utama — TESLOKA CBT')
+@section('title', 'Dashboard Utama : TESLOKA CBT')
 @section('page-title', 'Dashboard')
 
 @section('content')

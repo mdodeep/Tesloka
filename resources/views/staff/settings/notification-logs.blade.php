@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Log & Riwayat Pengiriman Email — TESLOKA CBT')
+@section('title', 'Log & Riwayat Pengiriman Email : TESLOKA CBT')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Log Pengiriman Email')
 @section('page-subtitle', 'Pemantauan status pengiriman pesan transaksional keluar (sent, failed, pending).')

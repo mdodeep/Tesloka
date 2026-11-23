@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Profil & Kata Sandi — TESLOKA CBT')
+@section('title', 'Profil & Kata Sandi : TESLOKA CBT')
 @section('page-parent', 'Akun Pribadi')
 @section('page-title', 'Profil & Kata Sandi')
 @section('page-subtitle', 'Kelola informasi identitas, foto profil resmi, dan keamanan kata sandi akun Anda.')

@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Penyimpanan Arsip Ujian Historis — TESLOKA CBT')
+@section('title', 'Penyimpanan Arsip Ujian Historis : TESLOKA CBT')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Penyimpanan Arsip Ujian Historis')
 @section('page-subtitle', 'Data ujian yang telah selesai diarsipkan secara permanen dengan manifest data snapshot utuh dan proteksi hukum (Legal Hold).')

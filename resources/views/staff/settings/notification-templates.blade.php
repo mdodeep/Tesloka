@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Template Notifikasi & Pesan — TESLOKA CBT')
+@section('title', 'Template Notifikasi & Pesan : TESLOKA CBT')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Template Notifikasi & Pesan')
 @section('page-subtitle', 'Kustomisasi subjek dan bodi pesan otomatis dengan variabel dinamis (merge tags).')

@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Pusat Penilaian & Koreksi Ujian — TESLOKA CBT')
+@section('title', 'Pusat Penilaian & Koreksi Ujian : TESLOKA CBT')
 @section('page-parent', 'Evaluasi & Hasil')
 @section('page-title', 'Penilaian & Koreksi')
 @section('page-subtitle', 'Pusat penilaian otomatis, koreksi manual soal esai, rubrik penilaian, moderasi, regrade, dan publikasi hasil ujian.')

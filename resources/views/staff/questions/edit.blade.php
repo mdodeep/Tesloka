@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Edit Butir Soal ' . $question->code . ' — TESLOKA CBT')
+@section('title', 'Edit Butir Soal ' . $question->code . ' : TESLOKA CBT')
 @section('page-parent', 'Bank Soal')
 @section('page-title', 'Edit Soal: ' . $question->code)
 @section('page-subtitle', 'Versi #' . $question->version . ' • Menyimpan perubahan menghasilkan snapshot Versi #' . ($question->version + 1) . ' otomatis.')

@@ -105,7 +105,7 @@
 
         btnDownload.addEventListener('click', function () {
             const summaryText = `===============================================================
-       TESLOKA CBT — RINGKASAN PEMASANGAN RESMI SISTEM
+       TESLOKA CBT : RINGKASAN PEMASANGAN RESMI SISTEM
 ===============================================================
 
 Institusi Pendidikan  : {{ $summary['institution_name'] ?? '-' }}

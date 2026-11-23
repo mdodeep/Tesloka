@@ -18,7 +18,7 @@ class CheckProductionReadinessCommand extends Command
     public function handle(): int
     {
         $this->info('===============================================================');
-        $this->info('  TESLOKA CBT — PEMERIKSAAN KESIAPAN PRODUKSI (PRODUCTION CHECK)');
+        $this->info('  TESLOKA CBT : PEMERIKSAAN KESIAPAN PRODUKSI (PRODUCTION CHECK)');
         $this->info('===============================================================');
         $this->newLine();
 

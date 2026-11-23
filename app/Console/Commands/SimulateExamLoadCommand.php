@@ -32,7 +32,7 @@ class SimulateExamLoadCommand extends Command
         $answersPerStudent = (int) $this->option('answers');
 
         $this->info('===============================================================');
-        $this->info('  TESLOKA CBT — SIMULASI PENGUJIAN BEBAN KONKUREN (LOAD TEST)  ');
+        $this->info('  TESLOKA CBT : SIMULASI PENGUJIAN BEBAN KONKUREN (LOAD TEST)  ');
         $this->info('===============================================================');
         $this->line("Peserta Konkuren: {$studentsCount} siswa");
         $this->line("Autosave per Siswa: {$answersPerStudent} request");

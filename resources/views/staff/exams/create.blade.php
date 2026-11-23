@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Rancang Ujian Baru — TESLOKA CBT')
+@section('title', 'Rancang Ujian Baru : TESLOKA CBT')
 @section('page-parent', 'Konten & Ujian')
 @section('page-title', 'Rancang Ujian Baru')
 @section('page-subtitle', 'Tentukan parameter ujian, durasi, jadwal, dan kebijakan pengawasan anti-kecurangan.')

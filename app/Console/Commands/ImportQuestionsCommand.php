@@ -41,7 +41,7 @@ class ImportQuestionsCommand extends Command
         $filename = pathinfo($filePath, PATHINFO_FILENAME);
 
         $this->info('===============================================================');
-        $this->info('  TESLOKA CBT — IMPOR BANK SOAL & KONTEN');
+        $this->info('  TESLOKA CBT : IMPOR BANK SOAL & KONTEN');
         $this->info('===============================================================');
         $this->line("Berkas : <fg=yellow>{$filePath}</>");
         $this->line('Format : <fg=cyan>'.strtoupper($extension).'</>');

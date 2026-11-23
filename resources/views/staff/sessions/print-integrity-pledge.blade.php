@@ -228,7 +228,7 @@
 
     <div class="no-print">
         <div>
-            <strong>Pakta Integritas Pengawas Ruang CBT</strong> — Sesi: {{ $session->session_code }} ({{ $session->room->name ?? 'Ruang Ujian' }})
+            <strong>Pakta Integritas Pengawas Ruang CBT</strong> : Sesi: {{ $session->session_code }} ({{ $session->room->name ?? 'Ruang Ujian' }})
         </div>
         <div style="display: flex; gap: 8px;">
             <button onclick="window.print()" class="btn-print">

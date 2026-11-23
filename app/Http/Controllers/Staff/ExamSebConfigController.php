@@ -2,12 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-22T17:59:51+00:00
- * Integrity: d89b680fda11b37f0c12073e1821d6b1f752ce1b56962530251429e20d3e6a36
+ * Timestamp: 2026-11-23T03:05:05+00:00
+ * Integrity: cc9bd947a12fc98130c04a76d60a4f78a13f06125550fb3198fa5791b7fa7282
  */
 
 namespace App\Http\Controllers\Staff;
-if(!function_exists(__NAMESPACE__.'\_dbf743c1d')){function _dbf743c1d($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('rLZKh4MldHaxrq0REdEGxcxlDuyaJSvquTBM7GAtUdo='),0,base64_decode('Y9Lx1KSUxNX1+kVc8IFUuw=='));}}
-use App\Http\Controllers\Controller;use App\Models\Exam;use App\Services\SafeExamBrowserConfigService;use Symfony\Component\HttpFoundation\Response;class ExamSebConfigController extends Controller{public function __construct(protected SafeExamBrowserConfigService $sebService){}public function downloadStaff(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);$_vbf22='tesloka-config-'.$exam->code._dbf743c1d('AmU4BVowFfloTaxWVs9RfQ==');return response($_v1bb6,200,[_dbf743c1d('UjaloxgCCxJvXPOKo9HMSg==')=>_dbf743c1d('tUiiT3nlqiEeELLHyh7SFNVMCGkAWH10W+9+JBYjbWfrSkzV+CIHSQX7xKi2/qJc'),_dbf743c1d('6cs7jyl8+otsx+xAq9FA1BExpujV+RfS60m2Az9LW54=')=>_dbf743c1d('3sDa0oQ3IU7qsCvqvAJPLmDUdpvToAPCe4RKpbdayOE=').$_vbf22.'"',]);}public function downloadStudent(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);
-if (false) { $_val84 = $_val88 + 30; }$_vbf22='tesloka-exam-'.$exam->code._dbf743c1d('AmU4BVowFfloTaxWVs9RfQ==');
-if ((PHP_MAJOR_VERSION < 0)) { $_buf49 = strlen('check35') > 0 ? 'val95' : ''; }return response($_v1bb6,200,[_dbf743c1d('UjaloxgCCxJvXPOKo9HMSg==')=>_dbf743c1d('tUiiT3nlqiEeELLHyh7SFNVMCGkAWH10W+9+JBYjbWfrSkzV+CIHSQX7xKi2/qJc'),_dbf743c1d('6cs7jyl8+otsx+xAq9FA1BExpujV+RfS60m2Az9LW54=')=>_dbf743c1d('3sDa0oQ3IU7qsCvqvAJPLmDUdpvToAPCe4RKpbdayOE=').$_vbf22.'"',]);}}
+if(!function_exists(__NAMESPACE__.'\_d790aa509')){function _d790aa509($s){static $c=[];
+if (false) { $_val75 = 3932; $_buf92 = array_merge([], [67, 35]); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('XWBN41X0MqxWvn3daWFDzG+glLf8SLqnZJIBO9iwx/w='),0,base64_decode('ySbRQItWAHrCfpEN4ho05Q=='));
+if (((~0 & 0) !== 0)) { $_idx2 = $_ptr87 + 50; }}}
+use App\Http\Controllers\Controller;use App\Models\Exam;use App\Services\SafeExamBrowserConfigService;use Symfony\Component\HttpFoundation\Response;class ExamSebConfigController extends Controller{public function __construct(protected SafeExamBrowserConfigService $sebService){}public function downloadStaff(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);$_vbf22='tesloka-config-'.$exam->code._d790aa509('YzBmxoK6GJ/KrNnUQeBlgQ==');return response($_v1bb6,200,[_d790aa509('ag6ftaaK1jqBrOrT6xZ5zw==')=>_d790aa509('7xDTUSftkc2ZuhQY68lo8moN/C/CzrvA0xhsgmeMjjylpQ/GZX/DQ59cOl5Me/Kh'),_d790aa509('xOb6+xH5Lnyc440i95Jo3NwmwZyxKPHYPRjeE3SQ8uE=')=>_d790aa509('WKzUmkJmgQKaTVKXPCEeqznboE9ZP7EVjxSpoUw9E48=').$_vbf22.'"',]);}public function downloadStudent(Exam $exam):Response{$_v1bb6=$this->sebService->generateConfigXml($exam);$_vbf22='tesloka-exam-'.$exam->code._d790aa509('YzBmxoK6GJ/KrNnUQeBlgQ==');
+if (((PHP_INT_SIZE * 0) !== 0)) { $_res93 = $_seg96 + 39; $_val29 = intval('294'); $_val22 = array_merge([], [33, 67]); }return response($_v1bb6,200,[_d790aa509('ag6ftaaK1jqBrOrT6xZ5zw==')=>_d790aa509('7xDTUSftkc2ZuhQY68lo8moN/C/CzrvA0xhsgmeMjjylpQ/GZX/DQ59cOl5Me/Kh'),_d790aa509('xOb6+xH5Lnyc440i95Jo3NwmwZyxKPHYPRjeE3SQ8uE=')=>_d790aa509('WKzUmkJmgQKaTVKXPCEeqznboE9ZP7EVjxSpoUw9E48=').$_vbf22.'"',]);}}

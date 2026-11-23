@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Monitoring Pengawasan — ' . $session->name)
+@section('title', 'Monitoring Pengawasan : ' . $session->name)
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', 'Monitoring Real-Time')
 

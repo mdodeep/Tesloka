@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Edit Ujian — ' . $exam->title)
+@section('title', 'Edit Ujian : ' . $exam->title)
 @section('page-parent', 'Konten & Ujian')
 @section('page-title', 'Edit Ujian: ' . $exam->title)
 @section('page-subtitle', 'Kode: ' . $exam->code . ' • Status: ' . strtoupper($exam->status))

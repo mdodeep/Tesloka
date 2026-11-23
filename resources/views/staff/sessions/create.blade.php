@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Jadwalkan Sesi Ujian Baru — TESLOKA CBT')
+@section('title', 'Jadwalkan Sesi Ujian Baru : TESLOKA CBT')
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', 'Jadwalkan Sesi Baru')
 @section('page-subtitle', 'Pilih ujian, tentukan ruang ujian sesuai batasan kapasitas DEC-001, dan jadwalkan rentang waktu pelaksanaan.')

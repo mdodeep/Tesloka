@@ -17,7 +17,7 @@
             ? \App\Models\SystemSetting::get('branding.staff_login_instructions')
             : \App\Models\SystemSetting::get('branding.student_login_instructions');
     @endphp
-    <title>@yield('title', 'Autentikasi') — {{ $systemInstName }}</title>
+    <title>@yield('title', 'Autentikasi') : {{ $systemInstName }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $systemFaviconUrl }}">
     <style>
         @font-face {

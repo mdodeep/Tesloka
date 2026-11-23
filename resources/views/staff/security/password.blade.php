@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Ubah Password Akun — TESLOKA CBT')
+@section('title', 'Ubah Password Akun : TESLOKA CBT')
 @section('page-parent', 'Akun Pribadi')
 @section('page-title', 'Ubah Password')
 @section('page-subtitle', 'Gunakan kombinasi password yang kuat untuk melindungi akun institusi Anda.')

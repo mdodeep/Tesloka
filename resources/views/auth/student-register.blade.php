@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Pendaftaran Peserta Baru — TESLOKA CBT')
+@section('title', 'Pendaftaran Peserta Baru : TESLOKA CBT')
 
 @section('content')
     <div class="mb-6 text-center">

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'Pemasang Sistem' }} — TESLOKA CBT</title>
+    <title>{{ $title ?? 'Pemasang Sistem' }} : TESLOKA CBT</title>
     <link rel="icon" type="image/webp" href="{{ asset('assets/images/favicon-tesloka-bg-putih.webp') }}">
 
     <style>

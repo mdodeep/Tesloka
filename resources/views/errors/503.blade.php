@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Dalam Pemeliharaan — TESLOKA CBT</title>
+    <title>Sistem Dalam Pemeliharaan : TESLOKA CBT</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon-tesloka-bg-putih.webp') }}">
     <style>
         @font-face {

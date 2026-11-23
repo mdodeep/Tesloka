@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Integrasi Sistem, API & Webhook — TESLOKA CBT')
+@section('title', 'Integrasi Sistem, API & Webhook : TESLOKA CBT')
 @section('page-parent', 'Tata Kelola & Keamanan')
 @section('page-title', 'Integrasi Sistem, API & Webhook')
 @section('page-subtitle', 'Kelola API Keys antarsistem, sinkronisasi sertifikat kelulusan, dan siaran peristiwa webhook.')
@@ -348,10 +348,10 @@
             <div class="space-y-2">
                 <div class="font-semibold text-default-700">Endpoint REST API Tersedia</div>
                 <ul class="divide-y divide-slate-100 border border-default-200 rounded overflow-hidden bg-default-50/50">
-                    <li class="px-3 py-2"><code>GET /api/v1/exams</code> — Daftar ujian yang dipublikasikan/selesai</li>
-                    <li class="px-3 py-2"><code>GET /api/v1/exams/{id}/grades?passed=1</code> — Data kelulusan & nilai peserta</li>
-                    <li class="px-3 py-2"><code>GET /api/v1/exams/{id}/grades/{student_id}</code> — Nilai spesifik peserta pada ujian</li>
-                    <li class="px-3 py-2"><code>GET /api/v1/students/{nomor_peserta}/results</code> — Riwayat ujian & kelulusan siswa</li>
+                    <li class="px-3 py-2"><code>GET /api/v1/exams</code> : Daftar ujian yang dipublikasikan/selesai</li>
+                    <li class="px-3 py-2"><code>GET /api/v1/exams/{id}/grades?passed=1</code> : Data kelulusan & nilai peserta</li>
+                    <li class="px-3 py-2"><code>GET /api/v1/exams/{id}/grades/{student_id}</code> : Nilai spesifik peserta pada ujian</li>
+                    <li class="px-3 py-2"><code>GET /api/v1/students/{nomor_peserta}/results</code> : Riwayat ujian & kelulusan siswa</li>
                 </ul>
             </div>
 

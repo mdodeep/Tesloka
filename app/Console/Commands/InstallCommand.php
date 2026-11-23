@@ -33,7 +33,7 @@ class InstallCommand extends Command
     public function handle(InstallationService $installerService): int
     {
         $this->info('===============================================================');
-        $this->info('           TESLOKA CBT — PEMASANG SISTEM RESMI (CLI)          ');
+        $this->info('           TESLOKA CBT : PEMASANG SISTEM RESMI (CLI)          ');
         $this->info('===============================================================');
         $this->newLine();
 

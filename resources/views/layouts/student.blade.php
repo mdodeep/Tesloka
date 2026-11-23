@@ -9,7 +9,7 @@
         $systemFaviconUrl = $systemInstitution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
         $systemInstName = \App\Models\SystemSetting::get('app.name', $systemInstitution?->name ?? 'TESLOKA CBT');
     @endphp
-    <title>@yield('title', 'Portal Ujian') — {{ $systemInstName }}</title>
+    <title>@yield('title', 'Portal Ujian') : {{ $systemInstName }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $systemFaviconUrl }}">
     <style>
         @font-face {

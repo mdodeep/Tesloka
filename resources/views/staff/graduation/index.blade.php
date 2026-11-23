@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Pusat Hasil & Kelulusan Siswa — TESLOKA CBT')
+@section('title', 'Pusat Hasil & Kelulusan Siswa : TESLOKA CBT')
 @section('page-parent', 'Evaluasi & Hasil')
 @section('page-title', 'Hasil & Kelulusan')
 @section('page-subtitle', 'Rekapitulasi penetapan status kelulusan, standar KKM, transkrip nilai akademik, cetak SKL, dan sertifikat kelulusan siswa.')

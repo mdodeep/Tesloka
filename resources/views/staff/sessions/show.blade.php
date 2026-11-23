@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Kelola Sesi — ' . $session->name)
+@section('title', 'Kelola Sesi : ' . $session->name)
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', $session->name)
 @section('page-subtitle', 'Kode: ' . $session->session_code . ' • Ujian: ' . $session->exam->title . ' • ' . ($session->isOnline() ? 'Pelaksanaan: Daring (Online CBT)' : ('Ruang: ' . ($session->room->name ?? 'Lab CBT') . ' (Kapasitas: ' . ($session->room->capacity ?? 30) . ')')))

@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Grid Kamera Pengawasan — ' . $session->name)
+@section('title', 'Grid Kamera Pengawasan : ' . $session->name)
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', 'Grid Kamera: ' . $session->name)
 

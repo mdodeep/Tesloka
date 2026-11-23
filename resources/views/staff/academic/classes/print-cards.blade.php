@@ -243,7 +243,7 @@
 
     <div class="no-print">
         <div>
-            <strong>Kartu Peserta Ujian Massal</strong> — Kelas: {{ $class->name }} ({{ $class->department->name ?? 'Reguler' }}) • Total: {{ $students->count() }} Peserta Didik
+            <strong>Kartu Peserta Ujian Massal</strong> : Kelas: {{ $class->name }} ({{ $class->department->name ?? 'Reguler' }}) • Total: {{ $students->count() }} Peserta Didik
         </div>
         <div style="display: flex; gap: 8px;">
             <button onclick="window.print()" class="btn-print">

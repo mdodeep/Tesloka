@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Pengaturan Server Email SMTP — TESLOKA CBT')
+@section('title', 'Pengaturan Server Email SMTP : TESLOKA CBT')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Pengaturan Server Email & SMTP')
 @section('page-subtitle', 'Konfigurasi server SMTP transaksional dan pengujian pengiriman email sistem.')
@@ -96,8 +96,8 @@
                                 Protokol Enkripsi
                             </label>
                             <select id="select_encryption" name="encryption" class="form-select @error('encryption') border-rose-500 @enderror">
-                                <option value="tls" @selected(old('encryption', strtolower($smtp['encryption'])) === 'tls')>TLS (STARTTLS — Rekomendasi Port 587)</option>
-                                <option value="ssl" @selected(old('encryption', strtolower($smtp['encryption'])) === 'ssl')>SSL (SMTPS — Port 465)</option>
+                                <option value="tls" @selected(old('encryption', strtolower($smtp['encryption'])) === 'tls')>TLS (STARTTLS : Rekomendasi Port 587)</option>
+                                <option value="ssl" @selected(old('encryption', strtolower($smtp['encryption'])) === 'ssl')>SSL (SMTPS : Port 465)</option>
                                 <option value="none" @selected(old('encryption', strtolower($smtp['encryption'])) === 'none' || empty($smtp['encryption']))>None (Tanpa Enkripsi / Local Relay)</option>
                             </select>
                             @error('encryption')

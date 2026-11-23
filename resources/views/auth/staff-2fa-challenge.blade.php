@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Verifikasi Dua Faktor (2FA) — Staf')
+@section('title', 'Verifikasi Dua Faktor (2FA) : Staf')
 
 @section('content')
     <div class="mb-6 text-center">

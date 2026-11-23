@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Delegasi Wewenang — TESLOKA CBT')
+@section('title', 'Delegasi Wewenang : TESLOKA CBT')
 @section('page-parent', 'Tata Kelola & Keamanan')
 @section('page-title', 'Delegasi Wewenang')
 @section('page-subtitle', 'Mekanisme pelimpahan wewenang sementara kepada koordinator atau pengganti resmi.')

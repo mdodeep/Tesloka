@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Detail Butir Soal ' . $question->code . ' — TESLOKA CBT')
+@section('title', 'Detail Butir Soal ' . $question->code . ' : TESLOKA CBT')
 @section('page-parent', 'Bank Soal')
 @section('page-title', 'Soal: ' . $question->code)
 @section('page-subtitle', 'Mata Pelajaran: ' . ($question->questionBank->subject->name ?? '-') . ' • Versi #' . $question->version . ' • Bobot: ' . $question->weight)

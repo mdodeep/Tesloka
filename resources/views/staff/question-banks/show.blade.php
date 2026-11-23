@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', $questionBank->name . ' — TESLOKA CBT')
+@section('title', $questionBank->name . ' : TESLOKA CBT')
 @section('page-parent', 'Bank Soal')
 @section('page-title', $questionBank->name)
 @section('page-subtitle', 'Kode: ' . $questionBank->code . ' • Mapel: ' . ($questionBank->subject?->name ?? 'Umum') . ' • Penyusun: ' . ($questionBank->author?->name ?? 'Staf'))

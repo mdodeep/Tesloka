@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Pusat Grafik & Laporan Analisis CBT — TESLOKA')
+@section('title', 'Pusat Grafik & Laporan Analisis CBT : TESLOKA')
 @section('page-parent', 'Evaluasi & Hasil')
 @section('page-title', 'Grafik & Analitik')
 @section('page-subtitle', 'Visualisasi psikometri butir soal, distribusi statistik skor ujian, komparasi performa mata pelajaran, dan analisis kelulusan komprehensif.')

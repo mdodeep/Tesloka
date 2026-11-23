@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Penilaian & Hasil Ujian — ' . $exam->title)
+@section('title', 'Penilaian & Hasil Ujian : ' . $exam->title)
 @section('page-parent', 'Konten & Ujian')
 @section('page-title', 'Penilaian & Pemeringkatan')
 

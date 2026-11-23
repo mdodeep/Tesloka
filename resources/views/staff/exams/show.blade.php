@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Detail & Kelola Ujian — ' . $exam->title)
+@section('title', 'Detail & Kelola Ujian : ' . $exam->title)
 @section('page-parent', 'Konten & Ujian')
 @section('page-title')
     <div class="flex items-center gap-2 flex-wrap">

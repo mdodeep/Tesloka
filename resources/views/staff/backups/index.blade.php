@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Cadangan & Disaster Recovery — TESLOKA CBT')
+@section('title', 'Cadangan & Disaster Recovery : TESLOKA CBT')
 @section('page-parent', 'Tata Kelola & Keamanan')
 @section('page-title')
 Manajemen Cadangan & Pemulihan Sistem

@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Aktivasi Two-Factor Authentication — TESLOKA CBT')
+@section('title', 'Aktivasi Two-Factor Authentication : TESLOKA CBT')
 @section('page-parent', 'Keamanan')
 @section('page-title', 'Pengaturan Autentikasi 2FA')
 @section('page-subtitle', 'Ikuti 3 langkah berikut untuk menautkan aplikasi autentikator Anda dengan akun TESLOKA.')

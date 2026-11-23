@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Repositori Berkas & Media Terisolasi — TESLOKA CBT')
+@section('title', 'Repositori Berkas & Media Terisolasi : TESLOKA CBT')
 @section('page-parent', 'Konten & Ujian')
 @section('page-title')
 Repositori Berkas & Media Terisolasi

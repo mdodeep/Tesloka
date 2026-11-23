@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Buat Ujian Remedial & Susulan — ' . $exam->title)
+@section('title', 'Buat Ujian Remedial & Susulan : ' . $exam->title)
 @section('page-parent', 'Konten & Ujian')
 @section('page-title', 'Penyusunan Ujian Remedial: ' . $exam->title)
 @section('page-subtitle', 'Menerbitkan ujian tindak lanjut yang terhubung ke ujian induk dengan penyalinan otomatis cetak biru (blueprint).')

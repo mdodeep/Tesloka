@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Autentikasi Dua Faktor (2FA) — TESLOKA CBT')
+@section('title', 'Autentikasi Dua Faktor (2FA) : TESLOKA CBT')
 @section('page-parent', 'Keamanan')
 @section('page-title', 'Autentikasi Dua Faktor (2FA)')
 @section('page-subtitle', 'Lapisan keamanan ekstra yang mengharuskan memasukkan kode numerik 6 digit dari aplikasi autentikator di ponsel cerdas Anda saat masuk ke sistem.')
@@ -261,7 +261,7 @@
 
             function downloadRecoveryCodes() {
                 if (!recoveryCodesList || recoveryCodesList.length === 0) return;
-                const header = "KODE PEMULIHAN DARURAT (EMERGENCY RECOVERY CODES) — TESLOKA CBT\n" +
+                const header = "KODE PEMULIHAN DARURAT (EMERGENCY RECOVERY CODES) : TESLOKA CBT\n" +
                     "Akun: {{ $user->name }} ({{ $user->username }})\n" +
                     "Institusi: {{ $user->institution->name ?? 'TESLOKA CBT' }}\n" +
                     "Tanggal Unduh: " + new Date().toLocaleString('id-ID') + "\n" +

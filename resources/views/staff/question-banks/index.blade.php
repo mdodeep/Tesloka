@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Bank Soal & Konten — TESLOKA CBT')
+@section('title', 'Bank Soal & Konten : TESLOKA CBT')
 @section('page-parent', 'Konten & Ujian')
 @section('page-title', 'Bank Soal & Konten')
 @section('page-subtitle', 'Kelola bank soal berbasis mata pelajaran/kuliah, stimulus, dan butir soal berbagai format.')

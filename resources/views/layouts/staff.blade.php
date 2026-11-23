@@ -88,27 +88,29 @@
                         @endif
 
                         <!-- 3. KONTEN & ASESMEN -->
-                        <li class="menu-title">
-                            <span>Konten &amp; Asesmen</span>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.question-banks.index') }}" class="menu-link {{ request()->routeIs('staff.question-banks.*', 'staff.questions.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="file-question" class="size-4.5"></i></span>
-                                <span class="menu-text">Bank Soal &amp; Konten</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.media.index') }}" class="menu-link {{ request()->routeIs('staff.media.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="image" class="size-4.5"></i></span>
-                                <span class="menu-text">Pustaka Media</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.exams.index') }}" class="menu-link {{ request()->routeIs('staff.exams.*') && !request()->routeIs('staff.exams.grading.*', 'staff.exams.reports.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="file-text" class="size-4.5"></i></span>
-                                <span class="menu-text">Perancangan Ujian</span>
-                            </a>
-                        </li>
+                        @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'exam_coordinator', 'academic_coordinator', 'approver']))
+                            <li class="menu-title">
+                                <span>Konten &amp; Asesmen</span>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('staff.question-banks.index') }}" class="menu-link {{ request()->routeIs('staff.question-banks.*', 'staff.questions.*') ? 'active !bg-primary !text-white' : '' }}">
+                                    <span class="menu-icon"><i data-lucide="file-question" class="size-4.5"></i></span>
+                                    <span class="menu-text">Bank Soal &amp; Konten</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('staff.media.index') }}" class="menu-link {{ request()->routeIs('staff.media.*') ? 'active !bg-primary !text-white' : '' }}">
+                                    <span class="menu-icon"><i data-lucide="image" class="size-4.5"></i></span>
+                                    <span class="menu-text">Pustaka Media</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('staff.exams.index') }}" class="menu-link {{ request()->routeIs('staff.exams.*') && !request()->routeIs('staff.exams.grading.*', 'staff.exams.reports.*') ? 'active !bg-primary !text-white' : '' }}">
+                                    <span class="menu-icon"><i data-lucide="file-text" class="size-4.5"></i></span>
+                                    <span class="menu-text">Perancangan Ujian</span>
+                                </a>
+                            </li>
+                        @endif
 
                         <!-- 4. PELAKSANAAN CBT -->
                         <li class="menu-title">
@@ -151,27 +153,35 @@
                         </li>
 
                         <!-- 6. TATA KELOLA & KEPATUHAN -->
-                        <li class="menu-title">
-                            <span>Tata Kelola &amp; Kepatuhan</span>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.delegations.index') }}" class="menu-link {{ request()->routeIs('staff.delegations.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="shield-check" class="size-4.5"></i></span>
-                                <span class="menu-text">Delegasi Wewenang</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.approvals.index') }}" class="menu-link {{ request()->routeIs('staff.approvals.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="user-check" class="size-4.5"></i></span>
-                                <span class="menu-text">Four-Eyes Approval</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.security.audit-logs') }}" class="menu-link {{ request()->routeIs('staff.security.audit-logs*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="file-spreadsheet" class="size-4.5"></i></span>
-                                <span class="menu-text">Jejak Audit Sistem</span>
-                            </a>
-                        </li>
+                        @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'academic_coordinator', 'exam_coordinator', 'approver', 'teacher', 'auditor', 'technical_officer']))
+                            <li class="menu-title">
+                                <span>Tata Kelola &amp; Kepatuhan</span>
+                            </li>
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'academic_coordinator', 'exam_coordinator', 'approver']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.delegations.index') }}" class="menu-link {{ request()->routeIs('staff.delegations.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="shield-check" class="size-4.5"></i></span>
+                                        <span class="menu-text">Delegasi Wewenang</span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'academic_coordinator', 'exam_coordinator', 'approver', 'teacher']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.approvals.index') }}" class="menu-link {{ request()->routeIs('staff.approvals.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="user-check" class="size-4.5"></i></span>
+                                        <span class="menu-text">Four-Eyes Approval</span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'auditor', 'technical_officer']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.security.audit-logs') }}" class="menu-link {{ request()->routeIs('staff.security.audit-logs*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="file-spreadsheet" class="size-4.5"></i></span>
+                                        <span class="menu-text">Jejak Audit Sistem</span>
+                                    </a>
+                                </li>
+                            @endif
+                        @endif
 
                         <!-- 7. SISTEM & INTEGRASI -->
                         @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin']))

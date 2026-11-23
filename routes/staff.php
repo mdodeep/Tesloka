@@ -43,7 +43,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('login', [StaffAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [StaffAuthController::class, 'login'])->name('login.post');
         Route::get('2fa/challenge', [StaffAuthController::class, 'showTwoFactorChallenge'])->name('2fa.challenge');
-        Route::post('2fa/challenge', [StaffAuthController::class, 'verifyTwoFactorChallenge'])->name('2fa.challenge.verify');
+        Route::post('2fa/challenge', [StaffAuthController::class, 'verifyTwoFactorChallenge'])->middleware('throttle:10,1')->name('2fa.challenge.verify');
     });
 
     // Authenticated Staff Routes
@@ -113,49 +113,51 @@ Route::prefix('staff')->name('staff.')->group(function () {
         });
 
         // Question Banks & Content Management (FULL-FEATURE Sec 6, 7, 50)
-        Route::prefix('question-banks')->name('question-banks.')->group(function () {
-            Route::get('/', [QuestionBankController::class, 'index'])->name('index');
-            Route::post('/', [QuestionBankController::class, 'store'])->name('store');
-            Route::get('template-xlsx', [QuestionBankController::class, 'downloadTemplateXlsx'])->name('template-xlsx');
-            Route::get('template-csv', [QuestionBankController::class, 'downloadTemplateCsv'])->name('template-csv');
-            Route::get('template-json', [QuestionBankController::class, 'downloadTemplateJson'])->name('template-json');
-            Route::get('template-zip', [QuestionBankController::class, 'downloadTemplateZip'])->name('template-zip');
-            Route::get('template-aiken', [QuestionBankController::class, 'downloadTemplateAiken'])->name('template-aiken');
-            Route::get('template-gift', [QuestionBankController::class, 'downloadTemplateGift'])->name('template-gift');
-            Route::get('{questionBank}', [QuestionBankController::class, 'show'])->name('show');
-            Route::put('{questionBank}', [QuestionBankController::class, 'update'])->name('update');
-            Route::delete('{questionBank}', [QuestionBankController::class, 'destroy'])->name('destroy');
-            Route::post('{questionBank}/duplicate', [QuestionBankController::class, 'duplicate'])->name('duplicate');
-            Route::get('{questionBank}/export-csv', [QuestionBankController::class, 'exportCsv'])->name('export-csv');
-            Route::get('{questionBank}/export-docx', [QuestionBankController::class, 'exportDocx'])->name('export-docx');
-            Route::get('{questionBank}/export-zip', [QuestionBankController::class, 'exportZip'])->name('export-zip');
-            Route::post('{questionBank}/import-preview', [QuestionBankController::class, 'previewImport'])->name('import-preview');
-            Route::post('{questionBank}/import-csv', [QuestionBankController::class, 'importCsv'])->name('import-csv');
-            Route::post('{questionBank}/stimuli', [QuestionStimulusController::class, 'store'])->name('stimuli.store');
-            Route::get('{questionBank}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
-            Route::post('{questionBank}/questions', [QuestionController::class, 'store'])->name('questions.store');
-        });
+        Route::middleware('role:admin,super_admin,institution_admin,teacher,exam_coordinator,academic_coordinator,approver')->group(function () {
+            Route::prefix('question-banks')->name('question-banks.')->group(function () {
+                Route::get('/', [QuestionBankController::class, 'index'])->name('index');
+                Route::post('/', [QuestionBankController::class, 'store'])->name('store');
+                Route::get('template-xlsx', [QuestionBankController::class, 'downloadTemplateXlsx'])->name('template-xlsx');
+                Route::get('template-csv', [QuestionBankController::class, 'downloadTemplateCsv'])->name('template-csv');
+                Route::get('template-json', [QuestionBankController::class, 'downloadTemplateJson'])->name('template-json');
+                Route::get('template-zip', [QuestionBankController::class, 'downloadTemplateZip'])->name('template-zip');
+                Route::get('template-aiken', [QuestionBankController::class, 'downloadTemplateAiken'])->name('template-aiken');
+                Route::get('template-gift', [QuestionBankController::class, 'downloadTemplateGift'])->name('template-gift');
+                Route::get('{questionBank}', [QuestionBankController::class, 'show'])->name('show');
+                Route::put('{questionBank}', [QuestionBankController::class, 'update'])->name('update');
+                Route::delete('{questionBank}', [QuestionBankController::class, 'destroy'])->name('destroy');
+                Route::post('{questionBank}/duplicate', [QuestionBankController::class, 'duplicate'])->name('duplicate');
+                Route::get('{questionBank}/export-csv', [QuestionBankController::class, 'exportCsv'])->name('export-csv');
+                Route::get('{questionBank}/export-docx', [QuestionBankController::class, 'exportDocx'])->name('export-docx');
+                Route::get('{questionBank}/export-zip', [QuestionBankController::class, 'exportZip'])->name('export-zip');
+                Route::post('{questionBank}/import-preview', [QuestionBankController::class, 'previewImport'])->name('import-preview');
+                Route::post('{questionBank}/import-csv', [QuestionBankController::class, 'importCsv'])->name('import-csv');
+                Route::post('{questionBank}/stimuli', [QuestionStimulusController::class, 'store'])->name('stimuli.store');
+                Route::get('{questionBank}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
+                Route::post('{questionBank}/questions', [QuestionController::class, 'store'])->name('questions.store');
+            });
 
-        Route::prefix('questions')->name('questions.')->group(function () {
-            Route::get('{question}', [QuestionController::class, 'show'])->name('show');
-            Route::get('{question}/edit', [QuestionController::class, 'edit'])->name('edit');
-            Route::put('{question}', [QuestionController::class, 'update'])->name('update');
-            Route::post('{question}/duplicate', [QuestionController::class, 'duplicate'])->name('duplicate');
-            Route::post('{question}/restore/{versionNumber}', [QuestionController::class, 'restoreVersion'])->name('restore');
-            Route::delete('{question}', [QuestionController::class, 'destroy'])->name('destroy');
-        });
+            Route::prefix('questions')->name('questions.')->group(function () {
+                Route::get('{question}', [QuestionController::class, 'show'])->name('show');
+                Route::get('{question}/edit', [QuestionController::class, 'edit'])->name('edit');
+                Route::put('{question}', [QuestionController::class, 'update'])->name('update');
+                Route::post('{question}/duplicate', [QuestionController::class, 'duplicate'])->name('duplicate');
+                Route::post('{question}/restore/{versionNumber}', [QuestionController::class, 'restoreVersion'])->name('restore');
+                Route::delete('{question}', [QuestionController::class, 'destroy'])->name('destroy');
+            });
 
-        Route::put('stimuli/{stimulus}', [QuestionStimulusController::class, 'update'])->name('stimuli.update');
-        Route::delete('stimuli/{stimulus}', [QuestionStimulusController::class, 'destroy'])->name('stimuli.destroy');
+            Route::put('stimuli/{stimulus}', [QuestionStimulusController::class, 'update'])->name('stimuli.update');
+            Route::delete('stimuli/{stimulus}', [QuestionStimulusController::class, 'destroy'])->name('stimuli.destroy');
+        });
 
         // Delegations & Four-Eyes Approvals
-        Route::prefix('delegations')->name('delegations.')->group(function () {
+        Route::prefix('delegations')->middleware('role:admin,super_admin,institution_admin,academic_coordinator,exam_coordinator,approver')->name('delegations.')->group(function () {
             Route::get('/', [DelegationApprovalController::class, 'indexDelegations'])->name('index');
             Route::post('/', [DelegationApprovalController::class, 'storeDelegation'])->name('store');
             Route::post('{delegation}/revoke', [DelegationApprovalController::class, 'revokeDelegation'])->name('revoke');
         });
 
-        Route::prefix('approvals')->name('approvals.')->group(function () {
+        Route::prefix('approvals')->middleware('role:admin,super_admin,institution_admin,academic_coordinator,exam_coordinator,approver,teacher')->name('approvals.')->group(function () {
             Route::get('/', [DelegationApprovalController::class, 'indexApprovals'])->name('index');
             Route::post('{approvalRequest}/approve', [DelegationApprovalController::class, 'approveRequest'])->name('approve');
             Route::post('{approvalRequest}/reject', [DelegationApprovalController::class, 'rejectRequest'])->name('reject');
@@ -290,12 +292,14 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::post('two-factor/disable', [StaffSecurityController::class, 'disableTwoFactor'])->name('two-factor.disable');
 
             // Audit Logs Trail & Export (FULL-FEATURE 48)
-            Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs');
-            Route::get('audit-logs/export-csv', [AuditLogController::class, 'exportCsv'])->name('audit-logs.export-csv');
+            Route::middleware('role:admin,super_admin,institution_admin,auditor,technical_officer')->group(function () {
+                Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs');
+                Route::get('audit-logs/export-csv', [AuditLogController::class, 'exportCsv'])->name('audit-logs.export-csv');
+            });
         });
 
         // Media Library & Isolated File Management (FULL-FEATURE Sec 47, 50)
-        Route::prefix('media')->name('media.')->group(function () {
+        Route::prefix('media')->middleware('role:admin,super_admin,institution_admin,teacher,exam_coordinator,academic_coordinator,approver')->name('media.')->group(function () {
             Route::get('/', [MediaController::class, 'index'])->name('index');
             Route::get('picker', [MediaController::class, 'picker'])->name('picker');
             Route::post('/', [MediaController::class, 'store'])->name('store');
@@ -330,7 +334,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
         });
 
         // System Observability & Pre-Flight Checks (FULL-FEATURE 57 & 60)
-        Route::prefix('system')->name('system.')->group(function () {
+        Route::prefix('system')->middleware('role:admin,super_admin,institution_admin,technical_officer')->name('system.')->group(function () {
             Route::get('health', [SystemHealthController::class, 'index'])->name('health');
             Route::post('health/preflight', [SystemHealthController::class, 'runPreflight'])->name('health.preflight');
         });

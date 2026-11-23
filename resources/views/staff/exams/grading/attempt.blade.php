@@ -65,7 +65,7 @@
 
                     <!-- Question Content -->
                     <div class="text-sm text-default-900 font-medium leading-relaxed">
-                        {!! $q->content !!}
+                        {!! \App\Services\HtmlSanitizerService::clean($q->content) !!}
                     </div>
 
                     <!-- Options / Answer Display -->

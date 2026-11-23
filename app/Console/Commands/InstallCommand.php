@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Services\InstallationService;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use Throwable;
 
 class InstallCommand extends Command
 {
@@ -159,7 +159,7 @@ class InstallCommand extends Command
             $this->table(['Parameter', 'Nilai'], $rows);
 
             return self::SUCCESS;
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             $this->error('Terjadi kesalahan fatal selama instalasi: '.$e->getMessage());
 
             return self::FAILURE;

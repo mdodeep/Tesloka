@@ -128,7 +128,23 @@ class User extends Authenticatable
      */
     public function isStaff(): bool
     {
-        return $this->hasRole(['admin', 'super_admin', 'teacher', 'proctor', 'operator', 'auditor']);
+        return $this->hasRole([
+            'admin',
+            'super_admin',
+            'institution_admin',
+            'teacher',
+            'proctor',
+            'operator',
+            'academic_coordinator',
+            'exam_coordinator',
+            'academic_operator',
+            'grader',
+            'grading_moderator',
+            'approver',
+            'auditor',
+            'technical_officer',
+            'helpdesk_officer',
+        ]);
     }
 
     /**

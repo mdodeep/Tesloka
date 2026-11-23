@@ -16,7 +16,7 @@ Route::prefix('ujian')->name('student.')->group(function () {
         Route::get('login', [StudentAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [StudentAuthController::class, 'login'])->name('login.post');
         Route::get('register', [StudentAuthController::class, 'showRegisterForm'])->name('register');
-        Route::post('register', [StudentAuthController::class, 'register'])->name('register.post');
+        Route::post('register', [StudentAuthController::class, 'register'])->middleware('throttle:10,1')->name('register.post');
     });
 
     // Authenticated Student Routes
@@ -49,11 +49,11 @@ Route::prefix('ujian')->name('student.')->group(function () {
             });
 
             Route::prefix('attempts')->name('exam.')->group(function () {
-                Route::get('{attempt}', [ExamAttemptController::class, 'show'])->name('show');
+                Route::get('{attempt}', [ExamAttemptController::class, 'show'])->middleware('seb')->name('show');
                 Route::get('{attempt}/time', [ExamAttemptController::class, 'serverTime'])->name('time');
-                Route::post('{attempt}/save-answer', [ExamAttemptController::class, 'saveAnswer'])->name('save-answer');
-                Route::post('{attempt}/toggle-flag', [ExamAttemptController::class, 'toggleFlag'])->name('toggle-flag');
-                Route::post('{attempt}/submit', [ExamAttemptController::class, 'submit'])->name('submit');
+                Route::post('{attempt}/save-answer', [ExamAttemptController::class, 'saveAnswer'])->middleware('seb')->name('save-answer');
+                Route::post('{attempt}/toggle-flag', [ExamAttemptController::class, 'toggleFlag'])->middleware('seb')->name('toggle-flag');
+                Route::post('{attempt}/submit', [ExamAttemptController::class, 'submit'])->middleware('seb')->name('submit');
                 Route::get('{attempt}/finish', [ExamAttemptController::class, 'finish'])->name('finish');
                 Route::get('{attempt}/transcript', [ExamAttemptController::class, 'transcript'])->name('transcript');
                 Route::get('{attempt}/certificate', [ExamAttemptController::class, 'certificate'])->name('certificate');

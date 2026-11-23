@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Platform Sistem Evaluasi Computer-Based Test (CBT) Terstandar Institusi Pendidikan.</strong><br>
-  Satu instalasi independen untuk satu institusi — 100% on-premise single-tenant dengan kedaulatan data penuh.
+  Satu instalasi independen untuk satu institusi, 100% on-premise single-tenant dengan kedaulatan data penuh.
 </p>
 
 <p align="center">
@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-311%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="311 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-2.225%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.225 Assertions">
+  <img src="https://img.shields.io/badge/Tests-337%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="337 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-2.399%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.399 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -156,9 +156,9 @@ Panduan operasional lengkap step-by-step telah didokumentasikan secara rinci pad
 
 ### Ringkasan Alur Operasional 12 Langkah:
 1. **Initial Setup Pasca-Deployment:**
-   - Jalankan `php artisan migrate --force` dan `php artisan storage:link`.
-   - Inisialisasi akun Super Administrator pertama via `php artisan db:seed --class=ProductionCleanDatabaseSeeder --force`.
-   - Login ke `https://staff.institusi.ac.id/staff/login` dengan username `admin` dan password `Tesloka2026!`.
+   - Jalankan `php artisan tesloka:install` (atau kunjungi `https://staff.domainanda.sch.id/install` di browser).
+   - Bila menginisialisasi manual tanpa wizard: jalankan `php artisan migrate --force`, `php artisan storage:link`, dan `php artisan db:seed --class=ProductionCleanDatabaseSeeder --force` (atur `TESLOKA_ADMIN_PASSWORD` di `.env` atau catat kata sandi acak yang dicetak command).
+   - Login ke `https://staff.domainanda.sch.id/staff/login` menggunakan akun administrator yang telah dikonfigurasi.
 2. **Branding & Konfigurasi Lembaga:**
    - Masuk ke menu `/staff/settings/general` untuk mengatur nama lembaga, alamat, NIP kepala lembaga, logo institusi, dan favicon.
    - Masuk ke `/staff/settings/smtp` untuk konfigurasi server email notifikasi transaksional.
@@ -198,9 +198,9 @@ Panduan operasional lengkap step-by-step telah didokumentasikan secara rinci pad
 
 Aplikasi telah dilengkapi secara bawaan dengan paket asesmen berspesifikasi TOEFL ITP® Level 1 Style berkonteks studi keislaman Universitas PTIQ Jakarta pada direktori [`Soal/`](Soal/):
 
-- **Section 1: Listening Comprehension (50 Soal)** — Terbagi menjadi Part A (30 percakapan pendek), Part B (2 percakapan panjang akademik), dan Part C (3 ceramah kuliah filologi Al-Qur'an).
-- **Section 2: Structure & Written Expression (40 Soal)** — 15 butir Structure dan 25 butir Written Expression dengan format deteksi kesalahan kata bergaris bawah `(A)`, `(B)`, `(C)`, `(D)`.
-- **Section 3: Reading Comprehension (50 Soal)** — 5 teks wacana akademik (Reading Manuscripts as Evidence, Qira'at Variation, Tafsir Scholarship, Coherence in Qur'anic Discourse, dan Digital Tools in Research).
+- **Section 1: Listening Comprehension (50 Soal):** Terbagi menjadi Part A (30 percakapan pendek), Part B (2 percakapan panjang akademik), dan Part C (3 ceramah kuliah filologi Al-Qur'an).
+- **Section 2: Structure & Written Expression (40 Soal):** 15 butir Structure dan 25 butir Written Expression dengan format deteksi kesalahan kata bergaris bawah `(A)`, `(B)`, `(C)`, `(D)`.
+- **Section 3: Reading Comprehension (50 Soal):** 5 teks wacana akademik (Reading Manuscripts as Evidence, Qira'at Variation, Tafsir Scholarship, Coherence in Qur'anic Discourse, dan Digital Tools in Research).
 
 ### Pilihan Format Impor Siap Pakai di Folder `Soal/`:
 1. **Master Excel (.xlsx):** [`Soal/PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx`](Soal/PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx) (140 soal lengkap) dan berkas per-seksi.
@@ -425,7 +425,7 @@ Panduan instalasi langkah-demi-langkah lengkap untuk server Linux Ubuntu dan pan
    npm install && npm run build
    php artisan key:generate --force
    php artisan migrate --force
-   php artisan db:seed --class=ProductionSeeder --force
+   php artisan db:seed --class=ProductionCleanDatabaseSeeder --force
    php artisan storage:link
    chown -R www:www /www/wwwroot/cbt.institusi.ac.id
    chmod -R 775 storage bootstrap/cache
@@ -482,6 +482,10 @@ Panduan instalasi langkah-demi-langkah lengkap untuk server Linux Ubuntu dan pan
 - **Penyebab:** Memori Redis penuh dan policy disetel ke `noeviction`.
 - **Solusi:** Buka `redis.conf`, atur `maxmemory-policy allkeys-lru` agar Redis mendaur ulang cache lama otomatis, lalu restart Redis.
 
+### 6. Error `exec()` atau `symlink()` Nonaktif Saat Web Installer (aaPanel)
+- **Penyebab:** Panel hosting seperti aaPanel menonaktifkan fungsi `symlink` dan `exec` pada daftar `disable_functions` PHP secara bawaan.
+- **Solusi:** Installer TESLOKA menangani kondisi ini secara aman tanpa gagal dan menampilkan perintah manual `ln -s`. Untuk pembuatan symlink otomatis penuh tanpa membuka `exec()`, hapus hanya `symlink` dari daftar `disable_functions` PHP di aaPanel (biarkan `exec` tetap nonaktif untuk keamanan).
+
 ---
 
 ## Perintah CLI Artisan Bawaan
@@ -497,7 +501,7 @@ php artisan tesloka:import-questions storage/app/PTIQ_EPT_Paket_A_Media_Bundle.z
 # 3. Uji Kesiapan Produksi (Memeriksa 8 Indikator Kritis Sistem):
 php artisan tesloka:production-check
 
-# 4. Menjalankan Seluruh Automated Test Suite (311 Tests, 2.225 Assertions):
+# 4. Menjalankan Seluruh Automated Test Suite (337 Tests, PHPUnit):
 php artisan test
 
 # 5. Simulasi Beban Pengerjaan & Autosave Bersamaan:
@@ -519,11 +523,11 @@ powershell -ExecutionPolicy Bypass -File .\scripts\sync-obfuscated-release.ps1
 
 Sistem TESLOKA dibangun dengan standar pengujian mutlak berbasis bukti eksekusi (*evidence-based quality assurance*):
 
-- **Backend Automated Test Suite:** **311 tests, 2.225 assertions — 100% PASS** (0 errors, 0 failures, durasi 123.8s di PostgreSQL 18.6 / 16).
-- **Headless Browser Multi-Device Testing:** **156 pengujian interaksi peramban (Puppeteer)** pada 25 halaman utama di 3 portal lintas 12 ukuran layar (320px hingga 1920px) menghasilkan **100% PASS (0 horizontal overflow dan 0 runtime console errors)**.
+- **Backend Automated Test Suite:** Seluruh unit & feature test suite terverifikasi **100% PASS** pada PostgreSQL (`docs/HASIL-PENGUJIAN.md`).
+- **Headless Browser Multi-Device Testing:** Pengujian interaksi peramban (Puppeteer / Chrome Headless) lintas portal (`staff`, `ujian`, `sertifikat`, dan `tesloka-donate`) pada viewport mobile, tablet, hingga desktop menghasilkan 0 error konsol dan 0 horizontal overflow.
 - **Code Style Linting:** 100% lulus standar PSR-12 via Laravel Pint (`vendor/bin/pint --test`).
-- **Frontend Asset Compilation:** 2.758 modul terkompilasi bersih via Vite & Rollup dalam ~2.8 detik.
-- **Protokol Zero-Input & Pipeline Rilis Obfuskasi:** Sinkronisasi satu arah otomatis ke repositori publik terdistribusi (`D:\laragon\www\tesloka-obfuscated`) dengan obfuskasi kode PHP bisnis layer (40 controllers, 12 services, jobs, middleware), 0 syntax error, dan commit otomatis tanpa repot bagi pengguna.
+- **Frontend Asset Compilation:** Seluruh modul aset frontend terkompilasi bersih via Vite.
+- **Protokol Zero-Input & Pipeline Rilis Obfuskasi:** Sinkronisasi satu arah otomatis ke repositori publik terdistribusi (`D:\laragon\www\tesloka-obfuscated`) dengan obfuskasi kode PHP bisnis layer (controllers, services, jobs, middleware), 0 syntax error, dan commit otomatis.
 
 Dokumentasi lengkap hasil pengujian dan matriks keterlacakan fitur tersedia di:
 - [docs/HASIL-PENGUJIAN.md](docs/HASIL-PENGUJIAN.md)
@@ -536,13 +540,13 @@ Dokumentasi lengkap hasil pengujian dan matriks keterlacakan fitur tersedia di:
 ```
 tesloka/
 ├── app/
-│   ├── Http/Controllers/     # 39 Controller (Staff, Student, Public, Media)
-│   ├── Http/Middleware/      # Pemisahan Portal, Safe Exam Browser, RBAC, Profil
+│   ├── Http/Controllers/     # 41 Controller (Staff, Student, Public, Media, API)
+│   ├── Http/Middleware/      # Pemisahan Portal, Safe Exam Browser, RBAC, Profil, Security
 │   ├── Jobs/                 # Queue background jobs (ekspor, regrade, email)
 │   ├── Models/               # 51 Model Eloquent & Relasi Database
-│   └── Services/             # Logika bisnis (psikometri, grading, integrasi SEB)
+│   └── Services/             # Logika bisnis (psikometri, grading, integrasi SEB, sanitasi)
 ├── database/
-│   ├── migrations/           # 27 Berkas migrasi skema tabel PostgreSQL
+│   ├── migrations/           # 30 Berkas migrasi skema tabel PostgreSQL
 │   └── seeders/              # Seeder produksi (bersih) & seeder simulasi lokal
 ├── deploy/                   # Konfigurasi deployment produksi siap pakai
 │   ├── nginx/                # Template virtual host Nginx (HTTP & HTTPS)
@@ -560,20 +564,20 @@ tesloka/
 ├── resources/
 │   ├── css/                  # Stylesheet tema antarmuka & Tailwind CSS 4
 │   ├── js/                   # Skrip interaktif, timer, autosave handler
-│   └── views/                # 93 Template Blade (staff, student, public, errors)
+│   └── views/                # 103 Template Blade (staff, student, public, errors)
 ├── routes/
 │   ├── staff.php             # Rute 16 modul staf & administrasi
 │   ├── student.php           # Rute portal ujian peserta
 │   ├── api.php               # API endpoint transaksional (autosave, heartbeat)
 │   └── web.php               # Router domain & portal verifikasi sertifikat publik
 ├── Soal/                     # Berkas asesmen siap upload PTIQ EPT 140 butir (XLSX, ZIP, Aiken, GIFT)
-└── tests/                    # 37 Berkas pengujian fitur & unit (PHPUnit / Pest)
+└── tests/                    # 48 Berkas pengujian fitur, keamanan & unit (PHPUnit)
 ```
 
 ---
 
 ## Lisensi & Hak Cipta
 
-Hak Cipta &copy; 2026 **TESLOKA** &mdash; Dikembangkan oleh **Muhammad Dody Pratama** ([@mdodeep](https://github.com/mdodeep)). Seluruh hak cipta dilindungi undang-undang.
+Hak Cipta &copy; 2026 **TESLOKA**, dikembangkan oleh **Muhammad Dody Pratama** ([@mdodeep](https://github.com/mdodeep)). Seluruh hak cipta dilindungi undang-undang.
 
 Dilisensikan secara tertutup (*proprietary on-premise single-tenant*) untuk institusi pendidikan pengguna berlisensi resmi.

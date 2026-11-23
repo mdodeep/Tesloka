@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Struktur Akademik : TESLOKA CBT')
+@section('title', 'Struktur Akademik')
 @section('page-parent', 'Master Organisasi')
 @section('page-title', 'Struktur Akademik')
 @section('page-subtitle', 'Kelola Tahun Ajaran, Semester, Jurusan, Rombel/Kelas, dan Mata Pelajaran secara terpadu.')

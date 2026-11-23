@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Pengaturan Sistem & Branding : TESLOKA CBT')
+@section('title', 'Pengaturan Sistem & Branding')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Pengaturan Sistem & Branding')
 @section('page-subtitle', 'Kelola profil institusi, identitas visual branding, template sertifikat kelulusan, dan preferensi engine CBT.')

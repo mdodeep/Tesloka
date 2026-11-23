@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Pengaturan Server Email SMTP : TESLOKA CBT')
+@section('title', 'Pengaturan Server Email SMTP')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Pengaturan Server Email & SMTP')
 @section('page-subtitle', 'Konfigurasi server SMTP transaksional dan pengujian pengiriman email sistem.')
@@ -131,7 +131,7 @@
                             </label>
                             <input type="text" id="input_from_name" name="from_name" required
                                 value="{{ old('from_name', $smtp['from_name']) }}"
-                                placeholder="TESLOKA CBT"
+                                placeholder="{{ $branding['app_name'] }}"
                                 class="form-input @error('from_name') border-rose-500 @enderror">
                             <span class="text-[11px] text-default-400">Nama resmi sistem atau institusi yang tampil di inbox penerima.</span>
                             @error('from_name')

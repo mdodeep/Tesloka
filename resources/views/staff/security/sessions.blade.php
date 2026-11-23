@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Sesi & Perangkat Aktif : TESLOKA CBT')
+@section('title', 'Sesi & Perangkat Aktif')
 @section('page-parent', 'Tata Kelola & Keamanan')
 @section('page-title')
 Manajemen Sesi & Perangkat Aktif

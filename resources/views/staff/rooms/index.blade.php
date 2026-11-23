@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Manajemen Ruang Ujian : TESLOKA CBT')
+@section('title', 'Manajemen Ruang Ujian')
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', 'Ruang Ujian')
 @section('page-subtitle', 'Kelola ruang pelaksanaan ujian dan kapasitas pengawasan kelompok peserta (standar 20–30 peserta per ruang).')

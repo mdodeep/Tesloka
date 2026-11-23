@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $attempt->exam->title }} - TESLOKA CBT</title>
+    <title>{{ $attempt->exam->title }} - {{ $branding['app_name'] }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <x-cbt.branding-styles />
     <style>
@@ -340,18 +340,26 @@
                     @php
                         $snap = $pq->question_snapshot;
                         $ans = $answersMap->get($pq->id);
+                        $resolvedQMediaUrl = \App\Services\MediaStorageService::resolveMediaUrl($snap['media_path'] ?? $snap['media_url'] ?? null);
+                        $resolvedQMediaType = $snap['media_type'] ?? \App\Services\MediaStorageService::inferMediaType($snap['media_path'] ?? $snap['media_url'] ?? null);
+                        $snapStimulus = $snap['stimulus'] ?? null;
+                        if (is_array($snapStimulus)) {
+                            $snapStimulus['media_url'] = \App\Services\MediaStorageService::resolveMediaUrl($snapStimulus['media_path'] ?? $snapStimulus['media_url'] ?? null);
+                            $snapStimulus['media_type'] = $snapStimulus['media_type'] ?? \App\Services\MediaStorageService::inferMediaType($snapStimulus['media_path'] ?? $snapStimulus['media_url'] ?? null);
+                        }
                     @endphp
                     {
                         packageQuestionId: {{ $pq->id }},
                         number: {{ $idx + 1 }},
                         type: "{{ $snap['type'] ?? 'multiple_choice' }}",
                         content: {!! json_encode($snap['content'] ?? '') !!},
-                        media_type: "{{ $snap['media_type'] ?? '' }}",
-                        media_url: "{{ $snap['media_url'] ?? '' }}",
+                        media_type: "{{ $resolvedQMediaType ?? '' }}",
+                        media_path: {!! json_encode($snap['media_path'] ?? '') !!},
+                        media_url: {!! json_encode($resolvedQMediaUrl ?? '', JSON_UNESCAPED_SLASHES) !!},
                         difficulty: "{{ $snap['difficulty'] ?? 'medium' }}",
                         weight: {{ $snap['weight'] ?? 1.0 }},
                         isRtl: {{ !empty($snap['is_rtl']) ? 'true' : 'false' }},
-                        stimulus: {!! json_encode($snap['stimulus'] ?? null) !!},
+                        stimulus: {!! json_encode($snapStimulus, JSON_UNESCAPED_SLASHES) !!},
                         options: {!! json_encode($snap['options'] ?? []) !!},
                         currentAnswer: {!! json_encode($ans?->answer_payload ?? null) !!},
                         isFlagged: {{ !empty($ans?->is_flagged) ? 'true' : 'false' }},
@@ -376,7 +384,53 @@
             startServerSyncHeartbeat();
         });
 
+        function isAudioMedia(type, url, path) {
+            if (type === 'audio') return true;
+            const target = (path || url || '').toLowerCase();
+            return /\.(mp3|wav|ogg|m4a|aac|webm|flac)(\?.*)?$/.test(target);
+        }
+
+        function isImageMedia(type, url, path) {
+            if (type === 'image') return true;
+            const target = (path || url || '').toLowerCase();
+            return /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/.test(target);
+        }
+
+        function buildAudioPlayerHtml(src, label) {
+            const safeSrc = String(src || '').replace(/"/g, '&quot;');
+            return `<div class="cbt-audio-container mb-3.5 p-3 rounded-lg bg-slate-50 border border-default-200 space-y-2">
+                <audio controls preload="metadata" controlsList="nodownload" src="${safeSrc}" class="w-full" onerror="window.handleCbtAudioError(this, '${safeSrc}')">
+                    Browser Anda tidak mendukung pemutar audio HTML5.
+                </audio>
+                <div class="cbt-audio-error hidden p-2.5 rounded bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between gap-2">
+                    <span>Berkas audio ${label} gagal dimuat atau tidak tersedia. Hubungi pengawas ruang jika berlanjut.</span>
+                    <button type="button" onclick="window.retryCbtAudio(this, '${safeSrc}')" class="px-2.5 py-1 rounded bg-white border border-rose-300 text-rose-800 font-semibold text-[11px] hover:bg-rose-100 shrink-0 cursor-pointer">Muat Ulang</button>
+                </div>
+            </div>`;
+        }
+
+        window.handleCbtAudioError = function(audioEl) {
+            const box = audioEl && audioEl.parentElement ? audioEl.parentElement.querySelector('.cbt-audio-error') : null;
+            if (box) box.classList.remove('hidden');
+        };
+
+        window.retryCbtAudio = function(btn, src) {
+            const container = btn.closest('.cbt-audio-container');
+            const audioEl = container ? container.querySelector('audio') : null;
+            const errBox = container ? container.querySelector('.cbt-audio-error') : null;
+            if (errBox) errBox.classList.add('hidden');
+            if (audioEl) {
+                audioEl.src = src + (src.includes('?') ? '&' : '?') + '_r=' + Date.now();
+                audioEl.load();
+            }
+        };
+
         function renderQuestion(idx) {
+            // Hentikan seluruh pemutar audio yang sedang aktif sebelum berpindah soal
+            document.querySelectorAll('.cbt-audio-container audio').forEach(a => {
+                try { a.pause(); a.currentTime = 0; } catch (e) {}
+            });
+
             currentIndex = idx;
             const q = window.CBT_DATA.questions[idx];
 
@@ -389,10 +443,10 @@
                 stimBox.classList.remove('hidden');
                 document.getElementById('stimulusTitle').innerText = q.stimulus.title || 'Wacana Stimulus';
                 let stimHtml = '';
-                if (q.stimulus.media_type === 'audio' && q.stimulus.media_url) {
-                    stimHtml += `<div class="cbt-audio-container mb-3"><audio controls preload="none" src="${q.stimulus.media_url}" class="w-full"></audio></div>`;
+                if (isAudioMedia(q.stimulus.media_type, q.stimulus.media_url, q.stimulus.media_path) && q.stimulus.media_url) {
+                    stimHtml += buildAudioPlayerHtml(q.stimulus.media_url, 'stimulus');
                     stimHtml += `<div class="p-2.5 rounded bg-primary-50/70 border border-primary-200/60 text-xs text-primary-900 flex items-center gap-2"><i data-lucide="headphones" class="size-4 text-primary shrink-0"></i><span><strong>Petunjuk Mendengarkan:</strong> Dengarkan rekaman audio di atas untuk menjawab butir soal terkait. Transkrip teks tidak ditampilkan pada sesi ujian.</span></div>`;
-                } else if (q.stimulus.media_type === 'image' && q.stimulus.media_url) {
+                } else if (isImageMedia(q.stimulus.media_type, q.stimulus.media_url, q.stimulus.media_path) && q.stimulus.media_url) {
                     stimHtml += `<div class="cbt-image-container mb-3"><img src="${q.stimulus.media_url}" alt="${q.stimulus.title || ''}" class="max-h-72 rounded border border-default-200"></div>`;
                     if (q.stimulus.content) {
                         stimHtml += q.stimulus.content.replace(/\n/g, '<br>');
@@ -414,9 +468,9 @@
             const qContentEl = document.getElementById('questionContent');
             let qMediaHtml = '';
             if (q.media_url) {
-                if (q.media_type === 'audio' || q.media_url.endsWith('.mp3') || q.media_url.endsWith('.wav')) {
-                    qMediaHtml = `<div class="cbt-audio-container mb-3.5"><audio controls preload="none" src="${q.media_url}" class="w-full"></audio></div>`;
-                } else if (q.media_type === 'image' || /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(q.media_url)) {
+                if (isAudioMedia(q.media_type, q.media_url, q.media_path)) {
+                    qMediaHtml = buildAudioPlayerHtml(q.media_url, 'soal');
+                } else if (isImageMedia(q.media_type, q.media_url, q.media_path)) {
                     qMediaHtml = `<div class="cbt-image-container mb-3.5"><img src="${q.media_url}" alt="Lampiran Soal" class="max-h-72 rounded border border-default-200"></div>`;
                 }
             }

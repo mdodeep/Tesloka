@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Sesi & Penjadwalan Ujian : TESLOKA CBT')
+@section('title', 'Sesi & Penjadwalan Ujian')
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', 'Sesi & Penjadwalan')
 @section('page-subtitle', 'Kelola jadwal pelaksanaan, penugasan ruang, token rilis ujian, pengawas, dan daftar hadir peserta.')
@@ -164,10 +164,20 @@
                                             <span>Monitoring</span>
                                         </a>
                                     @endif
+                                    <a href="{{ route('staff.sessions.edit', $session) }}" class="btn btn-icon size-8 bg-white hover:bg-amber-50 text-default-600 hover:text-amber-600 border border-default-200/90 hover:border-amber-300 rounded-lg inline-flex items-center justify-center shadow-2xs transition" title="Edit Jadwal &amp; Ruang Sesi">
+                                        <i data-lucide="edit" class="size-3.5"></i>
+                                    </a>
                                     <a href="{{ route('staff.sessions.show', $session) }}" class="btn btn-sm bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg inline-flex items-center gap-1.5 shadow-2xs transition" title="Kelola Sesi, Peserta & Pengawas">
                                         <i data-lucide="settings" class="size-3.5 text-default-500"></i>
                                         <span>Kelola Sesi</span>
                                     </a>
+                                    <form action="{{ route('staff.sessions.destroy', $session) }}" method="POST" class="inline" onsubmit="return confirm('Hapus sesi ujian ini? Sesi yang sudah memiliki riwayat pengerjaan peserta tidak dapat dihapus.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-icon size-8 bg-white hover:bg-rose-50 text-default-600 hover:text-rose-600 border border-default-200/90 hover:border-rose-300 rounded-lg inline-flex items-center justify-center shadow-2xs transition cursor-pointer" title="Hapus Sesi">
+                                            <i data-lucide="trash-2" class="size-3.5"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

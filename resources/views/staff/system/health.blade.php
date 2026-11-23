@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Kesehatan Sistem & Observabilitas : TESLOKA CBT')
+@section('title', 'Kesehatan Sistem & Observabilitas')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Kesehatan Sistem')
 @section('page-subtitle', 'Pemantauan real-time infrastruktur database, cache, antrean queue, kapasitas penyimpanan, dan audit produksi.')

@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Berita Acara & Daftar Hadir - {{ $session->session_code }}</title>
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $institution = $session->exam->institution ?? \App\Models\Institution::first();
-        $instName = $institution?->name ?? 'TESLOKA';
-        $instAddress = $institution?->address ?? 'Jl. Swakarsa IV';
-        $instPhone = $institution?->phone ?? '+62812 1249 9153';
-        $instEmail = $institution?->email ?? 'info@tesloka.web.id';
-        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
+        $instName = $institution?->name ?: $branding['institution_name'];
+        $instAddress = $institution?->address ?? '';
+        $instPhone = $institution?->phone ?? '';
+        $instEmail = $institution?->email ?? '';
+        $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
 
         // Template Blangko Kertas Surat Resmi A4 Portret (1 Kertas Penuh)
         $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
-        $docLetterheadUrl = $docLetterheadPath ? asset('storage/' . $docLetterheadPath) : null;
+        $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
     @endphp
     <style>
         *, *::before, *::after {

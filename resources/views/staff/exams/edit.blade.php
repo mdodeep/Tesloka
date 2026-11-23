@@ -116,7 +116,7 @@
                     </div>
                 </x-cbt.card>
 
-                <x-cbt.card title="2. Waktu Pelaksanaan & Ketuntasan">
+                <x-cbt.card title="2. Durasi, Ketuntasan, &amp; Periode Ketersediaan">
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -151,13 +151,23 @@
                             </div>
                         </div>
 
+                        <div class="p-3 rounded-lg bg-sky-50/70 border border-sky-200 text-xs text-sky-900 space-y-1">
+                            <div class="font-bold flex items-center justify-between gap-2">
+                                <span>Pemisahan Jadwal: Periode Ketersediaan vs Sesi Pelaksanaan</span>
+                                <span class="px-2 py-0.5 rounded bg-white border border-sky-200 font-mono text-[10px]">Zona Waktu: {{ config('app.timezone', 'Asia/Jakarta') }} (WIB)</span>
+                            </div>
+                            <p class="text-[11px] text-sky-800 leading-relaxed">
+                                Rentang di bawah hanya membatasi periode global kapan sesi ujian boleh dibuat (opsional). Penentuan jam mulai/selesai persis, ruang lab, token rilis, dan peserta diatur di menu <strong>Sesi &amp; Penjadwalan</strong>.
+                            </p>
+                        </div>
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Jadwal Mulai Ujian</label>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Periode Ketersediaan Mulai (Opsional)</label>
                                 <input type="datetime-local" name="scheduled_start" value="{{ old('scheduled_start', optional($exam->scheduled_start)->format('Y-m-d\TH:i')) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Batas Akhir Ujian</label>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Periode Ketersediaan Berakhir (Opsional)</label>
                                 <input type="datetime-local" name="scheduled_end" value="{{ old('scheduled_end', optional($exam->scheduled_end)->format('Y-m-d\TH:i')) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
                             </div>
                         </div>

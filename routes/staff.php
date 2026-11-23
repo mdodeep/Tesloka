@@ -117,11 +117,19 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('/', [QuestionBankController::class, 'index'])->name('index');
             Route::post('/', [QuestionBankController::class, 'store'])->name('store');
             Route::get('template-xlsx', [QuestionBankController::class, 'downloadTemplateXlsx'])->name('template-xlsx');
+            Route::get('template-csv', [QuestionBankController::class, 'downloadTemplateCsv'])->name('template-csv');
+            Route::get('template-json', [QuestionBankController::class, 'downloadTemplateJson'])->name('template-json');
+            Route::get('template-zip', [QuestionBankController::class, 'downloadTemplateZip'])->name('template-zip');
+            Route::get('template-aiken', [QuestionBankController::class, 'downloadTemplateAiken'])->name('template-aiken');
+            Route::get('template-gift', [QuestionBankController::class, 'downloadTemplateGift'])->name('template-gift');
             Route::get('{questionBank}', [QuestionBankController::class, 'show'])->name('show');
+            Route::put('{questionBank}', [QuestionBankController::class, 'update'])->name('update');
+            Route::delete('{questionBank}', [QuestionBankController::class, 'destroy'])->name('destroy');
             Route::post('{questionBank}/duplicate', [QuestionBankController::class, 'duplicate'])->name('duplicate');
             Route::get('{questionBank}/export-csv', [QuestionBankController::class, 'exportCsv'])->name('export-csv');
             Route::get('{questionBank}/export-docx', [QuestionBankController::class, 'exportDocx'])->name('export-docx');
             Route::get('{questionBank}/export-zip', [QuestionBankController::class, 'exportZip'])->name('export-zip');
+            Route::post('{questionBank}/import-preview', [QuestionBankController::class, 'previewImport'])->name('import-preview');
             Route::post('{questionBank}/import-csv', [QuestionBankController::class, 'importCsv'])->name('import-csv');
             Route::post('{questionBank}/stimuli', [QuestionStimulusController::class, 'store'])->name('stimuli.store');
             Route::get('{questionBank}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
@@ -137,6 +145,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::delete('{question}', [QuestionController::class, 'destroy'])->name('destroy');
         });
 
+        Route::put('stimuli/{stimulus}', [QuestionStimulusController::class, 'update'])->name('stimuli.update');
         Route::delete('stimuli/{stimulus}', [QuestionStimulusController::class, 'destroy'])->name('stimuli.destroy');
 
         // Delegations & Four-Eyes Approvals
@@ -221,6 +230,9 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('create', [ExamSessionController::class, 'create'])->name('create');
             Route::post('/', [ExamSessionController::class, 'store'])->name('store');
             Route::get('{session}', [ExamSessionController::class, 'show'])->name('show');
+            Route::get('{session}/edit', [ExamSessionController::class, 'edit'])->name('edit');
+            Route::put('{session}', [ExamSessionController::class, 'update'])->name('update');
+            Route::delete('{session}', [ExamSessionController::class, 'destroy'])->name('destroy');
             Route::post('{session}/generate-token', [ExamSessionController::class, 'generateToken'])->name('generate-token');
             Route::post('{session}/notify-participants', [ExamSessionController::class, 'notifyParticipants'])->name('notify-participants');
             Route::post('{session}/assign-class', [ExamSessionController::class, 'assignClass'])->name('assign-class');
@@ -229,6 +241,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::delete('proctors/{proctor}', [ExamSessionController::class, 'destroyProctor'])->name('proctors.destroy');
             Route::patch('participants/{participant}/attendance', [ExamSessionController::class, 'updateAttendance'])->name('participants.attendance');
             Route::patch('participants/{participant}/accommodation', [ExamSessionController::class, 'updateParticipantAccommodation'])->name('participants.accommodation');
+            Route::delete('participants/{participant}', [ExamSessionController::class, 'removeParticipant'])->name('participants.destroy');
             Route::patch('{session}/status', [ExamSessionController::class, 'updateStatus'])->name('update-status');
             Route::get('{session}/print-cards', [ExamSessionController::class, 'printCards'])->name('print-cards');
             Route::get('{session}/print-attendance', [ExamSessionController::class, 'printAttendance'])->name('print-attendance');

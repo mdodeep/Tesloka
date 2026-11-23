@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Services\InstallationService;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class InstallCommand extends Command
 {
@@ -61,10 +62,10 @@ class InstallCommand extends Command
                 'redis_port' => $this->option('redis-port'),
                 'institution_name' => $this->option('institution-name') ?: 'Institusi Pendidikan CBT',
                 'institution_code' => $this->option('institution-code') ?: 'NPSN'.rand(10000000, 99999999),
-                'admin_name' => $this->option('admin-name') ?: 'Administrator Utama TESLOKA',
+                'admin_name' => $this->option('admin-name') ?: 'Administrator Utama',
                 'admin_username' => $this->option('admin-username') ?: 'admin',
-                'admin_email' => $this->option('admin-email') ?: 'admin@tesloka.test',
-                'admin_password' => $this->option('admin-password') ?: 'Tesloka2026!',
+                'admin_email' => $this->option('admin-email') ?: 'admin@institusi.local',
+                'admin_password' => $this->option('admin-password') ?: Str::password(16),
                 'app_url' => $this->option('app-url') ?: config('app.url', 'https://staff.tesloka.test'),
             ];
         } else {
@@ -144,14 +145,18 @@ class InstallCommand extends Command
             $this->info('===============================================================');
             $this->info('          PEMASANGAN TESLOKA CBT BERHASIL 100%!                ');
             $this->info('===============================================================');
-            $this->table(['Parameter', 'Nilai'], [
+            $rows = [
                 ['Institusi', $payload['institution_name']],
                 ['NPSN / Kode', $payload['institution_code']],
                 ['URL Portal Staf', $payload['app_url']],
                 ['Username Admin', $payload['admin_username']],
                 ['Email Admin', $payload['admin_email']],
                 ['Waktu Pemasangan', $result['lock_data']['installed_at'] ?? date('c')],
-            ]);
+            ];
+            if (! $this->option('admin-password') && $isNonInteractive) {
+                $rows[] = ['Sandi Admin Acak', $payload['admin_password']];
+            }
+            $this->table(['Parameter', 'Nilai'], $rows);
 
             return self::SUCCESS;
         } catch (Exception $e) {

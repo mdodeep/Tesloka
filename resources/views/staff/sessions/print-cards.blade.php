@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kartu Peserta Ujian - {{ $session->session_code }}</title>
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $institution = $session->exam->institution ?? \App\Models\Institution::first();
-        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $instName = $institution?->name ?? config('app.name', 'TESLOKA CBT');
+        $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
+        $instName = $institution?->name ?: $branding['institution_name'];
     @endphp
     <style>
         *, *::before, *::after {

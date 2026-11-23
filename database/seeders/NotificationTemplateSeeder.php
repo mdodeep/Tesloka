@@ -29,8 +29,8 @@ class NotificationTemplateSeeder extends Seeder
             [
                 'code' => 'account_created',
                 'name' => 'Akun Baru Pengguna',
-                'subject' => 'Selamat Datang di TESLOKA CBT - Akun Anda Telah Aktif',
-                'body_template' => '<p>Selamat datang {{nama_siswa}},</p><p>Akun portal TESLOKA CBT Anda telah berhasil dibuat.</p><p><strong>Nomor Peserta / Username:</strong> {{username}}<br>Gunakan sandi yang telah dibagikan pengelola untuk masuk ke sistem.</p>',
+                'subject' => 'Selamat Datang di {{nama_aplikasi}} - Akun Anda Telah Aktif',
+                'body_template' => '<p>Selamat datang {{nama_siswa}},</p><p>Akun portal {{nama_aplikasi}} Anda telah berhasil dibuat.</p><p><strong>Nomor Peserta / Username:</strong> {{username}}<br>Gunakan sandi yang telah dibagikan pengelola untuk masuk ke sistem.</p>',
                 'channel' => 'email',
                 'is_active' => true,
             ],

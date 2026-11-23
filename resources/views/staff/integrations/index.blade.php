@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Integrasi Sistem, API & Webhook : TESLOKA CBT')
+@section('title', 'Integrasi Sistem, API & Webhook')
 @section('page-parent', 'Tata Kelola & Keamanan')
 @section('page-title', 'Integrasi Sistem, API & Webhook')
 @section('page-subtitle', 'Kelola API Keys antarsistem, sinkronisasi sertifikat kelulusan, dan siaran peristiwa webhook.')

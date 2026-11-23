@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     @php
-        $systemInstitution = \App\Models\Institution::first();
-        $systemLogoUrl = $systemInstitution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $systemFaviconUrl = $systemInstitution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $systemInstName = \App\Models\SystemSetting::get('app.name', $systemInstitution?->name ?? 'TESLOKA CBT');
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
+        $systemLogoUrl = $branding['logo_url'];
+        $systemFaviconUrl = $branding['favicon_url'];
+        $systemInstName = $branding['app_name'];
     @endphp
     <title>@yield('title', 'Portal Ujian') : {{ $systemInstName }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $systemFaviconUrl }}">
@@ -191,11 +191,7 @@
     <footer class="mt-auto footer flex items-center py-5 border-t border-default-200 bg-card">
         <div class="w-full px-6 lg:px-8 flex md:justify-between justify-center gap-4 text-xs text-default-500">
             <div>
-                @if(app(\App\Services\LicenseService::class)->shouldHideBranding())
-                    © {{ date('Y') }} {{ $systemInstName }}
-                @else
-                    © {{ date('Y') }} {{ $systemInstName }} &bull; TESLOKA CBT Community
-                @endif
+                {!! $branding['footer_copyright'] !!}
             </div>
             <div class="md:flex hidden gap-2 items-center text-default-400">
                 Portal Pelaksanaan Ujian Terstandar

@@ -266,11 +266,17 @@
 
     <div class="doc-viewport-container">
         <div class="card-wrapper">
+        @php
+            $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
+            $cardInst = $exam->institution ?? \App\Models\Institution::first();
+            $cardInstName = $cardInst?->name ?: $branding['institution_name'];
+            $cardLogoUrl = $cardInst?->logo_url ?: $branding['logo_url'];
+        @endphp
         <!-- HEADER KOP -->
         <div class="header">
-            <div class="brand-logo">tesloka.</div>
+            <img src="{{ $cardLogoUrl }}" alt="{{ $cardInstName }}" style="height: 28px; max-width: 110px; object-fit: contain;">
             <div class="inst-title">
-                <div class="inst-name">{{ $exam->institution->name ?? 'INSTITUSI TESLOKA CBT' }}</div>
+                <div class="inst-name">{{ $cardInstName }}</div>
                 <div class="inst-sub">KARTU TANDA PESERTA EVALUASI AKADEMIK</div>
             </div>
         </div>
@@ -366,7 +372,7 @@
             <div class="sign-col">
                 <div>Petugas Verifikasi / Panitia,</div>
                 <div class="sign-gap"></div>
-                <div style="font-weight: bold; text-decoration: underline;">( Panitia CBT TESLOKA )</div>
+                <div style="font-weight: bold; text-decoration: underline;">( Panitia {{ $branding['system_label'] ?? 'CBT' }} )</div>
                 <div style="font-size: 8.5pt; color: #64748b;">Tanggal: {{ now()->translatedFormat('d F Y') }}</div>
             </div>
         </div>

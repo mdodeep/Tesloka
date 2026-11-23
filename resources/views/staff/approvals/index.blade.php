@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Persetujuan Four-Eyes : TESLOKA CBT')
+@section('title', 'Persetujuan Four-Eyes')
 @section('page-parent', 'Tata Kelola & Keamanan')
 @section('page-title', 'Four-Eyes Approval')
 @section('page-subtitle', 'Tindakan berisiko tinggi wajib disetujui minimal oleh dua pihak berwenang yang berbeda.')

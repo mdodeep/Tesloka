@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Manajemen Mode Pemeliharaan : TESLOKA CBT')
+@section('title', 'Manajemen Mode Pemeliharaan')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Kontrol Pemeliharaan Sistem CBT')
 @section('page-subtitle', 'Aktivasi mode pemeliharaan dengan proteksi ujian aktif, token rahasia (bypass secret), dan audit terperinci.')

@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Repositori Berkas & Media Terisolasi : TESLOKA CBT')
+@section('title', 'Repositori Berkas & Media Terisolasi')
 @section('page-parent', 'Konten & Ujian')
 @section('page-title')
 Repositori Berkas & Media Terisolasi
@@ -97,9 +97,10 @@ Repositori Berkas & Media Terisolasi
                             <div class="w-10 h-10 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center mb-2">
                                 <i data-lucide="volume-2" class="size-5"></i>
                             </div>
-                            <audio controls class="w-full h-8" preload="none">
-                                <source src="{{ $file->url }}" type="{{ $file->mime_type }}">
+                            <audio controls class="w-full h-8" preload="metadata" src="{{ $file->url }}" onerror="this.nextElementSibling.classList.remove('hidden')">
+                                Browser Anda tidak mendukung pemutar audio.
                             </audio>
+                            <p class="hidden mt-1 text-[10px] text-rose-600 font-medium">Gagal memuat audio.</p>
                         </div>
                     @else
                         <div class="text-center">

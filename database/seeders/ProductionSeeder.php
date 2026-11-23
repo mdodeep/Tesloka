@@ -27,6 +27,9 @@ class ProductionSeeder extends Seeder
         ]);
 
         $userSeeder = new UserSeeder;
+        if ($this->command) {
+            $userSeeder->setCommand($this->command);
+        }
         $userSeeder->run(forceProduction: true);
     }
 }

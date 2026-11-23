@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Detail Butir Soal ' . $question->code . ' : TESLOKA CBT')
+@section('title', 'Detail Butir Soal ' . $question->code . '')
 @section('page-parent', 'Bank Soal')
 @section('page-title', 'Soal: ' . $question->code)
 @section('page-subtitle', 'Mata Pelajaran: ' . ($question->questionBank->subject->name ?? '-') . ' • Versi #' . $question->version . ' • Bobot: ' . $question->weight)
@@ -63,10 +63,11 @@
                             }
                         @endphp
 
-                        @if($question->stimulus->media_type === 'audio')
+                        @if($question->stimulus->media_type === 'audio' || \App\Services\MediaStorageService::isAudioPath($question->stimulus->media_path))
                             @if($question->stimulus->media_url)
                                 <div class="mb-3 p-2.5 bg-white rounded border border-default-200">
-                                    <audio controls class="w-full h-8" preload="none" src="{{ $question->stimulus->media_url }}"></audio>
+                                    <audio controls class="w-full h-8" preload="metadata" src="{{ $question->stimulus->media_url }}" onerror="this.nextElementSibling.classList.remove('hidden')"></audio>
+                                    <p class="hidden mt-1.5 text-[11px] text-rose-600 font-medium">Gagal memuat berkas audio stimulus. Periksa kembali keberadaan berkas di Pustaka Media.</p>
                                 </div>
                             @endif
                             <!-- Mode Peserta: Transkrip disembunyikan untuk simulasi listening asli -->
@@ -108,15 +109,16 @@
 
                     <!-- Lampiran Media Butir Soal (Audio / Gambar dari Pustaka Media) -->
                     @if($question->media_url)
-                        @if($question->media_type === 'audio' || str_ends_with(strtolower($question->media_path ?? ''), '.mp3') || str_ends_with(strtolower($question->media_path ?? ''), '.wav'))
+                        @if(\App\Services\MediaStorageService::isAudioPath($question->media_path, $question->media_type))
                             <div class="mb-4 p-3 bg-indigo-50/70 border border-indigo-200/70 rounded-md">
                                 <div class="flex items-center gap-2 mb-1.5 text-xs font-bold text-indigo-900">
                                     <i data-lucide="volume-2" class="size-4 text-indigo-600"></i>
                                     <span>Audio Pertanyaan / Soal Listening</span>
                                 </div>
-                                <audio controls class="w-full h-8" preload="none" src="{{ $question->media_url }}"></audio>
+                                <audio controls class="w-full h-8" preload="metadata" src="{{ $question->media_url }}" onerror="this.nextElementSibling.classList.remove('hidden')"></audio>
+                                <p class="hidden mt-1.5 text-[11px] text-rose-600 font-medium">Berkas audio gagal diputar atau tidak ditemukan di server.</p>
                             </div>
-                        @elseif($question->media_type === 'image' || preg_match('/\.(jpg|jpeg|png|webp|gif|svg)$/i', $question->media_path ?? ''))
+                        @elseif(\App\Services\MediaStorageService::isImagePath($question->media_path, $question->media_type))
                             <div class="mb-4 p-2 bg-white border border-default-200 rounded-md max-w-lg">
                                 <img src="{{ $question->media_url }}" alt="Media Soal" class="rounded max-h-72 object-contain mx-auto">
                             </div>

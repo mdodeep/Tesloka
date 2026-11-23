@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Verifikasi Keaslian Dokumen : TESLOKA CBT</title>
     @php
-        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $faviconUrl = $institution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $instName = $institution?->name ?? 'INSTITUSI PENDIDIKAN TESLOKA CBT';
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
+        $logoUrl = $institution?->logo_url ?? $branding['logo_url'];
+        $faviconUrl = $institution?->favicon_url ?? $branding['favicon_url'];
+        $instName = $institution?->name ?? $branding['institution_name'];
+        $instAddress = $institution?->address ?? $branding['institution_address'];
     @endphp
+    <title>Verifikasi Keaslian Dokumen : {{ $branding['app_name'] }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
     <style>
         @font-face {
@@ -53,7 +55,7 @@
                     <div>
                         <h1 class="text-xl sm:text-2xl font-black text-default-900 tracking-tight">Dokumen Asli Resmi Terverifikasi</h1>
                         <p class="text-xs text-default-600 mt-1">
-                            Dokumen evaluasi ini sah dan tercatat permanen pada sistem penyimpanan data primer TESLOKA CBT.
+                            Dokumen evaluasi ini sah dan tercatat permanen pada sistem penyimpanan data primer {{ $branding['system_label'] }}.
                         </p>
                     </div>
                 </div>
@@ -70,7 +72,9 @@
                         <div>
                             <span class="text-default-500 font-semibold block text-xs">Lembaga Penyelenggara:</span>
                             <span class="text-default-900 font-bold text-sm block mt-0.5">{{ $instName }}</span>
-                            <span class="text-default-500 text-[11px]">{{ $institution?->address ?? 'Jl. Swakarsa IV' }}</span>
+                            @if($instAddress)
+                                <span class="text-default-500 text-[11px]">{{ $instAddress }}</span>
+                            @endif
                         </div>
                         <div>
                             <span class="text-default-500 font-semibold block text-xs">Ujian &amp; Mata Pelajaran:</span>
@@ -147,7 +151,7 @@
                     <div>
                         <h1 class="text-xl sm:text-2xl font-black text-default-900 tracking-tight">Dokumen Tidak Ditemukan atau Tidak Valid</h1>
                         <p class="text-xs text-default-600 mt-1">
-                            Token atau kode verifikasi resi yang Anda periksa tidak terdaftar pada basis data resmi sistem TESLOKA CBT.
+                            Token atau kode verifikasi resi yang Anda periksa tidak terdaftar pada basis data resmi sistem {{ $branding['system_label'] }}.
                         </p>
                     </div>
                 </div>
@@ -174,7 +178,11 @@
 
     <!-- Footer -->
     <footer class="w-full max-w-4xl mx-auto py-6 text-center text-xs text-default-400">
-        &copy; {{ date('Y') }} {{ $instName }} &bull; Didukung oleh Sistem CBT TESLOKA
+        @if($branding['is_white_label'])
+            &copy; {{ date('Y') }} {{ $instName }}
+        @else
+            &copy; {{ date('Y') }} {{ $instName }} &bull; Didukung oleh Sistem CBT TESLOKA
+        @endif
     </footer>
 </body>
 </html>

@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Dashboard Utama : TESLOKA CBT')
+@section('title', 'Dashboard Utama')
 @section('page-title', 'Dashboard')
 
 @section('content')
@@ -17,7 +17,7 @@
                     Selamat Datang, {{ auth('staff')->user()->name }}
                 </h2>
                 <p class="text-xs sm:text-sm text-white/80 leading-relaxed">
-                    Pusat komando operasional Computer Based Test (CBT) TESLOKA. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.
+                    Pusat komando operasional {{ $branding['system_label'] }}. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.
                 </p>
                 <div class="flex flex-wrap gap-2.5 pt-1">
                     <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">

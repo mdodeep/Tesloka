@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Pencarian & Verifikasi Sertifikat Resmi : TESLOKA CBT</title>
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $institution = $institution ?? \App\Models\Institution::first();
-        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $faviconUrl = $institution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $instName = $institution?->name ?? 'INSTITUSI PENDIDIKAN TESLOKA CBT';
+        $logoUrl = $institution?->logo_url ?? $branding['logo_url'];
+        $faviconUrl = $institution?->favicon_url ?? $branding['favicon_url'];
+        $instName = $institution?->name ?? $branding['institution_name'];
     @endphp
+    <title>Pencarian & Verifikasi Sertifikat Resmi : {{ $branding['app_name'] }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
     <style>
         @font-face {
@@ -116,7 +117,11 @@
 
     <!-- Footer -->
     <footer class="w-full max-w-4xl mx-auto py-6 text-center text-xs text-default-400">
-        &copy; {{ date('Y') }} {{ $instName }} &bull; Sistem Evaluasi Berbasis Komputer TESLOKA CBT On-Premise
+        @if($branding['is_white_label'])
+            &copy; {{ date('Y') }} {{ $instName }}
+        @else
+            &copy; {{ date('Y') }} {{ $instName }} &bull; Sistem Evaluasi Berbasis Komputer TESLOKA CBT On-Premise
+        @endif
     </footer>
 </body>
 </html>

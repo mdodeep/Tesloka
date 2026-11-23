@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Template Notifikasi & Pesan : TESLOKA CBT')
+@section('title', 'Template Notifikasi & Pesan')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Template Notifikasi & Pesan')
 @section('page-subtitle', 'Kustomisasi subjek dan bodi pesan otomatis dengan variabel dinamis (merge tags).')
@@ -18,10 +18,10 @@
 
 @section('content')
 @php
-    $systemInstitution = \App\Models\Institution::first();
-    $systemLogoUrl = $systemInstitution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-    $systemInstName = $systemInstitution?->name ?? 'Tesloka';
-    $appName = config('app.name', 'TESLOKA CBT');
+    $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
+    $systemLogoUrl = $branding['logo_url'];
+    $systemInstName = $branding['institution_name'];
+    $appName = $branding['app_name'];
 @endphp
 <div class="space-y-6">
 
@@ -209,7 +209,8 @@ const sampleTemplateData = {
     'kkm': '75.00',
     'status_kelulusan': '<strong class="text-emerald-600 font-bold">LULUS</strong>',
     'nama_institusi': '{{ addslashes($systemInstName) }}',
-    'token': 'TESLOKA26',
+    'nama_aplikasi': '{{ addslashes($appName) }}',
+    'token': 'CBT2026',
     'durasi': '90 Menit',
     'tanggal': '09 November 2026'
 };

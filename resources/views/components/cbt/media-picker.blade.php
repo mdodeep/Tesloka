@@ -10,8 +10,8 @@
 @php
     $uniqueId = 'picker_' . str_replace(['[', ']', '-'], '_', $namePath) . '_' . substr(md5($namePath . microtime()), 0, 6);
     $hasMedia = !empty($currentPath);
-    $isAudio = $currentType === 'audio' || str_ends_with(strtolower($currentPath ?? ''), '.mp3') || str_ends_with(strtolower($currentPath ?? ''), '.wav');
-    $isImage = $currentType === 'image' || preg_match('/\.(jpg|jpeg|png|webp|gif|svg)$/i', $currentPath ?? '');
+    $isAudio = \App\Services\MediaStorageService::isAudioPath($currentPath, $currentType);
+    $isImage = \App\Services\MediaStorageService::isImagePath($currentPath, $currentType);
 @endphp
 
 <div id="{{ $uniqueId }}_container" class="space-y-3">
@@ -55,9 +55,10 @@
 
         <!-- Audio Player Player Preview -->
         <div id="{{ $uniqueId }}_audio_player_container" class="{{ $isAudio ? '' : 'hidden' }} mt-3 pt-3 border-t border-default-200">
-            <audio id="{{ $uniqueId }}_audio_element" controls class="w-full h-8" preload="none" src="{{ $currentUrl }}">
+            <audio id="{{ $uniqueId }}_audio_element" controls class="w-full h-8" preload="metadata" src="{{ $currentUrl }}" onerror="this.nextElementSibling.classList.remove('hidden')">
                 Browser Anda tidak mendukung pemutar audio.
             </audio>
+            <p class="hidden mt-1.5 text-[11px] text-rose-600 font-medium">Gagal memutar audio pratinjau. Periksa format atau ketersediaan berkas.</p>
         </div>
 
         <!-- Image Player Preview -->
@@ -381,9 +382,8 @@
                         </div>
 
                         ${isAudio ? `
-                            <audio controls class="w-full h-7 mt-1" preload="none">
-                                <source src="${item.url}" type="${item.mime_type}">
-                            </audio>
+                            <audio controls class="w-full h-7 mt-1" preload="metadata" src="${item.url}" onerror="this.nextElementSibling.classList.remove('hidden')"></audio>
+                            <p class="hidden text-[10px] text-rose-600">Gagal memuat audio.</p>
                         ` : ''}
 
                         ${isImage ? `

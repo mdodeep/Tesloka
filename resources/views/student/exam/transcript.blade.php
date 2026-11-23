@@ -6,35 +6,36 @@
     <title>Surat Keterangan Hasil Ujian (SKHU) - {{ $attempt->student->name }} - {{ $attempt->exam->code }}</title>
     @vite(['resources/js/app.js'])
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $institution = $institution ?? ($attempt->exam->institution ?? \App\Models\Institution::first());
-        $instName = $institution?->name ?? 'TESLOKA';
-        $instAddress = $institution?->address ?? 'Jl. Swakarsa IV';
-        $instPhone = $institution?->phone ?? '+62812 1249 9153';
-        $instEmail = $institution?->email ?? 'info@tesloka.web.id';
-        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $faviconUrl = $institution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
+        $instName = $institution?->name ?: $branding['institution_name'];
+        $instAddress = $institution?->address ?? '';
+        $instPhone = $institution?->phone ?? '';
+        $instEmail = $institution?->email ?? '';
+        $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
+        $faviconUrl = $institution?->favicon_url ?: $branding['favicon_url'];
 
         // Template Blangko Kertas Surat Resmi A4 Portret (1 Kertas Penuh)
         $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
-        $docLetterheadUrl = $docLetterheadPath ? asset('storage/' . $docLetterheadPath) : null;
+        $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
 
         // Pejabat Utama (Kanan)
         $signerName = \App\Models\SystemSetting::get('branding.cert_signer_name', 'Dr. H. Muhammad Zainuddin, M.Pd.');
         $signerTitle = \App\Models\SystemSetting::get('branding.cert_signer_title', 'Direktur / Kepala Akademik');
         $signerNip = \App\Models\SystemSetting::get('branding.cert_signer_nip', '19690815 199403 1 001');
         $signerSigPath = \App\Models\SystemSetting::get('branding.cert_signer_signature');
-        $signerSigUrl = $signerSigPath ? asset('storage/' . $signerSigPath) : null;
+        $signerSigUrl = $signerSigPath ? '/storage/' . ltrim((string) $signerSigPath, '/') : null;
 
         // Pejabat Kedua (Kiri)
         $signer2Name = \App\Models\SystemSetting::get('branding.cert_signer_secondary_name', 'Drs. H. M. Syatibi, M.Ag.');
         $signer2Title = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji CBT');
         $signer2Nip = \App\Models\SystemSetting::get('branding.cert_signer_secondary_nip', '19780512 200312 1 002');
         $signer2SigPath = \App\Models\SystemSetting::get('branding.cert_signer_secondary_signature');
-        $signer2SigUrl = $signer2SigPath ? asset('storage/' . $signer2SigPath) : null;
+        $signer2SigUrl = $signer2SigPath ? '/storage/' . ltrim((string) $signer2SigPath, '/') : null;
 
         // Cap Stempel Resmi Institusi
         $stampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $stampUrl = $stampPath ? asset('storage/' . $stampPath) : null;
+        $stampUrl = $stampPath ? '/storage/' . ltrim((string) $stampPath, '/') : null;
 
         // Mode Tanda Tangan Ganda
         $dualSignatures = (bool) \App\Models\SystemSetting::get('branding.cert_dual_signatures', true);
@@ -54,7 +55,7 @@
         $backLabel = $backLabel ?? ($isStaff ? 'Kembali ke Hasil & Kelulusan' : 'Kembali ke Beranda');
 
         $receipt = $attempt->submission_receipt ?? 'RCP-' . str_pad($attempt->id, 6, '0', STR_PAD_LEFT);
-        $verificationQrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=" . urlencode(route('document.verify', $receipt));
+        $verificationQrUrl = \App\Services\QrCodeService::dataUri(route('document.verify', $receipt), 110);
         $verificationHash = substr(hash('sha256', $attempt->id . $receipt . ($breakdown['total_score'] ?? 0)), 0, 24);
     @endphp
     <style>
@@ -535,7 +536,7 @@
 
             <!-- PARAGRAF PENUTUP -->
             <p style="text-align: justify; margin: 10px 0 14px 0;">
-                Demikian Surat Keterangan Hasil Ujian ini diterbitkan secara sah berdasarkan catatan data primer di server basis data TESLOKA CBT untuk dapat dipergunakan sebagaimana mestinya.
+                Demikian Surat Keterangan Hasil Ujian ini diterbitkan secara sah berdasarkan catatan data primer di server basis data {{ $branding['system_label'] }} untuk dapat dipergunakan sebagaimana mestinya.
             </p>
 
             <!-- BAGIAN TANDA TANGAN PEJABAT & CAP STEMPEL -->
@@ -595,7 +596,7 @@
             </div>
             <div style="text-align: right; line-height: 1.35;">
                 Dokumen Resmi Terverifikasi Sah<br>
-                Sistem CBT TESLOKA
+                {{ $branding['system_label'] }}
             </div>
         </div>
     </div>

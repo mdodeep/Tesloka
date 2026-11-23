@@ -204,7 +204,7 @@ class Exam extends Model
 
         // 3. Peringatan Opsional (Warnings)
         if (! $this->scheduled_start) {
-            $warnings[] = 'Jadwal pelaksanaan belum ditentukan (ujian dapat dimulai secara fleksibel).';
+            $warnings[] = 'Periode ketersediaan global bersifat opsional; waktu pelaksanaan spesifik tetap diatur pada menu Sesi & Penjadwalan.';
         }
 
         $isValid = empty($criticalErrors);

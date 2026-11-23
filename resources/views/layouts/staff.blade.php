@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     @php
-        $systemInstitution = \App\Models\Institution::first();
-        $systemLogoUrl = $systemInstitution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $systemFaviconUrl = $systemInstitution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $systemInstName = \App\Models\SystemSetting::get('app.name', $systemInstitution?->name ?? 'TESLOKA CBT');
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
+        $systemLogoUrl = $branding['logo_url'];
+        $systemFaviconUrl = $branding['favicon_url'];
+        $systemInstName = $branding['app_name'];
     @endphp
     <title>@yield('title', 'Portal Staf') : {{ $systemInstName }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $systemFaviconUrl }}">
@@ -265,7 +265,7 @@
 
             <!-- Sidebar Footer -->
             <div class="p-3 border-t border-default-200 shrink-0 text-center text-xs text-default-400">
-                TESLOKA CBT &bull; v1.0
+                {{ $branding['is_white_label'] ? $branding['app_name'] : 'TESLOKA CBT' }} &bull; v{{ app(\App\Services\UpdateService::class)->getCurrentVersion() }}
             </div>
         </aside>
 
@@ -528,11 +528,7 @@
             <!-- App Footer -->
             <footer class="mt-auto footer flex items-center py-4 border-t border-default-200">
                 <div class="px-6 w-full flex justify-between items-center text-xs text-default-500">
-                    @if(app(\App\Services\LicenseService::class)->shouldHideBranding())
-                        <div>{{ date('Y') }} &copy; {{ $systemInstName }}</div>
-                    @else
-                        <div>{{ date('Y') }} &copy; {{ $systemInstName }} &bull; TESLOKA CBT Community</div>
-                    @endif
+                    <div>{!! $branding['footer_copyright'] !!}</div>
                     <div class="font-medium text-primary">v{{ app(\App\Services\UpdateService::class)->getCurrentVersion() }}</div>
                 </div>
             </footer>

@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tempelan Meja Peserta - {{ $session->session_code }} - {{ $session->room->name ?? 'Ruang Ujian' }}</title>
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $institution = $session->exam->institution ?? \App\Models\Institution::first();
-        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $instName = $institution?->name ?? 'INSTITUSI TESLOKA CBT';
+        $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
+        $instName = $institution?->name ?: $branding['institution_name'];
     @endphp
     <style>
         *, *::before, *::after {

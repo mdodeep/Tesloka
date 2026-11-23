@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Facades\Storage;
 
 class StoredFile extends Model
 {
@@ -86,10 +85,10 @@ class StoredFile extends Model
     public function getUrlAttribute(): string
     {
         if ($this->disk === 'public') {
-            return Storage::disk('public')->url($this->storage_path);
+            return '/storage/'.ltrim($this->storage_path, '/');
         }
 
-        return route('media.stream', $this);
+        return route('media.stream', $this, false);
     }
 
     /**

@@ -43,10 +43,10 @@ class Institution extends Model
     public function getLogoUrlAttribute(): string
     {
         if ($this->logo_path && Storage::disk('public')->exists($this->logo_path)) {
-            return Storage::disk('public')->url($this->logo_path);
+            return '/storage/'.ltrim($this->logo_path, '/');
         }
 
-        return asset('assets/images/logo-tesloka-cbt.webp');
+        return '/assets/images/logo-tesloka-cbt.webp';
     }
 
     /**
@@ -55,9 +55,9 @@ class Institution extends Model
     public function getFaviconUrlAttribute(): string
     {
         if ($this->favicon_path && Storage::disk('public')->exists($this->favicon_path)) {
-            return Storage::disk('public')->url($this->favicon_path);
+            return '/storage/'.ltrim($this->favicon_path, '/');
         }
 
-        return asset('assets/images/favicon-tesloka-bg-putih.webp');
+        return '/assets/images/favicon-tesloka-bg-putih.webp';
     }
 }

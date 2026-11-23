@@ -1,10 +1,13 @@
+@php
+    $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Dalam Pemeliharaan : TESLOKA CBT</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon-tesloka-bg-putih.webp') }}">
+    <title>Sistem Dalam Pemeliharaan : {{ $branding['app_name'] }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ $branding['favicon_url'] }}">
     <style>
         @font-face {
             font-family: 'Sora';
@@ -139,7 +142,7 @@
     @endphp
 
     <div class="maintenance-card">
-        <img src="{{ asset('assets/images/logo-tesloka-cbt.webp') }}" alt="TESLOKA CBT" class="logo-img">
+        <img src="{{ $branding['logo_url'] }}" alt="{{ $branding['app_name'] }}" class="logo-img">
 
         <div>
             <span class="badge">
@@ -151,9 +154,9 @@
         <h1>Layanan Sedang Ditingkatkan</h1>
 
         <p>
-            {{ !empty($customMessage) && $customMessage !== 'Service Unavailable' 
-                ? $customMessage 
-                : 'Aplikasi TESLOKA CBT sedang dalam pemeliharaan berkala untuk peningkatan performa dan keandalan sistem ujian.' }}
+            {{ !empty($customMessage) && $customMessage !== 'Service Unavailable'
+                ? $customMessage
+                : 'Aplikasi '.$branding['app_name'].' sedang dalam pemeliharaan berkala untuk peningkatan performa dan keandalan sistem ujian.' }}
         </p>
 
         <div class="info-box">
@@ -172,7 +175,11 @@
         </button>
 
         <p class="footer-note">
-            Tesloka &bull; TESLOKA CBT Sistem Ujian Terstandarisasi
+            @if($branding['is_white_label'])
+                {{ $branding['institution_name'] }} &bull; Sistem Evaluasi Terstandarisasi
+            @else
+                Tesloka &bull; TESLOKA CBT Sistem Ujian Terstandarisasi
+            @endif
         </p>
     </div>
 </body>

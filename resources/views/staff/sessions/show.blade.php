@@ -6,6 +6,10 @@
 @section('page-subtitle', 'Kode: ' . $session->session_code . ' • Ujian: ' . $session->exam->title . ' • ' . ($session->isOnline() ? 'Pelaksanaan: Daring (Online CBT)' : ('Ruang: ' . ($session->room->name ?? 'Lab CBT') . ' (Kapasitas: ' . ($session->room->capacity ?? 30) . ')')))
 
 @section('page-actions')
+    <a href="{{ route('staff.sessions.edit', $session) }}" class="btn btn-sm bg-white hover:bg-amber-50 text-default-700 hover:text-amber-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Ubah Jadwal &amp; Ruang Sesi">
+        <i data-lucide="edit" class="size-4"></i>
+        <span>Edit Sesi</span>
+    </a>
     <a href="{{ route('staff.sessions.monitor', $session) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Monitoring Pelaksanaan">
         <i data-lucide="bar-chart-2" class="size-4"></i>
         <span>Monitoring</span>
@@ -339,6 +343,13 @@
                                                 <input type="hidden" name="status" value="absent">
                                                 <button type="submit" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-[11px] font-semibold border border-rose-200/60 transition" title="Tandai Absen">
                                                     Absen
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('staff.sessions.participants.destroy', $ptc) }}" method="POST" class="inline" onsubmit="return confirm('Keluarkan {{ addslashes($ptc->student->name) }} dari sesi ujian ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-icon bg-default-100 hover:bg-rose-100 text-default-500 hover:text-rose-700 rounded-md transition cursor-pointer" title="Keluarkan Peserta dari Sesi">
+                                                    <i data-lucide="trash-2" class="size-3.5"></i>
                                                 </button>
                                             </form>
                                         </div>

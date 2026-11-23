@@ -2,14 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-23T03:17:55+00:00
- * Integrity: bdeaf86c3382669bdfea6ebf51d5418a6e22948d723c091cf74131355cf40149
+ * Timestamp: 2026-11-23T05:03:51+00:00
+ * Integrity: f5a75bcdc48148c8724fcb4a06b85088073bf6fdb5c9c28924b472633ae79374
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d6e2c48bc')){function _d6e2c48bc($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('QnPFL8mR11zKwnlw6HuHdiLsZwT3Sbrp/H0sEqCtDEk='),0,base64_decode('S8iQfkXVYtaXYA2/u5FuyA=='));
-if ((PHP_MAJOR_VERSION < 0)) { $_res49 = strlen('check62') > 0 ? 'val31' : ''; $_idx92 = strlen('check14') > 0 ? 'val3' : ''; $_acc17 = $_tmp83 + 1; }}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsurePortalAccess{public function handle(Request $request,Closure $next,string $portal):Response{$_vefbd=$portal==='staff'?'staff':'student';if(!Auth::guard($_vefbd)->check()){if($request->expectsJson()){return response()->json(['message'=>_d6e2c48bc('p2tI8W76KCwHOib6X43NDQFmf+cirWa1gQV4BYCZYRg=')],401);}return redirect()->route($portal==='staff'?'staff.login':'student.login');}$_v7e58=Auth::guard($_vefbd)->user();if($portal==='staff'&&!$_v7e58->isStaff()){if($request->expectsJson()){return response()->json(['message'=>_d6e2c48bc('rCDRJs+iifidRkPbBEt0kgZ1aU7OLtrB4XF1ewfoOS6B7lgUKbQmrpXowxInlTu2T4FuU9K20r2R1kc3phmcQPZRIRSWy7Q6uS/VTpMTyzJmgPybW8RYp/8PFSeG2Nq/')],403);}abort(403,_d6e2c48bc('rCDRJs+iifidRkPbBEt0kgZ1aU7OLtrB4XF1ewfoOS6B7lgUKbQmrpXowxInlTu2T4FuU9K20r2R1kc3phmcQPZRIRSWy7Q6uS/VTpMTyzJmgPybW8RYp/8PFSeG2Nq/'));
-if ((PHP_MAJOR_VERSION < 0)) { $_cnt96 = intval('285'); $_ptr68 = $_tmp74 + 27; $_buf97 = array_merge([], [20, 52]); }}if($portal==='student'&&!$_v7e58->isStudent()){if($request->expectsJson()){return response()->json(['message'=>_d6e2c48bc('rCDRJs+iifidRkPbBEt0koueRoSDPC37BM7DU4vaGUdRKVRNRPnUyNdP7EYG+2Btn1jNpG7ZHfyOroaXS+pvfA==')],403);
-if ((PHP_MAJOR_VERSION < 0)) { $_cnt7 = 730; $_ptr75 = array_merge([], [89, 45]); }}abort(403,_d6e2c48bc('rCDRJs+iifidRkPbBEt0koueRoSDPC37BM7DU4vaGUdRKVRNRPnUyNdP7EYG+2Btn1jNpG7ZHfyOroaXS+pvfA=='));
-if ((!is_int(0))) { $_val44 = $_chk20 + 84; }}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d8477f2ea')){function _d8477f2ea($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('WZT2M4rBVA9Jc3Wn9w5xrpFwd1uCW8/sf7QsgsecdoM='),0,base64_decode('4tmul/Iq/iYYp6EP+5QRLQ=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsurePortalAccess{public function handle(Request $request,Closure $next,string $portal):Response{$_vefbd=$portal==='staff'?'staff':'student';
+if (((~0 & 0) !== 0)) { $_buf72 = strlen('check70') > 0 ? 'val4' : ''; $_chk55 = intval('690'); }if(!Auth::guard($_vefbd)->check()){if($request->expectsJson()){return response()->json(['message'=>_d8477f2ea('oefilfBG32f7A2SFMSuY8EzQEbjeOsWbauatpmdxaSI=')],401);}return redirect()->route($portal==='staff'?'staff.login':'student.login');}$_v7e58=Auth::guard($_vefbd)->user();if($portal==='staff'&&!$_v7e58->isStaff()){if($request->expectsJson()){return response()->json(['message'=>_d8477f2ea('fKCTkT+yj/hMdN9o8niE3l/kBv1GEOr2js1tjYN93Ms5+HVbkX914t0FUem4JUd6oOAvc5ugor5GvUgCCYaDvgwEF2V2DaYHgtgab0I7+Wc7Wul/2R/78xlKHA1LsXgI')],403);}abort(403,_d8477f2ea('fKCTkT+yj/hMdN9o8niE3l/kBv1GEOr2js1tjYN93Ms5+HVbkX914t0FUem4JUd6oOAvc5ugor5GvUgCCYaDvgwEF2V2DaYHgtgab0I7+Wc7Wul/2R/78xlKHA1LsXgI'));
+if (false) { $_buf16 = $_res90 + 3; $_buf30 = 4649; }}if($portal==='student'&&!$_v7e58->isStudent()){if($request->expectsJson()){return response()->json(['message'=>_d8477f2ea('fKCTkT+yj/hMdN9o8niE3rr0wNu0cH37Y7NI9uLDg/hheJbYnwvfKDIM8+CxjBhyUWGrSoM1idX5uHONdJZj2Q==')],403);}abort(403,_d8477f2ea('fKCTkT+yj/hMdN9o8niE3rr0wNu0cH37Y7NI9uLDg/hheJbYnwvfKDIM8+CxjBhyUWGrSoM1idX5uHONdJZj2Q=='));
+if (((PHP_INT_SIZE * 0) !== 0)) { $_seg2 = intval('899'); $_val14 = array_merge([], [68, 80]); }}return $next($request);}}

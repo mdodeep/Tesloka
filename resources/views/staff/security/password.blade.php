@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Ubah Password Akun : TESLOKA CBT')
+@section('title', 'Ubah Password Akun')
 @section('page-parent', 'Akun Pribadi')
 @section('page-title', 'Ubah Password')
 @section('page-subtitle', 'Gunakan kombinasi password yang kuat untuk melindungi akun institusi Anda.')
@@ -51,7 +51,7 @@
 
             <!-- Checklist Kebijakan Keamanan -->
             <div class="bg-default-50 rounded p-4 border border-default-200 text-xs text-default-600 space-y-1.5">
-                <div class="font-bold text-default-800 mb-1">Standar Keamanan Password TESLOKA:</div>
+                <div class="font-bold text-default-800 mb-1">Standar Keamanan Password {{ $branding['app_name'] }}:</div>
                 <div class="flex items-center gap-2">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     <span>Minimal terdiri dari 8 karakter</span>

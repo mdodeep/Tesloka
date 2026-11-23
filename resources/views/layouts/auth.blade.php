@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     @php
-        $systemInstitution = \App\Models\Institution::first();
-        $systemLogoUrl = $systemInstitution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $systemFaviconUrl = $systemInstitution?->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $systemInstName = \App\Models\SystemSetting::get('app.name', $systemInstitution?->name ?? 'TESLOKA CBT');
-        $systemTagline = \App\Models\SystemSetting::get('app.tagline', 'Sistem Evaluasi & Ujian Berbasis Komputer On-Premise');
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
+        $systemLogoUrl = $branding['logo_url'];
+        $systemFaviconUrl = $branding['favicon_url'];
+        $systemInstName = $branding['app_name'];
+        $systemTagline = $branding['tagline'];
         $isStaff = request()->is('staff*') || request()->routeIs('staff.*');
         $bgFile = $isStaff
             ? \App\Models\SystemSetting::get('branding.staff_login_bg')
@@ -30,7 +30,7 @@
             background-color: #f8fafc;
             color: #1e293b;
             @if($bgFile)
-            background-image: url('{{ asset('storage/' . $bgFile) }}');
+            background-image: url('{{ '/storage/' . ltrim((string) $bgFile, '/') }}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -92,11 +92,7 @@
         </div>
 
         <div class="mt-6 text-center text-xs text-default-400 font-medium">
-            @if(app(\App\Services\LicenseService::class)->shouldHideBranding())
-                &copy; {{ date('Y') }} {{ $systemInstName }}
-            @else
-                &copy; {{ date('Y') }} {{ $systemInstName }} &bull; TESLOKA CBT Community
-            @endif
+            {!! $branding['footer_copyright'] !!}
         </div>
     </div>
 </body>

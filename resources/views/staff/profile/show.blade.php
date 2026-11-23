@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Profil & Kata Sandi : TESLOKA CBT')
+@section('title', 'Profil & Kata Sandi')
 @section('page-parent', 'Akun Pribadi')
 @section('page-title', 'Profil & Kata Sandi')
 @section('page-subtitle', 'Kelola informasi identitas, foto profil resmi, dan keamanan kata sandi akun Anda.')
@@ -170,7 +170,7 @@
 
                     <!-- Checklist Kebijakan Keamanan Password -->
                     <div class="bg-default-50 rounded p-3.5 border border-default-200 text-xs text-default-600 space-y-1.5">
-                        <div class="font-bold text-default-800 mb-1">Standar Keamanan Kata Sandi TESLOKA:</div>
+                        <div class="font-bold text-default-800 mb-1">Standar Keamanan Kata Sandi {{ $branding['app_name'] }}:</div>
                         <div class="flex items-center gap-2">
                             <span class="size-1.5 rounded-full bg-emerald-500"></span>
                             <span>Minimal terdiri dari 8 karakter</span>

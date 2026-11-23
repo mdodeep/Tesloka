@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pakta Integritas Pengawas - {{ $session->session_code }} - {{ $session->room->name ?? 'Ruang Ujian' }}</title>
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $institution = $session->exam->institution ?? \App\Models\Institution::first();
-        $logoUrl = $institution?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $instName = $institution?->name ?? 'TESLOKA';
-        $instAddress = $institution?->address ?? 'Jl. Swakarsa IV';
-        $instPhone = $institution?->phone ?? '+62812 1249 9153';
-        $instEmail = $institution?->email ?? 'info@tesloka.web.id';
+        $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
+        $instName = $institution?->name ?: $branding['institution_name'];
+        $instAddress = $institution?->address ?? '';
+        $instPhone = $institution?->phone ?? '';
+        $instEmail = $institution?->email ?? '';
 
         $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
-        $docLetterheadUrl = $docLetterheadPath ? asset('storage/' . $docLetterheadPath) : null;
+        $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
 
         $stampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $stampUrl = $stampPath ? asset('storage/' . $stampPath) : null;
+        $stampUrl = $stampPath ? '/storage/' . ltrim((string) $stampPath, '/') : null;
     @endphp
     <style>
         *, *::before, *::after {

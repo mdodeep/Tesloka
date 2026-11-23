@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Services\MediaStorageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
 
 class QuestionStimulus extends Model
 {
@@ -32,13 +32,7 @@ class QuestionStimulus extends Model
 
     public function getMediaUrlAttribute(): ?string
     {
-        if (empty($this->media_path)) {
-            return null;
-        }
-
-        return str_starts_with($this->media_path, 'http')
-            ? $this->media_path
-            : Storage::disk('public')->url($this->media_path);
+        return MediaStorageService::resolveMediaUrl($this->media_path);
     }
 
     public function getTypeAttribute(): ?string

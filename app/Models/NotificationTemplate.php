@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\BrandingService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +31,8 @@ class NotificationTemplate extends Model
      */
     public static function getSampleData(): array
     {
+        $branding = app(BrandingService::class)->getBranding();
+
         return [
             'nama_siswa' => 'Ahmad Fauzi',
             'username' => '20261001',
@@ -41,7 +44,8 @@ class NotificationTemplate extends Model
             'nilai' => '88.50',
             'kkm' => '75.00',
             'status_kelulusan' => 'LULUS',
-            'nama_institusi' => SystemSetting::get('institution_name', 'Tesloka'),
+            'nama_institusi' => $branding['institution_name'] ?? 'Institusi Pendidikan',
+            'nama_aplikasi' => $branding['app_name'] ?? 'Portal Evaluasi CBT',
             'token' => 'TESLOKA26',
             'durasi' => '90 Menit',
             'tanggal' => now()->translatedFormat('d F Y'),

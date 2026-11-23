@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Bank Soal & Konten : TESLOKA CBT')
+@section('title', 'Bank Soal & Konten')
 @section('page-parent', 'Konten & Ujian')
 @section('page-title', 'Bank Soal & Konten')
 @section('page-subtitle', 'Kelola bank soal berbasis mata pelajaran/kuliah, stimulus, dan butir soal berbagai format.')
@@ -164,6 +164,13 @@
                                             <i data-lucide="arrow-right" class="size-3.5"></i>
                                         </a>
 
+                                        <button type="button"
+                                                onclick="openEditBankModal({{ $bank->id }}, {{ json_encode($bank->subject_id) }}, {{ json_encode($bank->name) }}, {{ json_encode($bank->code) }}, {{ json_encode($bank->description ?? '') }}, {{ $bank->is_active ? 'true' : 'false' }})"
+                                                class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300 text-default-600 flex items-center justify-center transition cursor-pointer"
+                                                title="Edit Metadata Bank Soal">
+                                            <i data-lucide="edit" class="size-4"></i>
+                                        </button>
+
                                         <form method="POST" action="{{ route('staff.question-banks.duplicate', $bank) }}" class="inline" onsubmit="return confirm('Duplikasi bank soal ini beserta seluruh soal dan stimulus?')">
                                             @csrf
                                             <button type="submit" 
@@ -178,6 +185,16 @@
                                            title="Ekspor CSV">
                                             <i data-lucide="download" class="size-4"></i>
                                         </a>
+
+                                        <form method="POST" action="{{ route('staff.question-banks.destroy', $bank) }}" class="inline" onsubmit="return confirm('Hapus permanen bank soal ini beserta seluruh butir soal di dalamnya?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-rose-50 hover:text-rose-600 hover:border-rose-300 text-default-600 flex items-center justify-center transition cursor-pointer"
+                                                    title="Hapus Bank Soal">
+                                                <i data-lucide="trash-2" class="size-4"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -349,8 +366,76 @@
     </div>
 </div>
 
+<!-- Modal Edit Question Bank -->
+<div id="modal-edit-bank" class="hidden fixed inset-0 bg-default-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-card rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 shadow-2xl border border-default-200 overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 mb-4 border-b border-default-200">
+            <div>
+                <h4 class="text-sm font-bold text-default-800">Edit Metadata Bank Soal</h4>
+                <p class="text-xs text-default-500 mt-0.5">Perbarui mata pelajaran, kode, atau status arsip bank soal.</p>
+            </div>
+            <button type="button" onclick="document.getElementById('modal-edit-bank').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 cursor-pointer">
+                <i data-lucide="x" class="size-4.5"></i>
+            </button>
+        </div>
+
+        <form id="form-edit-bank" method="POST" action="" class="space-y-4 text-xs">
+            @csrf
+            @method('PUT')
+            <div>
+                <label class="block font-semibold text-default-800 uppercase tracking-wider mb-1">Mata Pelajaran / Kuliah <span class="text-danger">*</span></label>
+                <select id="edit-bank-subject" name="subject_id" required class="form-select w-full">
+                    @foreach ($subjects as $s)
+                        <option value="{{ $s->id }}">{{ $s->name }} ({{ $s->code }})</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block font-semibold text-default-800 uppercase tracking-wider mb-1">Nama Bank Soal <span class="text-danger">*</span></label>
+                <input id="edit-bank-name" type="text" name="name" required class="form-input w-full">
+            </div>
+
+            <div>
+                <label class="block font-semibold text-default-800 uppercase tracking-wider mb-1">Kode Unik Bank Soal <span class="text-danger">*</span></label>
+                <input id="edit-bank-code" type="text" name="code" required class="form-input font-mono w-full">
+            </div>
+
+            <div>
+                <label class="block font-semibold text-default-800 uppercase tracking-wider mb-1">Deskripsi Singkat / Catatan Silabus</label>
+                <textarea id="edit-bank-desc" name="description" rows="2" class="form-textarea w-full"></textarea>
+            </div>
+
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input id="edit-bank-active" type="checkbox" name="is_active" value="1" class="rounded border-default-300 text-primary focus:ring-primary size-4">
+                <span class="font-semibold text-default-800">Bank Soal Aktif (Tersedia untuk Perancangan Ujian)</span>
+            </label>
+
+            <div class="flex flex-col-reverse sm:flex-row justify-end gap-2.5 pt-3 border-t border-default-200">
+                <button type="button" onclick="document.getElementById('modal-edit-bank').classList.add('hidden')" class="w-full sm:w-auto btn btn-sm border border-default-200 text-default-700 hover:bg-default-100 rounded cursor-pointer">
+                    Batal
+                </button>
+                <button type="submit" class="w-full sm:w-auto btn btn-sm bg-primary text-white hover:bg-primary-hover rounded inline-flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                    <i data-lucide="save" class="size-4"></i>
+                    <span>Simpan Perubahan</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @push('scripts')
 <script>
+    function openEditBankModal(id, subjectId, name, code, desc, isActive) {
+        document.getElementById('form-edit-bank').action = '{{ url('staff/question-banks') }}/' + id;
+        document.getElementById('edit-bank-subject').value = subjectId || '';
+        document.getElementById('edit-bank-name').value = name || '';
+        document.getElementById('edit-bank-code').value = code || '';
+        document.getElementById('edit-bank-desc').value = desc || '';
+        document.getElementById('edit-bank-active').checked = !!isActive;
+        document.getElementById('modal-edit-bank').classList.remove('hidden');
+        if (window.lucide) lucide.createIcons();
+    }
     function switchView(mode) {
         const tableView = document.getElementById('view-table');
         const gridView = document.getElementById('view-grid');

@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Jejak Audit Keamanan Sistem : TESLOKA CBT')
+@section('title', 'Jejak Audit Keamanan Sistem')
 @section('page-parent', 'Tata Kelola & Keamanan')
 @section('page-title', 'Jejak Audit Sistem')
 @section('page-subtitle', 'Catatan terperinci seluruh aktivitas autentikasi, perubahan kebijakan, otorisasi Four-Eyes, dan modifikasi data institusi yang tersimpan permanen di database.')

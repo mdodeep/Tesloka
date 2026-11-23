@@ -138,7 +138,7 @@
                     <span>Tata Tertib & Ketentuan Pengerjaan:</span>
                 </h3>
                 <ul class="text-xs text-default-600 space-y-2 list-disc list-inside bg-white p-4 border border-default-200 rounded leading-relaxed">
-                    <li><strong>Waktu Server:</strong> Hitung mundur pengerjaan menggunakan jam server resmi TESLOKA. Menutup browser atau memuat ulang halaman tidak menghentikan maupun menambah durasi timer.</li>
+                    <li><strong>Waktu Server:</strong> Hitung mundur pengerjaan menggunakan jam server resmi {{ $branding['system_label'] ?? 'CBT' }}. Menutup browser atau memuat ulang halaman tidak menghentikan maupun menambah durasi timer.</li>
                     <li><strong>Penyimpanan Jawaban:</strong> Jawaban yang Anda pilih disimpan secara otomatis dan instan (*real-time autosave*) ke basis data server.</li>
                     <li><strong>Integritas Layar Penuh:</strong> Anda diharapkan tetap berada pada jendela ujian. Tindakan berpindah tab, membuka aplikasi lain, atau keluar dari layar penuh akan dicatat ke dalam log insiden sistem.</li>
                     <li><strong>Pengumpulan Ujian:</strong> Klik tombol <strong>Selesai Ujian</strong> jika telah memeriksa seluruh jawaban Anda. Sistem akan menerbitkan <strong>Bukti Tanda Terima Digital</strong> sah sebagai konfirmasi akhir.</li>

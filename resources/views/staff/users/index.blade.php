@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Manajemen Pengguna : TESLOKA CBT')
+@section('title', 'Manajemen Pengguna')
 @section('page-parent', 'Master Organisasi')
 @section('page-title', 'Manajemen Pengguna')
 @section('page-subtitle', 'Kelola akun administrator, pengajar, pengawas, dan peserta ujian secara terpadu.')

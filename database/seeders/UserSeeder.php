@@ -12,11 +12,31 @@ use App\Models\TeacherSubjectAssignment;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
     public function run(bool $forceProduction = false): void
     {
+        $isProductionMode = $forceProduction || app()->environment('production');
+        $envAdminPassword = env('TESLOKA_ADMIN_PASSWORD');
+        $generatedProdPassword = null;
+
+        if ($isProductionMode) {
+            if (! empty($envAdminPassword)) {
+                $adminPasswordHash = Hash::make((string) $envAdminPassword);
+                $mustChangePassword = false;
+            } else {
+                // Production wajib bebas sandi bawaan universal; hasilkan sandi acak kriptografis
+                $generatedProdPassword = Str::password(16);
+                $adminPasswordHash = Hash::make($generatedProdPassword);
+                $mustChangePassword = true;
+            }
+        } else {
+            $adminPasswordHash = Hash::make('Tesloka2026!');
+            $mustChangePassword = false;
+        }
+
         $defaultPassword = Hash::make('Tesloka2026!');
 
         $adminRole = Role::where('name', 'admin')->first();
@@ -35,24 +55,31 @@ class UserSeeder extends Seeder
         $helpdeskRole = Role::where('name', 'helpdesk_officer')->first();
 
         // 1. Administrator Utama
-        $admin = User::updateOrCreate(
-            ['username' => 'admin'],
-            [
-                'name' => 'Administrator Utama TESLOKA',
-                'email' => 'admin@tesloka.test',
-                'password' => $defaultPassword,
-                'identity_number' => 'ADM2026001',
-                'status' => 'active',
-                'must_change_password' => false,
-            ]
-        );
-        if ($adminRole && ! $admin->hasRole('admin')) {
-            $admin->roles()->syncWithoutDetaching([$adminRole->id]);
+        if (! $isProductionMode || User::count() === 0) {
+            $admin = User::updateOrCreate(
+                ['username' => 'admin'],
+                [
+                    'name' => $isProductionMode ? 'Administrator Utama' : 'Administrator Utama TESLOKA',
+                    'email' => $isProductionMode ? 'admin@institusi.local' : 'admin@tesloka.test',
+                    'password' => $adminPasswordHash,
+                    'identity_number' => 'ADM2026001',
+                    'status' => 'active',
+                    'must_change_password' => $mustChangePassword,
+                ]
+            );
+            if ($adminRole && ! $admin->hasRole('admin')) {
+                $admin->roles()->syncWithoutDetaching([$adminRole->id]);
+            }
+
+            if ($generatedProdPassword !== null && $this->command) {
+                $this->command->warn("Akun admin awal dibuat dengan sandi acak sekali lihat: {$generatedProdPassword}");
+                $this->command->warn('Segera ganti kata sandi setelah login pertama.');
+            }
         }
 
         // Khusus Lingkungan Production: Hanya Administrator Utama yang dibuat.
         // Hentikan proses seeder di sini agar database institusi tetap bersih.
-        if ($forceProduction || app()->environment('production')) {
+        if ($isProductionMode) {
             return;
         }
 

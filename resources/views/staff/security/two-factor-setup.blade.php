@@ -1,9 +1,9 @@
 @extends('layouts.staff')
 
-@section('title', 'Aktivasi Two-Factor Authentication : TESLOKA CBT')
+@section('title', 'Aktivasi Two-Factor Authentication')
 @section('page-parent', 'Keamanan')
 @section('page-title', 'Pengaturan Autentikasi 2FA')
-@section('page-subtitle', 'Ikuti 3 langkah berikut untuk menautkan aplikasi autentikator Anda dengan akun TESLOKA.')
+@section('page-subtitle', 'Ikuti 3 langkah berikut untuk menautkan aplikasi autentikator Anda dengan akun ' . ($branding['app_name'] ?? 'Portal') . '.')
 
 @section('content')
 <div class="max-w-4xl space-y-6">

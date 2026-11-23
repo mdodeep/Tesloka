@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kartu Peserta Ujian - Kelas {{ $class->name }} ({{ $class->code }})</title>
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $inst = $institution ?? \App\Models\Institution::first();
-        $logoUrl = $inst?->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
-        $instName = $inst?->name ?? config('app.name', 'TESLOKA CBT');
+        $logoUrl = $inst?->logo_url ?: $branding['logo_url'];
+        $instName = $inst?->name ?: $branding['institution_name'];
     @endphp
     <style>
         *, *::before, *::after {
@@ -286,7 +287,7 @@
                                     <div class="content-body">
                                         <div class="photo-box">
                                             @if($student->photo_path)
-                                                <img src="{{ asset('storage/' . $student->photo_path) }}" alt="{{ $student->name }}">
+                                                <img src="{{ '/storage/' . ltrim((string) $student->photo_path, '/') }}" alt="{{ $student->name }}">
                                             @else
                                                 <span style="text-align: center; line-height: 1.2;">FOTO<br>3 x 4</span>
                                             @endif

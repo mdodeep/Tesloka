@@ -11,7 +11,7 @@
         </div>
         <h1 class="text-xl sm:text-2xl font-bold text-default-900 tracking-tight">Ujian Berhasil Dikumpulkan</h1>
         <p class="text-xs sm:text-sm text-default-600 max-w-md mx-auto leading-relaxed">
-            Jawaban Anda telah tersimpan secara permanen dan sah di server CBT TESLOKA.
+            Jawaban Anda telah tersimpan secara permanen dan sah di server {{ $branding['system_label'] ?? 'CBT' }}.
         </p>
     </div>
 
@@ -90,7 +90,7 @@
 
             <!-- Integrity Watermark & Notice -->
             <div class="text-[11px] text-default-400 border-t border-default-100 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-                <span>Bukti ini diterbitkan secara sah oleh mesin penguji TESLOKA CBT.</span>
+                <span>Bukti ini diterbitkan secara sah oleh mesin penguji {{ $branding['system_label'] ?? 'CBT' }}.</span>
                 <span class="font-mono font-semibold">ID Percobaan: #{{ $attempt->id }}</span>
             </div>
         </div>

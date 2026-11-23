@@ -6,12 +6,13 @@
     <title>Sertifikat Kelulusan - {{ $attempt->student->name ?? 'Peserta' }} - {{ $attempt->exam->title ?? 'Ujian' }}</title>
     @vite(['resources/js/app.js'])
     @php
+        $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
         $letterGrade = $letterGrade ?? ($attempt->finalResult->final_grade_letter ?? $attempt->getLetterGrade());
         $gradePredicate = $gradePredicate ?? $attempt->getGradePredicate();
         $institution = $attempt->exam->institution ?? \App\Models\Institution::first();
-        $instName = $institution->name ?? 'TESLOKA';
-        $faviconUrl = $institution->favicon_url ?? asset('assets/images/favicon-tesloka-bg-putih.webp');
-        $logoUrl = $institution->logo_url ?? asset('assets/images/logo-tesloka-cbt.webp');
+        $instName = $institution?->name ?: $branding['institution_name'];
+        $faviconUrl = $institution?->favicon_url ?: $branding['favicon_url'];
+        $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
         
         // Konfigurasi Desain & Warna Sertifikat
         $certPrimaryColor = \App\Models\SystemSetting::get('branding.cert_primary_color', '#14213d');
@@ -30,7 +31,7 @@
         // Template Narasi Pernyataan Kelulusan Sertifikat
         $rawStatementTemplate = \App\Models\SystemSetting::get(
             'branding.cert_statement_template',
-            'Atas keberhasilan menuntaskan seluruh rangkaian evaluasi terstandar pada mata pelajaran {{mata pelajaran}} dalam ujian "{{nama ujian}}" yang diselenggarakan oleh sistem TESLOKA CBT terakreditasi institusi dengan capaian:'
+            'Atas keberhasilan menuntaskan seluruh rangkaian evaluasi terstandar pada mata pelajaran {{mata pelajaran}} dalam ujian "{{nama ujian}}" yang diselenggarakan oleh '.$instName.' dengan capaian:'
         );
 
         $subjectName = $attempt->exam->subject->name ?? 'Evaluasi CBT';
@@ -109,18 +110,18 @@
         $certSignerTitle = \App\Models\SystemSetting::get('branding.cert_signer_title', 'Direktur / Kepala Akademik');
         $certSignerNip = \App\Models\SystemSetting::get('branding.cert_signer_nip', '19690815 199403 1 001');
         $certSignerSigPath = \App\Models\SystemSetting::get('branding.cert_signer_signature');
-        $certSignerSigUrl = $certSignerSigPath ? asset('storage/' . $certSignerSigPath) : null;
+        $certSignerSigUrl = $certSignerSigPath ? '/storage/' . ltrim((string) $certSignerSigPath, '/') : null;
 
         // Pejabat Kedua / Penguji (Kiri)
         $certSignerSecondaryName = \App\Models\SystemSetting::get('branding.cert_signer_secondary_name', 'Drs. H. M. Syatibi, M.Ag.');
         $certSignerSecondaryTitle = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji CBT');
         $certSignerSecondaryNip = \App\Models\SystemSetting::get('branding.cert_signer_secondary_nip', '19780512 200312 1 002');
         $certSignerSecondarySigPath = \App\Models\SystemSetting::get('branding.cert_signer_secondary_signature');
-        $certSignerSecondarySigUrl = $certSignerSecondarySigPath ? asset('storage/' . $certSignerSecondarySigPath) : null;
+        $certSignerSecondarySigUrl = $certSignerSecondarySigPath ? '/storage/' . ltrim((string) $certSignerSecondarySigPath, '/') : null;
 
         // Cap Stempel Institusi
         $certStampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $certStampUrl = $certStampPath ? asset('storage/' . $certStampPath) : null;
+        $certStampUrl = $certStampPath ? '/storage/' . ltrim((string) $certStampPath, '/') : null;
 
         // Opsi Tampilan
         $certShowWatermark = (bool) \App\Models\SystemSetting::get('branding.cert_show_watermark', true);
@@ -131,7 +132,7 @@
         // Blangko Kustom A4 (Khusus Supporter License)
         $isSupporter = app(\App\Services\LicenseService::class)->isSupporter();
         $certBgSetting = $isSupporter ? \App\Models\SystemSetting::get('branding.certificate_bg') : null;
-        $certBgUrl = $certBgSetting ? asset('storage/' . $certBgSetting) : null;
+        $certBgUrl = $certBgSetting ? '/storage/' . ltrim((string) $certBgSetting, '/') : null;
         
         // URL Tombol Kembali
         if (! isset($backUrl)) {
@@ -153,7 +154,7 @@
 
         $certCode = 'CERT/CBT/' . ($attempt->exam->code ?? 'EXAM') . '/' . str_pad($attempt->id, 6, '0', STR_PAD_LEFT);
         $receipt = $attempt->submission_receipt ?? (string) $attempt->id;
-        $verificationQrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" . urlencode(route('document.verify', $receipt));
+        $verificationQrUrl = \App\Services\QrCodeService::dataUri(route('document.verify', $receipt), 160);
         $verificationHash = substr(hash('sha256', $attempt->id . $receipt . ($attempt->submitted_at?->timestamp ?? '')), 0, 16);
     @endphp
     <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">

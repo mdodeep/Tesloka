@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Jadwalkan Sesi Ujian Baru : TESLOKA CBT')
+@section('title', 'Jadwalkan Sesi Ujian Baru')
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', 'Jadwalkan Sesi Baru')
 @section('page-subtitle', 'Pilih ujian, tentukan ruang ujian sesuai batasan kapasitas DEC-001, dan jadwalkan rentang waktu pelaksanaan.')
@@ -31,14 +31,19 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Ujian Terkait *</label>
-                    <select name="exam_id" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium" required>
+                    <select id="select-session-exam" name="exam_id" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium" required>
                         <option value="">-- Pilih Ujian --</option>
                         @foreach($exams as $ex)
-                            <option value="{{ $ex->id }}" {{ (old('exam_id') == $ex->id || $selectedExamId == $ex->id) ? 'selected' : '' }}>
+                            <option value="{{ $ex->id }}"
+                                data-duration="{{ $ex->duration_minutes }}"
+                                data-start="{{ $ex->scheduled_start?->format('d/m/Y H:i') ?? '' }}"
+                                data-end="{{ $ex->scheduled_end?->format('d/m/Y H:i') ?? '' }}"
+                                {{ (old('exam_id') == $ex->id || $selectedExamId == $ex->id) ? 'selected' : '' }}>
                                 {{ $ex->title }} ({{ $ex->code }}) - Durasi {{ $ex->duration_minutes }} menit [{{ $ex->getDeliveryModeLabel() }}]
                             </option>
                         @endforeach
                     </select>
+                    <div id="exam-window-hint" class="hidden mt-2 p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-[11px] text-sky-900"></div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -78,11 +83,11 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Waktu Mulai Sesi *</label>
+                        <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Waktu Mulai Sesi (WIB) *</label>
                         <input type="datetime-local" name="start_time" value="{{ old('start_time', now()->addHour()->format('Y-m-d\TH:00')) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Waktu Selesai Sesi *</label>
+                        <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Waktu Selesai Sesi (WIB) *</label>
                         <input type="datetime-local" name="end_time" value="{{ old('end_time', now()->addHours(3)->format('Y-m-d\TH:00')) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
                     </div>
                 </div>
@@ -133,6 +138,32 @@
         if (selectMode) {
             selectMode.addEventListener('change', updateRoomMode);
             updateRoomMode();
+        }
+
+        const selectExam = document.getElementById('select-session-exam');
+        const examWindowHint = document.getElementById('exam-window-hint');
+        function updateExamWindowHint() {
+            if (!selectExam || !examWindowHint) return;
+            const opt = selectExam.options[selectExam.selectedIndex];
+            if (!opt || !opt.value) {
+                examWindowHint.classList.add('hidden');
+                return;
+            }
+            const dur = opt.dataset.duration || '-';
+            const st = opt.dataset.start || '';
+            const en = opt.dataset.end || '';
+            let msg = `<strong>Durasi Ujian:</strong> ${dur} menit. `;
+            if (st || en) {
+                msg += `<strong>Periode Ketersediaan Ujian Induk:</strong> ${st || 'Fleksibel'} s/d ${en || 'Fleksibel'} WIB.`;
+            } else {
+                msg += 'Periode ketersediaan ujian induk bersifat fleksibel (tidak dibatasi tanggal tertentu).';
+            }
+            examWindowHint.innerHTML = msg;
+            examWindowHint.classList.remove('hidden');
+        }
+        if (selectExam) {
+            selectExam.addEventListener('change', updateExamWindowHint);
+            updateExamWindowHint();
         }
     });
 </script>

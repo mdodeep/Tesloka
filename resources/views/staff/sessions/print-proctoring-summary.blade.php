@@ -13,13 +13,27 @@
         $instPhone = $institution?->phone ?? '';
         $instEmail = $institution?->email ?? '';
 
-        // Template Blangko Kertas Surat Resmi A4 Portret (1 Kertas Penuh)
-        $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
-        $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
+        $docService = app(\App\Services\DocumentConfigService::class);
+        $doc = $docService->getSettings($institution);
+        $docLetterheadUrl = $doc['letterhead_url'];
+        $stampUrl = $doc['stamp_url'];
 
-        // Cap Stempel Resmi Institusi
-        $stampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $stampUrl = $stampPath ? '/storage/' . ltrim((string) $stampPath, '/') : null;
+        $docNumber = $docService->formatNumber('proctoring_summary', [
+            'exam_code' => $session->exam->code ?? 'EXAM',
+            'session_code' => $session->session_code,
+            'session_id' => $session->id,
+            'seq' => $session->id,
+            'date' => $session->start_time ?? now(),
+        ], $institution);
+
+        $resolvedProctors = $docService->resolveSessionProctors($session);
+        $leadProctorUser = $docService->proctorUser($resolvedProctors['lead']);
+        $leadProctorRole = $resolvedProctors['lead']?->role_title ?: 'Pengawas Utama Ruang Ujian';
+
+        $techProctorUser = $docService->proctorUser($resolvedProctors['technician']);
+        $techName = $techProctorUser?->name ?? $doc['technician_name'];
+        $techTitle = $resolvedProctors['technician']?->role_title ?? $doc['technician_title'];
+        $techNip = $techProctorUser?->identity_number ?? $doc['technician_nip'];
     @endphp
     <style>
         *, *::before, *::after {
@@ -39,15 +53,18 @@
             line-height: 1.45;
         }
         .no-print {
-            background: #f1f5f9;
+            background: #ffffff;
             padding: 12px 20px;
             border-bottom: 1px solid #cbd5e1;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             font-family: system-ui, sans-serif;
-            font-size: 14px;
-            margin-bottom: 20px;
+            font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
         }
         .btn-print {
             background: #2e33ff;
@@ -57,6 +74,17 @@
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 12.5px;
+        }
+        .btn-close {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 7px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 12.5px;
         }
         .doc-viewport-container {
             box-sizing: border-box;
@@ -110,9 +138,10 @@
             line-height: 1.2;
         }
         .kop-sub {
-            font-size: 10.5pt;
+            font-size: 10pt;
             font-weight: bold;
             margin: 2px 0;
+            text-transform: uppercase;
         }
         .kop-addr {
             font-size: 8.5pt;
@@ -133,6 +162,7 @@
         .doc-title p {
             font-size: 10pt;
             margin: 3px 0 0 0;
+            font-family: monospace, serif;
         }
         .meta-table, .data-table {
             width: 100%;
@@ -187,22 +217,28 @@
             width: 240px;
             text-align: center;
             font-size: 10pt;
+            position: relative;
         }
         .sign-space {
             height: 60px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .sign-name {
             font-weight: bold;
             text-decoration: underline;
         }
-        .doc-viewport-container {
-            box-sizing: border-box;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 12px 6px;
-            display: flex;
-            justify-content: center;
+        .stamp-mark {
+            position: absolute;
+            left: 10px;
+            top: -8px;
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            opacity: 0.85;
+            pointer-events: none;
         }
         @media screen and (max-width: 820px) {
             .no-print {
@@ -211,12 +247,15 @@
                 align-items: stretch !important;
                 gap: 8px !important;
             }
-            .btn-print {
-                width: 100% !important;
-                text-align: center;
+            .no-print-actions {
+                display: flex !important;
+                gap: 8px !important;
+            }
+            .no-print-actions button, .no-print-actions a {
+                flex: 1 !important;
+                text-align: center !important;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
                 justify-content: flex-start;
                 padding: 8px 4px;
             }
@@ -236,7 +275,6 @@
                 print-color-adjust: exact !important;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;
@@ -266,33 +304,33 @@
         <div>
             <strong>Rekapitulasi Pengawasan Ruang Ujian</strong> &bull; Sesi: {{ $session->session_code }} &bull; {{ $session->room->name ?? '-' }}
         </div>
-        <button onclick="window.print()" class="btn-print">Cetak Laporan Rekap</button>
+        <div class="no-print-actions" style="display: flex; gap: 8px;">
+            <button onclick="window.print()" class="btn-print">Cetak Laporan Rekap</button>
+            <a href="{{ route('staff.sessions.show', $session) }}" class="btn-close">Kembali</a>
+        </div>
     </div>
 
     <div class="doc-viewport-container">
     <div class="document-container">
-        <!-- KOP SURAT RESMI (HANYA JIKA TIDAK ADA BLANGKO KERTAS SURAT FULL) -->
         @if(! $docLetterheadUrl)
             <div class="kop-surat">
                 <img src="{{ $logoUrl }}" alt="Logo" class="kop-logo">
                 <div class="kop-text">
                     <div class="kop-inst">{{ $instName }}</div>
-                    <div class="kop-sub">SISTEM MONITORING &amp; PENGAWASAN EVALUASI CBT BERBASIS KOMPUTER</div>
-                    <div class="kop-addr">{{ $instAddress }} &bull; Telp: {{ $instPhone }} &bull; Email: {{ $instEmail }}</div>
+                    <div class="kop-sub">{{ $doc['kop_subtitle'] }}</div>
+                    <div class="kop-addr">{{ $instAddress }}@if($instPhone) &bull; Telp: {{ $instPhone }}@endif @if($instEmail) &bull; Email: {{ $instEmail }}@endif</div>
                 </div>
             </div>
         @endif
 
-        <!-- JUDUL DOKUMEN -->
         <div class="doc-title">
             <h1>REKAPITULASI DAN LAPORAN INTEGRITAS PENGAWASAN RUANG</h1>
-            <p>Kode Dokumen: RKP/PROCTOR/{{ date('Y') }}/{{ $session->session_code }} &bull; Sesi: {{ $session->session_code }}</p>
+            <p>Nomor: {{ $docNumber }} &bull; Sesi: {{ $session->session_code }}</p>
         </div>
 
-        <!-- IDENTITAS SESI & RUANG -->
         <table class="meta-table">
             <tr>
-                <td style="width: 140px; font-weight: bold;">Ujian / Mata Pelajaran</td>
+                <td style="width: 145px; font-weight: bold;">Ujian / Mata Pelajaran</td>
                 <td style="width: 10px;">:</td>
                 <td>{{ $session->exam->title }} ({{ $session->exam->subject->name ?? '-' }})</td>
                 <td style="width: 120px; font-weight: bold;">Ruang Ujian</td>
@@ -302,14 +340,13 @@
             <tr>
                 <td style="font-weight: bold;">Jadwal Pelaksanaan</td>
                 <td>:</td>
-                <td>{{ $session->start_time->translatedFormat('l, d F Y, H:i') }} s/d {{ $session->end_time->format('H:i') }} WIB</td>
+                <td>{{ $session->start_time?->translatedFormat('l, d F Y, H:i') ?? '-' }} s/d {{ $session->end_time?->format('H:i') ?? '-' }} WIB</td>
                 <td style="font-weight: bold;">Pengawas Utama</td>
                 <td>:</td>
-                <td>{{ $session->proctors->first()?->user->name ?? 'Staf Pengawas Resmi' }}</td>
+                <td>{{ $leadProctorUser?->name ?? '(Belum ditugaskan)' }}</td>
             </tr>
         </table>
 
-        <!-- METRIK REKAPITULASI -->
         <div class="metric-box">
             <div class="metric-card">
                 <div class="metric-num">{{ $totalRegistered }}</div>
@@ -329,7 +366,6 @@
             </div>
         </div>
 
-        <!-- LOG TINDAKAN INTERVENSI PENGAWAS -->
         <div style="font-weight: bold; margin-bottom: 6px;">CATATAN TINDAKAN INTERVENSI PENGAWAS RUANG:</div>
         <table class="data-table">
             <thead>
@@ -376,26 +412,31 @@
             </tbody>
         </table>
 
-        <!-- RINGKASAN INSIDEN & TELEMETRI RUANG -->
-        <div style="font-weight: bold; margin-bottom: 6px;">CATATAN KHUSUS & REKOMENDASI PENGAWAS RUANG:</div>
+        <div style="font-weight: bold; margin-bottom: 6px;">CATATAN KHUSUS &amp; REKOMENDASI PENGAWAS RUANG:</div>
         <div style="border: 1px solid #111827; padding: 10px; min-height: 50px; font-size: 9.5pt; margin-bottom: 20px;">
             Kondisi perangkat klien dan jaringan di {{ $session->room->name ?? 'ruang ujian' }} terpantau stabil. Seluruh peserta mematuhi tata tertib tanpa gangguan signifikan.
         </div>
 
-        <!-- PENGESAHAN DOKUMEN -->
         <div class="signatures">
             <div class="sign-box">
-                <div>Petugas Teknisi Lab / Jaringan,</div>
+                <div>{{ $techTitle }},</div>
                 <div class="sign-space"></div>
-                <div class="sign-name">Budi Santoso, S.T.</div>
-                <div>NIP. 19890415 201503 1 003</div>
+                <div class="sign-name">{{ $techName ?: '( ............................................ )' }}</div>
+                <div>NIP/ID. {{ $techNip ?: '....................................' }}</div>
             </div>
 
             <div class="sign-box">
-                <div>Pengawas Utama Ruang Ujian,</div>
-                <div class="sign-space"></div>
-                <div class="sign-name">{{ $session->proctors->first()?->user->name ?? 'Pengawas Ruang Resmi' }}</div>
-                <div>NIP. {{ $session->proctors->first()?->user->identity_number ?? '19820719 200801 1 011' }}</div>
+                @if($doc['city'] !== '')
+                    <div>{{ $doc['city'] }}, {{ ($session->start_time ?? now())->translatedFormat('d F Y') }}</div>
+                @endif
+                <div>{{ $leadProctorRole }},</div>
+                <div class="sign-space">
+                    @if($stampUrl)
+                        <img src="{{ $stampUrl }}" alt="Stempel Resmi" class="stamp-mark">
+                    @endif
+                </div>
+                <div class="sign-name">{{ $leadProctorUser?->name ?? '( ............................................ )' }}</div>
+                <div>NIP/ID. {{ $leadProctorUser?->identity_number ?: '....................................' }}</div>
             </div>
         </div>
     </div>

@@ -152,7 +152,13 @@
         }
         $backLabel = $backLabel ?? 'Kembali';
 
-        $certCode = 'CERT/CBT/' . ($attempt->exam->code ?? 'EXAM') . '/' . str_pad($attempt->id, 6, '0', STR_PAD_LEFT);
+        $docService = app(\App\Services\DocumentConfigService::class);
+        $certCode = $docService->formatNumber('certificate', [
+            'exam_code' => $attempt->exam->code ?? 'EXAM',
+            'attempt_id' => $attempt->id,
+            'seq' => $attempt->id,
+            'date' => $attempt->submitted_at ?? now(),
+        ], $institution);
         $receipt = $attempt->submission_receipt ?? (string) $attempt->id;
         $verificationQrUrl = \App\Services\QrCodeService::dataUri(route('document.verify', $receipt), 160);
         $verificationHash = substr(hash('sha256', $attempt->id . $receipt . ($attempt->submitted_at?->timestamp ?? '')), 0, 16);

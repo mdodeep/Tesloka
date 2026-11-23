@@ -113,44 +113,54 @@
                         @endif
 
                         <!-- 4. PELAKSANAAN CBT -->
-                        <li class="menu-title">
-                            <span>Pelaksanaan CBT</span>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.rooms.index') }}" class="menu-link {{ request()->routeIs('staff.rooms.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="door-open" class="size-4.5"></i></span>
-                                <span class="menu-text">Ruang Ujian</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.sessions.index') }}" class="menu-link {{ request()->routeIs('staff.sessions.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="calendar-clock" class="size-4.5"></i></span>
-                                <span class="menu-text">Sesi &amp; Penjadwalan</span>
-                            </a>
-                        </li>
+                        @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'proctor', 'exam_coordinator', 'academic_coordinator', 'academic_operator', 'technical_officer', 'helpdesk_officer', 'auditor']))
+                            <li class="menu-title">
+                                <span>Pelaksanaan CBT</span>
+                            </li>
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'proctor', 'exam_coordinator', 'academic_coordinator', 'academic_operator', 'technical_officer', 'auditor']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.rooms.index') }}" class="menu-link {{ request()->routeIs('staff.rooms.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="door-open" class="size-4.5"></i></span>
+                                        <span class="menu-text">Ruang Ujian</span>
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="menu-item">
+                                <a href="{{ route('staff.sessions.index') }}" class="menu-link {{ request()->routeIs('staff.sessions.*') ? 'active !bg-primary !text-white' : '' }}">
+                                    <span class="menu-icon"><i data-lucide="calendar-clock" class="size-4.5"></i></span>
+                                    <span class="menu-text">Sesi &amp; Penjadwalan</span>
+                                </a>
+                            </li>
+                        @endif
 
                         <!-- 5. EVALUASI & KELULUSAN -->
-                        <li class="menu-title">
-                            <span>Evaluasi &amp; Kelulusan</span>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.grading.overview') }}" class="menu-link {{ request()->routeIs('staff.grading.*', 'staff.exams.grading.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="award" class="size-4.5"></i></span>
-                                <span class="menu-text">Penilaian &amp; Koreksi</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.graduation.index') }}" class="menu-link {{ request()->routeIs('staff.graduation.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="check-check" class="size-4.5"></i></span>
-                                <span class="menu-text">Hasil &amp; Kelulusan</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('staff.reports.overview') }}" class="menu-link {{ request()->routeIs('staff.reports.*', 'staff.exams.reports.*') ? 'active !bg-primary !text-white' : '' }}">
-                                <span class="menu-icon"><i data-lucide="bar-chart-3" class="size-4.5"></i></span>
-                                <span class="menu-text">Grafik &amp; Analitik</span>
-                            </a>
-                        </li>
+                        @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'academic_coordinator', 'exam_coordinator', 'grader', 'grading_moderator', 'approver', 'auditor', 'academic_operator']))
+                            <li class="menu-title">
+                                <span>Evaluasi &amp; Kelulusan</span>
+                            </li>
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'exam_coordinator', 'grader', 'grading_moderator', 'approver']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.grading.overview') }}" class="menu-link {{ request()->routeIs('staff.grading.*', 'staff.exams.grading.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="award" class="size-4.5"></i></span>
+                                        <span class="menu-text">Penilaian &amp; Koreksi</span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'academic_coordinator', 'exam_coordinator', 'grading_moderator', 'approver', 'auditor', 'academic_operator']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.graduation.index') }}" class="menu-link {{ request()->routeIs('staff.graduation.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="check-check" class="size-4.5"></i></span>
+                                        <span class="menu-text">Hasil &amp; Kelulusan</span>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.reports.overview') }}" class="menu-link {{ request()->routeIs('staff.reports.*', 'staff.exams.reports.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="bar-chart-3" class="size-4.5"></i></span>
+                                        <span class="menu-text">Grafik &amp; Analitik</span>
+                                    </a>
+                                </li>
+                            @endif
+                        @endif
 
                         <!-- 6. TATA KELOLA & KEPATUHAN -->
                         @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'academic_coordinator', 'exam_coordinator', 'approver', 'teacher', 'auditor', 'technical_officer']))
@@ -184,67 +194,73 @@
                         @endif
 
                         <!-- 7. SISTEM & INTEGRASI -->
-                        @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin']))
+                        @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'technical_officer']))
                             <li class="menu-title">
                                 <span>Sistem &amp; Integrasi</span>
                             </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.settings.general') }}" class="menu-link {{ request()->routeIs('staff.settings.general*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="sliders-horizontal" class="size-4.5"></i></span>
-                                    <span class="menu-text">Pengaturan &amp; Branding</span>
-                                </a>
-                            </li>
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.settings.general') }}" class="menu-link {{ request()->routeIs('staff.settings.general*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="sliders-horizontal" class="size-4.5"></i></span>
+                                        <span class="menu-text">Pengaturan &amp; Branding</span>
+                                    </a>
+                                </li>
+                            @endif
                             <li class="menu-item">
                                 <a href="{{ route('staff.system.health') }}" class="menu-link {{ request()->routeIs('staff.system.health*') ? 'active !bg-primary !text-white' : '' }}">
                                     <span class="menu-icon"><i data-lucide="activity" class="size-4.5"></i></span>
                                     <span class="menu-text">Kesehatan Sistem (Health)</span>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.backups.index') }}" class="menu-link {{ request()->routeIs('staff.backups.*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="database" class="size-4.5"></i></span>
-                                    <span class="menu-text">Cadangan &amp; Arsip</span>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.integrations.index') }}" class="menu-link {{ request()->routeIs('staff.integrations.*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="cpu" class="size-4.5"></i></span>
-                                    <span class="menu-text">API &amp; Webhook</span>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.settings.smtp.index') }}" class="menu-link {{ request()->routeIs('staff.settings.smtp*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="mail" class="size-4.5"></i></span>
-                                    <span class="menu-text">Pengaturan Email</span>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.settings.notification-templates.index') }}" class="menu-link {{ request()->routeIs('staff.settings.notification-templates*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="bell" class="size-4.5"></i></span>
-                                    <span class="menu-text">Templat Notifikasi</span>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.settings.notification-logs.index') }}" class="menu-link {{ request()->routeIs('staff.settings.notification-logs*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="file-clock" class="size-4.5"></i></span>
-                                    <span class="menu-text">Log Notifikasi</span>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.settings.maintenance.index') }}" class="menu-link {{ request()->routeIs('staff.settings.maintenance*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="wrench" class="size-4.5"></i></span>
-                                    <span class="menu-text">Mode Pemeliharaan</span>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staff.settings.license.index') }}" class="menu-link {{ request()->routeIs('staff.settings.license*') ? 'active !bg-primary !text-white' : '' }}">
-                                    <span class="menu-icon"><i data-lucide="shield-check" class="size-4.5"></i></span>
-                                    <span class="menu-text">Lisensi &amp; Pembaruan</span>
-                                    @if(app(\App\Services\LicenseService::class)->isSupporter())
-                                        <span class="ms-auto inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">SUPPORTER</span>
-                                    @endif
-                                </a>
-                            </li>
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.backups.index') }}" class="menu-link {{ request()->routeIs('staff.backups.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="database" class="size-4.5"></i></span>
+                                        <span class="menu-text">Cadangan &amp; Arsip</span>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.integrations.index') }}" class="menu-link {{ request()->routeIs('staff.integrations.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="cpu" class="size-4.5"></i></span>
+                                        <span class="menu-text">API &amp; Webhook</span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin']))
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.settings.smtp.index') }}" class="menu-link {{ request()->routeIs('staff.settings.smtp*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="mail" class="size-4.5"></i></span>
+                                        <span class="menu-text">Pengaturan Email</span>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.settings.notification-templates.index') }}" class="menu-link {{ request()->routeIs('staff.settings.notification-templates*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="bell" class="size-4.5"></i></span>
+                                        <span class="menu-text">Templat Notifikasi</span>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.settings.notification-logs.index') }}" class="menu-link {{ request()->routeIs('staff.settings.notification-logs*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="file-clock" class="size-4.5"></i></span>
+                                        <span class="menu-text">Log Notifikasi</span>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.settings.maintenance.index') }}" class="menu-link {{ request()->routeIs('staff.settings.maintenance*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="wrench" class="size-4.5"></i></span>
+                                        <span class="menu-text">Mode Pemeliharaan</span>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.settings.license.index') }}" class="menu-link {{ request()->routeIs('staff.settings.license*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="shield-check" class="size-4.5"></i></span>
+                                        <span class="menu-text">Lisensi &amp; Pembaruan</span>
+                                        @if(app(\App\Services\LicenseService::class)->isSupporter())
+                                            <span class="ms-auto inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">SUPPORTER</span>
+                                        @endif
+                                    </a>
+                                </li>
+                            @endif
                         @endif
 
                         <!-- 8. AKUN & KEAMANAN SAYA -->

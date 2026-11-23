@@ -11,6 +11,13 @@
         $instName = $institution?->name ?: $branding['institution_name'];
     @endphp
     <style>
+        @font-face {
+            font-family: 'Sora';
+            src: url('/assets/fonts/sora.ttf') format('truetype');
+            font-weight: 100 900;
+            font-style: normal;
+            font-display: swap;
+        }
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -19,46 +26,81 @@
             margin: 10mm;
         }
         body {
-            font-family: 'Times New Roman', Times, serif;
-            color: #111827;
-            background: #fff;
+            font-family: 'Sora', system-ui, -apple-system, sans-serif;
+            color: #14213d;
+            background: #f8fafc;
             margin: 0;
             padding: 0;
-            font-size: 10pt;
-            line-height: 1.3;
+            font-size: 9.5pt;
+            line-height: 1.35;
         }
         .no-print {
-            background: #f1f5f9;
+            background: #ffffff;
             padding: 12px 20px;
             border-bottom: 1px solid #cbd5e1;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-family: system-ui, sans-serif;
-            font-size: 14px;
-            margin-bottom: 15px;
+            gap: 12px;
+            font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
         }
         .btn-print {
             background: #2e33ff;
-            color: white;
+            color: #ffffff;
             border: none;
             padding: 8px 18px;
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
+            font-family: inherit;
+            font-size: 12.5px;
+        }
+        .btn-print:hover {
+            background: #1e24cc;
+        }
+        .btn-close {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 7px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 12.5px;
+        }
+        .doc-viewport-container {
+            box-sizing: border-box;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 16px 8px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        .document-wrapper {
+            width: 210mm;
+            min-height: 297mm;
+            background: #ffffff;
+            padding: 10mm;
+            box-shadow: 0 4px 12px rgb(15 23 42 / 0.08);
+            flex-shrink: 0;
         }
         .grid-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8mm;
+            gap: 7mm;
         }
         .desk-card {
-            border: 2px dashed #334155;
+            border: 1.5px dashed #334155;
             border-radius: 8px;
-            padding: 12px 14px;
+            padding: 10px 13px;
             background: #ffffff;
-            box-sizing: border-box;
-            height: 82mm;
+            height: 86mm;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -67,84 +109,76 @@
         .card-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 10px;
-            border-bottom: 1.5px solid #0f172a;
-            padding-bottom: 6px;
+            border-bottom: 1.5px solid #14213d;
+            padding-bottom: 7px;
         }
         .card-logo {
-            max-height: 38px;
-            max-width: 90px;
+            max-height: 30px;
+            max-width: 115px;
             width: auto;
             height: auto;
             object-fit: contain;
-        }
-        .header-title {
-            flex: 1;
-        }
-        .header-inst {
-            font-size: 8pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #475569;
-            letter-spacing: 0.5px;
-        }
-        .header-doc {
-            font-size: 11pt;
-            font-weight: 900;
-            color: #0f172a;
-            text-transform: uppercase;
+            display: block;
         }
         .seat-badge {
-            background: #0f172a;
+            background: #14213d;
             color: #ffffff;
             font-size: 12pt;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 5px;
             text-align: center;
-            letter-spacing: 1px;
+            letter-spacing: 0.6px;
             white-space: nowrap;
         }
         .card-body {
-            margin-top: 6px;
+            margin-top: 7px;
             flex: 1;
         }
         .student-name {
-            font-size: 12pt;
-            font-weight: bold;
-            color: #0f172a;
-            margin-bottom: 4px;
-            line-height: 1.2;
+            font-size: 11.5pt;
+            font-weight: 700;
+            color: #14213d;
+            margin-bottom: 5px;
+            line-height: 1.25;
         }
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 9pt;
+            font-size: 8.5pt;
         }
         .info-table td {
             padding: 2px 0;
             vertical-align: top;
         }
         .info-label {
-            color: #64748b;
-            width: 80px;
+            color: #64728b;
+            width: 78px;
+        }
+        .info-colon {
+            width: 10px;
+            text-align: center;
+            color: #64728b;
         }
         .info-val {
             font-weight: 600;
             color: #1e293b;
         }
         .card-footer {
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px dashed #cbd5e1;
             padding-top: 6px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 8pt;
-            color: #64748b;
+            gap: 8px;
+            font-size: 7.5pt;
+            color: #64728b;
         }
         .qr-box {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border: 1px solid #cbd5e1;
             padding: 2px;
             display: flex;
@@ -153,62 +187,46 @@
             background: #ffffff;
             border-radius: 4px;
             flex-shrink: 0;
-            box-sizing: border-box;
         }
         .qr-box svg {
             width: 100%;
             height: 100%;
             display: block;
         }
-        .doc-viewport-container {
-            box-sizing: border-box;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 12px 6px;
-            display: flex;
-            justify-content: center;
-        }
-        .document-wrapper {
-            width: 210mm;
-            min-height: 297mm;
-            background: #ffffff;
-            box-sizing: border-box;
-            padding: 10mm;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        .page-break {
+            page-break-after: always;
+            break-after: page;
         }
         @media screen and (max-width: 820px) {
             .no-print {
-                padding: 10px 14px !important;
-                flex-direction: column !important;
-                align-items: stretch !important;
-                gap: 8px !important;
+                padding: 10px 14px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
             }
-            .btn-print {
-                width: 100% !important;
+            .no-print-actions {
+                display: flex;
+                gap: 8px;
+            }
+            .btn-print, .btn-close {
+                flex: 1;
                 text-align: center;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
-                justify-content: flex-start;
+                align-items: flex-start;
                 padding: 8px 4px;
-            }
-            .document-wrapper {
-                margin: 0;
-                flex-shrink: 0;
             }
         }
         @media print {
             .no-print { display: none !important; }
-            body { 
-                background: #ffffff !important; 
-                padding: 0 !important;
+            body {
+                background: #ffffff !important;
                 margin: 0 !important;
+                padding: 0 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;
@@ -218,87 +236,98 @@
                 min-height: auto !important;
                 padding: 0 !important;
                 box-shadow: none !important;
-                border: none !important;
+                margin: 0 !important;
             }
-            .grid-container { 
+            .grid-container {
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 6mm !important; 
+                gap: 6mm !important;
             }
         }
     </style>
 </head>
-<body style="background: #f8fafc;">
+<body>
     <div class="no-print">
         <div>
             <strong>Tempelan Meja Peserta Ujian (A4 Grid)</strong> &bull; Sesi: {{ $session->session_code }} &bull; Ruang: {{ $session->room->name ?? '-' }} ({{ $participants->count() }} Peserta)
         </div>
-        <button onclick="window.print()" class="btn-print">Cetak Label Meja</button>
+        <div class="no-print-actions" style="display: flex; gap: 8px;">
+            <button onclick="window.print()" class="btn-print">Cetak Label Meja (A4)</button>
+            <a href="{{ route('staff.sessions.show', $session) }}" class="btn-close">Kembali</a>
+        </div>
     </div>
 
     <div class="doc-viewport-container">
-        <div class="document-wrapper">
-            <div class="grid-container">
-                @forelse($participants as $participant)
-                    <div class="desk-card">
-                        <div class="card-header">
-                            <img src="{{ $logoUrl }}" alt="Logo" class="card-logo">
-                            <div class="header-title">
-                                <div class="header-inst">{{ $instName }}</div>
-                                <div class="header-doc">TEMPELAN MEJA UJIAN</div>
-                            </div>
-                            <div class="seat-badge">
-                                NO: {{ $participant->seat_number ? $participant->seat_number : str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                            </div>
-                        </div>
+        @php
+            $chunks = $participants->chunk(6);
+            $globalCounter = 0;
+        @endphp
 
-                        <div class="card-body">
-                            <div class="student-name">{{ $participant->student->name }}</div>
-                            <table class="info-table">
-                                <tr>
-                                    <td class="info-label">No. Peserta:</td>
-                                    <td class="info-val">{{ $participant->student->identity_number ?? $participant->student->username }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="info-label">Mata Ujian:</td>
-                                    <td class="info-val">{{ $session->exam->subject->name ?? $session->exam->title }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="info-label">Ruang / Sesi:</td>
-                                    <td class="info-val">{{ $session->room->name ?? 'Ruang 01' }} / {{ $session->session_code }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="info-label">Jadwal:</td>
-                                    <td class="info-val">{{ $session->start_time->translatedFormat('d M Y, H:i') }} WIB</td>
-                                </tr>
-                            </table>
-                        </div>
-
+        @forelse($chunks as $chunk)
+            <div class="document-wrapper {{ ! $loop->last ? 'page-break' : '' }}">
+                <div class="grid-container">
+                    @foreach($chunk as $participant)
                         @php
+                            $globalCounter++;
+                            $seatDisplay = $participant->seat_number ?: str_pad($globalCounter, 2, '0', STR_PAD_LEFT);
                             $studentIdent = $participant->student->identity_number ?? $participant->student->username;
                             $scheme = request()->getScheme() ?: 'https';
                             $studentHost = config('cbt.student_domain', 'ujian.tesloka.test');
                             $qrPayload = $scheme . '://' . $studentHost . '/ujian/login?u=' . urlencode($studentIdent);
-                            if (!empty($session->token)) {
+                            if (! empty($session->token)) {
                                 $qrPayload .= '&token=' . urlencode($session->token);
                             }
                         @endphp
-                        <div class="card-footer">
-                            <div>
-                                <strong>Token Rilis:</strong> <span style="font-family: monospace; font-size: 10pt; font-weight: bold; color: #2e33ff;">{{ $session->token ?? 'L00123' }}</span><br>
-                                <span style="font-size: 7.5pt; color: #64748b;">Tempelkan pada sudut meja peserta.</span>
+                        <div class="desk-card">
+                            <div class="card-header">
+                                <img src="{{ $logoUrl }}" alt="{{ $instName }}" class="card-logo">
+                                <div class="seat-badge">NO. {{ $seatDisplay }}</div>
                             </div>
-                            <div class="qr-box" title="Scan QR Verifikasi & Login: {{ $studentIdent }}">
-                                {!! \App\Services\QrCodeService::svg($qrPayload, 44) !!}
+
+                            <div class="card-body">
+                                <div class="student-name">{{ $participant->student->name }}</div>
+                                <table class="info-table">
+                                    <tr>
+                                        <td class="info-label">No. Peserta</td>
+                                        <td class="info-colon">:</td>
+                                        <td class="info-val" style="font-family: monospace;">{{ $studentIdent }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-label">Mata Ujian</td>
+                                        <td class="info-colon">:</td>
+                                        <td class="info-val">{{ $session->exam->subject->name ?? $session->exam->title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-label">Ruang / Sesi</td>
+                                        <td class="info-colon">:</td>
+                                        <td class="info-val">{{ $session->room->name ?? 'Ruang 01' }} / {{ $session->session_code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-label">Jadwal</td>
+                                        <td class="info-colon">:</td>
+                                        <td class="info-val">{{ $session->start_time?->translatedFormat('d M Y, H:i') ?? '-' }} WIB</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="card-footer">
+                                <div>
+                                    <strong>Token Rilis:</strong>
+                                    <span style="font-family: monospace; font-size: 9.5pt; font-weight: 700; color: #2e33ff;">{{ $session->token ?? '-' }}</span><br>
+                                    <span>Tempelkan pada sudut meja peserta.</span>
+                                </div>
+                                <div class="qr-box" title="Scan QR Verifikasi & Login: {{ $studentIdent }}">
+                                    {!! \App\Services\QrCodeService::svg($qrPayload, 40) !!}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @empty
-                    <div style="grid-column: span 2; text-align: center; padding: 40px; color: #64748b;">
-                        Belum ada peserta yang didaftarkan pada sesi ujian ini.
-                    </div>
-                @endforelse
+                    @endforeach
+                </div>
             </div>
-        </div>
+        @empty
+            <div class="document-wrapper" style="display: flex; align-items: center; justify-content: center; text-align: center;">
+                <p style="color: #64728b;">Belum ada peserta yang didaftarkan pada sesi ujian ini.</p>
+            </div>
+        @endforelse
     </div>
 </body>
 </html>

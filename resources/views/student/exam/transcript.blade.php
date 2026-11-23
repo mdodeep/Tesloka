@@ -54,6 +54,15 @@
         $backUrl = $backUrl ?? ($isStaff ? route('staff.graduation.index') : route('student.dashboard'));
         $backLabel = $backLabel ?? ($isStaff ? 'Kembali ke Hasil & Kelulusan' : 'Kembali ke Beranda');
 
+        $docService = app(\App\Services\DocumentConfigService::class);
+        $doc = $docService->getSettings($institution);
+        $transcriptNumber = $docService->formatNumber('transcript', [
+            'exam_code' => $attempt->exam->code ?? 'EXAM',
+            'attempt_id' => $attempt->id,
+            'seq' => $attempt->id,
+            'date' => $attempt->submitted_at ?? now(),
+        ], $institution);
+
         $receipt = $attempt->submission_receipt ?? 'RCP-' . str_pad($attempt->id, 6, '0', STR_PAD_LEFT);
         $verificationQrUrl = \App\Services\QrCodeService::dataUri(route('document.verify', $receipt), 110);
         $verificationHash = substr(hash('sha256', $attempt->id . $receipt . ($breakdown['total_score'] ?? 0)), 0, 24);
@@ -429,8 +438,8 @@
                     <img src="{{ $logoUrl }}" alt="Logo Institusi" class="kop-logo">
                     <div class="kop-text">
                         <h2 class="kop-inst">{{ $instName }}</h2>
-                        <div class="kop-sub">PUSAT EVALUASI PEMBELAJARAN &amp; UJIAN BERBASIS KOMPUTER</div>
-                        <p class="kop-addr">{{ $instAddress }} &bull; Telp: {{ $instPhone }} &bull; Email: {{ $instEmail }}</p>
+                        <div class="kop-sub">{{ $doc['kop_subtitle'] }}</div>
+                        <p class="kop-addr">{{ $instAddress }}@if($instPhone) &bull; Telp: {{ $instPhone }}@endif @if($instEmail) &bull; Email: {{ $instEmail }}@endif</p>
                     </div>
                 </div>
             @endif
@@ -438,7 +447,7 @@
             <!-- JUDUL DOKUMEN -->
             <div class="doc-title">
                 <h1>SURAT KETERANGAN HASIL UJIAN (SKHU)</h1>
-                <p>Nomor: SKHU/CBT/{{ $attempt->exam->code }}/{{ str_pad($attempt->id, 5, '0', STR_PAD_LEFT) }}/{{ date('Y') }}</p>
+                <p>Nomor: {{ $transcriptNumber }}</p>
             </div>
 
             <p style="text-align: justify; text-indent: 28px; margin-bottom: 10px;">
@@ -565,7 +574,9 @@
 
                 <!-- Kolom Kanan: Pejabat Utama Penandatangan & Stempel -->
                 <div class="sign-col">
-                    <div>Ditetapkan di: Jakarta</div>
+                    @if($doc['city'] !== '')
+                        <div>Ditetapkan di: {{ $doc['city'] }}</div>
+                    @endif
                     <div>Pada tanggal: {{ now()->translatedFormat('d F Y') }}</div>
                     <div>{{ $signerTitle }}</div>
                     <div class="stamp-overlay-wrap">

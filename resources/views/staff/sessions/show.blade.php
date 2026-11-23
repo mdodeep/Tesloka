@@ -175,6 +175,11 @@
                             <option value="Proktor CBT">Proktor CBT</option>
                             <option value="Teknisi IT">Teknisi IT</option>
                         </select>
+                        <div class="mt-2 p-2.5 rounded-lg bg-default-50 border border-default-200 text-[11px] text-default-600 space-y-1 leading-relaxed">
+                            <div><strong class="text-default-800">Pengawas Utama:</strong> Koordinator pengawas di ruang ujian dan penandatangan utama Berita Acara, Daftar Hadir, serta Rekapitulasi Pengawasan.</div>
+                            <div><strong class="text-default-800">Pengawas Ruang / Pendamping:</strong> Pengawas operasional tata tertib &amp; pemantau layar peserta di ruangan (namanya tetap tercetak di Surat Tugas &amp; Pakta Integritas).</div>
+                            <div><strong class="text-default-800">Teknisi IT / Proktor CBT:</strong> Penanggung jawab perangkat jaringan lab dan penandatangan sisi teknis pada Rekapitulasi Pengawasan Ruang.</div>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center justify-center gap-2 shadow-2xs transition cursor-pointer w-full">

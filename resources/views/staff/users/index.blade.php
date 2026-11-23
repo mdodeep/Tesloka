@@ -6,6 +6,10 @@
 @section('page-subtitle', 'Kelola akun administrator, pengajar, pengawas, dan peserta ujian secara terpadu.')
 
 @section('page-actions')
+    <button type="button" onclick="openModal('modal-role-guide')" class="btn btn-sm border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary shadow-xs inline-flex items-center gap-1.5 transition-all cursor-pointer font-semibold">
+        <i data-lucide="shield" class="size-4"></i>
+        <span>Panduan Peran &amp; Akses</span>
+    </button>
     <a href="{{ route('staff.users.export-csv') }}" class="btn btn-sm border border-default-200 bg-card hover:bg-default-100 text-default-700 shadow-xs inline-flex items-center gap-1.5 transition-all">
         <i data-lucide="download" class="size-4 text-default-500"></i>
         <span>Ekspor CSV</span>
@@ -423,11 +427,12 @@
                 </div>
                 <div class="space-y-1.5 min-w-0">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Peran (Role) <span class="text-danger">*</span></label>
-                    <select name="role_id" required class="form-select w-full max-w-full truncate">
+                    <select id="create_user_role_id" name="role_id" required onchange="updateRoleHint(this, 'create_role_hint')" class="form-select w-full max-w-full truncate">
                         @foreach ($roles as $r)
-                            <option value="{{ $r->id }}" {{ $r->name === 'student' ? 'selected' : '' }}>{{ $r->display_name }}</option>
+                            <option value="{{ $r->id }}" data-description="{{ $r->description }}" {{ $r->name === 'student' ? 'selected' : '' }}>{{ $r->display_name }}</option>
                         @endforeach
                     </select>
+                    <p id="create_role_hint" class="text-[11px] text-default-500 leading-relaxed"></p>
                 </div>
             </div>
 
@@ -693,11 +698,12 @@
                 </div>
                 <div class="space-y-1.5 min-w-0">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Peran (Role) <span class="text-danger">*</span></label>
-                    <select id="edit_user_role_id" name="role_id" required class="form-select w-full max-w-full truncate">
+                    <select id="edit_user_role_id" name="role_id" required onchange="updateRoleHint(this, 'edit_role_hint')" class="form-select w-full max-w-full truncate">
                         @foreach ($roles as $r)
-                            <option value="{{ $r->id }}">{{ $r->display_name }}</option>
+                            <option value="{{ $r->id }}" data-description="{{ $r->description }}">{{ $r->display_name }}</option>
                         @endforeach
                     </select>
+                    <p id="edit_role_hint" class="text-[11px] text-default-500 leading-relaxed"></p>
                 </div>
             </div>
 
@@ -796,9 +802,144 @@
     </div>
 </div>
 
+<!-- Modal Panduan Peran & Matriks Hak Akses -->
+<div id="modal-role-guide" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-card rounded-md max-w-4xl w-full p-4 sm:p-5 shadow-2xl border border-default-200 max-h-[90vh] flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-default-200 mb-3 shrink-0">
+            <div>
+                <h4 class="text-sm font-bold text-default-800 flex items-center gap-2">
+                    <i data-lucide="shield" class="size-4.5 text-primary"></i>
+                    <span>Panduan Peran, Tugas &amp; Matriks Menu Portal</span>
+                </h4>
+                <p class="text-xs text-default-500 mt-0.5">Setiap peran memiliki menu sidebar, portal login, dan izin rute server yang berbeda sesuai tanggung jawabnya.</p>
+            </div>
+            <button type="button" onclick="closeModal('modal-role-guide')" class="text-default-400 hover:text-default-600 cursor-pointer shrink-0">
+                <i data-lucide="x" class="size-4.5"></i>
+            </button>
+        </div>
+
+        <div class="overflow-y-auto pr-1 space-y-3 text-xs">
+            <div class="p-3 rounded bg-primary/5 border border-primary/20 text-default-700 leading-relaxed">
+                <strong>Pemisahan Portal:</strong> Akun Staf/Internal hanya dapat masuk melalui <code class="font-mono text-primary">staff.tesloka.test</code>, sedangkan akun <strong>Peserta Ujian</strong> hanya masuk melalui <code class="font-mono text-primary">ujian.tesloka.test</code>.
+            </div>
+
+            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
+                <table class="w-full min-w-[760px] divide-y divide-default-200 border border-default-200 text-left text-xs">
+                    <thead class="bg-default-100 text-default-700 font-semibold">
+                        <tr>
+                            <th class="px-3 py-2.5 whitespace-nowrap">Peran (Role)</th>
+                            <th class="px-3 py-2.5 whitespace-nowrap">Portal</th>
+                            <th class="px-3 py-2.5 whitespace-nowrap">Tugas Utama</th>
+                            <th class="px-3 py-2.5 whitespace-nowrap">Menu Sidebar &amp; Akses Modul</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-default-200 bg-white">
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Administrator / Institution Admin</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Kelola penuh institusi, pengguna, branding, dokumen cetak, sistem, &amp; lisensi.</td>
+                            <td class="px-3 py-2">Seluruh 8 bagian menu (Master Data, Konten, Pelaksanaan, Evaluasi, Tata Kelola, Sistem).</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Koordinator Akademik</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Koordinasi kurikulum, jadwal akademik, delegasi, &amp; pantauan analitik hasil.</td>
+                            <td class="px-3 py-2">Konten &amp; Asesmen, Pelaksanaan CBT, Kelulusan/Analitik, Delegasi &amp; Approval.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Koordinator Ujian</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Menyusun jadwal ujian, validasi paket soal, dan alokasi ruang/sesi ujian.</td>
+                            <td class="px-3 py-2">Konten &amp; Asesmen, Pelaksanaan CBT, Evaluasi &amp; Kelulusan, Delegasi &amp; Approval.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Pengajar (Guru/Dosen)</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Membuat bank soal, menyusun ujian, koreksi jawaban esai, &amp; analitik kelas.</td>
+                            <td class="px-3 py-2">Bank Soal, Pustaka Media, Perancangan Ujian, Sesi, Penilaian, Kelulusan, Analitik, Approval.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Pengawas Ujian (Proctor)</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Pengawasan live ruang ujian, rilis token, presensi, &amp; catat insiden (Ruang / Utama).</td>
+                            <td class="px-3 py-2">Dashboard, Ruang Ujian, Sesi &amp; Penjadwalan (Monitoring, Kamera, Cetak BA/Daftar Hadir).</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Pemeriksa / Korektor (Grader)</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Khusus menilai jawaban esai peserta sesuai rubrik penilaian ujian.</td>
+                            <td class="px-3 py-2">Dashboard, Penilaian &amp; Koreksi.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Moderator Penilaian</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Memoderasi perbedaan skor esai dan menyetujui nilai akhir ujian.</td>
+                            <td class="px-3 py-2">Dashboard, Penilaian &amp; Koreksi, Hasil &amp; Kelulusan, Grafik &amp; Analitik.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Pejabat Penyetuju (Approver)</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Menyetujui rilis paket ujian, nilai, &amp; alur empat-mata (Four-Eyes Approval).</td>
+                            <td class="px-3 py-2">Konten &amp; Asesmen, Evaluasi &amp; Kelulusan, Delegasi Wewenang, Four-Eyes Approval.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Operator Akademik</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Operasional jadwal sesi, presensi peserta, &amp; pencetakan kartu/dokumen sesi.</td>
+                            <td class="px-3 py-2">Dashboard, Ruang Ujian, Sesi &amp; Penjadwalan, Hasil &amp; Kelulusan, Analitik.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Auditor Sistem</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Meninjau log audit forensik, riwayat nilai, &amp; catatan integritas ujian.</td>
+                            <td class="px-3 py-2">Dashboard, Pelaksanaan CBT (read-only), Kelulusan, Analitik, Jejak Audit Sistem.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Petugas Teknis / Lab</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Pantau kesehatan server, konektivitas lab, SEB, &amp; log sistem teknis.</td>
+                            <td class="px-3 py-2">Dashboard, Ruang Ujian, Sesi, Jejak Audit Sistem, Kesehatan Sistem (Health).</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Petugas Helpdesk</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
+                            <td class="px-3 py-2">Membantu kendala sesi login peserta dan reset sesi perangkat ujian.</td>
+                            <td class="px-3 py-2">Dashboard, Sesi &amp; Penjadwalan.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Peserta Ujian (Student)</td>
+                            <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 font-semibold border border-teal-200">Ujian</span></td>
+                            <td class="px-3 py-2">Mengerjakan ujian CBT, unduh kartu peserta, &amp; melihat transkrip/sertifikat lulus.</td>
+                            <td class="px-3 py-2">Portal Peserta Ujian (<code class="font-mono">ujian.tesloka.test</code>), tidak dapat mengakses Portal Staf.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-default-200 mt-3 shrink-0">
+            <button type="button" onclick="closeModal('modal-role-guide')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover rounded cursor-pointer w-full sm:w-auto font-bold">
+                Tutup Panduan
+            </button>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
     let currentViewingUser = null;
+
+    function updateRoleHint(selectEl, targetId) {
+        const hintEl = document.getElementById(targetId);
+        if (!selectEl || !hintEl) return;
+        const selected = selectEl.options[selectEl.selectedIndex];
+        hintEl.textContent = selected ? (selected.getAttribute('data-description') || '') : '';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateRoleHint(document.getElementById('create_user_role_id'), 'create_role_hint');
+        updateRoleHint(document.getElementById('edit_user_role_id'), 'edit_role_hint');
+    });
 
     function openModal(id) {
         const m = document.getElementById(id);
@@ -1068,6 +1209,7 @@
             }
         }
 
+        updateRoleHint(document.getElementById('edit_user_role_id'), 'edit_role_hint');
         openModal('modal-edit-user');
     }
 </script>

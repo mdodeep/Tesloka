@@ -62,12 +62,13 @@
                     <div class="space-y-1.5 min-w-0">
                         <label for="institution_code" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Kode / Singkatan Institusi *</label>
                         <input type="text" id="institution_code" name="institution_code" value="{{ old('institution_code', $institution->code) }}" required class="form-input font-mono">
-                        <p class="text-xs text-default-500 mt-1">Digunakan sebagai prefix kode ujian dan pengelompokan berkas.</p>
+                        <p class="text-xs text-default-500 mt-1">Digunakan sebagai prefix kode ujian, placeholder {INST_CODE} nomor surat, dan pengelompokan berkas.</p>
                     </div>
 
-                    <div class="md:col-span-2 space-y-1.5 min-w-0">
-                        <label for="address" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Alamat Lengkap Kampus / Sekolah</label>
-                        <textarea id="address" name="address" rows="3" class="form-textarea">{{ old('address', $institution->address) }}</textarea>
+                    <div class="space-y-1.5 min-w-0">
+                        <label for="institution_city" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Kota / Kabupaten Penetapan Dokumen</label>
+                        <input type="text" id="institution_city" name="institution_city" value="{{ old('institution_city', $settings['institution_city'] ?? '') }}" placeholder="Contoh: Jakarta, Bandung, atau Yogyakarta" class="form-input">
+                        <p class="text-xs text-default-500 mt-1">Dicetak pada baris tempat penetapan (mis. "Jakarta, 24 November 2026") di SKL, SKHU, Surat Tugas, Pakta Integritas, dan Laporan Resmi.</p>
                     </div>
 
                     <div class="space-y-1.5 min-w-0">
@@ -75,7 +76,12 @@
                         <input type="text" id="phone" name="phone" value="{{ old('phone', $institution->phone) }}" class="form-input">
                     </div>
 
-                    <div class="space-y-1.5 min-w-0">
+                    <div class="md:col-span-2 space-y-1.5 min-w-0">
+                        <label for="address" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Alamat Lengkap Kampus / Sekolah</label>
+                        <textarea id="address" name="address" rows="3" class="form-textarea">{{ old('address', $institution->address) }}</textarea>
+                    </div>
+
+                    <div class="md:col-span-2 space-y-1.5 min-w-0">
                         <label for="email" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Email Layanan &amp; Helpdesk</label>
                         <input type="email" id="email" name="email" value="{{ old('email', $institution->email) }}" class="form-input">
                     </div>
@@ -563,7 +569,7 @@
                 <div class="space-y-6">
                     <div class="p-4 rounded-lg bg-default-50 border border-default-200">
                         <p class="text-xs text-default-600">
-                            Kelola data identitas pejabat penandatangan dan unggah berkas gambar tanda tangan asli bertransparan (PNG). Tanda tangan dan cap stempel yang diunggah akan otomatis ditempatkan presisi di atas nama masing-masing pejabat pada lembar Sertifikat Kelulusan, Surat Keterangan Lulus (SKL), dan Transkrip Nilai (SKHU).
+                            Kelola data identitas pejabat penandatangan dan unggah berkas gambar tanda tangan asli bertransparan (PNG). Data <strong>Pejabat Utama</strong> (mis. Kepala Institusi / Direktur), <strong>Pejabat Kedua</strong> (mis. Ketua Panitia Ujian / Ketua Tim Penguji), tanda tangan digital, dan cap stempel resmi akan otomatis mengisi seluruh dokumen cetak resmi: Sertifikat Kelulusan, SKL, Transkrip SKHU, Berita Acara Pelaksanaan, Daftar Hadir, Surat Tugas Pengawas, Pakta Integritas, dan Laporan Resmi Hasil Ujian.
                         </p>
                     </div>
 
@@ -678,6 +684,75 @@
                             :currentUrl="$settings['cert_stamp']"
                             hint="Format PNG transparan sangat disarankan agar latar stempel tidak menutupi teks dokumen."
                         />
+                    </div>
+                </div>
+            </x-cbt.card>
+
+            <!-- Sub 3: Penomoran Surat Resmi, Subjudul Kop, & Teknisi Dokumen Cetak -->
+            <x-cbt.card title="Penomoran Surat Resmi, Kop &amp; Teknisi Dokumen Cetak" subtitle="Sesuaikan format nomor dokumen resmi institusi, teks subjudul kop surat, dan identitas petugas teknisi default.">
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="md:col-span-2 space-y-1.5 min-w-0">
+                            <label for="doc_kop_subtitle" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Subjudul Kop Surat Dokumen Cetak</label>
+                            <input type="text" id="doc_kop_subtitle" name="doc_kop_subtitle" value="{{ old('doc_kop_subtitle', $settings['doc_kop_subtitle'] ?? '') }}" placeholder="PANITIA PELAKSANA EVALUASI & UJIAN BERBASIS KOMPUTER" class="form-input">
+                            <p class="text-xs text-default-500">Tampil tepat di bawah nama institusi saat mencetak Berita Acara, Daftar Hadir, Surat Tugas, Pakta Integritas, SKL, dan SKHU (jika tidak memakai gambar blangko kop penuh).</p>
+                        </div>
+
+                        <div class="space-y-1.5 min-w-0">
+                            <label for="doc_technician_name" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Nama Teknisi Lab / Proktor Teknis Default</label>
+                            <input type="text" id="doc_technician_name" name="doc_technician_name" value="{{ old('doc_technician_name', $settings['doc_technician_name'] ?? '') }}" placeholder="Kosongkan jika ingin garis tanda tangan manual" class="form-input">
+                            <p class="text-xs text-default-500">Digunakan sebagai fallback di Rekapitulasi Pengawasan jika belum ada akun berperanan "Teknisi IT" di sesi.</p>
+                        </div>
+
+                        <div class="space-y-1.5 min-w-0">
+                            <label for="doc_technician_title" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Jabatan Teknisi di Dokumen Cetak</label>
+                            <input type="text" id="doc_technician_title" name="doc_technician_title" value="{{ old('doc_technician_title', $settings['doc_technician_title'] ?? 'Petugas Teknisi Lab / Jaringan') }}" class="form-input">
+                        </div>
+
+                        <div class="md:col-span-2 space-y-1.5 min-w-0">
+                            <label for="doc_technician_nip" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">NIP / ID Teknisi Default</label>
+                            <input type="text" id="doc_technician_nip" name="doc_technician_nip" value="{{ old('doc_technician_nip', $settings['doc_technician_nip'] ?? '') }}" placeholder="Opsional" class="form-input font-mono">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-default-200 space-y-4">
+                        <div class="p-3.5 rounded-lg bg-primary/5 border border-primary/20 text-xs text-default-700 space-y-1.5">
+                            <div class="font-bold text-primary uppercase tracking-wider">Placeholder Variabel Format Nomor Dokumen / Nomor Surat</div>
+                            <p class="leading-relaxed">
+                                Gunakan token berikut agar nomor surat terisi otomatis mengikuti ketentuan tata naskah dinas lembaga Anda:
+                            </p>
+                            <div class="flex flex-wrap gap-1.5 font-mono text-[11px]">
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{INST_CODE}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{EXAM_CODE}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{SESSION_CODE}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{SESSION_ID}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{ATTEMPT_ID}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{RESULT_ID}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{SEQ}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{INDEX}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{YYYY}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{YY}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{MM}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{DD}</code>
+                                <code class="px-1.5 py-0.5 bg-white border border-default-200 rounded">{ROMAN_MONTH}</code>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @foreach(\App\Services\DocumentConfigService::DOCUMENT_NUMBER_LABELS as $docKey => $docMeta)
+                                <div class="space-y-1 min-w-0">
+                                    <label for="doc_number_format_{{ $docKey }}" class="block text-xs font-semibold text-default-800">{{ $docMeta['label'] }}</label>
+                                    <input
+                                        type="text"
+                                        id="doc_number_format_{{ $docKey }}"
+                                        name="doc_number_format_{{ $docKey }}"
+                                        value="{{ old('doc_number_format_' . $docKey, $settings['doc_number_formats'][$docKey] ?? \App\Services\DocumentConfigService::DEFAULT_NUMBER_FORMATS[$docKey]) }}"
+                                        class="form-input font-mono text-xs"
+                                    >
+                                    <p class="text-[11px] text-default-500">{{ $docMeta['hint'] }}</p>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </x-cbt.card>

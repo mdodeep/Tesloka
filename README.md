@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-340%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="340 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-2.412%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.412 Assertions">
+  <img src="https://img.shields.io/badge/Tests-346%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="346 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-2.491%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.491 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -501,7 +501,7 @@ php artisan tesloka:import-questions storage/app/PTIQ_EPT_Paket_A_Media_Bundle.z
 # 3. Uji Kesiapan Produksi (Memeriksa 8 Indikator Kritis Sistem):
 php artisan tesloka:production-check
 
-# 4. Menjalankan Seluruh Automated Test Suite (340 Tests, PHPUnit):
+# 4. Menjalankan Seluruh Automated Test Suite (346 Tests, PHPUnit):
 php artisan test
 
 # 5. Simulasi Beban Pengerjaan & Autosave Bersamaan:
@@ -571,7 +571,7 @@ tesloka/
 │   ├── api.php               # API endpoint transaksional (autosave, heartbeat)
 │   └── web.php               # Router domain & portal verifikasi sertifikat publik
 ├── Soal/                     # Berkas asesmen siap upload PTIQ EPT 140 butir (XLSX, ZIP, Aiken, GIFT)
-└── tests/                    # 48 Berkas pengujian fitur, keamanan & unit (PHPUnit)
+└── tests/                    # 49 Berkas pengujian fitur, keamanan & unit (PHPUnit)
 ```
 
 ---

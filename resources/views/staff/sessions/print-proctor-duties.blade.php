@@ -13,13 +13,18 @@
         $instPhone = $institution?->phone ?? '';
         $instEmail = $institution?->email ?? '';
 
-        // Template Blangko Kertas Surat Resmi A4 Portret (1 Kertas Penuh)
-        $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
-        $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
+        $docService = app(\App\Services\DocumentConfigService::class);
+        $doc = $docService->getSettings($institution);
+        $docLetterheadUrl = $doc['letterhead_url'];
+        $stampUrl = $doc['stamp_url'];
 
-        // Cap Stempel Resmi Institusi
-        $stampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $stampUrl = $stampPath ? '/storage/' . ltrim((string) $stampPath, '/') : null;
+        $docNumber = $docService->formatNumber('proctor_duties', [
+            'exam_code' => $session->exam->code ?? 'EXAM',
+            'session_code' => $session->session_code,
+            'session_id' => $session->id,
+            'seq' => $session->id,
+            'date' => $session->start_time ?? now(),
+        ], $institution);
     @endphp
     <style>
         *, *::before, *::after {
@@ -39,15 +44,18 @@
             line-height: 1.45;
         }
         .no-print {
-            background: #f1f5f9;
+            background: #ffffff;
             padding: 12px 20px;
             border-bottom: 1px solid #cbd5e1;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             font-family: system-ui, sans-serif;
-            font-size: 14px;
-            margin-bottom: 20px;
+            font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
         }
         .btn-print {
             background: #2e33ff;
@@ -57,6 +65,17 @@
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 12.5px;
+        }
+        .btn-close {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 7px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 12.5px;
         }
         .doc-viewport-container {
             box-sizing: border-box;
@@ -110,9 +129,10 @@
             line-height: 1.2;
         }
         .kop-sub {
-            font-size: 10.5pt;
+            font-size: 10pt;
             font-weight: bold;
             margin: 2px 0;
+            text-transform: uppercase;
         }
         .kop-addr {
             font-size: 8.5pt;
@@ -133,6 +153,7 @@
         .doc-title p {
             font-size: 10pt;
             margin: 3px 0 0 0;
+            font-family: monospace, serif;
         }
         .meta-table, .data-table {
             width: 100%;
@@ -175,7 +196,11 @@
             position: relative;
         }
         .sign-space {
-            height: 60px;
+            height: 62px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .sign-name {
             font-weight: bold;
@@ -183,13 +208,20 @@
         }
         .stamp-mark {
             position: absolute;
-            bottom: 15px;
-            left: 20px;
+            left: 12px;
+            top: -8px;
             width: 75px;
             height: 75px;
             object-fit: contain;
             opacity: 0.85;
             pointer-events: none;
+        }
+        .sig-img {
+            max-height: 55px;
+            max-width: 165px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
         }
         @media screen and (max-width: 820px) {
             .no-print {
@@ -198,12 +230,15 @@
                 align-items: stretch !important;
                 gap: 8px !important;
             }
-            .btn-print {
-                width: 100% !important;
-                text-align: center;
+            .no-print-actions {
+                display: flex !important;
+                gap: 8px !important;
+            }
+            .no-print-actions button, .no-print-actions a {
+                flex: 1 !important;
+                text-align: center !important;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
                 justify-content: flex-start;
                 padding: 8px 4px;
             }
@@ -223,7 +258,6 @@
                 print-color-adjust: exact !important;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;
@@ -253,34 +287,34 @@
         <div>
             <strong>Surat Tugas Penugasan Pengawas Ruang</strong> &bull; Sesi: {{ $session->session_code }} &bull; {{ $session->room->name ?? '-' }}
         </div>
-        <button onclick="window.print()" class="btn-print">Cetak Surat Tugas</button>
+        <div class="no-print-actions" style="display: flex; gap: 8px;">
+            <button onclick="window.print()" class="btn-print">Cetak Surat Tugas</button>
+            <a href="{{ route('staff.sessions.show', $session) }}" class="btn-close">Kembali</a>
+        </div>
     </div>
 
     <div class="doc-viewport-container">
     <div class="document-container">
-        <!-- KOP SURAT RESMI (HANYA JIKA TIDAK ADA BLANGKO KERTAS SURAT FULL) -->
         @if(! $docLetterheadUrl)
             <div class="kop-surat">
                 <img src="{{ $logoUrl }}" alt="Logo" class="kop-logo">
                 <div class="kop-text">
                     <div class="kop-inst">{{ $instName }}</div>
-                    <div class="kop-sub">PANITIA PELAKSANA EVALUASI CBT BERBASIS KOMPUTER</div>
-                    <div class="kop-addr">{{ $instAddress }} &bull; Telp: {{ $instPhone }} &bull; Email: {{ $instEmail }}</div>
+                    <div class="kop-sub">{{ $doc['kop_subtitle'] }}</div>
+                    <div class="kop-addr">{{ $instAddress }}@if($instPhone) &bull; Telp: {{ $instPhone }}@endif @if($instEmail) &bull; Email: {{ $instEmail }}@endif</div>
                 </div>
             </div>
         @endif
 
-        <!-- JUDUL & NOMOR SURAT -->
         <div class="doc-title">
             <h1>SURAT TUGAS PENGAWAS RUANG UJIAN</h1>
-            <p>Nomor: ST/CBT/{{ date('Y') }}/{{ $session->exam->code }}/{{ str_pad($session->id, 4, '0', STR_PAD_LEFT) }}</p>
+            <p>Nomor: {{ $docNumber }}</p>
         </div>
 
         <p style="text-align: justify; margin-bottom: 12px;">
-            Menindaklanjuti agenda pelaksanaan evaluasi terstandar berbasis komputer pada {{ $branding['system_label'] }}, dengan ini Ketua Panitia Ujian menugaskan staf / pengajar berikut sebagai <strong>Pengawas Ruang Ujian</strong> dengan rincian jadwal dan ketentuan sebagai berikut:
+            Menindaklanjuti agenda pelaksanaan evaluasi terstandar berbasis komputer pada {{ $branding['system_label'] }}, dengan ini {{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian' }} menugaskan staf / pengajar berikut sebagai <strong>Pengawas Ruang Ujian</strong> dengan rincian jadwal dan ketentuan sebagai berikut:
         </p>
 
-        <!-- RINCIAN JADWAL UJIAN -->
         <table class="meta-table">
             <tr>
                 <td style="width: 140px; font-weight: bold;">Nama Ujian</td>
@@ -301,14 +335,13 @@
             <tr>
                 <td style="font-weight: bold;">Hari / Tanggal</td>
                 <td>:</td>
-                <td>{{ $session->start_time->translatedFormat('l, d F Y') }}</td>
+                <td>{{ $session->start_time?->translatedFormat('l, d F Y') ?? '-' }}</td>
                 <td style="font-weight: bold;">Waktu Pelaksanaan</td>
                 <td>:</td>
-                <td>{{ $session->start_time->format('H:i') }} s/d {{ $session->end_time->format('H:i') }} WIB</td>
+                <td>{{ $session->start_time?->format('H:i') ?? '-' }} s/d {{ $session->end_time?->format('H:i') ?? '-' }} WIB</td>
             </tr>
         </table>
 
-        <!-- DAFTAR PENGAWAS DITUGASKAN -->
         <div style="font-weight: bold; margin-bottom: 6px;">DAFTAR PERSONEL PENGAWAS YANG DITUGASKAN:</div>
         <table class="data-table">
             <thead>
@@ -322,28 +355,28 @@
             </thead>
             <tbody>
                 @forelse($session->proctors as $idx => $p)
+                    @php
+                        $pUser = $docService->proctorUser($p);
+                    @endphp
                     <tr>
                         <td style="text-align: center;">{{ $idx + 1 }}</td>
-                        <td style="font-weight: 600;">{{ $p->user->name ?? 'Staf Pengawas' }}</td>
-                        <td style="text-align: center; font-family: monospace;">{{ $p->user->identity_number ?? $p->user->email }}</td>
+                        <td style="font-weight: 600;">{{ $pUser?->name ?? 'Staf Pengawas' }}</td>
+                        <td style="text-align: center; font-family: monospace;">{{ $pUser?->identity_number ?: ($pUser?->email ?? '-') }}</td>
                         <td style="text-align: center; font-weight: 600; color: #2e33ff;">
-                            {{ $p->role === 'lead_proctor' ? 'Pengawas Utama' : ($p->role === 'technical' ? 'Teknisi Ruang' : 'Pengawas Ruang') }}
+                            {{ $p->role_title ?: 'Pengawas Ruang' }}
                         </td>
                         <td style="height: 35px;"></td>
                     </tr>
                 @empty
                     <tr>
-                        <td style="text-align: center;">1</td>
-                        <td style="font-weight: 600;">Pengawas Ditugaskan Panitia</td>
-                        <td style="text-align: center; font-family: monospace;">-</td>
-                        <td style="text-align: center; font-weight: 600; color: #2e33ff;">Pengawas Ruang</td>
-                        <td style="height: 35px;"></td>
+                        <td colspan="5" style="text-align: center; padding: 14px; color: #64748b; font-style: italic;">
+                            Belum ada pengawas yang ditugaskan pada sesi ini. Silakan tugaskan pengawas melalui halaman detail sesi.
+                        </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
-        <!-- TATA TERTIB & KEWAJIBAN PENGAWAS -->
         <div style="font-weight: bold; margin-bottom: 4px;">KEWAJIBAN DAN TATA TERTIB PENGAWAS RUANG:</div>
         <ol class="rules-list">
             <li>Hadir di ruang ujian selambat-lambatnya 30 menit sebelum sesi ujian dimulai.</li>
@@ -354,18 +387,23 @@
             <li>Mengisi dan menandatangani Berita Acara serta Daftar Hadir resmi setelah seluruh peserta mengumpulkan jawaban.</li>
         </ol>
 
-        <!-- PENGESAHAN KETUA PANITIA -->
         <div class="signatures">
             <div class="sign-box">
-                <div>Ditetapkan di: Jakarta</div>
-                <div>Pada tanggal: {{ $session->start_time->translatedFormat('d F Y') }}</div>
-                <div style="font-weight: 600; margin-top: 4px;">Ketua Panitia Ujian CBT,</div>
-                <div class="sign-space"></div>
-                @if($stampUrl)
-                    <img src="{{ $stampUrl }}" alt="Stempel Resmi" class="stamp-mark">
+                @if($doc['city'] !== '')
+                    <div>Ditetapkan di: {{ $doc['city'] }}</div>
                 @endif
-                <div class="sign-name">Ahmad Fauzi, M.Kom.</div>
-                <div>NIP. 19850914 201012 1 004</div>
+                <div>Pada tanggal: {{ ($session->start_time ?? now())->translatedFormat('d F Y') }}</div>
+                <div style="font-weight: 600; margin-top: 4px;">{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian CBT' }},</div>
+                <div class="sign-space">
+                    @if($stampUrl)
+                        <img src="{{ $stampUrl }}" alt="Stempel Resmi" class="stamp-mark">
+                    @endif
+                    @if($doc['secondary_signature_url'])
+                        <img src="{{ $doc['secondary_signature_url'] }}" alt="Tanda Tangan" class="sig-img">
+                    @endif
+                </div>
+                <div class="sign-name">{{ $doc['secondary_name'] ?: '( ............................................ )' }}</div>
+                <div>NIP. {{ $doc['secondary_nip'] ?: '....................................' }}</div>
             </div>
         </div>
     </div>

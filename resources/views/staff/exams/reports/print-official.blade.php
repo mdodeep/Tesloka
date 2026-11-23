@@ -12,12 +12,17 @@
         $instPhone = $institution?->phone ?? '';
         $instEmail = $institution?->email ?? '';
         $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
-        $certStampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $certStampUrl = $certStampPath ? '/storage/' . ltrim((string) $certStampPath, '/') : null;
 
-        // Template Blangko Kertas Surat Resmi A4 Portret (1 Kertas Penuh)
-        $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
-        $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
+        $docService = app(\App\Services\DocumentConfigService::class);
+        $doc = $docService->getSettings($institution);
+        $certStampUrl = $doc['stamp_url'];
+        $docLetterheadUrl = $doc['letterhead_url'];
+
+        $docNumber = $docService->formatNumber('official_report', [
+            'exam_code' => $exam->code ?? 'EXAM',
+            'seq' => $exam->id,
+            'date' => now(),
+        ], $institution);
     @endphp
     <style>
         *, *::before, *::after {
@@ -35,6 +40,40 @@
             padding: 0;
             font-size: 11pt;
             line-height: 1.3;
+        }
+        .no-print {
+            background: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+        .btn-print {
+            background: #2e33ff;
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12.5px;
+        }
+        .btn-close {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 7px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 12.5px;
         }
         .header {
             border-bottom: 2.5px double #000;
@@ -55,28 +94,37 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 15pt;
+            font-size: 14.5pt;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .header h2 {
             margin: 3px 0 0 0;
-            font-size: 11pt;
+            font-size: 10pt;
             text-transform: uppercase;
             font-weight: bold;
         }
         .header p {
             margin: 3px 0 0 0;
-            font-size: 9pt;
+            font-size: 8.5pt;
             font-style: italic;
         }
         .doc-title {
             text-align: center;
-            margin: 15px 0 10px 0;
+            margin: 14px 0 10px 0;
+        }
+        .doc-title h3 {
+            margin: 0;
             text-decoration: underline;
             text-transform: uppercase;
             font-size: 12pt;
             font-weight: bold;
+        }
+        .doc-title p {
+            margin: 3px 0 0 0;
+            font-size: 9.5pt;
+            font-family: monospace, serif;
+            color: #334155;
         }
         .info-grid {
             width: 100%;
@@ -123,11 +171,26 @@
             justify-content: space-between;
             page-break-inside: avoid;
             margin-top: 25px;
-            font-size: 10.5pt;
+            font-size: 10pt;
         }
         .sig-box {
             width: 45%;
             text-align: center;
+            position: relative;
+        }
+        .sig-space {
+            height: 62px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sig-img {
+            max-height: 54px;
+            max-width: 160px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
         }
         .badge-tuntas {
             font-weight: bold;
@@ -171,12 +234,15 @@
                 align-items: stretch !important;
                 gap: 8px !important;
             }
-            .no-print button {
-                width: 100% !important;
-                text-align: center;
+            .no-print-actions {
+                display: flex !important;
+                gap: 8px !important;
+            }
+            .no-print-actions button, .no-print-actions a {
+                flex: 1 !important;
+                text-align: center !important;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
                 justify-content: flex-start;
                 padding: 8px 4px;
             }
@@ -197,7 +263,6 @@
                 print-color-adjust: exact !important;
             }
             .doc-viewport-container {
-            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;
@@ -222,155 +287,158 @@
         }
     </style>
 </head>
-<body style="background: #f8fafc;">
-    <div class="no-print" style="background: #f1f5f9; padding: 12px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-family: sans-serif; font-size: 10pt;">
+<body>
+    <div class="no-print">
         <div>
-            <strong>Laporan Resmi &amp; Rekapitulasi Hasil Ujian CBT</strong> (Kode: {{ $exam->code }})
+            <strong>Laporan Resmi &amp; Rekapitulasi Hasil Ujian CBT</strong> &bull; Kode: {{ $exam->code }}
         </div>
-        <button onclick="window.print()" style="background: #2e33ff; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">
-            Cetak Dokumen Resmi (A4)
-        </button>
+        <div class="no-print-actions" style="display: flex; gap: 8px;">
+            <button onclick="window.print()" class="btn-print">Cetak Dokumen Resmi (A4)</button>
+            <a href="{{ route('staff.exams.reports.index', $exam) }}" class="btn-close">Kembali</a>
+        </div>
     </div>
 
     <div class="doc-viewport-container">
         <div class="document-wrapper">
-            <!-- Kop Surat Lembaga (Hanya Jika Tidak Ada Blangko Kertas Surat Full) -->
             @if(! $docLetterheadUrl)
                 <div class="header">
                     <img src="{{ $logoUrl }}" alt="Logo Institusi" class="kop-logo">
                     <div class="header-text">
                         <h1>{{ $instName }}</h1>
-                        <h2>PANITIA PENILAIAN COMPUTER BASED TEST (CBT)</h2>
-                        <p>{{ $instAddress }} &bull; Telp: {{ $instPhone }} &bull; Surel: {{ $instEmail }}</p>
+                        <h2>{{ $doc['kop_subtitle'] }}</h2>
+                        <p>{{ $instAddress }}@if($instPhone) &bull; Telp: {{ $instPhone }}@endif @if($instEmail) &bull; Surel: {{ $instEmail }}@endif</p>
                     </div>
                 </div>
             @endif
 
-    <div class="doc-title">
-        LAPORAN RESMI & REKAPITULASI HASIL PENILAIAN UJIAN
-    </div>
-
-    <!-- Metadata Ujian -->
-    <table class="info-grid">
-        <tr>
-            <td style="width: 18%; font-weight: bold;">Mata Pelajaran</td>
-            <td style="width: 2%;">:</td>
-            <td style="width: 35%;">{{ $exam->subject->name ?? '-' }}</td>
-            <td style="width: 18%; font-weight: bold;">Tahun Ajaran / Smt</td>
-            <td style="width: 2%;">:</td>
-            <td style="width: 25%;">{{ $exam->academicYear->name ?? '-' }} ({{ ucfirst($exam->academicYear->semester ?? 'Ganjil') }})</td>
-        </tr>
-        <tr>
-            <td style="font-weight: bold;">Kode / Judul Ujian</td>
-            <td>:</td>
-            <td>{{ $exam->code }} - {{ $exam->title }}</td>
-            <td style="font-weight: bold;">KKM / Passing Grade</td>
-            <td>:</td>
-            <td><strong>{{ $exam->passing_grade ?? 75 }}</strong></td>
-        </tr>
-        <tr>
-            <td style="font-weight: bold;">Penyusun / Guru</td>
-            <td>:</td>
-            <td>{{ $exam->creator->name ?? 'Administrator' }}</td>
-            <td style="font-weight: bold;">Waktu Pengesahan</td>
-            <td>:</td>
-            <td>{{ now()->translatedFormat('d F Y H:i') }} WIB</td>
-        </tr>
-    </table>
-
-    <!-- Ringkasan Statistik Deskriptif -->
-    <h4 style="margin: 10px 0 5px 0; font-size: 10.5pt; text-transform: uppercase;">A. Ringkasan Statistik Nilai</h4>
-    <table class="stat-grid">
-        <tr>
-            <th>Jumlah Peserta</th>
-            <th>Rata-rata (Mean)</th>
-            <th>Median</th>
-            <th>Modus</th>
-            <th>Std. Deviasi</th>
-            <th>Nilai Tertinggi</th>
-            <th>Nilai Terendah</th>
-            <th>Rentang (Range)</th>
-        </tr>
-        <tr>
-            <td><strong>{{ $statistics['count'] ?? 0 }} Siswa</strong></td>
-            <td>{{ number_format($statistics['mean'] ?? 0, 2) }}</td>
-            <td>{{ number_format($statistics['median'] ?? 0, 2) }}</td>
-            <td>{{ number_format($statistics['mode'] ?? 0, 2) }}</td>
-            <td>{{ number_format($statistics['std_dev'] ?? 0, 2) }}</td>
-            <td>{{ number_format($statistics['max'] ?? 0, 2) }}</td>
-            <td>{{ number_format($statistics['min'] ?? 0, 2) }}</td>
-            <td>{{ number_format($statistics['range'] ?? 0, 2) }}</td>
-        </tr>
-    </table>
-
-    <!-- Tabel Rekapitulasi Nilai Siswa -->
-    <h4 style="margin: 10px 0 5px 0; font-size: 10.5pt; text-transform: uppercase;">B. Daftar Rekapitulasi Hasil Penilaian Siswa</h4>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th style="width: 5%;">No</th>
-                <th style="width: 15%;">NISN / ID</th>
-                <th>Nama Lengkap Peserta</th>
-                <th style="width: 10%;">Skor Perolehan</th>
-                <th style="width: 10%;">Skor Maks</th>
-                <th style="width: 10%;">Nilai (%)</th>
-                <th style="width: 8%;">Predikat</th>
-                <th style="width: 12%;">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($results as $index => $res)
-                <tr>
-                    <td style="text-align: center;">{{ $index + 1 }}</td>
-                    <td style="text-align: center;">{{ $res->student->nisn ?? $res->student->username }}</td>
-                    <td>{{ $res->student->name }}</td>
-                    <td style="text-align: right;">{{ number_format($res->total_score, 2) }}</td>
-                    <td style="text-align: right;">{{ number_format($res->max_score, 2) }}</td>
-                    <td style="text-align: right; font-weight: bold;">{{ number_format($res->percentage, 2) }}%</td>
-                    <td style="text-align: center; font-weight: bold;">{{ $res->final_grade_letter ?? '-' }}</td>
-                    <td style="text-align: center;">
-                        @if($res->is_passed)
-                            <span class="badge-tuntas">TUNTAS</span>
-                        @else
-                            <span class="badge-remedial">REMEDIAL</span>
-                        @endif
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="8" style="text-align: center; padding: 15px; font-style: italic;">
-                        Belum ada data nilai peserta yang tercatat untuk ujian ini.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-
-    <!-- Tanda Tangan Pengesahan -->
-    <div class="signatures">
-        <div class="sig-box">
-            <p>Mengetahui,<br>Ketua Panitia Ujian CBT</p>
-            <div style="height: 60px;"></div>
-            <p style="text-decoration: underline; font-weight: bold; margin-bottom: 2px;">
-                ( {{ $exam->creator->name ?? '............................................' }} )
-            </p>
-            <p style="margin-top: 0; font-size: 9pt;">NIP: ............................................</p>
-        </div>
-        <div class="sig-box" style="position: relative;">
-            <p>{{ $institution->city ?? 'Jakarta' }}, {{ now()->translatedFormat('d F Y') }}<br>Kepala Lembaga / Madrasah</p>
-            <div style="height: 60px; position: relative;">
-                @if($certStampUrl)
-                    <img src="{{ $certStampUrl }}" alt="Stempel Lembaga" style="position: absolute; left: 10px; top: -10px; width: 85px; height: 85px; object-fit: contain; opacity: 0.85; pointer-events: none;">
-                @endif
+            <div class="doc-title">
+                <h3>LAPORAN RESMI & REKAPITULASI HASIL PENILAIAN UJIAN</h3>
+                <p>Nomor: {{ $docNumber }}</p>
             </div>
-            <p style="text-decoration: underline; font-weight: bold; margin-bottom: 2px;">
-                ( {{ $institution->leader_name ?? '............................................' }} )
-            </p>
-            <p style="margin-top: 0; font-size: 9pt;">NIP: ............................................</p>
-        </div>
-    </div>
+
+            <table class="info-grid">
+                <tr>
+                    <td style="width: 18%; font-weight: bold;">Mata Pelajaran</td>
+                    <td style="width: 2%;">:</td>
+                    <td style="width: 35%;">{{ $exam->subject->name ?? '-' }}</td>
+                    <td style="width: 18%; font-weight: bold;">Tahun Ajaran / Smt</td>
+                    <td style="width: 2%;">:</td>
+                    <td style="width: 25%;">{{ $exam->academicYear->name ?? '-' }} ({{ ucfirst($exam->academicYear->semester ?? 'Ganjil') }})</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Kode / Judul Ujian</td>
+                    <td>:</td>
+                    <td>{{ $exam->code }} - {{ $exam->title }}</td>
+                    <td style="font-weight: bold;">KKM / Passing Grade</td>
+                    <td>:</td>
+                    <td><strong>{{ $exam->passing_grade ?? 75 }}</strong></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Penyusun / Guru</td>
+                    <td>:</td>
+                    <td>{{ $exam->creator->name ?? 'Administrator' }}</td>
+                    <td style="font-weight: bold;">Waktu Pengesahan</td>
+                    <td>:</td>
+                    <td>{{ now()->translatedFormat('d F Y H:i') }} WIB</td>
+                </tr>
+            </table>
+
+            <h4 style="margin: 10px 0 5px 0; font-size: 10.5pt; text-transform: uppercase;">A. Ringkasan Statistik Nilai</h4>
+            <table class="stat-grid">
+                <tr>
+                    <th>Jumlah Peserta</th>
+                    <th>Rata-rata (Mean)</th>
+                    <th>Median</th>
+                    <th>Modus</th>
+                    <th>Std. Deviasi</th>
+                    <th>Nilai Tertinggi</th>
+                    <th>Nilai Terendah</th>
+                    <th>Rentang (Range)</th>
+                </tr>
+                <tr>
+                    <td><strong>{{ $statistics['count'] ?? 0 }} Siswa</strong></td>
+                    <td>{{ number_format($statistics['mean'] ?? 0, 2) }}</td>
+                    <td>{{ number_format($statistics['median'] ?? 0, 2) }}</td>
+                    <td>{{ number_format($statistics['mode'] ?? 0, 2) }}</td>
+                    <td>{{ number_format($statistics['std_dev'] ?? 0, 2) }}</td>
+                    <td>{{ number_format($statistics['max'] ?? 0, 2) }}</td>
+                    <td>{{ number_format($statistics['min'] ?? 0, 2) }}</td>
+                    <td>{{ number_format($statistics['range'] ?? 0, 2) }}</td>
+                </tr>
+            </table>
+
+            <h4 style="margin: 10px 0 5px 0; font-size: 10.5pt; text-transform: uppercase;">B. Daftar Rekapitulasi Hasil Penilaian Siswa</h4>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">No</th>
+                        <th style="width: 15%;">NISN / ID</th>
+                        <th>Nama Lengkap Peserta</th>
+                        <th style="width: 10%;">Skor Perolehan</th>
+                        <th style="width: 10%;">Skor Maks</th>
+                        <th style="width: 10%;">Nilai (%)</th>
+                        <th style="width: 8%;">Predikat</th>
+                        <th style="width: 12%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($results as $index => $res)
+                        <tr>
+                            <td style="text-align: center;">{{ $index + 1 }}</td>
+                            <td style="text-align: center; font-family: monospace;">{{ $res->student->identity_number ?? $res->student->username }}</td>
+                            <td>{{ $res->student->name }}</td>
+                            <td style="text-align: right;">{{ number_format($res->total_score, 2) }}</td>
+                            <td style="text-align: right;">{{ number_format($res->max_score, 2) }}</td>
+                            <td style="text-align: right; font-weight: bold;">{{ number_format($res->percentage, 2) }}%</td>
+                            <td style="text-align: center; font-weight: bold;">{{ $res->final_grade_letter ?? '-' }}</td>
+                            <td style="text-align: center;">
+                                @if($res->is_passed)
+                                    <span class="badge-tuntas">TUNTAS</span>
+                                @else
+                                    <span class="badge-remedial">REMEDIAL</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 15px; font-style: italic;">
+                                Belum ada data nilai peserta yang tercatat untuk ujian ini.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            <div class="signatures">
+                <div class="sig-box">
+                    <p style="margin: 0 0 4px;">Mengetahui,<br>{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian CBT' }}</p>
+                    <div class="sig-space">
+                        @if($doc['secondary_signature_url'])
+                            <img src="{{ $doc['secondary_signature_url'] }}" alt="TTD Ketua Panitia" class="sig-img">
+                        @endif
+                    </div>
+                    <p style="text-decoration: underline; font-weight: bold; margin: 0 0 2px;">
+                        {{ $doc['secondary_name'] ?: '( ' . ($exam->creator->name ?? '............................................') . ' )' }}
+                    </p>
+                    <p style="margin: 0; font-size: 9pt;">NIP: {{ $doc['secondary_nip'] ?: '............................................' }}</p>
+                </div>
+                <div class="sig-box" style="position: relative;">
+                    <p style="margin: 0 0 4px;">{{ $doc['city'] !== '' ? $doc['city'] . ', ' : '' }}{{ now()->translatedFormat('d F Y') }}<br>{{ $doc['primary_title'] ?: 'Kepala Lembaga / Institusi' }}</p>
+                    <div class="sig-space">
+                        @if($certStampUrl)
+                            <img src="{{ $certStampUrl }}" alt="Stempel Lembaga" style="position: absolute; left: 10px; top: -10px; width: 82px; height: 82px; object-fit: contain; opacity: 0.85; pointer-events: none;">
+                        @endif
+                        @if($doc['primary_signature_url'])
+                            <img src="{{ $doc['primary_signature_url'] }}" alt="TTD Kepala Institusi" class="sig-img">
+                        @endif
+                    </div>
+                    <p style="text-decoration: underline; font-weight: bold; margin: 0 0 2px;">
+                        {{ $doc['primary_name'] ?: '( ............................................ )' }}
+                    </p>
+                    <p style="margin: 0; font-size: 9pt;">NIP: {{ $doc['primary_nip'] ?: '............................................' }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 </html>
-

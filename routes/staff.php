@@ -59,8 +59,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
             return app(ProfileController::class)->changePassword($request, 'staff');
         })->name('password.update');
 
-        // Academic Structure Management (Admin Only)
-        Route::prefix('academic')->middleware('role:admin,super_admin')->name('academic.')->group(function () {
+        // Academic Structure Management (Admin & Institution Admin)
+        Route::prefix('academic')->middleware('role:admin,super_admin,institution_admin')->name('academic.')->group(function () {
             Route::get('/', [AcademicStructureController::class, 'index'])->name('index');
 
             // Tahun Ajaran
@@ -96,8 +96,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::patch('subjects/{subject}/toggle', [AcademicStructureController::class, 'toggleSubjectStatus'])->name('subjects.toggle');
         });
 
-        // User Management & Bulk Operations (Admin Only)
-        Route::prefix('users')->middleware('role:admin,super_admin')->name('users.')->group(function () {
+        // User Management & Bulk Operations (Admin & Institution Admin)
+        Route::prefix('users')->middleware('role:admin,super_admin,institution_admin')->name('users.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::post('/', [UserController::class, 'store'])->name('store');
             Route::post('bulk-import', [UserController::class, 'bulkImport'])->name('bulk-import');

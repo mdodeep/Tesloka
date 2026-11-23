@@ -20,14 +20,18 @@
                     Pusat komando operasional {{ $branding['system_label'] }}. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.
                 </p>
                 <div class="flex flex-wrap gap-2.5 pt-1">
-                    <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
-                        <i data-lucide="clock" class="size-4"></i>
-                        <span>Pantau Sesi Ujian</span>
-                    </a>
-                    <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
-                        <i data-lucide="file-question" class="size-4"></i>
-                        <span>Bank Soal &amp; Konten</span>
-                    </a>
+                    @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'proctor', 'exam_coordinator', 'academic_coordinator', 'academic_operator', 'technical_officer', 'helpdesk_officer', 'auditor']))
+                        <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
+                            <i data-lucide="clock" class="size-4"></i>
+                            <span>Pantau Sesi Ujian</span>
+                        </a>
+                    @endif
+                    @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'exam_coordinator', 'academic_coordinator', 'approver']))
+                        <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
+                            <i data-lucide="file-question" class="size-4"></i>
+                            <span>Bank Soal &amp; Konten</span>
+                        </a>
+                    @endif
                 </div>
             </div>
 
@@ -74,46 +78,52 @@
     </div>
 
     <!-- Quick Navigation Hub: Penilaian, Kelulusan & Grafik -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <a href="{{ route('staff.grading.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
-            <div class="flex items-center gap-3.5">
-                <div class="size-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-                    <i data-lucide="award" class="size-5"></i>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Pusat Penilaian &amp; Koreksi</h4>
-                    <p class="text-xs text-default-500">Penilaian otomatis, esai &amp; rubrik</p>
-                </div>
-            </div>
-            <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
-        </a>
+    @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'academic_coordinator', 'exam_coordinator', 'grader', 'grading_moderator', 'approver', 'auditor', 'academic_operator']))
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'exam_coordinator', 'grader', 'grading_moderator', 'approver']))
+                <a href="{{ route('staff.grading.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="size-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                            <i data-lucide="award" class="size-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Pusat Penilaian &amp; Koreksi</h4>
+                            <p class="text-xs text-default-500">Penilaian otomatis, esai &amp; rubrik</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
+                </a>
+            @endif
 
-        <a href="{{ route('staff.graduation.index') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
-            <div class="flex items-center gap-3.5">
-                <div class="size-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                    <i data-lucide="check-check" class="size-5"></i>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Hasil &amp; Kelulusan</h4>
-                    <p class="text-xs text-default-500">Rekap KKM, SKL &amp; Sertifikat</p>
-                </div>
-            </div>
-            <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
-        </a>
+            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'academic_coordinator', 'exam_coordinator', 'grading_moderator', 'approver', 'auditor', 'academic_operator']))
+                <a href="{{ route('staff.graduation.index') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="size-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                            <i data-lucide="check-check" class="size-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Hasil &amp; Kelulusan</h4>
+                            <p class="text-xs text-default-500">Rekap KKM, SKL &amp; Sertifikat</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
+                </a>
 
-        <a href="{{ route('staff.reports.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
-            <div class="flex items-center gap-3.5">
-                <div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold">
-                    <i data-lucide="bar-chart-3" class="size-5"></i>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Grafik &amp; Analitik CBT</h4>
-                    <p class="text-xs text-default-500">Distribusi skor &amp; psikometri</p>
-                </div>
-            </div>
-            <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
-        </a>
-    </div>
+                <a href="{{ route('staff.reports.overview') }}" class="p-4 bg-white hover:bg-default-50/80 border border-default-200/90 rounded-xl shadow-2xs hover:border-default-300 flex items-center justify-between group transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold">
+                            <i data-lucide="bar-chart-3" class="size-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Grafik &amp; Analitik CBT</h4>
+                            <p class="text-xs text-default-500">Distribusi skor &amp; psikometri</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="size-4 text-default-400 group-hover:text-primary transition"></i>
+                </a>
+            @endif
+        </div>
+    @endif
 
     <!-- Visual Analytics: Grafik Sebaran Nilai & Rasio Kelulusan -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">

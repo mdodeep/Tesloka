@@ -392,7 +392,7 @@
                     <option value="">-- Pilih Kelas --</option>
                     @foreach($classes as $cls)
                         <option value="{{ $cls->id }}">
-                            {{ $cls->name }} ({{ $cls->code }}) - {{ $cls->enrollments_count }} Siswa
+                            {{ $cls->name }} ({{ $cls->code }}) - {{ $cls->students_count }} Siswa
                         </option>
                     @endforeach
                 </select>

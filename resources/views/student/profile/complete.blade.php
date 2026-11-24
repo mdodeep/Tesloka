@@ -33,11 +33,17 @@
                     </label>
                     <input type="text" name="nik" value="{{ old('nik', $user->nik) }}" maxlength="16" placeholder="16 digit angka NIK"
                         class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    @error('nik')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label class="block font-semibold text-default-700 mb-1">Nomor WhatsApp / HP Aktif *</label>
                     <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" required placeholder="081234567890"
                         class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    @error('phone')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
@@ -48,16 +54,25 @@
                         <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Laki-laki</option>
                         <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Perempuan</option>
                     </select>
+                    @error('gender')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label class="block font-semibold text-default-700 mb-1">Tempat Lahir *</label>
                     <input type="text" name="birth_place" value="{{ old('birth_place', $user->birth_place) }}" required placeholder="Kota kelahiran"
                         class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    @error('birth_place')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label class="block font-semibold text-default-700 mb-1">Tanggal Lahir *</label>
-                    <input type="date" name="birth_date" value="{{ old('birth_date', $user->birth_date?->format('Y-m-d')) }}" required
+                    <input type="date" name="birth_date" value="{{ old('birth_date', $user->birth_date?->format('Y-m-d')) }}" max="{{ now()->subDay()->format('Y-m-d') }}" required
                         class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    @error('birth_date')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
@@ -65,6 +80,9 @@
                 <label class="block font-semibold text-default-700 mb-1">Alamat Tempat Tinggal Lengkap *</label>
                 <textarea name="address" rows="2" required placeholder="Nama jalan, RT/RW, nomor rumah, kelurahan, kecamatan..."
                     class="form-textarea w-full text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">{{ old('address', $user->address) }}</textarea>
+                @error('address')
+                    <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -72,25 +90,34 @@
                     <label class="block font-semibold text-default-700 mb-1">Kabupaten / Kota *</label>
                     <input type="text" name="city" value="{{ old('city', $user->city) }}" required placeholder="Contoh: Jakarta Selatan"
                         class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    @error('city')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label class="block font-semibold text-default-700 mb-1">Provinsi *</label>
                     <input type="text" name="province" value="{{ old('province', $user->province) }}" required placeholder="Contoh: DKI Jakarta"
                         class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    @error('province')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label class="block font-semibold text-default-700 mb-1">Kode Pos</label>
                     <input type="text" name="postal_code" value="{{ old('postal_code', $user->postal_code) }}" placeholder="12240"
                         class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    @error('postal_code')
+                        <p class="text-[11px] text-danger mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
             <x-cbt.dropzone
                 name="photo"
                 id="complete_photo_dropzone"
-                label="Unggah Pasfoto Formal (JPG/PNG/WebP, Maks 1 MB)"
+                label="Unggah Pasfoto Formal (JPG/PNG/WebP, Maks 5 MB)"
                 accept="image/jpeg,image/png,image/webp"
-                maxSize="1MB"
+                maxSize="5MB"
                 hint="Pasfoto resmi berlatar belakang polos untuk identifikasi kartu peserta ujian."
             />
 

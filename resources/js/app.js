@@ -55,7 +55,7 @@ if (
  * @param {number} quality Parameter kualitas WebP (default 0.60 = 60%)
  * @returns {Promise<{file: File, originalSize: number, compressedSize: number, ratio: number, isConverted: boolean}>}
  */
-window.compressImageToWebP = async function (file, quality = 0.60) {
+window.compressImageToWebP = async function (file, quality = 0.60, maxDimension = 1600) {
     if (!file || !file.type || !file.type.startsWith("image/")) {
         return { file, originalSize: file ? file.size : 0, compressedSize: file ? file.size : 0, ratio: 0, isConverted: false };
     }
@@ -73,9 +73,17 @@ window.compressImageToWebP = async function (file, quality = 0.60) {
             bitmap = await createImageBitmap(file);
         }
 
+        let targetWidth = bitmap.width;
+        let targetHeight = bitmap.height;
+        if (maxDimension > 0 && (targetWidth > maxDimension || targetHeight > maxDimension)) {
+            const scale = maxDimension / Math.max(targetWidth, targetHeight);
+            targetWidth = Math.max(1, Math.round(targetWidth * scale));
+            targetHeight = Math.max(1, Math.round(targetHeight * scale));
+        }
+
         const canvas = document.createElement("canvas");
-        canvas.width = bitmap.width;
-        canvas.height = bitmap.height;
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
 
         const ctx = canvas.getContext("2d", { alpha: true });
         if (!ctx) {
@@ -83,7 +91,7 @@ window.compressImageToWebP = async function (file, quality = 0.60) {
             return { file, originalSize: file.size, compressedSize: file.size, ratio: 0, isConverted: false };
         }
 
-        ctx.drawImage(bitmap, 0, 0);
+        ctx.drawImage(bitmap, 0, 0, targetWidth, targetHeight);
         if (typeof bitmap.close === "function") bitmap.close();
 
         const blob = await new Promise((resolve) => {
@@ -91,6 +99,11 @@ window.compressImageToWebP = async function (file, quality = 0.60) {
         });
 
         if (!blob || blob.size === 0) {
+            return { file, originalSize: file.size, compressedSize: file.size, ratio: 0, isConverted: false };
+        }
+
+        // Jangan ganti berkas asli jika hasil re-encode WebP malah lebih besar
+        if (blob.size >= file.size && ["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
             return { file, originalSize: file.size, compressedSize: file.size, ratio: 0, isConverted: false };
         }
 

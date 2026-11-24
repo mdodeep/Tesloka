@@ -429,16 +429,16 @@
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Peran (Role) <span class="text-danger">*</span></label>
                     <select id="create_user_role_id" name="role_id" required onchange="updateRoleHint(this, 'create_role_hint')" class="form-select w-full max-w-full truncate">
                         @foreach ($roles as $r)
-                            <option value="{{ $r->id }}" data-description="{{ $r->description }}" {{ $r->name === 'student' ? 'selected' : '' }}>{{ $r->display_name }}</option>
+                            <option value="{{ $r->id }}" data-role-name="{{ $r->name }}" data-description="{{ $r->description }}" {{ $r->name === 'student' ? 'selected' : '' }}>{{ $r->display_name }}</option>
                         @endforeach
                     </select>
                     <p id="create_role_hint" class="text-[11px] text-default-500 leading-relaxed"></p>
                 </div>
             </div>
 
-            <div class="space-y-1.5 min-w-0">
+            <div id="create_user_class_wrapper" class="space-y-1.5 min-w-0">
                 <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Rombel / Kelas (Khusus Siswa / Peserta Didik)</label>
-                <select name="academic_class_id" class="form-select w-full">
+                <select id="create_user_academic_class_id" name="academic_class_id" class="form-select w-full">
                     <option value="">-- Tanpa Rombel / Belum Ditugaskan --</option>
                     @if(isset($academicClasses))
                         @foreach($academicClasses as $ac)
@@ -705,14 +705,14 @@
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Peran (Role) <span class="text-danger">*</span></label>
                     <select id="edit_user_role_id" name="role_id" required onchange="updateRoleHint(this, 'edit_role_hint')" class="form-select w-full max-w-full truncate">
                         @foreach ($roles as $r)
-                            <option value="{{ $r->id }}" data-description="{{ $r->description }}">{{ $r->display_name }}</option>
+                            <option value="{{ $r->id }}" data-role-name="{{ $r->name }}" data-description="{{ $r->description }}">{{ $r->display_name }}</option>
                         @endforeach
                     </select>
                     <p id="edit_role_hint" class="text-[11px] text-default-500 leading-relaxed"></p>
                 </div>
             </div>
 
-            <div class="space-y-1.5 min-w-0">
+            <div id="edit_user_class_wrapper" class="space-y-1.5 min-w-0">
                 <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Rombel / Kelas (Khusus Siswa / Peserta Didik)</label>
                 <select id="edit_user_academic_class_id" name="academic_class_id" class="form-select w-full">
                     <option value="">-- Tanpa Rombel / Belum Ditugaskan --</option>
@@ -939,6 +939,21 @@
         if (!selectEl || !hintEl) return;
         const selected = selectEl.options[selectEl.selectedIndex];
         hintEl.textContent = selected ? (selected.getAttribute('data-description') || '') : '';
+
+        const roleSlug = selected ? (selected.getAttribute('data-role-name') || '') : '';
+        const isStudentRole = roleSlug === 'student';
+
+        if (selectEl.id === 'create_user_role_id') {
+            const wrapper = document.getElementById('create_user_class_wrapper');
+            const classSelect = document.getElementById('create_user_academic_class_id');
+            if (wrapper) wrapper.classList.toggle('hidden', !isStudentRole);
+            if (!isStudentRole && classSelect) classSelect.value = '';
+        } else if (selectEl.id === 'edit_user_role_id') {
+            const wrapper = document.getElementById('edit_user_class_wrapper');
+            const classSelect = document.getElementById('edit_user_academic_class_id');
+            if (wrapper) wrapper.classList.toggle('hidden', !isStudentRole);
+            if (!isStudentRole && classSelect) classSelect.value = '';
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {

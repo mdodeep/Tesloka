@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -154,6 +155,26 @@ class User extends Authenticatable
     public function isStudent(): bool
     {
         return $this->hasRole('student');
+    }
+
+    /**
+     * Memeriksa apakah pengguna murni peserta ujian (hanya memiliki peran student, bukan staf).
+     */
+    public function isPureStudent(): bool
+    {
+        $roleNames = $this->roles()->pluck('name');
+
+        return $roleNames->contains('student') && $roleNames->every(fn (string $role) => $role === 'student');
+    }
+
+    /**
+     * Scope query khusus akun peserta ujian murni (mengecualikan akun staf).
+     */
+    public function scopePureStudents(Builder $query): Builder
+    {
+        return $query
+            ->whereHas('roles', fn ($q) => $q->where('name', 'student'))
+            ->whereDoesntHave('roles', fn ($q) => $q->where('name', '!=', 'student'));
     }
 
     /**

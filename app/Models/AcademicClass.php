@@ -54,11 +54,13 @@ class AcademicClass extends Model
     }
 
     /**
-     * Relasi ke Peserta Didik (Siswa) di kelas ini.
+     * Relasi ke Peserta Didik (Siswa murni) di kelas ini.
      */
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'class_student_enrollments', 'class_id', 'student_id')
+            ->whereHas('roles', fn ($q) => $q->where('name', 'student'))
+            ->whereDoesntHave('roles', fn ($q) => $q->where('name', '!=', 'student'))
             ->withPivot('academic_year_id', 'status')
             ->withTimestamps();
     }

@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-365%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="365 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-3.032%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="3.032 Assertions">
+  <img src="https://img.shields.io/badge/Tests-372%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="372 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-3.079%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="3.079 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">

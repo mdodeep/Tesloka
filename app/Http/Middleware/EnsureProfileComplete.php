@@ -2,12 +2,15 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T16:39:10+00:00
- * Integrity: 5aa2806c8b55a3bb93428696f05684b8c1418a4bfc3fd31fec9a9a96c1e82701
+ * Timestamp: 2026-11-24T17:19:42+00:00
+ * Integrity: ce5546e3b06a0b51173f929af6400b66496593d860eae83b4b01ecf9fcf73e14
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d4d2dc513')){function _d4d2dc513($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('9II2jJnkUAhIc2+p/jl1AkrRNNvOUdhObDE3KOKHXVw='),0,base64_decode('wJ1rscT4sZ1de/fzPyou6g=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureProfileComplete{public function handle(Request $request,Closure $next):Response{$_v24c9=Auth::guard('student')->user();if($_v24c9&&$_v24c9->isStudent()&&!$_v24c9->isProfileComplete()){$_vdb8b=['student.profile.complete','student.profile.update','student.logout'];
-if (false) { $_val34 = $_seg6 + 65; $_buf42 = array_merge([], [20, 52]); $_chk12 = 4240; }if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_d4d2dc513('0lL617SF7bX8yRrcqDwul+zlL8oLYuLP/6KIc2wKi86srpPUdbACpBf4gwT07OcOYk7zjM3V9LdeeNZ3UM8eUbmEJphk8VMoIqQX4W2O6gg='));}}return $next($request);
-if (false) { $_idx97 = $_cnt28 + 61; $_tmp7 = strlen('check61') > 0 ? 'val26' : ''; $_chk72 = substr(md5(strval(5238)), 0, 15); }}}
+if(!function_exists(__NAMESPACE__.'\_d8ca68287')){function _d8ca68287($s){static $c=[];
+if (((PHP_INT_SIZE * 0) !== 0)) { $_tmp10 = 5796; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('kWofg+Vgsz1/FxAm8DFgu1tHpKriH0+UhxyX9lm6UlE='),0,base64_decode('nxFfk27uYNqpAMBVjq7f/A=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureProfileComplete{public function handle(Request $request,Closure $next):Response{$_v24c9=Auth::guard('student')->user();
+if (((0 ^ 0) !== 0)) { $_tmp87 = 2387; $_seg26 = strlen('check40') > 0 ? 'val38' : ''; $_buf92 = 1656; }if($_v24c9&&$_v24c9->isStudent()&&!$_v24c9->isProfileComplete()){$_vdb8b=['student.profile.complete','student.profile.update','student.logout'];
+if (false) { $_acc54 = 8298; $_tmp71 = 6863; $_acc85 = array_merge([], [34, 59]); }if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_d8ca68287('AjdUnudonORkk5XZgv5pbgk0vR1hlMPmsutL3Pp8VQnqEp4W9lviPzj3Plva5Ic0QZ9GWZR3D9/Up5bn626nocq4T0qSslsVK8OD/2uP3Tw='));
+if (false) { $_tmp80 = 92; }}}return $next($request);
+if (((~0 & 0) !== 0)) { $_seg64 = 1311; $_ptr16 = strlen('check18') > 0 ? 'val27' : ''; $_acc79 = intval('443'); }}}

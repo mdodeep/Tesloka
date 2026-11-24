@@ -247,7 +247,7 @@
 
         <x-cbt.card flush title="Daftar Jurusan / Program Studi" subtitle="Daftar departemen yang terdaftar beserta relasi kelas dan mata pelajaran">
             <x-slot:actions>
-                <button type="button" onclick="openModal('modal-create-department')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
+                <button type="button" onclick="openCreateDepartmentModal()" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="size-4"></i>
                     <span>Tambah Jurusan Baru</span>
                 </button>
@@ -585,8 +585,8 @@
                     <input type="text" name="code" required placeholder="Contoh: XII-MIPA-1" class="form-input font-mono w-full">
                 </div>
                 <div class="min-w-0">
-                    <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kapasitas Maksimal (1-30) <span class="text-danger">*</span></label>
-                    <input type="number" name="capacity" min="1" max="30" value="30" required class="form-input font-mono w-full">
+                    <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kapasitas Maksimal (1-50) <span class="text-danger">*</span></label>
+                    <input type="number" name="capacity" min="1" max="50" value="50" required class="form-input font-mono w-full">
                 </div>
             </div>
 
@@ -644,8 +644,8 @@
                     <input type="text" id="edit_class_code" name="code" required class="form-input font-mono w-full">
                 </div>
                 <div class="min-w-0">
-                    <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kapasitas Maksimal (1-30) <span class="text-danger">*</span></label>
-                    <input type="number" id="edit_class_capacity" name="capacity" min="1" max="30" required class="form-input font-mono w-full">
+                    <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kapasitas Maksimal (1-50) <span class="text-danger">*</span></label>
+                    <input type="number" id="edit_class_capacity" name="capacity" min="1" max="50" required class="form-input font-mono w-full">
                 </div>
             </div>
 
@@ -852,30 +852,32 @@
         <form method="POST" action="{{ route('staff.academic.departments.store') }}" class="p-4 sm:p-5 space-y-4 overflow-y-auto">
             @csrf
             <input type="hidden" name="active_tab" value="departments">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                <div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="min-w-0">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kode Jurusan <span class="text-danger">*</span></label>
                     <input type="text" name="code" required placeholder="Contoh: TIQ / MIPA" class="form-input font-mono w-full">
                 </div>
-                <div class="sm:col-span-2">
+                <div class="min-w-0">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Jenjang / Level</label>
-                    <div class="flex items-center gap-1.5">
-                        <select id="create_dept_level_select" onchange="if(this.value) document.getElementById('create_dept_level').value = this.value" class="form-select text-xs h-9 w-32 shrink-0">
-                            <option value="">-- Preset --</option>
-                            <option value="S1">S1 (Sarjana)</option>
-                            <option value="S2">S2 (Magister)</option>
-                            <option value="S3">S3 (Doktor)</option>
-                            <option value="D3">D3 (Diploma 3)</option>
-                            <option value="D4">D4 (Sarjana Terapan)</option>
-                            <option value="SMA">SMA</option>
-                            <option value="MA">MA (Madrasah)</option>
-                            <option value="SMK">SMK (Kejuruan)</option>
-                            <option value="SMP">SMP / MTs</option>
-                            <option value="Umum">Umum / Kursus</option>
-                        </select>
-                        <input type="text" id="create_dept_level" name="level" placeholder="Ketik/Pilih Jenjang (cth: S1)" class="form-input text-xs h-9 w-full">
-                    </div>
+                    <select id="create_dept_level_select" onchange="syncDepartmentLevelInput('create')" class="form-select w-full">
+                        <option value="">-- Pilih Jenjang --</option>
+                        <option value="S1">S1 (Sarjana)</option>
+                        <option value="S2">S2 (Magister)</option>
+                        <option value="S3">S3 (Doktor)</option>
+                        <option value="D3">D3 (Diploma 3)</option>
+                        <option value="D4">D4 (Sarjana Terapan)</option>
+                        <option value="SMA">SMA</option>
+                        <option value="MA">MA (Madrasah)</option>
+                        <option value="SMK">SMK (Kejuruan)</option>
+                        <option value="SMP">SMP / MTs</option>
+                        <option value="Umum">Umum / Kursus</option>
+                        <option value="__custom__">Lainnya (Ketik Manual)</option>
+                    </select>
                 </div>
+            </div>
+            <div id="create_dept_level_custom_wrap" class="hidden">
+                <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Jenjang / Level Kustom</label>
+                <input type="text" id="create_dept_level" name="level" placeholder="Contoh: Ma'had Aly / Tahfidz / D1" class="form-input w-full">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Nama Jurusan / Prodi <span class="text-danger">*</span></label>
@@ -906,30 +908,32 @@
             @csrf
             @method('PUT')
             <input type="hidden" name="active_tab" value="departments">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                <div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="min-w-0">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Kode <span class="text-danger">*</span></label>
                     <input type="text" id="edit_dept_code" name="code" required class="form-input font-mono w-full">
                 </div>
-                <div class="sm:col-span-2">
+                <div class="min-w-0">
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Jenjang / Level</label>
-                    <div class="flex items-center gap-1.5">
-                        <select id="edit_dept_level_select" onchange="if(this.value) document.getElementById('edit_dept_level').value = this.value" class="form-select text-xs h-9 w-32 shrink-0">
-                            <option value="">-- Preset --</option>
-                            <option value="S1">S1 (Sarjana)</option>
-                            <option value="S2">S2 (Magister)</option>
-                            <option value="S3">S3 (Doktor)</option>
-                            <option value="D3">D3 (Diploma 3)</option>
-                            <option value="D4">D4 (Sarjana Terapan)</option>
-                            <option value="SMA">SMA</option>
-                            <option value="MA">MA (Madrasah)</option>
-                            <option value="SMK">SMK (Kejuruan)</option>
-                            <option value="SMP">SMP / MTs</option>
-                            <option value="Umum">Umum / Kursus</option>
-                        </select>
-                        <input type="text" id="edit_dept_level" name="level" class="form-input text-xs h-9 w-full">
-                    </div>
+                    <select id="edit_dept_level_select" onchange="syncDepartmentLevelInput('edit')" class="form-select w-full">
+                        <option value="">-- Pilih Jenjang --</option>
+                        <option value="S1">S1 (Sarjana)</option>
+                        <option value="S2">S2 (Magister)</option>
+                        <option value="S3">S3 (Doktor)</option>
+                        <option value="D3">D3 (Diploma 3)</option>
+                        <option value="D4">D4 (Sarjana Terapan)</option>
+                        <option value="SMA">SMA</option>
+                        <option value="MA">MA (Madrasah)</option>
+                        <option value="SMK">SMK (Kejuruan)</option>
+                        <option value="SMP">SMP / MTs</option>
+                        <option value="Umum">Umum / Kursus</option>
+                        <option value="__custom__">Lainnya (Ketik Manual)</option>
+                    </select>
                 </div>
+            </div>
+            <div id="edit_dept_level_custom_wrap" class="hidden">
+                <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Jenjang / Level Kustom</label>
+                <input type="text" id="edit_dept_level" name="level" placeholder="Contoh: Ma'had Aly / Tahfidz / D1" class="form-input w-full">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider mb-1">Nama Jurusan / Prodi <span class="text-danger">*</span></label>
@@ -1061,7 +1065,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-xs font-semibold text-default-700">Status Kuota Rombel:</span>
-                        <span id="class-capacity-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">0 / 30 Peserta</span>
+                        <span id="class-capacity-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">0 / 50 Peserta</span>
                         <span id="class-capacity-desc" class="text-xs text-default-500">Tersedia kuota untuk siswa baru.</span>
                     </div>
                     <div class="text-xs font-mono font-semibold text-default-600" id="class-capacity-percent-text">0% Terisi</div>
@@ -1228,15 +1232,63 @@
         openModal('modal-edit-class');
     }
 
+    // Sinkronisasi input Jenjang / Level (Preset vs Kustom)
+    function syncDepartmentLevelInput(prefix) {
+        const select = document.getElementById(`${prefix}_dept_level_select`);
+        const wrap = document.getElementById(`${prefix}_dept_level_custom_wrap`);
+        const input = document.getElementById(`${prefix}_dept_level`);
+        if (!select || !wrap || !input) return;
+
+        if (select.value === '__custom__') {
+            const presetValues = Array.from(select.options)
+                .map(opt => opt.value)
+                .filter(v => v && v !== '__custom__');
+            if (presetValues.includes(input.value)) {
+                input.value = '';
+            }
+            wrap.classList.remove('hidden');
+            input.focus();
+        } else {
+            wrap.classList.add('hidden');
+            input.value = select.value;
+        }
+    }
+
+    function openCreateDepartmentModal() {
+        const select = document.getElementById('create_dept_level_select');
+        const wrap = document.getElementById('create_dept_level_custom_wrap');
+        const input = document.getElementById('create_dept_level');
+        if (select) select.value = '';
+        if (input) input.value = '';
+        if (wrap) wrap.classList.add('hidden');
+        openModal('modal-create-department');
+    }
+
     // Populate Edit Department Modal
     function openEditDepartmentModal(id, code, name, level, description) {
         document.getElementById('form-edit-department').action = `/staff/academic/departments/${id}`;
         document.getElementById('edit_dept_code').value = code;
         document.getElementById('edit_dept_name').value = name;
-        document.getElementById('edit_dept_level').value = level;
+        const input = document.getElementById('edit_dept_level');
         const select = document.getElementById('edit_dept_level_select');
-        if (select) {
-            select.value = level || '';
+        const wrap = document.getElementById('edit_dept_level_custom_wrap');
+
+        if (select && input && wrap) {
+            const trimmedLevel = (level || '').trim();
+            const isPreset = trimmedLevel !== '' && Array.from(select.options).some(opt => opt.value === trimmedLevel && opt.value !== '__custom__');
+            if (trimmedLevel === '') {
+                select.value = '';
+                input.value = '';
+                wrap.classList.add('hidden');
+            } else if (isPreset) {
+                select.value = trimmedLevel;
+                input.value = trimmedLevel;
+                wrap.classList.add('hidden');
+            } else {
+                select.value = '__custom__';
+                input.value = trimmedLevel;
+                wrap.classList.remove('hidden');
+            }
         }
         document.getElementById('edit_dept_desc').value = description;
         openModal('modal-edit-department');
@@ -1369,8 +1421,8 @@
                 if (notice) {
                     notice.classList.remove('hidden');
                     if (noticeText) {
-                        noticeText.innerText = isFull 
-                            ? 'Kelas telah penuh sesuai kuota batas kapasitas (30 peserta).' 
+                        noticeText.innerText = isFull
+                            ? `Kelas telah penuh sesuai kuota batas kapasitas (${cls.capacity} peserta).`
                             : 'Seluruh siswa aktif telah terdaftar ke kelas ini.';
                     }
                 }

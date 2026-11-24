@@ -88,9 +88,9 @@
                         id="profile_photo_dropzone"
                         label="Unggah Foto Profil Pegawai / Staf"
                         accept="image/jpeg,image/png,image/webp"
-                        maxSize="1MB"
+                        maxSize="5MB"
                         :currentUrl="$user->photo_path ? Storage::url($user->photo_path) : null"
-                        hint="Maks. 1 MB (JPG, PNG, atau WebP). Jika belum ada foto, sistem otomatis menggunakan avatar default tesloka-default-profile.webp."
+                        hint="Maks. 5 MB (JPG, PNG, atau WebP). Jika belum ada foto, sistem otomatis menggunakan avatar default tesloka-default-profile.webp."
                     />
                 </div>
 

@@ -86,14 +86,33 @@
                             </div>
                         </div>
 
-                        <div class="pt-2 border-t border-default-100 flex items-center justify-between">
-                            <div>
-                                <span class="text-xs font-bold text-default-700 block">Teks Arab / Harakat (RTL)</span>
-                                <p class="text-[11px] text-default-400">Perataan kanan untuk soal bahasa Arab</p>
+                        <div class="pt-2 border-t border-default-100 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-default-700 block">Teks Arab / Harakat (RTL)</span>
+                                    <p class="text-[11px] text-default-400">Perataan kanan soal &amp; opsi Bahasa Arab</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="is_rtl" value="1" id="isRtlCheckbox" {{ old('is_rtl', $question->is_rtl) ? 'checked' : '' }} onchange="toggleRtl(this.checked)" class="form-switch">
+                                </label>
                             </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="is_rtl" value="1" id="isRtlCheckbox" {{ old('is_rtl', $question->is_rtl) ? 'checked' : '' }} onchange="toggleRtl(this.checked)" class="form-switch">
-                            </label>
+
+                            @php($currentRtlStyleMeta = old('rtl_option_style', $question->metadata['rtl_option_style'] ?? 'inherit'))
+                            <div>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Gaya Huruf Opsi Arab (RTL)</label>
+                                <select name="rtl_option_style" class="form-select w-full h-9 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                    <option value="inherit" {{ $currentRtlStyleMeta === 'inherit' ? 'selected' : '' }}>Ikuti Pengaturan Ujian (Default: أ، ب، ت، ث)</option>
+                                    <option value="arabic_hijaiyah" {{ $currentRtlStyleMeta === 'arabic_hijaiyah' ? 'selected' : '' }}>Hijaiyah (أ، ب، ت، ث، ج)</option>
+                                    <option value="arabic_abjadiyah" {{ $currentRtlStyleMeta === 'arabic_abjadiyah' ? 'selected' : '' }}>Abjadiyah / TOAFL (أ، ب، ج، د، هـ)</option>
+                                    <option value="latin" {{ $currentRtlStyleMeta === 'latin' ? 'selected' : '' }}>Huruf Latin (A, B, C, D)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Batas Putar Audio Khusus Soal (Opsional)</label>
+                                <input type="number" min="0" max="20" name="audio_max_plays" value="{{ old('audio_max_plays', $question->getAudioMaxPlaysOverride()) }}" placeholder="Kosong = ikut aturan ujian (0 = bebas)" class="form-input w-full h-9 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <p class="text-[11px] text-default-400 mt-1">Isi <code>0</code> agar bebas diputar berulang, atau angka <code>1-20</code>.</p>
+                            </div>
                         </div>
                     </div>
                 </x-cbt.card>
@@ -386,6 +405,15 @@
             window.questionQuill.format('direction', isRtl ? 'rtl' : false);
             window.questionQuill.format('align', isRtl ? 'right' : false);
         }
+        document.querySelectorAll('#optionsList input[name*="[content]"]').forEach(input => {
+            if (isRtl) {
+                input.setAttribute('dir', 'rtl');
+                input.classList.add('text-right', 'font-serif');
+            } else {
+                input.removeAttribute('dir');
+                input.classList.remove('text-right', 'font-serif');
+            }
+        });
     }
 
     // Mutual exclusivity handler for Single Choice radio buttons

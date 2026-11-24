@@ -322,6 +322,9 @@
     </div>
 
     <!-- Data Injection for Client Engine -->
+    @php
+        $examMediaConfig = $attempt->exam->getMediaAndDisplayConfig();
+    @endphp
     <script>
         window.CBT_DATA = {
             attemptId: {{ $attempt->id }},
@@ -335,11 +338,19 @@
             cameraProctoring: {{ $attempt->exam->isCameraProctoringEnabled() ? 'true' : 'false' }},
             submitUrl: "{{ route('student.exam.submit', $attempt) }}",
             csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            mediaConfig: {
+                audioMaxPlays: {{ (int) $examMediaConfig['audio_max_plays'] }},
+                audioAllowSeek: {{ $examMediaConfig['audio_allow_seek'] ? 'true' : 'false' }},
+                imageZoomEnabled: {{ $examMediaConfig['image_zoom_enabled'] ? 'true' : 'false' }},
+                rtlOptionStyle: "{{ $examMediaConfig['rtl_option_style'] }}",
+                rtlAlignOptionsRight: {{ $examMediaConfig['rtl_align_options_right'] ? 'true' : 'false' }}
+            },
             questions: [
                 @foreach($orderedQuestions as $idx => $pq)
                     @php
                         $snap = $pq->question_snapshot;
                         $ans = $answersMap->get($pq->id);
+                        $snapMeta = is_array($snap['metadata'] ?? null) ? $snap['metadata'] : [];
                         $resolvedQMediaUrl = \App\Services\MediaStorageService::resolveMediaUrl($snap['media_path'] ?? $snap['media_url'] ?? null);
                         $resolvedQMediaType = $snap['media_type'] ?? \App\Services\MediaStorageService::inferMediaType($snap['media_path'] ?? $snap['media_url'] ?? null);
                         $snapStimulus = $snap['stimulus'] ?? null;
@@ -359,6 +370,8 @@
                         difficulty: "{{ $snap['difficulty'] ?? 'medium' }}",
                         weight: {{ $snap['weight'] ?? 1.0 }},
                         isRtl: {{ !empty($snap['is_rtl']) ? 'true' : 'false' }},
+                        audioMaxPlays: {!! isset($snapMeta['audio_max_plays']) && $snapMeta['audio_max_plays'] !== '' ? (int) $snapMeta['audio_max_plays'] : 'null' !!},
+                        rtlOptionStyle: {!! json_encode($snapMeta['rtl_option_style'] ?? null, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!},
                         stimulus: {!! json_encode($snapStimulus, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!},
                         options: {!! json_encode($snap['options'] ?? [], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!},
                         currentAnswer: {!! json_encode($ans?->answer_payload ?? null, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!},
@@ -396,10 +409,34 @@
             return /\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/.test(target);
         }
 
-        function buildAudioPlayerHtml(src, label) {
+        function formatOptionLabel(rawKey, isRtl, questionStyle) {
+            const key = String(rawKey || '').trim().toUpperCase();
+            const examCfg = window.CBT_DATA.mediaConfig || {};
+            const style = (questionStyle && ['arabic_hijaiyah', 'arabic_abjadiyah', 'latin'].includes(questionStyle))
+                ? questionStyle
+                : (examCfg.rtlOptionStyle || 'arabic_hijaiyah');
+
+            if (!isRtl || style === 'latin') {
+                return key;
+            }
+
+            const maps = {
+                arabic_hijaiyah: { A: 'أ', B: 'ب', C: 'ت', D: 'ث', E: 'ج', F: 'ح', G: 'خ', H: 'د' },
+                arabic_abjadiyah: { A: 'أ', B: 'ب', C: 'ج', D: 'د', E: 'هـ', F: 'و', G: 'ز', H: 'ح' },
+            };
+            const map = maps[style] || maps.arabic_hijaiyah;
+            return map[key] || key;
+        }
+
+        function buildAudioPlayerHtml(src, label, q) {
             const safeSrc = String(src || '').replace(/"/g, '&quot;');
+            const examCfg = window.CBT_DATA.mediaConfig || {};
+            const maxPlays = (q && q.audioMaxPlays !== null && q.audioMaxPlays !== undefined)
+                ? parseInt(q.audioMaxPlays, 10)
+                : (typeof examCfg.audioMaxPlays === 'number' ? examCfg.audioMaxPlays : 2);
+            const allowSeek = examCfg.audioAllowSeek === false ? '0' : '1';
             return `<div class="cbt-audio-container mb-3.5 p-3 rounded-lg bg-slate-50 border border-default-200 space-y-2">
-                <audio controls preload="metadata" controlsList="nodownload" src="${safeSrc}" class="w-full" onerror="window.handleCbtAudioError(this, '${safeSrc}')">
+                <audio controls preload="metadata" controlsList="nodownload" src="${safeSrc}" data-max-plays="${maxPlays}" data-allow-seek="${allowSeek}" class="w-full" onerror="window.handleCbtAudioError(this, '${safeSrc}')">
                     Browser Anda tidak mendukung pemutar audio HTML5.
                 </audio>
                 <div class="cbt-audio-error hidden p-2.5 rounded bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between gap-2">
@@ -408,6 +445,41 @@
                 </div>
             </div>`;
         }
+
+        function buildImageHtml(src, altText) {
+            const safeSrc = String(src || '').replace(/"/g, '&quot;');
+            const safeAlt = String(altText || '').replace(/"/g, '&quot;');
+            const zoomEnabled = !window.CBT_DATA.mediaConfig || window.CBT_DATA.mediaConfig.imageZoomEnabled !== false;
+            if (!zoomEnabled) {
+                return `<div class="cbt-image-container mb-3.5"><img src="${safeSrc}" alt="${safeAlt}" class="max-h-72 rounded border border-default-200"></div>`;
+            }
+            return `<div class="cbt-image-container mb-3.5">
+                <button type="button" onclick="window.openCbtImageZoom('${safeSrc}')" class="inline-block text-left cursor-zoom-in group" title="Klik untuk memperbesar gambar">
+                    <img src="${safeSrc}" alt="${safeAlt}" class="max-h-72 rounded border border-default-200 group-hover:opacity-95 transition">
+                    <span class="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-primary group-hover:underline">
+                        <i data-lucide="zoom-in" class="size-3.5"></i>
+                        <span>Klik gambar untuk memperbesar</span>
+                    </span>
+                </button>
+            </div>`;
+        }
+
+        window.openCbtImageZoom = function(src) {
+            const modal = document.getElementById('imageZoomModal');
+            const img = document.getElementById('imageZoomTarget');
+            if (modal && img && src) {
+                img.src = src;
+                modal.classList.remove('hidden');
+            }
+        };
+
+        window.closeCbtImageZoom = function(event) {
+            const modal = document.getElementById('imageZoomModal');
+            if (!modal) return;
+            if (!event || event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        };
 
         window.handleCbtAudioError = function(audioEl) {
             const box = audioEl && audioEl.parentElement ? audioEl.parentElement.querySelector('.cbt-audio-error') : null;
@@ -443,20 +515,21 @@
                 stimBox.classList.remove('hidden');
                 document.getElementById('stimulusTitle').innerText = q.stimulus.title || 'Wacana Stimulus';
                 let stimHtml = '';
+                const stimContentEl = document.getElementById('stimulusContent');
                 if (isAudioMedia(q.stimulus.media_type, q.stimulus.media_url, q.stimulus.media_path) && q.stimulus.media_url) {
-                    stimHtml += buildAudioPlayerHtml(q.stimulus.media_url, 'stimulus');
+                    stimHtml += buildAudioPlayerHtml(q.stimulus.media_url, 'stimulus', q);
                     stimHtml += `<div class="p-2.5 rounded bg-primary-50/70 border border-primary-200/60 text-xs text-primary-900 flex items-center gap-2"><i data-lucide="headphones" class="size-4 text-primary shrink-0"></i><span><strong>Petunjuk Mendengarkan:</strong> Dengarkan rekaman audio di atas untuk menjawab butir soal terkait. Transkrip teks tidak ditampilkan pada sesi ujian.</span></div>`;
                 } else if (isImageMedia(q.stimulus.media_type, q.stimulus.media_url, q.stimulus.media_path) && q.stimulus.media_url) {
-                    stimHtml += `<div class="cbt-image-container mb-3"><img src="${q.stimulus.media_url}" alt="${q.stimulus.title || ''}" class="max-h-72 rounded border border-default-200"></div>`;
+                    stimHtml += buildImageHtml(q.stimulus.media_url, q.stimulus.title || '');
                     if (q.stimulus.content) {
-                        stimHtml += q.stimulus.content.replace(/\n/g, '<br>');
+                        stimHtml += `<div class="${q.isRtl ? 'text-right font-serif text-base leading-relaxed' : ''}" ${q.isRtl ? 'dir="rtl"' : ''}>${q.stimulus.content.replace(/\n/g, '<br>')}</div>`;
                     }
                 } else {
                     if (q.stimulus.content) {
-                        stimHtml += q.stimulus.content.replace(/\n/g, '<br>');
+                        stimHtml += `<div class="${q.isRtl ? 'text-right font-serif text-base leading-relaxed' : ''}" ${q.isRtl ? 'dir="rtl"' : ''}>${q.stimulus.content.replace(/\n/g, '<br>')}</div>`;
                     }
                 }
-                document.getElementById('stimulusContent').innerHTML = stimHtml;
+                stimContentEl.innerHTML = stimHtml;
                 if (typeof lucide !== 'undefined' && lucide.createIcons) {
                     lucide.createIcons();
                 }
@@ -469,9 +542,9 @@
             let qMediaHtml = '';
             if (q.media_url) {
                 if (isAudioMedia(q.media_type, q.media_url, q.media_path)) {
-                    qMediaHtml = buildAudioPlayerHtml(q.media_url, 'soal');
+                    qMediaHtml = buildAudioPlayerHtml(q.media_url, 'soal', q);
                 } else if (isImageMedia(q.media_type, q.media_url, q.media_path)) {
-                    qMediaHtml = `<div class="cbt-image-container mb-3.5"><img src="${q.media_url}" alt="Lampiran Soal" class="max-h-72 rounded border border-default-200"></div>`;
+                    qMediaHtml = buildImageHtml(q.media_url, 'Lampiran Soal');
                 }
             }
             qContentEl.innerHTML = qMediaHtml + q.content.replace(/\n/g, '<br>');
@@ -486,18 +559,24 @@
             // Options Rendering
             const optBox = document.getElementById('optionsContainer');
             optBox.innerHTML = '';
+            const examMediaCfg = window.CBT_DATA.mediaConfig || {};
+            const alignOptionsRight = Boolean(q.isRtl && examMediaCfg.rtlAlignOptionsRight !== false);
 
             if (q.type === 'multiple_choice' || q.type === 'true_false') {
                 q.options.forEach(opt => {
                     const isChecked = q.currentAnswer === opt.key;
+                    const displayLabel = formatOptionLabel(opt.display_key || opt.key, q.isRtl, q.rtlOptionStyle);
                     const div = document.createElement('div');
-                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
+                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${alignOptionsRight ? 'text-right' : ''} ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
+                    if (alignOptionsRight) {
+                        div.setAttribute('dir', 'rtl');
+                    }
                     div.onclick = () => selectSingleOption(opt.key);
                     div.innerHTML = `
-                        <span class="size-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
-                            ${opt.display_key || opt.key}
+                        <span class="size-8 rounded-lg flex items-center justify-center font-bold shrink-0 transition-colors ${q.isRtl ? 'font-serif text-sm' : 'text-xs'} ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
+                            ${displayLabel}
                         </span>
-                        <span class="text-sm sm:text-base text-default-900 leading-snug font-medium ${q.isRtl ? 'text-right font-serif' : ''}">${opt.content}</span>
+                        <span class="text-sm sm:text-base text-default-900 leading-snug font-medium flex-1 ${q.isRtl ? 'text-right font-serif text-lg' : ''}">${opt.content}</span>
                     `;
                     optBox.appendChild(div);
                 });
@@ -505,15 +584,19 @@
                 const currentArr = Array.isArray(q.currentAnswer) ? q.currentAnswer : [];
                 q.options.forEach(opt => {
                     const isChecked = currentArr.includes(opt.key);
+                    const displayLabel = formatOptionLabel(opt.display_key || opt.key, q.isRtl, q.rtlOptionStyle);
                     const div = document.createElement('div');
-                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
+                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${alignOptionsRight ? 'text-right' : ''} ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
+                    if (alignOptionsRight) {
+                        div.setAttribute('dir', 'rtl');
+                    }
                     div.onclick = () => toggleComplexOption(opt.key);
                     div.innerHTML = `
                         <input type="checkbox" ${isChecked ? 'checked' : ''} class="size-4.5 rounded text-primary pointer-events-none mt-1 sm:mt-0">
-                        <span class="size-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
-                            ${opt.display_key || opt.key}
+                        <span class="size-7 rounded-lg flex items-center justify-center font-bold shrink-0 transition-colors ${q.isRtl ? 'font-serif text-sm' : 'text-xs'} ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
+                            ${displayLabel}
                         </span>
-                        <span class="text-sm sm:text-base text-default-900 leading-snug font-medium">${opt.content}</span>
+                        <span class="text-sm sm:text-base text-default-900 leading-snug font-medium flex-1 ${q.isRtl ? 'text-right font-serif text-lg' : ''}">${opt.content}</span>
                     `;
                     optBox.appendChild(div);
                 });
@@ -522,7 +605,7 @@
                 optBox.innerHTML = `
                     <div class="space-y-2">
                         <label class="block text-xs font-semibold text-default-500 uppercase">Ketikkan Jawaban Anda:</label>
-                        <input type="text" id="shortAnswerInput" value="${val}" onblur="saveTextAnswer(this.value)" placeholder="Ketik jawaban di sini..." class="form-input w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium bg-white">
+                        <input type="text" id="shortAnswerInput" value="${val}" ${q.isRtl ? 'dir="rtl"' : ''} onblur="saveTextAnswer(this.value)" placeholder="Ketik jawaban di sini..." class="form-input w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium bg-white ${q.isRtl ? 'text-right font-serif' : ''}">
                         <p class="text-xs text-default-400">Tekan di luar kotak input atau pindah soal untuk menyimpan otomatis.</p>
                     </div>
                 `;
@@ -531,7 +614,7 @@
                 optBox.innerHTML = `
                     <div class="space-y-2">
                         <label class="block text-xs font-semibold text-default-500 uppercase">Tuliskan Uraian / Jawaban Esai:</label>
-                        <textarea id="essayInput" rows="6" onblur="saveTextAnswer(this.value)" placeholder="Tuliskan uraian lengkap di sini..." class="form-textarea w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed bg-white">${val}</textarea>
+                        <textarea id="essayInput" rows="6" ${q.isRtl ? 'dir="rtl"' : ''} onblur="saveTextAnswer(this.value)" placeholder="Tuliskan uraian lengkap di sini..." class="form-textarea w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed bg-white ${q.isRtl ? 'text-right font-serif' : ''}">${val}</textarea>
                         <p class="text-xs text-default-400">Jawaban tersimpan otomatis saat Anda berpindah soal.</p>
                     </div>
                 `;
@@ -994,21 +1077,25 @@
         }
 
         /**
-         * Pengontrol Batas Pemutaran Audio Listening Comprehension (FULL-FEATURE 15.3, GAP-07).
-         * Mencegah peserta memutar ulang audio soal melebihi batas maksimal (default 2x).
+         * Pengontrol Batas Pemutaran & Kebijakan Seek Audio Listening Comprehension.
+         * Mengikuti rules_config ujian (0 = bebas tak terbatas) serta override per butir soal.
          */
         function initAudioListeningLimiter() {
             const containers = [document.getElementById('stimulusContent'), document.getElementById('questionContent')];
+            const defaultPlays = window.CBT_DATA.mediaConfig ? window.CBT_DATA.mediaConfig.audioMaxPlays : 2;
+            const defaultAllowSeek = !window.CBT_DATA.mediaConfig || window.CBT_DATA.mediaConfig.audioAllowSeek !== false;
+
             containers.forEach(container => {
                 if (!container) return;
                 const audios = container.querySelectorAll('audio');
                 audios.forEach((audio, aIdx) => {
                     const audioSrc = audio.currentSrc || audio.src || audio.querySelector('source')?.src || `audio_${currentIndex}_${aIdx}`;
                     const storageKey = `audio_play_count_${window.CBT_DATA.attemptId}_${btoa(audioSrc).slice(0, 24)}`;
-                    const maxPlays = parseInt(audio.dataset.maxPlays || '2', 10);
+                    const maxPlays = parseInt(audio.dataset.maxPlays ?? String(defaultPlays), 10);
+                    const allowSeek = (audio.dataset.allowSeek ?? (defaultAllowSeek ? '1' : '0')) !== '0';
+                    const isUnlimited = maxPlays === 0;
                     let playedCount = parseInt(sessionStorage.getItem(storageKey) || '0', 10);
 
-                    // Buat wrapper UI jika belum ada
                     let wrapper = audio.closest('.cbt-audio-wrapper');
                     if (!wrapper) {
                         wrapper = document.createElement('div');
@@ -1016,15 +1103,28 @@
                         audio.parentNode.insertBefore(wrapper, audio);
 
                         const header = document.createElement('div');
-                        header.className = 'flex items-center justify-between text-xs font-semibold';
+                        header.className = 'flex flex-wrap items-center justify-between gap-2 text-xs font-semibold';
+                        const badgeClass = isUnlimited
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : (playedCount >= maxPlays ? 'bg-rose-100 text-rose-800' : 'bg-primary/10 text-primary');
+                        const badgeText = isUnlimited
+                            ? 'Putar Bebas (Tanpa Batas)'
+                            : `Sisa Putar: ${Math.max(0, maxPlays - playedCount)}x (Maks. ${maxPlays}x)`;
+                        const seekBadge = !allowSeek
+                            ? '<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-semibold">Putar Berurutan</span>'
+                            : '';
+
                         header.innerHTML = `
                             <span class="flex items-center gap-1.5 text-primary">
                                 <i data-lucide="volume-2" class="size-4"></i>
                                 <span>Audio Listening Comprehension</span>
                             </span>
-                            <span class="audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] ${playedCount >= maxPlays ? 'bg-rose-100 text-rose-800' : 'bg-primary/10 text-primary'}">
-                                Sisa Putar: ${Math.max(0, maxPlays - playedCount)}x (Maks. ${maxPlays}x)
-                            </span>
+                            <div class="flex items-center gap-1.5">
+                                ${seekBadge}
+                                <span class="audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] ${badgeClass}">
+                                    ${badgeText}
+                                </span>
+                            </div>
                         `;
                         wrapper.appendChild(header);
                         wrapper.appendChild(audio);
@@ -1033,8 +1133,26 @@
                         }
                     }
 
-                    const counterEl = wrapper.querySelector('.audio-play-counter');
+                    if (!allowSeek && audio.dataset.seekBound !== '1') {
+                        audio.dataset.seekBound = '1';
+                        let lastAllowedTime = 0;
+                        audio.addEventListener('timeupdate', () => {
+                            if (!audio.seeking && audio.currentTime > lastAllowedTime) {
+                                lastAllowedTime = audio.currentTime;
+                            }
+                        });
+                        audio.addEventListener('seeking', () => {
+                            if (Math.abs(audio.currentTime - lastAllowedTime) > 1.0) {
+                                audio.currentTime = lastAllowedTime;
+                            }
+                        });
+                    }
 
+                    if (isUnlimited) {
+                        return;
+                    }
+
+                    const counterEl = wrapper.querySelector('.audio-play-counter');
                     if (playedCount >= maxPlays) {
                         audio.pause();
                         audio.controls = false;
@@ -1177,8 +1295,19 @@
             }
             window.addEventListener('offline', checkNetwork);
             window.addEventListener('online', checkNetwork);
+            window.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') window.closeCbtImageZoom();
+            });
             checkNetwork();
         })();
     </script>
+
+    <!-- Lightbox Perbesar Gambar Soal Peserta -->
+    <div id="imageZoomModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4" onclick="window.closeCbtImageZoom(event)">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
+            <button type="button" onclick="window.closeCbtImageZoom()" class="mb-2 self-end px-3 py-1 rounded-full bg-white text-default-800 text-xs font-bold shadow cursor-pointer">Tutup</button>
+            <img id="imageZoomTarget" src="" alt="Perbesaran Media Soal" class="max-h-[82vh] max-w-full rounded-lg shadow-2xl bg-white p-1 object-contain">
+        </div>
+    </div>
 </body>
 </html>

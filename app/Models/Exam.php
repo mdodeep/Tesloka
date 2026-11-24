@@ -71,6 +71,25 @@ class Exam extends Model
         ];
     }
 
+    /**
+     * Pengaturan media (batas putar audio, seek, zoom gambar) dan tampilan RTL Bahasa Arab.
+     *
+     * @return array{audio_max_plays: int, audio_allow_seek: bool, image_zoom_enabled: bool, rtl_option_style: string, rtl_align_options_right: bool}
+     */
+    public function getMediaAndDisplayConfig(): array
+    {
+        $rules = is_array($this->rules_config) ? $this->rules_config : [];
+        $style = (string) ($rules['rtl_option_style'] ?? 'arabic_hijaiyah');
+
+        return [
+            'audio_max_plays' => max(0, min(20, (int) ($rules['audio_max_plays'] ?? 2))),
+            'audio_allow_seek' => array_key_exists('audio_allow_seek', $rules) ? (bool) $rules['audio_allow_seek'] : true,
+            'image_zoom_enabled' => array_key_exists('image_zoom_enabled', $rules) ? (bool) $rules['image_zoom_enabled'] : true,
+            'rtl_option_style' => in_array($style, ['arabic_hijaiyah', 'arabic_abjadiyah', 'latin'], true) ? $style : 'arabic_hijaiyah',
+            'rtl_align_options_right' => array_key_exists('rtl_align_options_right', $rules) ? (bool) $rules['rtl_align_options_right'] : true,
+        ];
+    }
+
     public function institution(): BelongsTo
     {
         return $this->belongsTo(Institution::class);
@@ -345,6 +364,7 @@ class Exam extends Model
                         'weight' => (float) $q->weight,
                         'explanation' => $q->explanation,
                         'is_rtl' => (bool) $q->is_rtl,
+                        'metadata' => $q->metadata ?? [],
                         'version' => $q->version,
                         'stimulus' => $q->stimulus ? [
                             'id' => $q->stimulus->id,

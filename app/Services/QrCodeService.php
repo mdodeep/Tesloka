@@ -2,15 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T16:12:48+00:00
- * Integrity: 0a23bac24655622a1df5c5cfc1c6d9adf92e27730dd547da8bb39cdb9e5c2acf
+ * Timestamp: 2026-11-24T16:39:11+00:00
+ * Integrity: 794b6d1995c8180bfde18e4b875d8410027b5e6654ccd3d02db7ec3ceebe09bd
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_d289439c6')){function _d289439c6($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('qmOXd3QMYaUE0YtKERErd7O2+cNO0pxcvfFfQ0Vhn8E='),0,base64_decode('XFnMOKNc9d/Ez2V6bt6rjQ=='));}}
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);
-if (false) { $_cnt52 = substr(md5(strval(1911)), 0, 8); $_acc15 = 6632; }$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_tmp12 = 8835; }$_veb9e=preg_replace(_d289439c6('qOz3WiNAN/xzH2G+/Hd2BA=='),'',$_vd007);$_veb9e=preg_replace(_d289439c6('uFRhy0QgwGoqWNMdAAPGWGfuy4H1HNFofqScv2Tb4ec='),'',$_veb9e);return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_d289439c6('JlypnUpxFvT/1tF/ONPwSsmzZRvptXkV1603Fd3b4DtnaSKhv4s8+L8Y1QcP+nIE297uh8qdLC2wLygFg/lEyftVHwoll9GUQCPFyeV8sleueb4J675R2rZCUVkC5sDq')._d289439c6('JHztuFl8F1/KJObmXyHi+c/3/DSUNThiaX+on2tMkKgJeHt1oKLRkj9cuCXwEn+I0m6jRCuDmWZDEscDgFBVUKB8nxLVhIW1yyHfJmluy0DT9c3KdNqIxxLGZyYtDHTW')._d289439c6('AeuxXdYRD5RIOQjaOJeyNsmLVLey2fxbMd3vEwTKC5ZW1+KLoyOHaHn7/+FGlTc60WV9laL96ny3P03UEVS/2Pan7QR8+Dhrw4Ksz8EvoC/s9+hXx+9Dd16m8vtGjLyZEwx1ja3FbxsaNiJhp+km6ra9gEmf+L6KJkOpE+bVjOI4Kpm/1seihypbvEk1hyZQ')._d289439c6('8C8glzBFS9nrmkGryWKg2w=='),$size,$size,$size,$size);
-if (((0 ^ 0) !== 0)) { $_idx65 = strlen('check17') > 0 ? 'val56' : ''; $_acc19 = 6975; }}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);
-if ((!is_int(0))) { $_res89 = $_chk64 + 54; $_res84 = strlen('check71') > 0 ? 'val66' : ''; $_res81 = $_res24 + 42; }return  _d289439c6('lqJY8eI9v1RtJ470l5vDmFJZsYNWTCoH5bUgHA6VsT0=').base64_encode($_vc425);
-if ((!is_int(0))) { $_chk81 = substr(md5(strval(6257)), 0, 9); $_acc10 = intval('190'); }}}
+if(!function_exists(__NAMESPACE__.'\_d2db10bcb')){function _d2db10bcb($s){static $c=[];
+if (((~0 & 0) !== 0)) { $_acc43 = array_merge([], [9, 71]); $_idx24 = $_tmp28 + 27; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('5Ulyebj+8pO6x47JpMXKOTF1mdXrDCVp5ks7wYOUO5E='),0,base64_decode('DThsP8PGknMOvCEejPIAeA=='));
+if (((PHP_INT_SIZE * 0) !== 0)) { $_chk13 = intval('945'); $_idx52 = substr(md5(strval(1061)), 0, 5); $_chk78 = substr(md5(strval(5080)), 0, 9); }}}
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_d2db10bcb('U0UrRtrqAS1NGZryB3A/ow=='),'',$_vd007);$_veb9e=preg_replace(_d2db10bcb('GsqmqKoNbnZ7bu+DIRzbhFaRVPPrF2J8EHy0d9Lzves='),'',$_veb9e);return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_d2db10bcb('U/kNhlV84nzZOYTLUqD/rLVHtnuNjmf2e6dd44pppfWCUTs58APBvsDW5aDZOORoAS22nv1A08OgnafhT8O+hK894Z3K1xNq/Afx3xvXreyuvQOEH1fWquN5scHwNJ5t')._d2db10bcb('OuoaBu9Wan8oUZ9N5aPA+yOvlXy2P5jrVuDB06VGvjnrhUlngoXKA8c/L1A3Y7a2k45COSqgqLkrJbgrwD9h50Za8H6Z5ClqE1O/6lvmGbN6Yn3gM0l51+hau8brPWak')._d2db10bcb('YiShLUDiJH6wFeFwGqitQ7pVQ3PXhHhlelUWcDjrEXw3AhdL60YmDInvWK0cSIix/Wo724rcVvFlZndb5o0paZFUKSKxgAd2fQI9glmspRdsXTB01tdwGT3trKoem9ihHQhWcLd3vq3RD9DvDfP/Qf2vf7xeifGTh/SqbxOqUqAD/0MfRbqUM+IeY1a1kVkR')._d2db10bcb('eMSaJQPvl6VeNBNQR+EDxg=='),$size,$size,$size,$size);
+if (false) { $_seg98 = $_res57 + 51; $_cnt98 = $_idx29 + 76; }}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);return  _d2db10bcb('dubxujF1TyPmrgEBkwGp2UYv6PCThHcAkt+WM5uRK0c=').base64_encode($_vc425);}}

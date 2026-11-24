@@ -258,6 +258,64 @@
                     </div>
                 </x-cbt.card>
 
+                @php($mediaCfg = $exam->getMediaAndDisplayConfig())
+                <x-cbt.card title="5. Pengaturan Media (Audio & Gambar) & Bahasa Arab (RTL)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Batas Pemutaran Audio Listening</label>
+                            <select name="audio_max_plays" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                @php($curPlays = (string) old('audio_max_plays', $mediaCfg['audio_max_plays']))
+                                <option value="0" {{ $curPlays === '0' ? 'selected' : '' }}>Tak Terbatas (Bebas Diputar Ulang Peserta)</option>
+                                <option value="1" {{ $curPlays === '1' ? 'selected' : '' }}>Maksimal 1 Kali (Standar TOEFL / TOAFL Resmi)</option>
+                                <option value="2" {{ $curPlays === '2' ? 'selected' : '' }}>Maksimal 2 Kali (Default Institusi)</option>
+                                <option value="3" {{ $curPlays === '3' ? 'selected' : '' }}>Maksimal 3 Kali</option>
+                                <option value="5" {{ $curPlays === '5' ? 'selected' : '' }}>Maksimal 5 Kali (Latihan)</option>
+                                @if(! in_array($curPlays, ['0', '1', '2', '3', '5'], true))
+                                    <option value="{{ $curPlays }}" selected>Maksimal {{ $curPlays }} Kali (Kustom)</option>
+                                @endif
+                            </select>
+                            <p class="text-[11px] text-default-400 mt-1">Aturan global untuk soal audio; dapat dioverride di masing-masing butir soal.</p>
+                        </div>
+
+                        <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer">
+                            <div>
+                                <span class="text-xs font-bold text-default-800 block">Izinkan Geser Durasi / Seek Audio</span>
+                                <p class="text-[11px] text-default-400">Jika nonaktif, peserta harus menyimak audio secara berurutan tanpa loncat detik.</p>
+                            </div>
+                            <input type="hidden" name="audio_allow_seek" value="0">
+                            <input type="checkbox" name="audio_allow_seek" value="1" {{ old('audio_allow_seek', $mediaCfg['audio_allow_seek']) ? 'checked' : '' }} class="form-switch">
+                        </label>
+
+                        <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer">
+                            <div>
+                                <span class="text-xs font-bold text-default-800 block">Izinkan Perbesar Gambar Soal (Zoom Lightbox)</span>
+                                <p class="text-[11px] text-default-400">Peserta dapat mengeklik gambar pada stimulus/soal untuk memperbesar tampilan.</p>
+                            </div>
+                            <input type="hidden" name="image_zoom_enabled" value="0">
+                            <input type="checkbox" name="image_zoom_enabled" value="1" {{ old('image_zoom_enabled', $mediaCfg['image_zoom_enabled']) ? 'checked' : '' }} class="form-switch">
+                        </label>
+
+                        <div class="pt-2 border-t border-default-100">
+                            <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Huruf Pilihan Jawaban Khusus Soal Arab (RTL)</label>
+                            @php($curRtlStyle = old('rtl_option_style', $mediaCfg['rtl_option_style']))
+                            <select name="rtl_option_style" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <option value="arabic_hijaiyah" {{ $curRtlStyle === 'arabic_hijaiyah' ? 'selected' : '' }}>أ، ب، ت، ث، ج (Alif, Ba, Ta - Hijaiyah)</option>
+                                <option value="arabic_abjadiyah" {{ $curRtlStyle === 'arabic_abjadiyah' ? 'selected' : '' }}>أ، ب، ج، د، هـ (Alif, Ba, Jim - Abjadiyah / TOAFL)</option>
+                                <option value="latin" {{ $curRtlStyle === 'latin' ? 'selected' : '' }}>A, B, C, D, E (Huruf Latin)</option>
+                            </select>
+                        </div>
+
+                        <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer">
+                            <div>
+                                <span class="text-xs font-bold text-default-800 block">Pilihan Jawaban Rata Kanan Khusus Soal Arab (RTL)</span>
+                                <p class="text-[11px] text-default-400">Menempatkan huruf pilihan dan teks opsi Arab sejajar dari kanan ke kiri.</p>
+                            </div>
+                            <input type="hidden" name="rtl_align_options_right" value="0">
+                            <input type="checkbox" name="rtl_align_options_right" value="1" {{ old('rtl_align_options_right', $mediaCfg['rtl_align_options_right']) ? 'checked' : '' }} class="form-switch">
+                        </label>
+                    </div>
+                </x-cbt.card>
+
                 <!-- Actions -->
                 <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-2">
                     <a href="{{ route('staff.exams.show', $exam) }}" class="btn btn-sm w-full sm:w-auto px-5 py-2.5 bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded transition text-center">

@@ -79,6 +79,74 @@ class Question extends Model
     }
 
     /**
+     * Memetakan label opsi pilihan ganda menjadi huruf Arab (Hijaiyah / Abjadiyah) untuk soal RTL.
+     */
+    public static function formatOptionLabel(string $key, bool $isRtl = false, string $style = 'arabic_hijaiyah'): string
+    {
+        $normalized = strtoupper(trim($key));
+        if (! $isRtl || $style === 'latin') {
+            return $normalized;
+        }
+
+        $maps = [
+            'arabic_hijaiyah' => [
+                'A' => 'أ',
+                'B' => 'ب',
+                'C' => 'ت',
+                'D' => 'ث',
+                'E' => 'ج',
+                'F' => 'ح',
+                'G' => 'خ',
+                'H' => 'د',
+            ],
+            'arabic_abjadiyah' => [
+                'A' => 'أ',
+                'B' => 'ب',
+                'C' => 'ج',
+                'D' => 'د',
+                'E' => 'هـ',
+                'F' => 'و',
+                'G' => 'ز',
+                'H' => 'ح',
+            ],
+        ];
+
+        $selectedMap = $maps[$style] ?? $maps['arabic_hijaiyah'];
+
+        return $selectedMap[$normalized] ?? $normalized;
+    }
+
+    /**
+     * Gaya penomoran opsi Arab efektif pada butir soal (override soal atau default ujian).
+     */
+    public function getEffectiveRtlOptionStyle(?string $examDefault = null): string
+    {
+        $meta = is_array($this->metadata) ? $this->metadata : [];
+        $override = $meta['rtl_option_style'] ?? null;
+
+        if (in_array($override, ['arabic_hijaiyah', 'arabic_abjadiyah', 'latin'], true)) {
+            return $override;
+        }
+
+        return in_array($examDefault, ['arabic_hijaiyah', 'arabic_abjadiyah', 'latin'], true)
+            ? $examDefault
+            : 'arabic_hijaiyah';
+    }
+
+    /**
+     * Batas pemutaran audio khusus butir soal (null = ikuti aturan ujian, 0 = tak terbatas).
+     */
+    public function getAudioMaxPlaysOverride(): ?int
+    {
+        $meta = is_array($this->metadata) ? $this->metadata : [];
+        if (! array_key_exists('audio_max_plays', $meta) || $meta['audio_max_plays'] === null || $meta['audio_max_plays'] === '') {
+            return null;
+        }
+
+        return max(0, (int) $meta['audio_max_plays']);
+    }
+
+    /**
      * Membentuk snapshot data butir soal yang mandiri dan tidak berubah (FULL-FEATURE 6.11).
      */
     public function createSnapshot(): array

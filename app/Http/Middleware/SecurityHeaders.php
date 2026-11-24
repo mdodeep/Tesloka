@@ -2,15 +2,11 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T14:53:14+00:00
- * Integrity: 179c6012d379ee653be11c384ab2747ffd20fdf270a218152104616ad00751a2
+ * Timestamp: 2026-11-24T15:01:07+00:00
+ * Integrity: 732d13c17bea258201492d7d488181ebc396461ab0f6b9e4f8436f39a34f93ee
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d5dbaad44')){function _d5dbaad44($s){static $c=[];
-if (false) { $_seg75 = array_merge([], [53, 72]); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('erItNPYQlSfmuuo351BhyuXOvEpnhldj1lM59/+iDfU='),0,base64_decode('nyGo+MosF5pVvtciAga1Ng=='));}}
-use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);
-if (false) { $_cnt15 = $_seg54 + 43; $_val77 = array_merge([], [89, 37]); $_seg15 = 3165; }$_vd20a->headers->set(_d5dbaad44('GNrA6pbKgHgndlagjdP5bmzy/T41b3G8RVXYNf1vAp0='),'nosniff',false);$_vd20a->headers->set(_d5dbaad44('rieYWfNeol7hizVQxb+gOQ=='),'SAMEORIGIN',false);$_vd20a->headers->set(_d5dbaad44('zQa4Svh0cm4eYZXmp9E6Sw=='),'strict-origin-when-cross-origin',false);
-if ((!is_int(0))) { $_res71 = strlen('check29') > 0 ? 'val31' : ''; }$_vd20a->headers->set(_d5dbaad44('/gWDKIt7wmGBlOUAFim4zRmEVB5ElnANMCC92kEcU80='),_d5dbaad44('OzycqMkRcOv5eIxrkGpJkUfvm8ITzQPMekTwJqm5zFkvXgmhmWuHE27KQ1Pp+XdeEe7NkvZc0aAIMobq8fzagQ=='),false);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_buf28 = array_merge([], [89, 17]); $_val74 = 5977; $_chk24 = 7331; }return $_vd20a;
-if (false) { $_tmp78 = 7102; $_tmp32 = 165; }}}
+if(!function_exists(__NAMESPACE__.'\_dcdb19a52')){function _dcdb19a52($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('2zEI2Znp2yXBRHdekFAVmT+qzC7FW1TJAQm3yWN9NvM='),0,base64_decode('TnpK2epY2ZeQyV7/3Xh8bg=='));
+if (false) { $_acc54 = 1969; $_cnt93 = $_ptr75 + 73; $_acc3 = array_merge([], [14, 38]); }}}
+use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);$_vd20a->headers->set(_dcdb19a52('ZdhJOuxU3v5XyZ4A6YyzpoyO0+1hXDrjyjpn0wQPLCI='),'nosniff',false);$_vd20a->headers->set(_dcdb19a52('HgR99axeFtXPhMNwGkdTHA=='),'SAMEORIGIN',false);$_vd20a->headers->set(_dcdb19a52('rNLqmHSG8pza+j3sqg8D/w=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_dcdb19a52('sy0TDfxiyV/wC49NKJURINxwkmhBcwMgisVbwNhM0Zw='),_dcdb19a52('q5uCyX5w4XoOiaYxJtgsYneEnbHWxg60ceF2Bo/uCU9SVz52VncCBRgWX9RKwgslq8HH7VRtTDQ1eY29clpw8Q=='),false);return $_vd20a;}}

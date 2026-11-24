@@ -189,7 +189,7 @@ if (! function_exists('teslokaBootstrapDownloadFile')) {
                 $result = curl_exec($ch);
                 $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 $curlErr = curl_error($ch);
-                curl_close($ch);
+                unset($ch);
                 fclose($fp);
 
                 if ($result === true && $httpCode >= 200 && $httpCode < 400 && file_exists($tempPath) && filesize($tempPath) > 100000) {
@@ -246,33 +246,63 @@ if (! function_exists('teslokaBootstrapRunCommand')) {
 
         exec($fullCommand, $output, $exitCode);
 
+        $cleanOutput = (string) preg_replace('/\x1B\[[0-9;]*[A-Za-z]/', '', implode("\n", $output));
+
         return [
             'exit_code' => $exitCode,
-            'output' => implode("\n", $output),
+            'output' => $cleanOutput,
         ];
     }
 }
 
-// Inisialisasi sesi untuk proteksi CSRF tanpa bergantung pada path sesi yang terkunci
-$sessionPath = $basePath.'/storage/framework/sessions';
-if (is_dir($sessionPath) && is_writable($sessionPath)) {
-    @ini_set('session.save_path', $sessionPath);
-} elseif (is_writable(sys_get_temp_dir())) {
-    @ini_set('session.save_path', sys_get_temp_dir());
-}
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    @session_start();
-}
-if (empty($_SESSION['tesloka_bootstrap_csrf'])) {
-    $_SESSION['tesloka_bootstrap_csrf'] = bin2hex(random_bytes(32));
-}
-$csrfToken = (string) $_SESSION['tesloka_bootstrap_csrf'];
-
-// Pemeriksaan prasyarat dasar
+// Pemeriksaan prasyarat dasar & direktori terlebih dahulu
 $dirWarnings = teslokaBootstrapEnsureDirectories($basePath);
 $execEnabled = teslokaBootstrapIsFunctionEnabled('exec');
 $cliPhp = teslokaBootstrapDetectCliPhp();
 $localPharPath = $basePath.'/storage/app/composer.phar';
+
+// Manajemen token CSRF independen (kebal terhadap session.save_handler=redis atau pembatasan ini_set di aaPanel)
+$secretFile = is_writable($basePath.'/storage/app')
+    ? $basePath.'/storage/app/.bootstrap_csrf_secret'
+    : sys_get_temp_dir().'/tesloka_boot_secret_'.md5($basePath);
+if (! file_exists($secretFile)) {
+    @file_put_contents($secretFile, bin2hex(random_bytes(32)));
+}
+$csrfSecret = (string) @file_get_contents($secretFile);
+if ($csrfSecret === '') {
+    $csrfSecret = hash('sha256', $basePath.'|'.php_uname());
+}
+
+$verifyBootstrapToken = static function (string $token, string $secret): bool {
+    if (! str_contains($token, '.')) {
+        return false;
+    }
+    [$nonce, $sig] = explode('.', $token, 2);
+    if (! preg_match('/^[a-f0-9]{32}$/', $nonce) || ! preg_match('/^[a-f0-9]{64}$/', $sig)) {
+        return false;
+    }
+
+    return hash_equals(hash_hmac('sha256', $nonce, $secret), $sig);
+};
+
+$cookieToken = (string) ($_COOKIE['tesloka_boot_token'] ?? '');
+if ($verifyBootstrapToken($cookieToken, $csrfSecret)) {
+    $csrfToken = $cookieToken;
+} else {
+    $nonce = bin2hex(random_bytes(16));
+    $csrfToken = $nonce.'.'.hash_hmac('sha256', $nonce, $csrfSecret);
+    if (PHP_SAPI !== 'cli' && ! headers_sent()) {
+        $isHttps = (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+        setcookie('tesloka_boot_token', $csrfToken, [
+            'expires' => time() + 3600,
+            'path' => '/',
+            'secure' => $isHttps,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+}
 
 $requiredExtensions = [
     'bcmath', 'ctype', 'curl', 'fileinfo', 'gd', 'json',
@@ -295,10 +325,14 @@ $executionResult = null;
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $submittedToken = (string) ($_POST['_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
-    if ($submittedToken === '' || ! hash_equals($csrfToken, $submittedToken)) {
+    $validCsrf = $submittedToken !== ''
+        && $cookieToken !== ''
+        && $verifyBootstrapToken($submittedToken, $csrfSecret)
+        && hash_equals($cookieToken, $submittedToken);
+    if (! $validCsrf) {
         $executionResult = [
             'success' => false,
-            'logs' => ['[GAGAL] Token keamanan CSRF tidak valid atau sesi kedaluwarsa. Muat ulang halaman lalu coba lagi.'],
+            'logs' => ['[GAGAL] Token keamanan CSRF tidak valid atau cookie sesi belum aktif. Muat ulang halaman lalu coba lagi.'],
         ];
     } elseif (! $execEnabled) {
         $executionResult = [
@@ -358,6 +392,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             }
 
             if ($install['exit_code'] === 0 && file_exists($vendorAutoload)) {
+                @unlink($secretFile);
                 $logs[] = '[SUKSES] Seluruh paket vendor berhasil dipasang dan autoloader siap digunakan.';
                 $executionResult = [
                     'success' => true,

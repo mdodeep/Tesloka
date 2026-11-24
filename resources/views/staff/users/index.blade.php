@@ -511,7 +511,7 @@
 <div id="modal-import" class="hidden fixed inset-0 bg-default-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
     <div class="bg-card rounded-md max-w-lg w-full p-4 sm:p-5 shadow-2xl border border-default-200 max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between pb-3 border-b border-default-200 mb-4 shrink-0">
-            <h4 class="text-sm font-semibold text-default-800">Impor Massal Akun Peserta Ujian (CSV)</h4>
+            <h4 class="text-sm font-semibold text-default-800">Impor Massal Akun Pengguna (CSV)</h4>
             <button type="button" onclick="document.getElementById('modal-import').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
@@ -519,12 +519,17 @@
 
         <form method="POST" action="{{ route('staff.users.bulk-import') }}" enctype="multipart/form-data" class="space-y-4 text-xs overflow-y-auto pr-1">
             @csrf
-            <div class="p-3 bg-primary/5 border border-primary/20 rounded text-default-800 space-y-1">
-                <div class="font-semibold">Format Kolom Berkas CSV:</div>
-                <div class="font-mono text-xs bg-card p-2 rounded border border-default-200 break-all">
-                    nim,nama_lengkap,email,jenis_kelamin,kode_kelas
+            <div class="p-3 bg-primary/5 border border-primary/20 rounded text-default-800 space-y-1.5">
+                <div class="font-semibold">Format Kolom Multi-Role Lengkap (Staf &amp; Peserta):</div>
+                <div class="font-mono text-[11px] bg-card p-2 rounded border border-default-200 break-all">
+                    name,username,email,role,identity_number,nik,gender,phone,birth_place,birth_date,address,class_code,password
                 </div>
-                <div class="text-xs text-default-500">Contoh: <code>NIM20260099,Ahmad Fauzi,ahmad.f@tesloka.test,male,TIQ-1A</code></div>
+                <div class="text-[11px] text-default-600 leading-relaxed">
+                    <strong>Slug Peran (role):</strong> <code>admin</code>, <code>institution_admin</code>, <code>academic_coordinator</code>, <code>exam_coordinator</code>, <code>academic_operator</code>, <code>teacher</code>, <code>proctor</code>, <code>grader</code>, <code>grading_moderator</code>, <code>approver</code>, <code>auditor</code>, <code>technical_officer</code>, <code>helpdesk_officer</code>, <code>student</code>.
+                </div>
+                <div class="text-[11px] text-default-500">
+                    Mendukung juga format ringkas khusus peserta: <code>nim,nama_lengkap,email,jenis_kelamin,kode_kelas</code>.
+                </div>
             </div>
 
             <x-cbt.dropzone
@@ -543,7 +548,7 @@
                 </button>
                 <button type="submit" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs rounded inline-flex items-center justify-center gap-1.5 w-full sm:w-auto cursor-pointer font-bold">
                     <i data-lucide="upload" class="size-4"></i>
-                    <span>Unggah &amp; Impor Peserta</span>
+                    <span>Unggah &amp; Impor Pengguna</span>
                 </button>
             </div>
         </form>

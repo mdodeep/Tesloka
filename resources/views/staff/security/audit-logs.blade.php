@@ -128,7 +128,7 @@
                 <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                     <tr>
                         <th class="ps-4 sm:ps-6 pe-3 py-3 w-12 text-center whitespace-nowrap">ID</th>
-                        <th class="px-3 py-3 w-36 whitespace-nowrap">Waktu Kejadian</th>
+                        <th class="px-3 py-3 w-40 whitespace-nowrap">Waktu Kejadian ({{ $tzAbbr ?? \App\Services\DocumentConfigService::timezoneAbbreviation() }})</th>
                         <th class="px-3 py-3 whitespace-nowrap">Tipe Event</th>
                         <th class="px-3 py-3 whitespace-nowrap">Aktor Pengguna</th>
                         <th class="px-3 py-3 whitespace-nowrap">Alamat IP</th>
@@ -149,17 +149,29 @@
                             </td>
                             <td class="px-3 py-3.5 whitespace-nowrap">
                                 @if($log->user)
-                                    <div class="font-bold text-default-900">{{ $log->user->name }}</div>
+                                    @php
+                                        $actorRole = $log->user->roles->first();
+                                        $actorRoleLabel = $actorRole ? ($actorRole->display_name ?: $actorRole->name) : null;
+                                    @endphp
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="font-bold text-default-900">{{ $log->user->name }}</span>
+                                        @if($actorRoleLabel)
+                                            <span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-primary/10 text-primary">{{ $actorRoleLabel }}</span>
+                                        @endif
+                                    </div>
                                     <div class="text-[10px] text-default-400 font-mono">{{ $log->user->username }}</div>
                                 @else
-                                    <span class="text-default-400 italic">Sistem Otonom</span>
+                                    <span class="text-default-500 italic">{{ $log->actorFallbackLabel() }}</span>
                                 @endif
                             </td>
                             <td class="px-3 py-3.5 font-mono text-default-600 whitespace-nowrap">
                                 {{ $log->ip_address ?? '-' }}
                             </td>
-                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-default-700 min-w-[200px]">
-                                {{ $log->notes ?? '-' }}
+                            <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-default-700 min-w-[220px]">
+                                <div>{{ $log->notes ?? '-' }}</div>
+                                @if($log->auditableShortLabel())
+                                    <div class="text-[10px] text-default-400 font-mono mt-0.5">Target: {{ $log->auditableShortLabel() }}</div>
+                                @endif
                             </td>
                         </tr>
                     @empty

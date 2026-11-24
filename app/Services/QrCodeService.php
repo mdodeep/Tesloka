@@ -2,13 +2,15 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T00:08:21+00:00
- * Integrity: e2d6ed59f9f7faebfce4df88a34a26f59e037c7a22cc74a203ec30f8a25d5b4e
+ * Timestamp: 2026-11-24T02:29:34+00:00
+ * Integrity: b01655018c94d9a6d98ce3abbe72200d33cd62dda25971490828ecaee8340877
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_d6bbbdeb0')){function _d6bbbdeb0($s){static $c=[];
-if (false) { $_buf26 = strlen('check60') > 0 ? 'val72' : ''; $_cnt51 = intval('396'); $_idx32 = substr(md5(strval(5582)), 0, 6); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('5BLBGQESNo5kf/2wGyzM8OEAtYQE3FWdI8GVz4boRJM='),0,base64_decode('56YinY5oTebVzacWTF9zrg=='));}}
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);$_v79a2=new Writer($_ve28f);
-if (((~0 & 0) !== 0)) { $_acc87 = substr(md5(strval(5769)), 0, 7); $_seg34 = $_chk27 + 27; }$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_d6bbbdeb0('1hM6tm2EPUbJM9sMwhIF/Q=='),'',$_vd007);$_veb9e=preg_replace(_d6bbbdeb0('1Zel6FvGL7LpkcQ0saOtlespZ3etXVLm5Nl2vrJ8mdM='),'',$_veb9e);
-if (false) { $_chk26 = intval('924'); }return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_d6bbbdeb0('zvduDHizsbEQvi6MkoTwsCtTJpxew22/79LE1Cc9VzAmPF26FCfSk3jz54/geblRK1/xQtf73PEoWv56JLZlwqFEUyvo5AV1YJydWRqjeiqcETZd5xJHd5KOyWrrMRI5')._d6bbbdeb0('EUf9l9hbnLZyQMcyssBYIo3MBFqDfewdavCTxCB65nuj3VMLbPhQy2Vxxg1CjhJQd+nE41HoQZMFIPiqBEPZMPnAHVVcYX2El7rR+ZrCca0Eu3k32sWhwmnxGDBCdj1y')._d6bbbdeb0('dn6T+7qrbbRxui03rea/T05oWT3CO5RFUo+wWXAF1gkoVuoOr6j0fXJ4lL1QK9k/bSS/n17gOU2Ipu3rMcLlnFGzu9j6+TjcXXdSIMPdmasgoNruJX2U2DLrjODen9TvD/HWz/HGuQzOMC0roiqgVGegedhxQMf3MJD8a4M0l/MVk/Kj4wZxHszO6Xe8id9Q')._d6bbbdeb0('W0Sbr+wV26gqBFUnCUuFyg=='),$size,$size,$size,$size);}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);return  _d6bbbdeb0('sgCGCgApLXMBy16zGoC790qgFdhprOB+SVjF9RRZacw=').base64_encode($_vc425);}}
+if(!function_exists(__NAMESPACE__.'\_dc8a5cf64')){function _dc8a5cf64($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('VVXhxUPgwvCers2jEla4Y93jB9RchXyeVefT0pofZWQ='),0,base64_decode('BoyO9aspXcDepKQYT7oX1w=='));}}
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);
+if (false) { $_res42 = intval('69'); }$_v79a2=new Writer($_ve28f);
+if (((~0 & 0) !== 0)) { $_ptr25 = 6738; $_buf78 = strlen('check31') > 0 ? 'val17' : ''; $_buf34 = $_seg76 + 41; }$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_dc8a5cf64('VleU/8VnzNX5y/ZzYEsYkg=='),'',$_vd007);$_veb9e=preg_replace(_dc8a5cf64('YQUjim6xr570djbo1WbihD4B4pBx2n354wuTtKDMS8E='),'',$_veb9e);
+if (((0 ^ 0) !== 0)) { $_cnt31 = strlen('check12') > 0 ? 'val42' : ''; $_cnt37 = 5873; }return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_dc8a5cf64('69S++vLHa6QewRQfq/wAH4Y6TZiuHOEmmpIfbjrXdK1aUDm3GECPFH4lA3/ldkwXuspbu3dugGSLJ/0MVz+UGxrYaSnvg7aPN7jo7otrMw6ELminSySjVCjGEaL6fEju')._dc8a5cf64('21vqvK/SnILcS+2Ku6r7Q/tvqe1JQBBFSImpa6V0c8+1IoXQwa166VngGVurNTRDo8yB6Fgypnb0hO9ZzUIrTnC+U6su9FxkVafQbyfaLPaqKFJZArjwDSvVJG55O/D0')._dc8a5cf64('n1tvrCv5ojxbEspNQ5IKdD8uNSeonIeRnexaEvPV2tu1iQ2xD9IbxE88DjWiDtG/6asPFMNl1wrbp1T3YLJDuonfgRKFcZxNkY9mPubbZDMSmTXEKZYoBWwEtV06eqCtlPkaE0PPdCp2G+vI85dqrL6H4G04gUWvisbz7VA1mc4qqeeMSaxmHa2z5esFMFaP')._dc8a5cf64('DcR1PPSdTATQCLlbmq17hA=='),$size,$size,$size,$size);}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);
+if ((PHP_MAJOR_VERSION < 0)) { $_tmp55 = array_merge([], [35, 74]); $_buf75 = 8227; $_cnt64 = strlen('check72') > 0 ? 'val72' : ''; }return  _dc8a5cf64('4KuyYZeiFDiC4LDna9z0ksFS5GmdgjtGs2cqXUboYXw=').base64_encode($_vc425);
+if (((~0 & 0) !== 0)) { $_chk38 = substr(md5(strval(7814)), 0, 13); $_seg16 = intval('771'); }}}

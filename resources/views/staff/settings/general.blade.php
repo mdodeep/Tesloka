@@ -754,6 +754,49 @@
                             @endforeach
                         </div>
                     </div>
+
+                    <div class="pt-4 border-t border-default-200 space-y-4">
+                        <input type="hidden" name="doc_card_settings_present" value="1">
+                        <div>
+                            <h5 class="text-xs font-bold text-default-800 uppercase tracking-wider">Pengaturan Kredensial Kartu Peserta Ujian (Rombel &amp; Sesi)</h5>
+                            <p class="text-[11px] text-default-500 mt-0.5">
+                                Atur tampilan bawaan kredensial login saat mencetak kartu peserta rombel maupun kartu peserta sesi. Operator tetap dapat menyalakan atau mematikan opsi ini secara instan pada toolbar halaman pratinjau cetak.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="flex items-center justify-between p-3.5 rounded-lg border border-default-200 bg-default-50/60 cursor-pointer gap-3">
+                                <div>
+                                    <span class="text-xs font-bold text-default-800 block">Tampilkan Username Login</span>
+                                    <span class="text-[11px] text-default-500">Mencetak username login peserta pada bagian bawah kartu.</span>
+                                </div>
+                                <input type="checkbox" name="doc_card_show_username" value="1" {{ old('doc_card_show_username', $settings['doc_card_show_username'] ?? true) ? 'checked' : '' }} class="form-switch shrink-0">
+                            </label>
+
+                            <label class="flex items-center justify-between p-3.5 rounded-lg border border-default-200 bg-default-50/60 cursor-pointer gap-3">
+                                <div>
+                                    <span class="text-xs font-bold text-default-800 block">Tampilkan Password Login</span>
+                                    <span class="text-[11px] text-default-500">Mencetak password awal/reset terenkripsi (bila tersedia) pada kartu peserta.</span>
+                                </div>
+                                <input type="checkbox" name="doc_card_show_password" value="1" {{ old('doc_card_show_password', $settings['doc_card_show_password'] ?? false) ? 'checked' : '' }} class="form-switch shrink-0">
+                            </label>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="doc_card_password_fallback" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Teks Pengganti Password Pribadi</label>
+                            <input
+                                type="text"
+                                id="doc_card_password_fallback"
+                                name="doc_card_password_fallback"
+                                value="{{ old('doc_card_password_fallback', $settings['doc_card_password_fallback'] ?? 'Sesuai akun / Hubungi panitia') }}"
+                                class="form-input text-xs"
+                                placeholder="Sesuai akun / Hubungi panitia"
+                            >
+                            <p class="text-[11px] text-default-500">
+                                Password yang dibuat admin, diimpor CSV, atau direset sementara dapat dicetak ke kartu. Apabila peserta sudah mengganti password secara mandiri, teks di atas akan ditampilkan agar privasi tetap aman.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </x-cbt.card>
         </div>

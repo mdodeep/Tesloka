@@ -324,6 +324,18 @@
     <!-- TAB 3: ROMBEL & KELAS                      -->
     <!-- ========================================== -->
     <div id="tab-pane-classes" class="tab-pane hidden space-y-6">
+        <div class="p-4 rounded-xl bg-sky-50/70 border border-sky-200 text-xs text-sky-900 flex flex-col sm:flex-row sm:items-start gap-3">
+            <div class="size-9 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+                <i data-lucide="id-card" class="size-4.5"></i>
+            </div>
+            <div class="space-y-1">
+                <div class="font-bold text-sky-950">Panduan Kartu Peserta Rombel vs Kartu Peserta Sesi</div>
+                <p class="leading-relaxed text-sky-800">
+                    <strong>Kartu Peserta Rombel / Kelas</strong> dirancang untuk <strong>ujian berkelanjutan / multi-sesi</strong> (misalnya rangkaian ujian 1 minggu hingga 1 bulan penuh), sehingga panitia cukup mencetak kartu identitas ujian 1 kali per kelas tanpa terikat jadwal ruang tunggal. Untuk ujian dengan ruang lab, tanggal/jam persis, dan nomor kursi spesifik, cetak melalui menu <strong>Sesi &amp; Penjadwalan</strong>.
+                </p>
+            </div>
+        </div>
+
         <x-cbt.card flush title="Daftar Rombel / Kelas Terdaftar" subtitle="Kelola seluruh kelas, alokasi siswa terdaftar, pengarsipan status, dan rincian kapasitas peserta (Maks. 30)">
             <x-slot:actions>
                 <button type="button" onclick="openModal('modal-create-class')" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
@@ -378,6 +390,11 @@
                                                 title="Kelola Peserta Didik (Daftarkan / Keluarkan Siswa)">
                                             <i data-lucide="user-plus" class="size-4"></i>
                                         </button>
+                                        <a href="{{ route('staff.academic.classes.print-cards', $c) }}" target="_blank"
+                                           class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 text-default-600 flex items-center justify-center transition cursor-pointer"
+                                           title="Cetak Kartu Peserta Rombel (Ujian Berkelanjutan)">
+                                            <i data-lucide="printer" class="size-4"></i>
+                                        </a>
                                         <button type="button" 
                                                 onclick="openEditClassModal('{{ $c->id }}', '{{ $c->academic_year_id }}', '{{ $c->department_id }}', '{{ addslashes($c->name) }}', '{{ $c->code }}', '{{ $c->capacity }}', {{ $c->is_active ? 'true' : 'false' }})"
                                                 class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:text-info hover:border-info/30 text-default-600 flex items-center justify-center transition cursor-pointer"

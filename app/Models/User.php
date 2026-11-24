@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
@@ -366,5 +367,42 @@ class User extends Authenticatable
     public function hasCustomPhoto(): bool
     {
         return ! empty($this->photo_path) && Storage::disk('public')->exists($this->photo_path);
+    }
+
+    /**
+     * Menghasilkan array metadata dengan password kartu ujian terenkripsi (AES-256 Laravel Crypt).
+     * Mengirim null akan menghapus password awal kartu apabila peserta mengganti password pribadinya.
+     *
+     * @param  array<string, mixed>|null  $baseMetadata
+     * @return array<string, mixed>
+     */
+    public static function mergeExamCardPasswordMetadata(?array $baseMetadata, ?string $plainPassword): array
+    {
+        $metadata = is_array($baseMetadata) ? $baseMetadata : [];
+
+        if ($plainPassword !== null && $plainPassword !== '') {
+            $metadata['exam_card_password_enc'] = Crypt::encryptString($plainPassword);
+        } else {
+            unset($metadata['exam_card_password_enc']);
+        }
+
+        return $metadata;
+    }
+
+    /**
+     * Mendekripsi password awal/sementara yang dicetak pada kartu peserta jika tersedia.
+     */
+    public function getExamCardPassword(): ?string
+    {
+        $encrypted = is_array($this->metadata) ? ($this->metadata['exam_card_password_enc'] ?? null) : null;
+        if (! is_string($encrypted) || $encrypted === '') {
+            return null;
+        }
+
+        try {
+            return Crypt::decryptString($encrypted);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }

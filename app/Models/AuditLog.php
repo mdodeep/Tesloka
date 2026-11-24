@@ -64,7 +64,10 @@ class AuditLog extends Model
         ?string $notes = null,
         ?int $userId = null
     ): self {
-        $actorId = $userId ?? Auth::id();
+        $actorId = $userId
+            ?? Auth::guard('staff')->id()
+            ?? Auth::guard('student')->id()
+            ?? Auth::id();
 
         return self::create([
             'user_id' => $actorId,
@@ -78,5 +81,31 @@ class AuditLog extends Model
             'notes' => $notes,
             'created_at' => now(),
         ]);
+    }
+
+    /**
+     * Label aktor manusiawi apabila log tidak terikat dengan user_id tertentu.
+     */
+    public function actorFallbackLabel(): string
+    {
+        if (str_contains($this->event_type, 'login') || str_contains($this->event_type, 'auth')) {
+            return 'Tamu / Belum Login';
+        }
+
+        return 'Sistem (Otomatis / CLI)';
+    }
+
+    /**
+     * Ringkasan entitas target audit untuk ditampilkan di UI.
+     */
+    public function auditableShortLabel(): ?string
+    {
+        if (empty($this->auditable_type)) {
+            return null;
+        }
+
+        $shortName = class_basename($this->auditable_type);
+
+        return $this->auditable_id ? "{$shortName} #{$this->auditable_id}" : $shortName;
     }
 }

@@ -154,7 +154,7 @@
                         <div class="p-3 rounded-lg bg-sky-50/70 border border-sky-200 text-xs text-sky-900 space-y-1">
                             <div class="font-bold flex items-center justify-between gap-2">
                                 <span>Pemisahan Jadwal: Periode Ketersediaan vs Sesi Pelaksanaan</span>
-                                <span class="px-2 py-0.5 rounded bg-white border border-sky-200 font-mono text-[10px]">Zona Waktu: {{ config('app.timezone', 'Asia/Jakarta') }} (WIB)</span>
+                                <span class="px-2 py-0.5 rounded bg-white border border-sky-200 font-mono text-[10px]">Zona Waktu: {{ \App\Services\DocumentConfigService::timezoneLabel() }}</span>
                             </div>
                             <p class="text-[11px] text-sky-800 leading-relaxed">
                                 Rentang di bawah hanya membatasi periode global kapan sesi ujian boleh dibuat (opsional). Penentuan jam mulai/selesai persis, ruang lab, token rilis, dan peserta diatur di menu <strong>Sesi &amp; Penjadwalan</strong>.

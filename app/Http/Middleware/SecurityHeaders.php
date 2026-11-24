@@ -2,11 +2,10 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T00:08:20+00:00
- * Integrity: 7e97075b0c1d11d33345a82032b32d9a6731eec33cb5702f74d22d41762357b3
+ * Timestamp: 2026-11-24T02:29:33+00:00
+ * Integrity: 43fdf86efbfbbb1116c9caf705672898348bcddc1b8947fa1b458ec37cb62b52
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_db7494e87')){function _db7494e87($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('YPyts6ySsD+QEInZ9CvTBqFdfsj6sBWI7yxc53u2XeM='),0,base64_decode('hA3rsGB3tZGtXXFOHLmG7w=='));}}
-use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);$_vd20a->headers->set(_db7494e87('lKxWfSX3KKecLo11edZk+WmGbt7ZCBTW5yNDISdoMFA='),'nosniff',false);$_vd20a->headers->set(_db7494e87('jYL/BispKBy4d4twru02ew=='),'SAMEORIGIN',false);$_vd20a->headers->set(_db7494e87('uXKZb6KgYpnHxriElPnqzQ=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_db7494e87('3BDJVsrgUy0CUFLBvNHN9HXrAxaAOJxdCP53T4P8FEs='),_db7494e87('fiaVU71qycqcbHxPndssy3i3s/t4HsP3GfsYPRZnhUy6dkh0qth1is7PxBg2JwUKFZnZb2HZlQvcMPyJJd+jwA=='),false);return $_vd20a;
-if (((PHP_INT_SIZE * 0) !== 0)) { $_idx74 = array_merge([], [67, 75]); }}}
+if(!function_exists(__NAMESPACE__.'\_df21c9424')){function _df21c9424($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('la0J07m1hhnlhkJLMslL9hZTXb+jNb4vCKWvBgbaAl8='),0,base64_decode('p82dsDA75FEeQx7wUKC6TQ=='));}}
+use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);$_vd20a->headers->set(_df21c9424('SFdf6JPwLf+0+EJQkxoEHARhdN9nZkJGIUGbkzebLXM='),'nosniff',false);$_vd20a->headers->set(_df21c9424('BPdkrvLz2kTwvUBNH+ysLg=='),'SAMEORIGIN',false);$_vd20a->headers->set(_df21c9424('dG4EGriYlcK84nUwVAUnoQ=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_df21c9424('Eo/nI98He/C83jx6rUNiL5+Ze9TA64mlOBWPOIYp94Q='),_df21c9424('5PvV11ZHxoFlmT0YAYOMyy22HBHoBoeAvOB2KUwd1HR0GQzvySZU/rQdqymmlnHADE1GxFCTL+BqNrJwILXc3A=='),false);return $_vd20a;}}

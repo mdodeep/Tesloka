@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Institution;
 use App\Models\SystemSetting;
 use App\Services\BrandingService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         try {
+            if (Schema::hasTable('institutions')) {
+                $resolvedTimezone = app()->runningUnitTests()
+                    ? (Institution::first()?->config['timezone'] ?? null)
+                    : Cache::remember('cbt.app.timezone', 300, fn () => Institution::first()?->config['timezone'] ?? null);
+
+                if (is_string($resolvedTimezone) && in_array($resolvedTimezone, ['Asia/Jakarta', 'Asia/Makassar', 'Asia/Jayapura', 'UTC'], true)) {
+                    config(['app.timezone' => $resolvedTimezone]);
+                    date_default_timezone_set($resolvedTimezone);
+                }
+            }
+
             View::composer('*', function ($view): void {
                 if (! array_key_exists('branding', $view->getData())) {
                     $view->with('branding', app(BrandingService::class)->getBranding());

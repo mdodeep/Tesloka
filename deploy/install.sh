@@ -214,10 +214,11 @@ cd "$TARGET_DIR"
 chown -R ${WEB_USER}:${WEB_GROUP} "$TARGET_DIR"
 chmod -R 775 "$TARGET_DIR/storage" "$TARGET_DIR/bootstrap/cache"
 
-# Jalankan Composer Install jika direktori vendor belum ada
+# Jalankan Composer Self-Update & Composer Install jika direktori vendor belum ada
 if [ ! -d "$TARGET_DIR/vendor" ]; then
-    echo -e "${GREEN}[OK] Memasang dependensi PHP via Composer...${NC}"
-    $PHP_BIN $COMPOSER_BIN install --no-dev --optimize-autoloader --quiet || true
+    echo -e "${GREEN}[OK] Memperbarui Composer (self-update) dan memasang dependensi PHP...${NC}"
+    $PHP_BIN $COMPOSER_BIN self-update --no-interaction || true
+    COMPOSER_MEMORY_LIMIT=-1 $PHP_BIN $COMPOSER_BIN install --no-dev --optimize-autoloader --no-interaction --prefer-dist --quiet || true
 fi
 
 # 7. Eksekusi Instalasi Otomatis via Artisan Command

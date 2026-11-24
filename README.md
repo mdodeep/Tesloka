@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-353%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="353 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-2.610%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.610 Assertions">
+  <img src="https://img.shields.io/badge/Tests-356%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="356 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-2.650%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.650 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -239,18 +239,20 @@ Seluruh tampilan antarmuka dibangun di atas fondasi desain sistem modern Tailwin
 
 ## Matriks Sizing & Spesifikasi Server VPS
 
-TESLOKA dapat beroperasi mulai dari VPS 1 vCPU 2 GB RAM hingga server fisik multi-core 32 GB RAM. Sesuaikan tuning memori PostgreSQL, PHP-FPM, dan Redis agar respon tetap di bawah 100 ms:
+TESLOKA dapat beroperasi mulai dari VPS spek minimal `1 vCPU, 1 GB RAM` hingga server enterprise `8 vCPU, 32 GB RAM+`. Penjelasan anggaran RAM lengkap serta tutorial step-by-step setting aaPanel tersedia pada [deploy/OPTIMISASI-SERVER.md](deploy/OPTIMISASI-SERVER.md):
 
-| Tier & Spesifikasi Server | Kapasitas Peserta Serentak | Rekomendasi Swap | PHP `memory_limit` | PHP-FPM `pm.max_children` | PostgreSQL `shared_buffers` | Redis `maxmemory` | Worker Queue |
+| Profil & Spesifikasi Server | Kapasitas Peserta Serentak | Rekomendasi Swap | PHP `memory_limit` | PHP-FPM `pm.max_children` | PostgreSQL `shared_buffers` | Redis `maxmemory` | Worker Queue |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| **Tier 1: 1 vCPU, 2 GB RAM** | 30 – 50 siswa (1 Lab Kecil) | `2 GB` | `256M` | `12` | `256MB` | `256mb` | 1 worker |
-| **Tier 2: 2-4 vCPU, 4 GB RAM**| 50 – 150 siswa (Standar Sekolah) | `2 GB` | `256M` | `24` | `1GB` | `512mb` | 2 worker |
-| **Tier 3: 4 vCPU, 8 GB RAM** | 150 – 300 siswa (Multi-Lab Kampus) | `4 GB` | `512M` | `48` | `2GB` | `1024mb` (1 GB) | 4 worker |
-| **Tier 4: 4-8 vCPU, 16 GB RAM**<br>*(Baseline Produksi Resmi)*| **300 – 600 siswa (Enterprise Institusi)** | `4 GB` | `512M` | `64` | `4GB` | `2048mb` (2 GB) | 6 worker |
-| **Tier 5: 8-16 vCPU, 32 GB RAM**| 600 – 1.200+ siswa (Ujian Akbar) | `8 GB` | `1024M` | `128` | `8GB` | `4096mb` (4 GB) | 8 worker |
+| **Profil A: 1 vCPU, 1 GB RAM** | 15 – 25 siswa (Uji Coba Minimal) | `2 GB` | `128M` | `8` | `128MB` | `96mb` | 1 worker |
+| **Profil B: 1 vCPU, 2 GB RAM** | 30 – 60 siswa (1 Lab Kecil) | `2 GB` | `192M` | `14` | `256MB` | `192mb` | 1 worker |
+| **Profil C: 2 vCPU, 2 GB RAM** | 60 – 100 siswa (Kelas Paralel) | `2 GB` | `192M` | `16` | `256MB` | `192mb` | 1 worker |
+| **Profil D: 2 vCPU, 4 GB RAM**| 120 – 220 siswa (Standar Sekolah) | `2 GB` | `256M` | `30` | `768MB` | `384mb` | 2 worker |
+| **Profil E: 4 vCPU, 8 GB RAM** | 300 – 500 siswa (Multi-Lab Kampus) | `4 GB` | `256M` | `60` | `2GB` | `768mb` | 3 worker |
+| **Profil F: 4 vCPU, 16 GB RAM**<br>*(Baseline Produksi Resmi)*| **500 – 1.000 siswa (Enterprise Institusi)** | `4 GB` | `512M` | `90` | `4GB` | `2gb` | 4 worker |
+| **Profil G: 8 vCPU, 32 GB RAM+**| 1.500 – 2.500 siswa (Kampus / Wilayah) | `4 GB` | `512M` | `160` | `8GB` | `4gb` | 6 worker |
 
 > [!NOTE]
-> **Spesifikasi VPS Produksi Acuan Resmi:** 4 vCPU, 16 GB RAM, 100 GB SSD Enterprise RAID 10, Dedicated IPv4, Data Center Jakarta.
+> **Spesifikasi VPS Produksi Acuan Resmi:** 4 vCPU, 16 GB RAM, 100 GB SSD Enterprise RAID 10, Dedicated IPv4, Data Center Jakarta. Detail langkah optimasi per profil dapat dibaca di [deploy/OPTIMISASI-SERVER.md](deploy/OPTIMISASI-SERVER.md).
 
 ---
 
@@ -397,60 +399,31 @@ php artisan tesloka:install --non-interactive --db-name=tesloka --db-user=postgr
 
 ## Panduan Deployment Produksi (Linux Ubuntu / aaPanel)
 
-Panduan instalasi langkah-demi-langkah lengkap untuk server Linux Ubuntu dan panel aaPanel tersedia pada:
-[deploy/INSTALL-AAPANEL.md](deploy/INSTALL-AAPANEL.md)
+Panduan instalasi langkah-demi-langkah yang mudah dipahami untuk server Linux Ubuntu dan panel aaPanel tersedia pada:
+- **Panduan Pemasangan aaPanel (Web Bootstrapper `/install` Tanpa Error `vendor/`):** [deploy/INSTALL-AAPANEL.md](deploy/INSTALL-AAPANEL.md)
+- **Panduan Optimisasi Server Multi-Spesifikasi (1 vCPU 1 GB s.d. 8 vCPU 32 GB+):** [deploy/OPTIMISASI-SERVER.md](deploy/OPTIMISASI-SERVER.md)
 
-### Ringkasan Langkah Cepat Produksi:
+### Ringkasan Langkah Cepat Produksi (Metode Web Bootstrapper `/install`):
 1. **Persiapan OS Linux & Swap File 2–4 GB:**
    ```bash
    sudo apt update && sudo apt upgrade -y
-   sudo apt install -y curl wget git unzip htop build-essential supervisor
-   sudo fallocate -l 4G /swapfile && sudo chmod 600 /swapfile
+   sudo apt install -y curl wget git unzip htop build-essential
+   sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
    sudo mkswap /swapfile && sudo swapon /swapfile
    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
    sudo timedatectl set-timezone Asia/Jakarta
    ```
 2. **Pasang Paket Stack di App Store aaPanel:**
-   - Nginx (1.24 atau 1.26+)
-   - PHP (PHP 8.3 / 8.4 / 8.5) beserta ekstensi: `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `fileinfo`, `exif`, `gd`, `zip`, `bcmath`.
-   - PostgreSQL (v16 atau 17) & Redis (v7 atau 8).
-   - Node.js LTS v20.
-3. **Inisialisasi Proyek di `/www/wwwroot/cbt.institusi.ac.id`:**
-   ```bash
-   cd /www/wwwroot/cbt.institusi.ac.id
-   git clone https://github.com/mdodeep/Tesloka.git .
-   cp .env.example .env
-   # Edit .env dengan APP_ENV=production, kredensial DB PostgreSQL, & Redis
-   composer install --no-dev --optimize-autoloader
-   npm install && npm run build
-   php artisan key:generate --force
-   php artisan migrate --force
-   php artisan db:seed --class=ProductionCleanDatabaseSeeder --force
-   php artisan storage:link
-   chown -R www:www /www/wwwroot/cbt.institusi.ac.id
-   chmod -R 775 storage bootstrap/cache
-   php artisan optimize
-   ```
-4. **Konfigurasi Site Directory & URL Rewrite (PENTING ANTI-404):**
+   - Nginx (`1.24` atau `1.26+`), PHP (`8.3` / `8.4` / `8.5` dengan ekstensi `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `fileinfo`, `exif`, `gd`, `zip`, `bcmath`, `intl`), PostgreSQL (`16` / `17`), dan Redis (`7` / `8`).
+   - Pastikan fungsi `exec` dihapus dari daftar *Disable functions* PHP jika ingin pemasangan Composer langsung 1-klik dari browser `/install`.
+3. **Konfigurasi Site Directory & URL Rewrite (PENTING ANTI-404):**
+   - Unggah/clone kode proyek ke `/www/wwwroot/domainanda.sch.id` lalu atur izin pemilik: `chown -R www:www /www/wwwroot/domainanda.sch.id && chmod -R 775 storage bootstrap/cache`.
    - Tab **Site Directory**: Ubah **Running directory** dari `/` menjadi `/public` lalu simpan.
    - Tab **URL rewrite**: Pilih preset **laravel 5** (`try_files $uri $uri/ /index.php?$query_string;`) lalu simpan.
-5. **Supervisor Background Worker & Scheduler:**
-   - Buat file konfigurasi Supervisor di `/etc/supervisor/conf.d/tesloka-worker.conf`:
-     ```ini
-     [program:tesloka-worker]
-     process_name=%(program_name)s_%(process_num)02d
-     command=php /www/wwwroot/cbt.institusi.ac.id/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=120
-     autostart=true
-     autorestart=true
-     user=www
-     numprocs=4
-     redirect_stderr=true
-     stdout_logfile=/www/wwwroot/cbt.institusi.ac.id/storage/logs/worker.log
-     ```
-   - Tambahkan Cron tiap 1 menit untuk scheduler:
-     ```bash
-     * * * * * cd /www/wwwroot/cbt.institusi.ac.id && php artisan schedule:run >> /dev/null 2>&1
-     ```
+4. **Buka `https://domainanda.sch.id/install` di Browser:**
+   - **Zero-Vendor Web Bootstrapper** otomatis mendeteksi ketiadaan `vendor/`, memperbarui Composer (`self-update`), memasang dependensi vendor, membuat `.env` + `APP_KEY`, lalu otomatis membuka Wizard Pemasang 6 Langkah TESLOKA tanpa error fatal `vendor/autoload.php`.
+5. **Systemd Queue Worker & Cron Scheduler:**
+   - Lihat contoh siap pakai `systemd` (`tesloka-worker.service`) dan Cron 1-menit pada [deploy/INSTALL-AAPANEL.md](deploy/INSTALL-AAPANEL.md).
 
 ---
 

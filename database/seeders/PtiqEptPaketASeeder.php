@@ -69,7 +69,7 @@ class PtiqEptPaketASeeder extends Seeder
             'is_active' => true,
         ]);
 
-        $zipPath = base_path('Soal/PTIQ_EPT_Paket_A_Media_Bundle.zip');
+        $zipPath = base_path('Soal/Bahasa-Inggris/PTIQ_EPT_Paket_A_Media_Bundle.zip');
         if (file_exists($zipPath)) {
             $service = new QuestionImportService;
             $service->importZip($zipPath, $questionBank, $authorId);

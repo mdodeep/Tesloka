@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-357%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="357 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-2.674%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.674 Assertions">
+  <img src="https://img.shields.io/badge/Tests-361%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="361 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-2.991%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="2.991 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -194,19 +194,21 @@ Panduan operasional lengkap step-by-step telah didokumentasikan secara rinci pad
 
 ---
 
-## Integrasi Asesmen PTIQ English Proficiency Test (140 Butir)
+## Integrasi Asesmen PTIQ English & Arabic Proficiency Test (Masing-Masing 140 Butir + Audio)
 
-Aplikasi telah dilengkapi secara bawaan dengan paket asesmen berspesifikasi TOEFL ITP® Level 1 Style berkonteks studi keislaman Universitas PTIQ Jakarta pada direktori [`Soal/`](Soal/):
+Aplikasi telah dilengkapi dua paket asesmen terstandar berspesifikasi TOEFL ITP / TOAFL Style berkonteks studi keislaman Universitas PTIQ Jakarta yang dipisahkan rapi dalam direktori [`Soal/`](Soal/):
 
-- **Section 1: Listening Comprehension (50 Soal):** Terbagi menjadi Part A (30 percakapan pendek), Part B (2 percakapan panjang akademik), dan Part C (3 ceramah kuliah filologi Al-Qur'an).
-- **Section 2: Structure & Written Expression (40 Soal):** 15 butir Structure dan 25 butir Written Expression dengan format deteksi kesalahan kata bergaris bawah `(A)`, `(B)`, `(C)`, `(D)`.
-- **Section 3: Reading Comprehension (50 Soal):** 5 teks wacana akademik (Reading Manuscripts as Evidence, Qira'at Variation, Tafsir Scholarship, Coherence in Qur'anic Discourse, dan Digital Tools in Research).
+### A. Bahasa Inggris (`Soal/Bahasa-Inggris/` - PTIQ EPT Paket A, 140 Butir + 55 Audio)
+- **Section 1: Listening Comprehension (50 Soal + 55 MP3):** Part A (30 percakapan pendek), Part B (2 percakapan panjang), dan Part C (3 ceramah kuliah filologi Al-Qur'an).
+- **Section 2: Structure & Written Expression (40 Soal):** 15 butir Structure dan 25 butir Written Expression dengan deteksi kesalahan kata bergaris bawah `(A)` s.d. `(D)`.
+- **Section 3: Reading Comprehension (50 Soal):** 5 teks wacana akademik (Manuscripts, Qira'at, Tafsir, Discourse, Digital Research).
+- **Berkas Siap Impor:** [`PTIQ_EPT_Paket_A_Media_Bundle.zip`](Soal/Bahasa-Inggris/PTIQ_EPT_Paket_A_Media_Bundle.zip), [`PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx`](Soal/Bahasa-Inggris/PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx), per-seksi XLSX, `.aiken.txt`, `.gift.txt`, `.csv`, dan [`PANDUAN-DAN-KUNCI-JAWABAN.md`](Soal/Bahasa-Inggris/PANDUAN-DAN-KUNCI-JAWABAN.md).
 
-### Pilihan Format Impor Siap Pakai di Folder `Soal/`:
-1. **Master Excel (.xlsx):** [`Soal/PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx`](Soal/PTIQ_EPT_Paket_A_Lengkap_140_Soal.xlsx) (140 soal lengkap) dan berkas per-seksi.
-2. **Media Bundle Archive ZIP:** [`Soal/PTIQ_EPT_Paket_A_Media_Bundle.zip`](Soal/PTIQ_EPT_Paket_A_Media_Bundle.zip) memuat `manifest.json`, 10 wacana stimulus lengkap, opsi jawaban, dan kunci resmi.
-3. **Format Standar Internasional:** Format Aiken (`.aiken.txt`), Moodle GIFT (`.gift.txt`), dan CSV UTF-8 BOM.
-4. **Dokumentasi & Master Kunci Jawaban:** [`Soal/PANDUAN-DAN-KUNCI-JAWABAN.md`](Soal/PANDUAN-DAN-KUNCI-JAWABAN.md) (cetak biru tes, tabel kunci jawaban 1–140, dan transkrip audio lengkap).
+### B. Bahasa Arab (`Soal/Bahasa-Arab/` - PTIQ APT Paket A, 140 Butir + 55 Audio Neural RTL)
+- **Section 1: Istima' / فهم المسموع (50 Soal + 55 MP3 Neural Arab):** Part A (30 dialog pendek Arab fusha), Part B (2 dialog panjang), dan Part C (3 kuliah & pengumuman akademik).
+- **Section 2: Tarakib / التراكيب النحوية والتعبير الكتابي (40 Soal RTL):** 15 butir Ikmal al-Jumlah dan 25 butir Tahdid al-Khata (`<u>...</u> (A)-(D)`).
+- **Section 3: Qira'ah / فهم المقروء (50 Soal RTL):** 5 teks wacana akademik berbahasa Arab fusha lengkap dengan tombol RTL aktif (`is_rtl=true`).
+- **Berkas Siap Impor:** [`PTIQ_APT_Paket_A_Media_Bundle.zip`](Soal/Bahasa-Arab/PTIQ_APT_Paket_A_Media_Bundle.zip), [`PTIQ_APT_Paket_A_Lengkap_140_Soal.xlsx`](Soal/Bahasa-Arab/PTIQ_APT_Paket_A_Lengkap_140_Soal.xlsx), per-seksi XLSX (`Section_1_Istima`, `Section_2_Tarakib`, `Section_3_Qiraah`), `.aiken.txt`, `.gift.txt`, `.csv`, dan [`PANDUAN-DAN-KUNCI-JAWABAN.md`](Soal/Bahasa-Arab/PANDUAN-DAN-KUNCI-JAWABAN.md).
 
 ---
 
@@ -543,7 +545,7 @@ tesloka/
 │   ├── student.php           # Rute portal ujian peserta
 │   ├── api.php               # API endpoint transaksional (autosave, heartbeat)
 │   └── web.php               # Router domain & portal verifikasi sertifikat publik
-├── Soal/                     # Berkas asesmen siap upload PTIQ EPT 140 butir (XLSX, ZIP, Aiken, GIFT)
+├── Soal/                     # Berkas asesmen siap upload PTIQ EPT & APT Arab masing-masing 140 butir + audio (Bahasa-Inggris/ & Bahasa-Arab/)
 └── tests/                    # 49 Berkas pengujian fitur, keamanan & unit (PHPUnit)
 ```
 

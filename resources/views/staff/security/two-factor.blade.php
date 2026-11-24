@@ -36,7 +36,7 @@
                             @endif
                         </div>
                         <p class="text-xs text-default-500 mt-1 max-w-2xl leading-relaxed">
-                            Lapisan keamanan ekstra yang mengharuskan memasukkan kode numerik 6 digit dari aplikasi autentikator di ponsel cerdas Anda saat masuk ke portal staf CBT.
+                            Lapisan keamanan ekstra yang mengharuskan memasukkan kode numerik 6 digit dari aplikasi autentikator di ponsel cerdas Anda saat masuk ke portal staf.
                         </p>
                     </div>
                 </div>

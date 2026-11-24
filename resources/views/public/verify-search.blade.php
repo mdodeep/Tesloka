@@ -34,7 +34,7 @@
             <img src="{{ $logoUrl }}" alt="{{ $instName }}" class="h-9 max-w-[180px] object-contain">
             <div class="hidden sm:block">
                 <div class="text-xs font-bold text-default-800 uppercase tracking-tight">{{ $instName }}</div>
-                <div class="text-[10px] text-default-400">Verifikasi Resmi Dokumen & Sertifikat CBT</div>
+                <div class="text-[10px] text-default-400">Verifikasi Resmi Dokumen & Sertifikat</div>
             </div>
         </div>
         <div class="flex items-center gap-2">
@@ -55,7 +55,7 @@
                 <div class="size-16 rounded-2xl bg-primary/10 text-primary mx-auto flex items-center justify-center shadow-xs">
                     <i data-lucide="award" class="size-8"></i>
                 </div>
-                <h1 class="text-2xl font-black text-default-900 tracking-tight">Verifikasi Keaslian Sertifikat CBT</h1>
+                <h1 class="text-2xl font-black text-default-900 tracking-tight">Verifikasi Keaslian Sertifikat</h1>
                 <p class="text-xs text-default-500 max-w-md mx-auto leading-relaxed">
                     Periksa keabsahan sertifikat kelulusan, surat keterangan hasil ujian (SKHU), dan integritas data penilaian institusi tanpa perlu login ke sistem.
                 </p>
@@ -99,7 +99,7 @@
                     <span>Layanan Verifikasi Cepat &amp; Terisolasi Penuh</span>
                 </div>
                 <p class="text-[11px] text-emerald-700 leading-relaxed">
-                    Sistem verifikasi ini dilengkapi perlindungan cache Redis in-memory dan pembatasan laju request. Ratusan mahasiswa atau pihak ketiga yang melakukan pengecekan sertifikat secara bersamaan tidak akan mempengaruhi atau memperlambat sesi ujian CBT yang sedang aktif.
+                    Sistem verifikasi ini dilengkapi perlindungan cache Redis in-memory dan pembatasan laju request. Ratusan mahasiswa atau pihak ketiga yang melakukan pengecekan sertifikat secara bersamaan tidak akan mempengaruhi atau memperlambat sesi ujian yang sedang aktif.
                 </p>
             </div>
 

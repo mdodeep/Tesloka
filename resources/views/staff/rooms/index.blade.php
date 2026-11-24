@@ -20,7 +20,7 @@
         <x-cbt.stat-card 
             title="Total Ruang Ujian" 
             value="{{ number_format($rooms->total()) }}" 
-            subtitle="Laboratorium &amp; Ruang CBT" 
+            subtitle="Laboratorium &amp; Ruang Ujian" 
             icon="building" 
             color="primary" />
         <x-cbt.stat-card 

@@ -41,8 +41,8 @@
             color: #14213d;
             margin: 0;
             padding: 0;
-            font-size: 9pt;
-            line-height: 1.32;
+            font-size: 8pt;
+            line-height: 1.25;
         }
         .no-print {
             background: #ffffff;
@@ -106,92 +106,102 @@
         }
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 7mm;
+            grid-template-columns: repeat(2, 85.6mm);
+            justify-content: center;
+            column-gap: 8mm;
+            row-gap: 7mm;
         }
         .pdf-grid-table {
-            width: 100%;
+            width: 179.2mm;
+            margin: 0 auto;
             border-collapse: separate;
-            border-spacing: 5mm;
+            border-spacing: 4mm 5mm;
         }
         .pdf-grid-td {
-            width: 50%;
+            width: 85.6mm;
             vertical-align: top;
         }
+        /* Standar ukuran Kartu KTP / ISO IEC 7810 ID-1 (85.6mm x 54mm) */
         .card {
-            border: 1.5px dashed #334155;
-            border-radius: 8px;
-            padding: 10px 12px;
+            width: 85.6mm;
+            height: 54mm;
+            border: 1px dashed #334155;
+            border-radius: 3mm;
+            padding: 2.3mm 2.8mm;
             background: #ffffff;
             page-break-inside: avoid;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: {{ $isPdfMode ? '78mm' : '86mm' }};
+            overflow: hidden;
         }
         .header {
-            border-bottom: 1.5px solid #14213d;
-            padding-bottom: 6px;
-            margin-bottom: 7px;
+            border-bottom: 1px solid #14213d;
+            padding-bottom: 1.3mm;
+            margin-bottom: 1.5mm;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            gap: 2mm;
+            flex-shrink: 0;
         }
         .header-brand {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 1.8mm;
             min-width: 0;
         }
         .card-logo {
-            max-height: 26px;
-            max-width: 58px;
+            max-height: 4.8mm;
+            max-width: 14mm;
             width: auto;
             height: auto;
             object-fit: contain;
+            flex-shrink: 0;
         }
         .title {
-            font-size: 9.5pt;
+            font-size: 7.4pt;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             color: #14213d;
-            line-height: 1.2;
+            line-height: 1.15;
+            white-space: nowrap;
         }
         .subtitle {
-            font-size: 7.5pt;
+            font-size: 5.8pt;
             color: #64728b;
             text-transform: uppercase;
-            line-height: 1.2;
+            line-height: 1.15;
         }
         .year-badge {
             background: #14213d;
             color: #ffffff;
-            padding: 3px 7px;
-            border-radius: 4px;
-            font-size: 7.5pt;
+            padding: 1.5px 5.5px;
+            border-radius: 3px;
+            font-size: 6.4pt;
             font-weight: 700;
             white-space: nowrap;
             flex-shrink: 0;
         }
         .content-body {
             display: flex;
-            gap: 9px;
+            gap: 2.4mm;
             align-items: flex-start;
             flex: 1;
+            min-height: 0;
         }
         .photo-box {
-            width: 21mm;
-            height: 27mm;
+            width: 15mm;
+            height: 20mm;
             border: 1px solid #cbd5e1;
-            border-radius: 4px;
+            border-radius: 2.5px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #f8fafc;
             color: #94a3b8;
-            font-size: 7.5pt;
+            font-size: 5.8pt;
             overflow: hidden;
             flex-shrink: 0;
             text-align: center;
@@ -204,47 +214,53 @@
         .meta-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 8pt;
+            font-size: 6.1pt;
+            line-height: 1.2;
+            table-layout: fixed;
         }
         .meta-table td {
-            padding: 1.8px 0;
+            padding: 0.8px 0;
             vertical-align: top;
         }
         .meta-table td.label {
             color: #64728b;
-            width: 72px;
+            width: 14.5mm;
+            white-space: nowrap;
         }
         .meta-table td.colon {
-            width: 10px;
+            width: 2.2mm;
             text-align: center;
             color: #64728b;
         }
         .meta-table td.val {
             font-weight: 600;
             color: #14213d;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .footer-note {
-            font-size: 7.5pt;
+            font-size: 5.8pt;
             color: #64728b;
-            border-top: 1px dashed #cbd5e1;
-            padding-top: 6px;
-            margin-top: 6px;
+            border-top: 0.75px dashed #cbd5e1;
+            padding-top: 1.3mm;
+            margin-top: 1.2mm;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 8px;
+            gap: 2mm;
+            flex-shrink: 0;
         }
         .rules-note {
-            font-size: 7pt;
+            font-size: 5.8pt;
             color: #475569;
-            line-height: 1.35;
+            line-height: 1.25;
         }
         .qr-box {
-            width: 40px;
-            height: 40px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            padding: 2px;
+            width: 8.5mm;
+            height: 8.5mm;
+            border: 0.75px solid #cbd5e1;
+            border-radius: 2.5px;
+            padding: 1px;
             background: #ffffff;
             display: flex;
             align-items: center;
@@ -304,8 +320,10 @@
                 margin: 0 !important;
             }
             .grid-container {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 6mm !important;
+                grid-template-columns: repeat(2, 85.6mm) !important;
+                justify-content: center !important;
+                column-gap: 8mm !important;
+                row-gap: 7mm !important;
             }
             * {
                 -webkit-print-color-adjust: exact !important;
@@ -322,7 +340,7 @@
     @if(! $isPdfMode)
         <div class="no-print">
             <div>
-                <strong>Kartu Peserta Ujian Massal</strong> &bull; Kelas: {{ $class->name }} ({{ $class->department->name ?? 'Reguler' }}) &bull; Total: {{ $students->count() }} Peserta Didik
+                <strong>Kartu Peserta Ujian Massal (Ukuran Standar KTP / A4 Grid)</strong> &bull; Kelas: {{ $class->name }} ({{ $class->department->name ?? 'Reguler' }}) &bull; Total: {{ $students->count() }} Peserta Didik
             </div>
             <div class="no-print-actions" style="display: flex; gap: 8px;">
                 <button onclick="window.print()" class="btn-print">
@@ -340,7 +358,7 @@
 
     <div class="doc-viewport-container">
         @php
-            $studentChunks = $students->chunk(6);
+            $studentChunks = $students->chunk(8);
         @endphp
 
         @forelse($studentChunks as $chunk)
@@ -361,7 +379,7 @@
                                                 <table style="width: 100%; border-collapse: collapse;">
                                                     <tr>
                                                         <td style="vertical-align: middle;">
-                                                            <div class="title" style="font-size: 8.6pt; white-space: nowrap;">KARTU PESERTA UJIAN (CBT)</div>
+                                                            <div class="title">KARTU PESERTA UJIAN</div>
                                                             <div class="subtitle">{{ $instName }}</div>
                                                         </td>
                                                         <td style="text-align: right; vertical-align: middle;">
@@ -372,7 +390,7 @@
                                             </div>
                                             <table style="width: 100%; border-collapse: collapse;">
                                                 <tr>
-                                                    <td style="width: 23mm; vertical-align: top;">
+                                                    <td style="width: 17mm; vertical-align: top;">
                                                         <div class="photo-box">
                                                             @if($photoAbsPath && file_exists($photoAbsPath))
                                                                 <img src="{{ $photoAbsPath }}" alt="{{ $student->name }}">
@@ -383,25 +401,24 @@
                                                     </td>
                                                     <td style="vertical-align: top;">
                                                         <table class="meta-table">
-                                                            <tr><td class="label">Nama</td><td class="colon">:</td><td class="val">{{ Str::limit($student->name, 26) }}</td></tr>
+                                                            <tr><td class="label">Nama</td><td class="colon">:</td><td class="val">{{ $student->name }}</td></tr>
                                                             <tr><td class="label">NIM / NISN</td><td class="colon">:</td><td class="val" style="font-family: monospace;">{{ $cardIdent }}</td></tr>
                                                             <tr><td class="label">Kelas</td><td class="colon">:</td><td class="val">{{ $class->name }}</td></tr>
-                                                            <tr><td class="label">Jurusan</td><td class="colon">:</td><td class="val">{{ Str::limit($class->department->name ?? 'Reguler', 26) }}</td></tr>
-                                                            <tr><td class="label">Username</td><td class="colon">:</td><td class="val" style="font-family: monospace; color: #2e33ff;">{{ $student->username }}</td></tr>
+                                                            <tr><td class="label">Jurusan</td><td class="colon">:</td><td class="val">{{ $class->department->name ?? 'Reguler' }}</td></tr>
                                                             <tr><td class="label">Status</td><td class="colon">:</td><td class="val" style="color: #059669;">{{ ucfirst($student->status) }}</td></tr>
                                                         </table>
                                                     </td>
                                                 </tr>
                                             </table>
-                                            <table style="width: 100%; border-collapse: collapse; border-top: 1px dashed #cbd5e1; margin-top: 6px; padding-top: 5px;">
+                                            <table style="width: 100%; border-collapse: collapse; border-top: 0.75px dashed #cbd5e1; margin-top: 1.2mm; padding-top: 1.2mm;">
                                                 <tr>
                                                     <td style="vertical-align: middle;" class="rules-note">
-                                                        * Wajib dibawa saat pelaksanaan ujian.<br>
-                                                        * Portal peserta: {{ $studentHost }}
+                                                        Login: <strong style="font-family: monospace; color: #2e33ff;">{{ $student->username }}</strong><br>
+                                                        Portal: {{ $studentHost }}
                                                     </td>
-                                                    <td style="width: 44px; text-align: right; vertical-align: middle;">
+                                                    <td style="width: 10mm; text-align: right; vertical-align: middle;">
                                                         <div class="qr-box">
-                                                            <img src="{{ \App\Services\QrCodeService::dataUri($cardQrUrl, 36) }}" alt="QR">
+                                                            <img src="{{ \App\Services\QrCodeService::dataUri($cardQrUrl, 32) }}" alt="QR">
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -423,70 +440,63 @@
                                 $cardQrUrl = $scheme . '://' . $studentHost . '/ujian/login?u=' . urlencode($cardIdent);
                             @endphp
                             <div class="card">
-                                <div>
-                                    <div class="header">
-                                        <div class="header-brand">
-                                            <img src="{{ $logoUrl }}" alt="Logo" class="card-logo">
-                                            <div>
-                                                <div class="title" style="font-size: 8.6pt; white-space: nowrap;">KARTU PESERTA UJIAN (CBT)</div>
-                                                <div class="subtitle">{{ $instName }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="year-badge">
-                                            {{ $class->academicYear->name ?? date('Y') }}
+                                <div class="header">
+                                    <div class="header-brand">
+                                        <img src="{{ $logoUrl }}" alt="Logo" class="card-logo">
+                                        <div style="min-width: 0;">
+                                            <div class="title">KARTU PESERTA UJIAN</div>
+                                            <div class="subtitle">{{ $instName }}</div>
                                         </div>
                                     </div>
+                                    <div class="year-badge">
+                                        {{ $class->academicYear->name ?? date('Y') }}
+                                    </div>
+                                </div>
 
-                                    <div class="content-body">
-                                        <div class="photo-box">
-                                            @if($student->photo_path)
-                                                <img src="{{ '/storage/' . ltrim((string) $student->photo_path, '/') }}" alt="{{ $student->name }}">
-                                            @else
-                                                <span style="line-height: 1.25;">FOTO<br>3 x 4</span>
-                                            @endif
-                                        </div>
-                                        <table class="meta-table">
-                                            <tr>
-                                                <td class="label">Nama</td>
-                                                <td class="colon">:</td>
-                                                <td class="val">{{ Str::limit($student->name, 26) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="label">NIM / NISN</td>
-                                                <td class="colon">:</td>
-                                                <td class="val" style="font-family: monospace;">{{ $cardIdent }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="label">Kelas</td>
-                                                <td class="colon">:</td>
-                                                <td class="val">{{ $class->name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="label">Jurusan</td>
-                                                <td class="colon">:</td>
-                                                <td class="val">{{ Str::limit($class->department->name ?? 'Reguler', 26) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="label">Username</td>
-                                                <td class="colon">:</td>
-                                                <td class="val" style="font-family: monospace; color: #2e33ff;">{{ $student->username }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="label">Status</td>
-                                                <td class="colon">:</td>
-                                                <td class="val" style="color: #059669;">{{ ucfirst($student->status) }}</td>
-                                            </tr>
-                                        </table>
+                                <div class="content-body">
+                                    <div class="photo-box">
+                                        @if($student->photo_path)
+                                            <img src="{{ '/storage/' . ltrim((string) $student->photo_path, '/') }}" alt="{{ $student->name }}">
+                                        @else
+                                            <span style="line-height: 1.2;">FOTO<br>3 x 4</span>
+                                        @endif
                                     </div>
+                                    <table class="meta-table">
+                                        <tr>
+                                            <td class="label">Nama</td>
+                                            <td class="colon">:</td>
+                                            <td class="val">{{ $student->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">NIM / NISN</td>
+                                            <td class="colon">:</td>
+                                            <td class="val" style="font-family: monospace;">{{ $cardIdent }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Kelas</td>
+                                            <td class="colon">:</td>
+                                            <td class="val">{{ $class->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Jurusan</td>
+                                            <td class="colon">:</td>
+                                            <td class="val">{{ $class->department->name ?? 'Reguler' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Status</td>
+                                            <td class="colon">:</td>
+                                            <td class="val" style="color: #059669;">{{ ucfirst($student->status) }}</td>
+                                        </tr>
+                                    </table>
                                 </div>
 
                                 <div class="footer-note">
                                     <div class="rules-note">
-                                        * Wajib dibawa saat pelaksanaan ujian.<br>
-                                        * Login portal peserta: <strong>{{ $studentHost }}</strong>
+                                        <div>Login: <strong style="font-family: monospace; color: #2e33ff;">{{ $student->username }}</strong></div>
+                                        <div>Portal peserta: <strong>{{ $studentHost }}</strong></div>
                                     </div>
                                     <div class="qr-box" title="Scan QR Verifikasi &amp; Login: {{ $cardIdent }}">
-                                        {!! \App\Services\QrCodeService::svg($cardQrUrl, 36) !!}
+                                        {!! \App\Services\QrCodeService::svg($cardQrUrl, 32) !!}
                                     </div>
                                 </div>
                             </div>

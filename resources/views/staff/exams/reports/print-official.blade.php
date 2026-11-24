@@ -290,7 +290,7 @@
 <body>
     <div class="no-print">
         <div>
-            <strong>Laporan Resmi &amp; Rekapitulasi Hasil Ujian CBT</strong> &bull; Kode: {{ $exam->code }}
+            <strong>Laporan Resmi &amp; Rekapitulasi Hasil Ujian</strong> &bull; Kode: {{ $exam->code }}
         </div>
         <div class="no-print-actions" style="display: flex; gap: 8px;">
             <button onclick="window.print()" class="btn-print">Cetak Dokumen Resmi (A4)</button>
@@ -411,7 +411,7 @@
 
             <div class="signatures">
                 <div class="sig-box">
-                    <p style="margin: 0 0 4px;">Mengetahui,<br>{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian CBT' }}</p>
+                    <p style="margin: 0 0 4px;">Mengetahui,<br>{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian' }}</p>
                     <div class="sig-space">
                         @if($doc['secondary_signature_url'])
                             <img src="{{ $doc['secondary_signature_url'] }}" alt="TTD Ketua Panitia" class="sig-img">

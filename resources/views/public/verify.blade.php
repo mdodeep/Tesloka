@@ -34,7 +34,7 @@
             <img src="{{ $logoUrl }}" alt="{{ $instName }}" class="h-9 max-w-[180px] object-contain">
             <div class="hidden sm:block">
                 <div class="text-xs font-bold text-default-800 uppercase tracking-tight">{{ $instName }}</div>
-                <div class="text-[10px] text-default-400">Verifikasi Resmi Dokumen CBT</div>
+                <div class="text-[10px] text-default-400">Verifikasi Resmi Dokumen</div>
             </div>
         </div>
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-primary text-xs font-bold border border-blue-200">

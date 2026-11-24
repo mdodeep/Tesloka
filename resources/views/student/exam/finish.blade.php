@@ -11,7 +11,7 @@
         </div>
         <h1 class="text-xl sm:text-2xl font-bold text-default-900 tracking-tight">Ujian Berhasil Dikumpulkan</h1>
         <p class="text-xs sm:text-sm text-default-600 max-w-md mx-auto leading-relaxed">
-            Jawaban Anda telah tersimpan secara permanen dan sah di server {{ $branding['system_label'] ?? 'CBT' }}.
+            Jawaban Anda telah tersimpan secara permanen dan sah di server {{ $branding['system_label'] ?? 'Ujian' }}.
         </p>
     </div>
 
@@ -19,7 +19,7 @@
     <div class="card bg-white border border-default-200/90 rounded-xl shadow-2xs overflow-hidden print:border-none print:shadow-none">
         <div class="bg-secondary text-white p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-secondary-800">
             <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">Tanda Terima Resmi CBT</span>
+                <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">Tanda Terima Resmi Ujian</span>
                 <h2 class="text-base sm:text-lg font-bold tracking-tight text-white mt-0.5">BUKTI PENGUMPULAN UJIAN</h2>
             </div>
             <div class="bg-secondary-800/80 border border-secondary-700 px-3.5 py-2 rounded-lg text-left sm:text-right shadow-inner">
@@ -90,7 +90,7 @@
 
             <!-- Integrity Watermark & Notice -->
             <div class="text-[11px] text-default-400 border-t border-default-100 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-                <span>Bukti ini diterbitkan secara sah oleh mesin penguji {{ $branding['system_label'] ?? 'CBT' }}.</span>
+                <span>Bukti ini diterbitkan secara sah oleh mesin penguji {{ $branding['system_label'] ?? 'Ujian' }}.</span>
                 <span class="font-mono font-semibold">ID Percobaan: #{{ $attempt->id }}</span>
             </div>
         </div>

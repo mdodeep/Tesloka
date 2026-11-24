@@ -16,7 +16,7 @@
                     SFU WebRTC Live-Only &amp; Real-Time
                 </span>
                 <span class="px-2.5 py-0.5 bg-secondary-800 text-slate-300 text-xs rounded-md font-mono border border-secondary-700/80">
-                    {{ $session->room->name ?? 'Daring / Online CBT' }} (Kapasitas: {{ $session->room->capacity ?? count($participants) }})
+                    {{ $session->room->name ?? 'Daring / Online' }} (Kapasitas: {{ $session->room->capacity ?? count($participants) }})
                 </span>
                 <span class="px-2 py-0.5 bg-secondary-800 text-slate-400 text-xs rounded-md font-mono border border-secondary-700/80" id="live-sync-indicator">
                     Sinkronisasi: Aktif

@@ -320,7 +320,7 @@
         <div class="flex items-center justify-between pb-3 mb-4 border-b border-default-200">
             <div>
                 <h4 class="text-sm font-bold text-default-800">Buat Bank Soal Baru</h4>
-                <p class="text-xs text-default-500 mt-0.5">Susun bank soal berbasis mata pelajaran dan standar CBT.</p>
+                <p class="text-xs text-default-500 mt-0.5">Susun bank soal berbasis mata pelajaran dan standar evaluasi.</p>
             </div>
             <button type="button" onclick="document.getElementById('modal-create-bank').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>

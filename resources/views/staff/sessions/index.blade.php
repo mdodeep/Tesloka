@@ -128,10 +128,10 @@
                                         </x-cbt.badge>
                                     @else
                                         <x-cbt.badge color="primary">
-                                            <i data-lucide="building" class="size-3"></i> Lab CBT
+                                            <i data-lucide="building" class="size-3"></i> Ruang Lab
                                         </x-cbt.badge>
                                     @endif
-                                    <span>{{ $session->room->name ?? 'Daring (Online CBT)' }}</span>
+                                    <span>{{ $session->room->name ?? 'Daring (Online)' }}</span>
                                 </div>
                                 <div class="text-[11px] text-default-500 mt-0.5">
                                     @if($session->isOnline() || ! $session->exam_room_id)

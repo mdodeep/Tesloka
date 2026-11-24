@@ -144,7 +144,7 @@
 
     <!-- Petunjuk Teknis Pelaksanaan Ujian -->
     <div class="card bg-default-100/70 border border-default-200 rounded-xl p-5 text-xs text-default-600 space-y-2">
-        <div class="font-bold text-default-800 text-sm">{{ __('Tata Tertib & Ketentuan Ujian CBT:') }}</div>
+        <div class="font-bold text-default-800 text-sm">{{ __('Tata Tertib & Ketentuan Ujian:') }}</div>
         <ul class="list-disc list-inside space-y-1 text-default-600">
             <li>{{ __('Pastikan koneksi internet stabil selama pengerjaan ujian berlangsung.') }}</li>
             <li>{{ __('Jawaban Anda disimpan secara berkala dan otomatis ke server (Autosave).') }}</li>

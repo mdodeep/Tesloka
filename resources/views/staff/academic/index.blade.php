@@ -378,11 +378,6 @@
                                                 title="Kelola Peserta Didik (Daftarkan / Keluarkan Siswa)">
                                             <i data-lucide="user-plus" class="size-4"></i>
                                         </button>
-                                        <a href="{{ route('staff.academic.classes.print-cards', $c) }}" target="_blank"
-                                           class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 text-default-600 flex items-center justify-center transition cursor-pointer"
-                                           title="Cetak Kartu Ujian Massal Siswa Kelas Ini (A4)">
-                                            <i data-lucide="printer" class="size-4"></i>
-                                        </a>
                                         <button type="button" 
                                                 onclick="openEditClassModal('{{ $c->id }}', '{{ $c->academic_year_id }}', '{{ $c->department_id }}', '{{ addslashes($c->name) }}', '{{ $c->code }}', '{{ $c->capacity }}', {{ $c->is_active ? 'true' : 'false' }})"
                                                 class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-info/10 hover:text-info hover:border-info/30 text-default-600 flex items-center justify-center transition cursor-pointer"

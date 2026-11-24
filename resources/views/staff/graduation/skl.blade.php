@@ -27,7 +27,7 @@
 
         // Pejabat Kedua (Kiri)
         $signer2Name = \App\Models\SystemSetting::get('branding.cert_signer_secondary_name', 'Drs. H. M. Syatibi, M.Ag.');
-        $signer2Title = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji CBT');
+        $signer2Title = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji');
         $signer2Nip = \App\Models\SystemSetting::get('branding.cert_signer_secondary_nip', '19780512 200312 1 002');
         $signer2SigPath = \App\Models\SystemSetting::get('branding.cert_signer_secondary_signature');
         $signer2SigUrl = $signer2SigPath ? '/storage/' . ltrim((string) $signer2SigPath, '/') : null;

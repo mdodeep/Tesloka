@@ -324,7 +324,7 @@
 
             <div class="doc-title">
                 <h2>BERITA ACARA &amp; DAFTAR HADIR PELAKSANAAN UJIAN</h2>
-                <h3>COMPUTER BASED TEST (CBT) &bull; TAHUN AKADEMIK {{ $session->exam->academicYear->name ?? now()->format('Y') }}</h3>
+                <h3>TAHUN AKADEMIK {{ $session->exam->academicYear->name ?? now()->format('Y') }}</h3>
                 <p class="doc-number">Nomor: {{ $docNumber }}</p>
             </div>
 

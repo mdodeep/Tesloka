@@ -4,12 +4,12 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">
-    <div class="card bg-amber-50/70 border border-amber-200 rounded-xl p-5 text-xs text-amber-900 flex items-start gap-3 shadow-2xs">
+    <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-5 text-xs text-amber-900 flex flex-row items-start gap-3 shadow-2xs">
         <i data-lucide="alert-triangle" class="size-5 text-amber-600 shrink-0 mt-0.5"></i>
         <div>
             <div class="font-bold text-sm text-amber-950">Pelengkapan Data Wajib Peserta Ujian</div>
             <p class="mt-1">
-                Sesuai tata tertib CBT, Anda wajib melengkapi data profil pokok berikut sebelum diizinkan mengakses dan memulai sesi ujian.
+                Sesuai tata tertib ujian, Anda wajib melengkapi data profil pokok berikut sebelum diizinkan mengakses dan memulai sesi ujian.
             </p>
         </div>
     </div>

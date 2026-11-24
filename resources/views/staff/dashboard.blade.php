@@ -6,42 +6,38 @@
 @section('content')
 <div class="space-y-6 w-full">
     <!-- Hero Welcome Banner -->
-    <div class="relative overflow-hidden bg-secondary rounded-xl border border-secondary-800 p-6 sm:p-7 text-white shadow-2xs">
-        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div class="space-y-2.5 max-w-2xl">
-                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/10 border border-white/15 text-white/90 text-xs font-medium">
-                    <i data-lucide="shield-check" class="size-3.5 text-teal-400"></i>
-                    <span>Sistem Evaluasi Terpadu &bull; Produksi Standar</span>
+    <div class="relative overflow-hidden rounded-2xl border border-primary/20 p-5 sm:p-6 text-white shadow-sm" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-800) 100%);">
+        <div class="pointer-events-none absolute -top-16 -right-16 size-56 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 left-1/3 size-48 rounded-full bg-white/5 blur-2xl"></div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div class="space-y-2 max-w-2xl">
+                <div class="text-xs font-semibold text-white/85 tracking-wide flex flex-wrap items-center gap-2">
+                    <span>{{ $branding['institution_name'] }}</span>
+                    <span class="opacity-60">&bull;</span>
+                    <span>{{ now()->translatedFormat('l, d F Y') }}</span>
                 </div>
                 <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
                     Selamat Datang, {{ auth('staff')->user()->name }}
                 </h2>
-                <p class="text-xs sm:text-sm text-white/80 leading-relaxed">
-                    Pusat komando operasional {{ $branding['system_label'] }}. Kelola bank soal, jadwalkan sesi ruang, pantau integritas proctoring, dan verifikasi kelulusan terstandar.
+                <p class="text-xs sm:text-sm text-white/85 leading-relaxed">
+                    Kelola bank soal, jadwalkan sesi ruang, pantau pengawasan ujian, dan terbitkan hasil evaluasi institusi secara terpadu.
                 </p>
-                <div class="flex flex-wrap gap-2.5 pt-1">
-                    @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'proctor', 'exam_coordinator', 'academic_coordinator', 'academic_operator', 'technical_officer', 'helpdesk_officer', 'auditor']))
-                        <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-primary text-white hover:bg-primary-hover shadow-xs inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
-                            <i data-lucide="clock" class="size-4"></i>
-                            <span>Pantau Sesi Ujian</span>
-                        </a>
-                    @endif
-                    @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'exam_coordinator', 'academic_coordinator', 'approver']))
-                        <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold">
-                            <i data-lucide="file-question" class="size-4"></i>
-                            <span>Bank Soal &amp; Konten</span>
-                        </a>
-                    @endif
-                </div>
             </div>
 
-            <div class="hidden lg:flex flex-col items-center justify-center p-4 rounded-xl bg-white/5 border border-white/10 text-center min-w-[200px]">
-                <span class="text-xs text-default-300 font-semibold uppercase tracking-wider">Kapasitas Maks / Ruang</span>
-                <span class="text-3xl sm:text-4xl font-black text-white mt-1">30</span>
-                <span class="text-xs text-emerald-400 mt-1 font-bold flex items-center gap-1">
-                    <i data-lucide="users" class="size-3.5"></i>
-                    <span>Peserta Terjadwal</span>
-                </span>
+            <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+                @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'proctor', 'exam_coordinator', 'academic_coordinator', 'academic_operator', 'technical_officer', 'helpdesk_officer', 'auditor']))
+                    <a href="{{ route('staff.sessions.index') }}" class="btn btn-sm bg-white text-primary hover:bg-white/95 shadow-xs inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs font-bold transition">
+                        <i data-lucide="clock" class="size-4"></i>
+                        <span>Pantau Sesi Ujian</span>
+                    </a>
+                @endif
+                @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'exam_coordinator', 'academic_coordinator', 'approver']))
+                    <a href="{{ route('staff.question-banks.index') }}" class="btn btn-sm bg-white/15 hover:bg-white/25 text-white border border-white/25 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition">
+                        <i data-lucide="file-question" class="size-4"></i>
+                        <span>Bank Soal &amp; Konten</span>
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -115,7 +111,7 @@
                             <i data-lucide="bar-chart-3" class="size-5"></i>
                         </div>
                         <div>
-                            <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Grafik &amp; Analitik CBT</h4>
+                            <h4 class="text-sm font-bold text-default-800 group-hover:text-primary transition">Grafik &amp; Analitik</h4>
                             <p class="text-xs text-default-500">Distribusi skor &amp; psikometri</p>
                         </div>
                     </div>
@@ -127,7 +123,7 @@
 
     <!-- Visual Analytics: Grafik Sebaran Nilai & Rasio Kelulusan -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <x-cbt.card title="Distribusi Nilai Peserta CBT (Histogram Skor)" subtitle="Sebaran capaian nilai akhir seluruh peserta ujian">
+        <x-cbt.card title="Distribusi Nilai Peserta (Histogram Skor)" subtitle="Sebaran capaian nilai akhir seluruh peserta ujian">
             <div id="dashboardScoreChart" class="w-full min-h-[260px]"></div>
         </x-cbt.card>
 

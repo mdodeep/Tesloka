@@ -2,7 +2,7 @@
 
 @section('title', 'Manajemen Mode Pemeliharaan')
 @section('page-parent', 'Tata Kelola')
-@section('page-title', 'Kontrol Pemeliharaan Sistem CBT')
+@section('page-title', 'Kontrol Pemeliharaan Sistem')
 @section('page-subtitle', 'Aktivasi mode pemeliharaan dengan proteksi ujian aktif, token rahasia (bypass secret), dan audit terperinci.')
 
 @section('page-actions')
@@ -31,36 +31,38 @@
 
     <!-- Active Exams Safety Guard Notice -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="card bg-white rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
-            <div class="flex items-center gap-3">
+        <div class="bg-white rounded-xl border border-default-200/90 p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
                 <div class="size-11 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold shrink-0">
                     <i data-lucide="clock" class="size-5"></i>
                 </div>
-                <div>
+                <div class="min-w-0">
                     <div class="text-xs text-default-600 font-semibold tracking-normal">Pengerjaan Ujian Sedang Berlangsung</div>
                     <div class="text-xl font-bold {{ $activeAttemptsCount > 0 ? 'text-rose-600' : 'text-default-800' }} mt-0.5">
                         {{ $activeAttemptsCount }} Siswa
                     </div>
                 </div>
             </div>
-            @if($activeAttemptsCount > 0)
-                <x-cbt.badge color="danger">Perhatian Khusus</x-cbt.badge>
-            @else
-                <x-cbt.badge color="success">Aman</x-cbt.badge>
-            @endif
+            <div class="shrink-0 self-start sm:self-center">
+                @if($activeAttemptsCount > 0)
+                    <x-cbt.badge color="danger">Perhatian Khusus</x-cbt.badge>
+                @else
+                    <x-cbt.badge color="success">Aman</x-cbt.badge>
+                @endif
+            </div>
         </div>
 
-        <div class="card bg-white rounded-xl border border-default-200/90 p-4 shadow-2xs flex items-center justify-between">
-            <div class="flex items-center gap-3">
+        <div class="bg-white rounded-xl border border-default-200/90 p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
                 <div class="size-11 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center font-bold shrink-0">
                     <i data-lucide="calendar" class="size-5"></i>
                 </div>
-                <div>
+                <div class="min-w-0">
                     <div class="text-xs text-default-600 font-semibold tracking-normal">Sesi Ujian Aktif Saat Ini</div>
                     <div class="text-xl font-bold text-default-800 mt-0.5">{{ $activeSessionsCount }} Sesi</div>
                 </div>
             </div>
-            <div class="text-right text-xs text-default-400">
+            <div class="text-left sm:text-right text-xs text-default-500 shrink-0 self-start sm:self-center">
                 IP Anda: <code class="font-mono text-default-700 bg-default-100 px-2 py-0.5 rounded-md border border-default-200/60">{{ $clientIp }}</code>
             </div>
         </div>
@@ -118,7 +120,7 @@
                     <div class="p-4 rounded bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-3">
                         <i data-lucide="alert-triangle" class="size-5 shrink-0 text-rose-600 mt-0.5"></i>
                         <div>
-                            <strong class="font-bold">PERINGATAN PERLINDUNGAN CBT:</strong>
+                            <strong class="font-bold">PERINGATAN PERLINDUNGAN UJIAN:</strong>
                             <p class="mt-0.5">Saat ini terdapat {{ $activeAttemptsCount }} pengerjaan ujian siswa yang aktif. Mengaktifkan mode pemeliharaan dapat memutuskan sesi pengerjaan ujian siswa. Centang kotak persetujuan darurat di bawah jika ini adalah perbaikan kritis.</p>
                             <label class="mt-2.5 flex items-center gap-2 cursor-pointer font-semibold text-rose-900">
                                 <input type="checkbox" name="confirm_override" value="1" class="rounded border-rose-400 text-rose-600 focus:ring-rose-500">

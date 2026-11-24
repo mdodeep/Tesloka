@@ -312,7 +312,7 @@
                 </div>
             </div>
 
-            <div class="card-title">KARTU PESERTA UJIAN KOMPUTER (CBT)</div>
+            <div class="card-title">KARTU PESERTA UJIAN</div>
 
             <div class="main-content">
                 <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
@@ -368,7 +368,7 @@
                     </div>
                     <div>
                         <span style="color: #64728b; display: block; font-size: 8pt;">Ruang Ujian:</span>
-                        <strong>{{ $participant->session->room->name ?? 'Ruang Lab CBT' }}</strong>
+                        <strong>{{ $participant->session->room->name ?? 'Ruang Ujian' }}</strong>
                     </div>
                     <div>
                         <span style="color: #64728b; display: block; font-size: 8pt;">Waktu Mulai:</span>
@@ -404,7 +404,7 @@
 
                 <div class="sign-col">
                     <div>{{ ($doc['city'] !== '' ? $doc['city'] . ', ' : '') . now()->translatedFormat('d F Y') }}</div>
-                    <div>{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian CBT' }},</div>
+                    <div>{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian' }},</div>
                     <div class="sign-gap">
                         @if($doc['stamp_url'])
                             <img src="{{ $doc['stamp_url'] }}" alt="Cap Stempel" style="position: absolute; left: 8px; top: -6px; width: 64px; height: 64px; object-fit: contain; opacity: 0.85; pointer-events: none;">

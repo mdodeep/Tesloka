@@ -34,8 +34,8 @@
             'Atas keberhasilan menuntaskan seluruh rangkaian evaluasi terstandar pada mata pelajaran {{mata pelajaran}} dalam ujian "{{nama ujian}}" yang diselenggarakan oleh '.$instName.' dengan capaian:'
         );
 
-        $subjectName = $attempt->exam->subject->name ?? 'Evaluasi CBT';
-        $examTitle = $attempt->exam->title ?? 'Ujian CBT';
+        $subjectName = $attempt->exam->subject->name ?? 'Evaluasi Ujian';
+        $examTitle = $attempt->exam->title ?? 'Ujian';
         $studentName = $attempt->student->name ?? 'Peserta';
         $studentId = $attempt->student->identity_number ?? ($attempt->student->username ?? '-');
         $totalScoreFormatted = number_format($attempt->total_score ?? 0, 1);
@@ -114,7 +114,7 @@
 
         // Pejabat Kedua / Penguji (Kiri)
         $certSignerSecondaryName = \App\Models\SystemSetting::get('branding.cert_signer_secondary_name', 'Drs. H. M. Syatibi, M.Ag.');
-        $certSignerSecondaryTitle = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji CBT');
+        $certSignerSecondaryTitle = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji');
         $certSignerSecondaryNip = \App\Models\SystemSetting::get('branding.cert_signer_secondary_nip', '19780512 200312 1 002');
         $certSignerSecondarySigPath = \App\Models\SystemSetting::get('branding.cert_signer_secondary_signature');
         $certSignerSecondarySigUrl = $certSignerSecondarySigPath ? '/storage/' . ltrim((string) $certSignerSecondarySigPath, '/') : null;
@@ -821,7 +821,7 @@
         <div style="display: flex; align-items: center; gap: 12px;">
             <a href="{{ $backUrl }}" class="btn-back">&larr; {{ $backLabel }}</a>
             <div>
-                <strong style="color: #0f172a; font-size: 14px;">Sertifikat Kelulusan Resmi CBT</strong>
+                <strong style="color: #0f172a; font-size: 14px;">Sertifikat Kelulusan Resmi</strong>
                 <span style="display: block; font-size: 11px; color: #64748b;">
                     {{ $attempt->student->name }} &bull; {{ $attempt->exam->title }}
                     @if($certBgUrl) &bull; <span style="color: #059669; font-weight: 700;">Menggunakan Desain Blangko A4 Institusi</span> @else &bull; <span style="color: #2563eb; font-weight: 600;">Desain Vektor Resmi Terpadu</span> @endif

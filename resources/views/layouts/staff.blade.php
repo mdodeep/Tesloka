@@ -115,7 +115,7 @@
                         <!-- 4. PELAKSANAAN CBT -->
                         @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'proctor', 'exam_coordinator', 'academic_coordinator', 'academic_operator', 'technical_officer', 'helpdesk_officer', 'auditor']))
                             <li class="menu-title">
-                                <span>Pelaksanaan CBT</span>
+                                <span>Pelaksanaan Ujian</span>
                             </li>
                             @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'teacher', 'proctor', 'exam_coordinator', 'academic_coordinator', 'academic_operator', 'technical_officer', 'auditor']))
                                 <li class="menu-item">
@@ -586,7 +586,7 @@
                     <span><kbd class="font-mono bg-white border border-default-200 px-1 rounded shadow-xs">↵</kbd> Buka</span>
                     <span><kbd class="font-mono bg-white border border-default-200 px-1 rounded shadow-xs">ESC</kbd> Tutup</span>
                 </div>
-                <span class="text-[11px] hidden sm:inline">Pencarian Cepat CBT</span>
+                <span class="text-[11px] hidden sm:inline">Pencarian Cepat</span>
             </div>
         </div>
     </div>

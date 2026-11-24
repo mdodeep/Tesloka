@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Pusat Grafik & Laporan Analisis CBT')
+@section('title', 'Pusat Grafik & Laporan Analisis')
 @section('page-parent', 'Evaluasi & Hasil')
 @section('page-title', 'Grafik & Analitik')
 @section('page-subtitle', 'Visualisasi psikometri butir soal, distribusi statistik skor ujian, komparasi performa mata pelajaran, dan analisis kelulusan komprehensif.')
@@ -55,7 +55,7 @@
         </x-cbt.card>
 
         <!-- Chart 2: Donut Chart Rasio Kelulusan -->
-        <x-cbt.card title="Rasio Kelulusan Peserta CBT (Lulus vs Remedial)">
+        <x-cbt.card title="Rasio Kelulusan Peserta (Lulus vs Remedial)">
             <div id="chartPassFailOverview" class="w-full min-h-[270px] flex items-center justify-center"></div>
         </x-cbt.card>
 

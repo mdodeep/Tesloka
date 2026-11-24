@@ -3,7 +3,7 @@
 @section('title', 'Kelola Sesi : ' . $session->name)
 @section('page-parent', 'Pelaksanaan Ujian')
 @section('page-title', $session->name)
-@section('page-subtitle', 'Kode: ' . $session->session_code . ' • Ujian: ' . $session->exam->title . ' • ' . ($session->isOnline() ? 'Pelaksanaan: Daring (Online CBT)' : ('Ruang: ' . ($session->room->name ?? 'Lab CBT') . ' (Kapasitas: ' . ($session->room->capacity ?? 30) . ')')))
+@section('page-subtitle', 'Kode: ' . $session->session_code . ' • Ujian: ' . $session->exam->title . ' • ' . ($session->isOnline() ? 'Pelaksanaan: Daring (Online)' : ('Ruang: ' . ($session->room->name ?? 'Ruang Lab') . ' (Kapasitas: ' . ($session->room->capacity ?? 30) . ')')))
 
 @section('page-actions')
     <a href="{{ route('staff.sessions.edit', $session) }}" class="btn btn-sm bg-white hover:bg-amber-50 text-default-700 hover:text-amber-700 border border-default-200 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition" title="Ubah Jadwal &amp; Ruang Sesi">
@@ -172,13 +172,13 @@
                             <option value="Pengawas Ruang">Pengawas Ruang</option>
                             <option value="Pengawas Utama">Pengawas Utama</option>
                             <option value="Pengawas Pendamping">Pengawas Pendamping</option>
-                            <option value="Proktor CBT">Proktor CBT</option>
+                            <option value="Proktor Ujian">Proktor Ujian</option>
                             <option value="Teknisi IT">Teknisi IT</option>
                         </select>
                         <div class="mt-2 p-2.5 rounded-lg bg-default-50 border border-default-200 text-[11px] text-default-600 space-y-1 leading-relaxed">
                             <div><strong class="text-default-800">Pengawas Utama:</strong> Koordinator pengawas di ruang ujian dan penandatangan utama Berita Acara, Daftar Hadir, serta Rekapitulasi Pengawasan.</div>
                             <div><strong class="text-default-800">Pengawas Ruang / Pendamping:</strong> Pengawas operasional tata tertib &amp; pemantau layar peserta di ruangan (namanya tetap tercetak di Surat Tugas &amp; Pakta Integritas).</div>
-                            <div><strong class="text-default-800">Teknisi IT / Proktor CBT:</strong> Penanggung jawab perangkat jaringan lab dan penandatangan sisi teknis pada Rekapitulasi Pengawasan Ruang.</div>
+                            <div><strong class="text-default-800">Teknisi IT / Proktor Ujian:</strong> Penanggung jawab perangkat jaringan lab dan penandatangan sisi teknis pada Rekapitulasi Pengawasan Ruang.</div>
                         </div>
                     </div>
 
@@ -238,7 +238,7 @@
                         <span class="font-semibold text-default-700">
                             @if($isOnline)
                                 <span class="inline-flex items-center gap-1 text-teal-700 font-bold">
-                                    <i data-lucide="globe" class="size-3.5"></i> Sesi Pelaksanaan Daring (Online CBT)
+                                    <i data-lucide="globe" class="size-3.5"></i> Sesi Pelaksanaan Daring (Online)
                                 </span>
                             @else
                                 Kapasitas Ruang Terisi (Maksimal 30 Peserta per DEC-001):

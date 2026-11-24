@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-6 text-center space-y-1">
         <h1 class="text-xl font-bold text-default-900 tracking-tight">Login Portal Staf</h1>
-        <p class="text-xs text-default-500 leading-relaxed">Sistem Administrasi, Pengawasan, &amp; Evaluasi CBT</p>
+        <p class="text-xs text-default-500 leading-relaxed">Sistem Administrasi, Pengawasan, &amp; Evaluasi Ujian</p>
     </div>
 
     <form method="POST" action="{{ route('staff.login.post') }}" class="space-y-4">

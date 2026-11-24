@@ -513,7 +513,7 @@
                         <td style="text-align: center;">-</td>
                     </tr>
                     <tr style="background-color: #f1f5f9; font-weight: bold;">
-                        <td colspan="2" style="text-align: right; padding-right: 14px;">TOTAL NILAI AKHIR (SKOR CBT):</td>
+                        <td colspan="2" style="text-align: right; padding-right: 14px;">TOTAL NILAI AKHIR:</td>
                         <td style="text-align: center; font-size: 11.5pt; color: #2e33ff;">
                             {{ number_format($breakdown['total_score'], 1) }}
                         </td>

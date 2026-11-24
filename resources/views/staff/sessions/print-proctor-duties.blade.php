@@ -381,7 +381,7 @@
         <ol class="rules-list">
             <li>Hadir di ruang ujian selambat-lambatnya 30 menit sebelum sesi ujian dimulai.</li>
             <li>Memeriksa kebersihan ruang, konektivitas komputer klien, dan menempelkan nomor meja peserta.</li>
-            <li>Memeriksa Kartu Peserta Ujian dan mencocokkan identitas fisik peserta dengan data sistem CBT.</li>
+            <li>Memeriksa Kartu Peserta Ujian dan mencocokkan identitas fisik peserta dengan data sistem ujian.</li>
             <li>Membacakan tata tertib ujian dan merilis Token Ujian tepat pada waktu yang dijadwalkan.</li>
             <li>Memantau layar pengawasan proctoring secara aktif, merespons kendala teknis (reset sesi jika klien freeze), dan mencatat insiden.</li>
             <li>Mengisi dan menandatangani Berita Acara serta Daftar Hadir resmi setelah seluruh peserta mengumpulkan jawaban.</li>
@@ -393,7 +393,7 @@
                     <div>Ditetapkan di: {{ $doc['city'] }}</div>
                 @endif
                 <div>Pada tanggal: {{ ($session->start_time ?? now())->translatedFormat('d F Y') }}</div>
-                <div style="font-weight: 600; margin-top: 4px;">{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian CBT' }},</div>
+                <div style="font-weight: 600; margin-top: 4px;">{{ $doc['secondary_title'] ?: 'Ketua Panitia Ujian' }},</div>
                 <div class="sign-space">
                     @if($stampUrl)
                         <img src="{{ $stampUrl }}" alt="Stempel Resmi" class="stamp-mark">

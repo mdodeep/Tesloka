@@ -279,7 +279,7 @@
 
     <div class="no-print">
         <div>
-            <strong>Pakta Integritas Pengawas Ruang CBT</strong> &bull; Sesi: {{ $session->session_code }} ({{ $session->room->name ?? 'Ruang Ujian' }})
+            <strong>Pakta Integritas Pengawas Ruang Ujian</strong> &bull; Sesi: {{ $session->session_code }} ({{ $session->room->name ?? 'Ruang Ujian' }})
         </div>
         <div class="no-print-actions" style="display: flex; gap: 8px;">
             <button onclick="window.print()" class="btn-print">
@@ -324,7 +324,7 @@
                         </div>
 
                         <p style="text-align: justify; margin-bottom: 8px;">
-                            Yang bertanda tangan di bawah ini, saya selaku <strong>{{ $proctorRoleLabel }}</strong> Ujian Berbasis Komputer (Computer Based Test - CBT) pada:
+                            Yang bertanda tangan di bawah ini, saya selaku <strong>{{ $proctorRoleLabel }}</strong> Pelaksanaan Ujian pada:
                         </p>
 
                         <table class="meta-table">
@@ -361,7 +361,7 @@
                         </table>
 
                         <p style="text-align: justify; margin: 12px 0 6px;">
-                            Dengan ini menyatakan dengan penuh kesadaran dan tanggung jawab, bahwa selama menjalankan tugas pengawasan ujian CBT ini, saya berjanji:
+                            Dengan ini menyatakan dengan penuh kesadaran dan tanggung jawab, bahwa selama menjalankan tugas pengawasan ujian ini, saya berjanji:
                         </p>
 
                         <ol class="pledge-list">
@@ -371,7 +371,7 @@
                             <li><strong>Integritas dan Kejujuran:</strong> Tidak membantu, membisikkan, memberi petunjuk jawaban, atau memberi toleransi terhadap segala bentuk kecurangan peserta selama ujian berlangsung.</li>
                             <li><strong>Bebas Distraksi Gawai:</strong> Tidak mengoperasikan telepon genggam/ponsel pintar atau gawai pribadi untuk keperluan selain koordinasi operasional pengawasan darurat.</li>
                             <li><strong>Pencatatan Objektif:</strong> Mengisi Berita Acara Pelaksanaan, Daftar Hadir, dan Rekapitulasi Insiden Pengawasan secara faktual, jujur, dan akurat tanpa rekayasa.</li>
-                            <li><strong>Kepatuhan Regulasi:</strong> Mematuhi seluruh petunjuk teknis pelaksanaan CBT yang ditetapkan oleh institusi. Apabila saya melanggar pernyataan ini, saya bersedia menerima sanksi disiplin dan hukum sesuai peraturan perundang-undangan yang berlaku.</li>
+                            <li><strong>Kepatuhan Regulasi:</strong> Mematuhi seluruh petunjuk teknis pelaksanaan ujian yang ditetapkan oleh institusi. Apabila saya melanggar pernyataan ini, saya bersedia menerima sanksi disiplin dan hukum sesuai peraturan perundang-undangan yang berlaku.</li>
                         </ol>
                     </div>
 

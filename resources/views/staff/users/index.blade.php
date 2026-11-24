@@ -366,7 +366,7 @@
             </p>
 
             <div class="p-3 bg-rose-50 border border-rose-200 rounded text-rose-800 space-y-1">
-                <div class="font-semibold text-[11px] uppercase tracking-wider">Perlindungan Integritas CBT:</div>
+                <div class="font-semibold text-[11px] uppercase tracking-wider">Perlindungan Integritas Data:</div>
                 <p class="text-[11px] leading-relaxed">
                     Pengguna yang memiliki riwayat pengerjaan ujian, jawaban, atau kepemilikan bank soal akan secara otomatis <strong>dilewati (tidak dihapus)</strong> demi menjaga integritas data akademik.
                 </p>
@@ -844,13 +844,13 @@
                             <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Koordinator Akademik</td>
                             <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
                             <td class="px-3 py-2">Koordinasi kurikulum, jadwal akademik, delegasi, &amp; pantauan analitik hasil.</td>
-                            <td class="px-3 py-2">Konten &amp; Asesmen, Pelaksanaan CBT, Kelulusan/Analitik, Delegasi &amp; Approval.</td>
+                            <td class="px-3 py-2">Konten &amp; Asesmen, Pelaksanaan Ujian, Kelulusan/Analitik, Delegasi &amp; Approval.</td>
                         </tr>
                         <tr>
                             <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Koordinator Ujian</td>
                             <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
                             <td class="px-3 py-2">Menyusun jadwal ujian, validasi paket soal, dan alokasi ruang/sesi ujian.</td>
-                            <td class="px-3 py-2">Konten &amp; Asesmen, Pelaksanaan CBT, Evaluasi &amp; Kelulusan, Delegasi &amp; Approval.</td>
+                            <td class="px-3 py-2">Konten &amp; Asesmen, Pelaksanaan Ujian, Evaluasi &amp; Kelulusan, Delegasi &amp; Approval.</td>
                         </tr>
                         <tr>
                             <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Pengajar (Guru/Dosen)</td>
@@ -892,7 +892,7 @@
                             <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Auditor Sistem</td>
                             <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">Staff</span></td>
                             <td class="px-3 py-2">Meninjau log audit forensik, riwayat nilai, &amp; catatan integritas ujian.</td>
-                            <td class="px-3 py-2">Dashboard, Pelaksanaan CBT (read-only), Kelulusan, Analitik, Jejak Audit Sistem.</td>
+                            <td class="px-3 py-2">Dashboard, Pelaksanaan Ujian (read-only), Kelulusan, Analitik, Jejak Audit Sistem.</td>
                         </tr>
                         <tr>
                             <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Petugas Teknis / Lab</td>
@@ -909,7 +909,7 @@
                         <tr>
                             <td class="px-3 py-2 font-semibold text-default-900 whitespace-nowrap">Peserta Ujian (Student)</td>
                             <td class="px-3 py-2 whitespace-nowrap"><span class="px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 font-semibold border border-teal-200">Ujian</span></td>
-                            <td class="px-3 py-2">Mengerjakan ujian CBT, unduh kartu peserta, &amp; melihat transkrip/sertifikat lulus.</td>
+                            <td class="px-3 py-2">Mengerjakan ujian, unduh kartu peserta, &amp; melihat transkrip/sertifikat lulus.</td>
                             <td class="px-3 py-2">Portal Peserta Ujian (<code class="font-mono">ujian.tesloka.test</code>), tidak dapat mengakses Portal Staf.</td>
                         </tr>
                     </tbody>

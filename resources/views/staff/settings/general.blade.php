@@ -3,7 +3,7 @@
 @section('title', 'Pengaturan Sistem & Branding')
 @section('page-parent', 'Tata Kelola')
 @section('page-title', 'Pengaturan Sistem & Branding')
-@section('page-subtitle', 'Kelola profil institusi, identitas visual branding, template sertifikat kelulusan, dan preferensi engine CBT.')
+@section('page-subtitle', 'Kelola profil institusi, identitas visual branding, template sertifikat kelulusan, dan preferensi engine ujian.')
 
 @section('content')
 <div class="space-y-6 w-full">
@@ -145,7 +145,7 @@
                             <input type="color" id="primary_color_picker" value="{{ old('primary_color', $settings['primary_color']) }}" class="size-9 rounded border border-default-200 cursor-pointer p-0.5 bg-card" onchange="document.getElementById('primary_color').value = this.value; updateColorPreviews();">
                             <input type="text" id="primary_color" name="primary_color" value="{{ old('primary_color', $settings['primary_color']) }}" required class="form-input flex-1 font-mono uppercase" oninput="document.getElementById('primary_color_picker').value = this.value; updateColorPreviews();">
                         </div>
-                        <p class="text-xs text-default-500 mt-1">Warna tombol utama, aksen aktif, dan badge CBT (Standar: #2e33ff).</p>
+                        <p class="text-xs text-default-500 mt-1">Warna tombol utama, aksen aktif, dan badge (Standar: #2e33ff).</p>
                     </div>
 
                     <div class="space-y-1.5 min-w-0">
@@ -171,7 +171,7 @@
                         <div class="p-3 rounded-lg bg-card border border-default-200 flex flex-col justify-between">
                             <span class="text-[11px] font-semibold text-default-500 uppercase tracking-wider mb-2">Tombol Primer</span>
                             <button type="button" id="preview_primary_btn" class="w-full py-2 px-3 text-xs font-semibold text-white rounded-md shadow-xs transition" style="background-color: {{ old('primary_color', $settings['primary_color']) }};">
-                                Mulai Ujian CBT
+                                Mulai Ujian
                             </button>
                         </div>
                         <div class="p-3 rounded-lg bg-card border border-default-200 flex flex-col justify-between">
@@ -196,7 +196,7 @@
                             <span class="text-[11px] font-semibold text-default-500 uppercase tracking-wider mb-2">Item Aktif Sidebar</span>
                             <div id="preview_active_nav" class="flex items-center gap-2 p-2 rounded-md text-xs font-bold text-white shadow-xs" style="background-color: {{ old('primary_color', $settings['primary_color']) }};">
                                 <i data-lucide="layers" class="size-3.5"></i>
-                                <span>Bank Soal CBT</span>
+                                <span>Bank Soal</span>
                             </div>
                         </div>
                     </div>
@@ -361,7 +361,7 @@
                         <div class="space-y-0.5">
                             <h4 class="text-xs font-bold text-primary-950 uppercase tracking-wider flex items-center gap-1.5">
                                 <i data-lucide="award" class="size-4 text-primary"></i>
-                                <span>Template Vektor Dinamis Sertifikat CBT (A4 Landscape)</span>
+                                <span>Template Vektor Dinamis Sertifikat (A4 Landscape)</span>
                             </h4>
                             <p class="text-xs text-default-600">
                                 Sertifikat kelulusan dirancang presisi untuk format A4 Landscape (297 x 210 mm) dengan ornamen vektor lossless, segel emas 3D, watermark institusi, dan verifikasi QR terintegrasi.
@@ -637,7 +637,7 @@
 
                             <div class="space-y-1.5">
                                 <label for="cert_signer_secondary_title" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Jabatan Resmi</label>
-                                <input type="text" id="cert_signer_secondary_title" name="cert_signer_secondary_title" value="{{ old('cert_signer_secondary_title', $settings['cert_signer_secondary_title']) }}" class="form-input" placeholder="Ketua Tim Penguji CBT">
+                                <input type="text" id="cert_signer_secondary_title" name="cert_signer_secondary_title" value="{{ old('cert_signer_secondary_title', $settings['cert_signer_secondary_title']) }}" class="form-input" placeholder="Ketua Tim Penguji">
                             </div>
 
                             <div class="space-y-1.5">
@@ -1077,7 +1077,7 @@
                     <div class="space-y-1">
                         <div class="flex items-center gap-2 font-semibold text-xs text-default-800">
                             <i data-lucide="activity" class="size-4 text-cyan-500 shrink-0"></i>
-                            <span>Transien CBT &amp; Heartbeat</span>
+                            <span>Transien Sesi &amp; Heartbeat</span>
                         </div>
                         <p class="text-xs text-default-500 leading-normal">
                             Menyegarkan token rate-limit, gembok kueri autosave in-flight, serta cache status pengawasan peserta.
@@ -1087,7 +1087,7 @@
                         @csrf
                         <button type="submit" class="btn border border-default-200 bg-card text-default-700 hover:bg-default-100 shadow-xs h-9 px-3 text-xs font-semibold w-full justify-center inline-flex items-center gap-2 cursor-pointer transition rounded-md" style="height: 36px;">
                             <i data-lucide="refresh-cw" class="size-3.5 shrink-0"></i>
-                            <span>Segarkan Transien CBT</span>
+                            <span>Segarkan Transien Sesi</span>
                         </button>
                     </form>
                 </div>
@@ -1376,18 +1376,18 @@
                     <div class="space-y-1.5">
                         <div class="flex items-center gap-2 font-semibold text-xs text-default-800">
                             <i data-lucide="sliders" class="size-4 text-primary shrink-0"></i>
-                            <span>Reset Parameter Engine CBT</span>
+                            <span>Reset Parameter Engine Ujian</span>
                         </div>
                         <p class="text-xs text-default-500 leading-normal">
                             Mengembalikan interval autosave jawaban (5 detik), batas idle logout (30 menit), serta format tampilan tanggal dan jam ke standar bawaan.
                         </p>
                     </div>
-                    <form action="{{ route('staff.settings.reset') }}" method="POST" onsubmit="return confirm('Kembalikan parameter engine CBT & lokalisasi ke standar bawaan?')">
+                    <form action="{{ route('staff.settings.reset') }}" method="POST" onsubmit="return confirm('Kembalikan parameter engine ujian & lokalisasi ke standar bawaan?')">
                         @csrf
                         <input type="hidden" name="scope" value="cbt">
                         <button type="submit" class="btn border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 shadow-xs h-9 px-3 text-xs font-semibold w-full justify-center inline-flex items-center gap-2 cursor-pointer transition rounded-md" style="height: 36px;">
                             <i data-lucide="rotate-ccw" class="size-3.5 shrink-0"></i>
-                            <span>Reset Parameter CBT</span>
+                            <span>Reset Parameter Sistem</span>
                         </button>
                     </form>
                 </div>

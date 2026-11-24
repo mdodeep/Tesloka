@@ -390,6 +390,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::post('license/deactivate', [LicenseController::class, 'deactivate'])->name('license.deactivate');
             Route::match(['get', 'post'], 'license/check-update', [LicenseController::class, 'checkUpdate'])->name('license.check-update');
             Route::post('license/perform-update', [LicenseController::class, 'performUpdate'])->name('license.perform-update');
+            Route::post('license/manual-update', [LicenseController::class, 'performManualUpdate'])->name('license.manual-update');
         });
 
         // In-App Notification Center (FULL-FEATURE 40.7)

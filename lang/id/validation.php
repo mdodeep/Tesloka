@@ -194,6 +194,8 @@ return [
         'role_id' => 'peran',
         'role' => 'peran',
         'registration_code' => 'kode pendaftaran',
+        'update_package' => 'paket pembaruan ZIP',
+        'target_version' => 'versi target',
         'start_date' => 'tanggal mulai',
         'end_date' => 'tanggal selesai',
         'start_time' => 'waktu mulai',

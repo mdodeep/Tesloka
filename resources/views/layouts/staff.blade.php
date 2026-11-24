@@ -254,9 +254,11 @@
                                 <li class="menu-item">
                                     <a href="{{ route('staff.settings.license.index') }}" class="menu-link {{ request()->routeIs('staff.settings.license*') ? 'active !bg-primary !text-white' : '' }}">
                                         <span class="menu-icon"><i data-lucide="shield-check" class="size-4.5"></i></span>
-                                        <span class="menu-text">Lisensi &amp; Pembaruan</span>
+                                        <span class="menu-text truncate">Lisensi &amp; Pembaruan</span>
                                         @if(app(\App\Services\LicenseService::class)->isSupporter())
-                                            <span class="ms-auto inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">SUPPORTER</span>
+                                            <span class="ms-auto shrink-0 inline-flex items-center justify-center" title="Lisensi Supporter Aktif" aria-label="Lisensi Supporter Aktif">
+                                                <i data-lucide="star" class="size-3.5 text-amber-400 fill-amber-400"></i>
+                                            </span>
                                         @endif
                                     </a>
                                 </li>

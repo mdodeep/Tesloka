@@ -9,7 +9,7 @@ return [
     | URL endpoint server donasi dan pembaruan resmi TESLOKA CBT.
     |
     */
-    'server_url' => env('TESLOKA_DONATE_SERVER_URL', 'http://tesloka-donate.test'),
+    'server_url' => rtrim((string) env('TESLOKA_LICENSE_SERVER_URL', env('TESLOKA_DONATE_SERVER_URL', 'https://tesloka.web.id')), '/'),
 
     /*
     |--------------------------------------------------------------------------

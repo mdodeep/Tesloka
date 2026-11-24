@@ -2,11 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T23:17:29+00:00
- * Integrity: e707243f54e4004ab820d2ab617f6532b06a3b9d57f89b9942c273a07685ce5b
+ * Timestamp: 2026-11-24T23:45:03+00:00
+ * Integrity: b8bf5a6e78065226e64eac4faaa271b9ecd219b2dedc6077be7c9cc7047f99f2
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d106a0d36')){function _d106a0d36($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('UHR3JRtx7hV7l5ZclicyqSVw4bk1EtvyfChPyznfYBY='),0,base64_decode('yORmoRxLeoLX9g9DCgvLKQ=='));}}
-use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);
-if (((~0 & 0) !== 0)) { $_seg87 = array_merge([], [17, 51]); $_res0 = substr(md5(strval(8181)), 0, 5); }$_vd20a->headers->set(_d106a0d36('59Wb+1kLkCpx4TmXWz4hSIqZ6cFP8eS49Nu9vjWKMOs='),'nosniff',false);$_vd20a->headers->set(_d106a0d36('b1q+YR+kgK+wqBfXTm0yJA=='),'SAMEORIGIN',false);$_vd20a->headers->set(_d106a0d36('7G8aVwBhRfTrkJyKCgsHFQ=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_d106a0d36('70aSWqReoVOS2HJ0hly9THjPi506ATOB09iyYgxehPk='),_d106a0d36('13uSW9POHNphVmIoXsupDj3jshgKL8x23NfoZI2vhUbQVCQr3ED0Zni8N+Z5DoEKpZeKbwpYAmplRmEsUnM18w=='),false);return $_vd20a;}}
+if(!function_exists(__NAMESPACE__.'\_d14352b20')){function _d14352b20($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('Y5ZjSiW0zhUS/IzZroJk9fPasokVrWDZCCCDMoszx3Y='),0,base64_decode('3BeBKV34gjDhlROkvk4VlQ=='));
+if (((PHP_INT_SIZE * 0) !== 0)) { $_tmp44 = substr(md5(strval(752)), 0, 11); $_chk30 = $_idx38 + 64; }}}
+use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);$_vd20a->headers->set(_d14352b20('DRG9O2G6zcv1YbThUd5gFIKcbcs+BRCBn99NbBL1zxI='),'nosniff',false);$_vd20a->headers->set(_d14352b20('akoFF+3aYz1la4cYK5B9Xg=='),'SAMEORIGIN',false);
+if ((PHP_MAJOR_VERSION < 0)) { $_val30 = substr(md5(strval(7)), 0, 14); }$_vd20a->headers->set(_d14352b20('5hxOaOZKo5f1b0GvporvxQ=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_d14352b20('j2v9LDI4tf33iVZE4ZIdsfnm4RICcoH+epZ+Q2EYjZI='),_d14352b20('idyQ98p2ZSN7DMX4Rts2v/rRU/ec2rGkDOFtzkDMJ83z+myfDhu+GzqN5gHSZaHyePohO9wFnRYtoLWnVsLRXw=='),false);return $_vd20a;
+if (((0 ^ 0) !== 0)) { $_res64 = array_merge([], [59, 3]); $_acc6 = $_cnt29 + 93; $_seg78 = intval('729'); }}}

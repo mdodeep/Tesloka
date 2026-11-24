@@ -27,9 +27,18 @@
 
     <!-- Alert Notifikasi -->
     @if(session('success'))
-        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-medium flex items-center gap-3">
-            <i data-lucide="check-circle" class="size-5 text-emerald-600 shrink-0"></i>
-            <div>{{ session('success') }}</div>
+        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-medium space-y-2">
+            <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="size-5 text-emerald-600 shrink-0"></i>
+                <div>{{ session('success') }}</div>
+            </div>
+            @if(is_array(session('update_details')) && !empty(session('update_details')))
+                <ul class="list-disc list-inside text-[11px] text-emerald-700 ps-8 space-y-0.5">
+                    @foreach(session('update_details') as $detailLine)
+                        <li>{{ $detailLine }}</li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
     @endif
 
@@ -230,8 +239,84 @@
             <div class="flex items-center gap-3 p-4 rounded-xl bg-default-50 border border-default-100 text-xs text-default-600">
                 <i data-lucide="info" class="size-4.5 text-default-400 shrink-0"></i>
                 <div>
-                    Versi terpasang saat ini adalah <strong class="text-default-900 font-bold">v{{ $currentVersion }}</strong>. Klik tombol <strong>Periksa Pembaruan</strong> untuk memeriksa ketersediaan rilis resmi terbaru dari server TESLOKA.
+                    Versi terpasang saat ini adalah <strong class="text-default-900 font-bold">v{{ $currentVersion }}</strong>. Klik tombol <strong>Periksa Pembaruan</strong> untuk memeriksa ketersediaan rilis resmi terbaru dari server <code class="font-mono text-primary">{{ parse_url($donateServerUrl, PHP_URL_HOST) ?: 'tesloka.web.id' }}</code>.
                 </div>
+            </div>
+        @endif
+    </div>
+
+    <!-- 2B. PEMBARUAN MANUAL VIA UPLOAD PAKET ZIP -->
+    <div class="rounded-2xl border border-default-200 bg-white p-6 shadow-2xs space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-default-100 pb-4">
+            <div>
+                <h3 class="font-bold text-base text-default-900 flex items-center gap-2">
+                    <i data-lucide="file-archive" class="size-4.5 text-primary"></i>
+                    <span>Pembaruan Manual (Unggah Paket ZIP)</span>
+                </h3>
+                <p class="text-xs text-default-500 mt-0.5">
+                    Terapkan paket pembaruan aplikasi (<code class="font-mono">.zip</code>) langsung ke instalasi yang sudah berjalan tanpa menghapus database atau mengulang setup dari awal.
+                </p>
+            </div>
+            @if($license['is_activated'])
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+                    <i data-lucide="unlock" class="size-3.5"></i>
+                    Tersedia untuk Lisensi Aktif
+                </span>
+            @endif
+        </div>
+
+        @if($license['is_activated'])
+            <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-200 text-xs text-sky-900 flex items-start gap-2.5 leading-relaxed">
+                <i data-lucide="shield-check" class="size-4.5 text-sky-600 shrink-0 mt-0.5"></i>
+                <div>
+                    <strong class="block font-bold">Perlindungan Data &amp; Migrasi Skema Otomatis</strong>
+                    Konfigurasi <code>.env</code>, direktori <code>storage/</code> (termasuk foto, audio soal, kunci lisensi, dan backup), serta data basis data tetap aman terlindungi. Setelah ekstraksi selesai, sistem otomatis menjalankan penyesuaian struktur tabel (<code>migrate --force</code>), membersihkan cache, dan menyediakan <em>Auto-Rollback</em> bila terjadi kegagalan.
+                </div>
+            </div>
+
+            <form action="{{ route('staff.settings.license.manual-update') }}" method="POST" enctype="multipart/form-data" class="space-y-4 text-xs" onsubmit="return confirm('Terapkan paket pembaruan ZIP ini? Sistem akan membuat snapshot backup dan menyelaraskan skema database secara otomatis tanpa menghapus data.')">
+                @csrf
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2 space-y-1.5">
+                        <label for="manual_update_package" class="block font-semibold text-default-800 uppercase tracking-wider">
+                            Pilih Berkas Paket Pembaruan (.zip) <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" id="manual_update_package" name="update_package" accept=".zip,application/zip" required
+                            class="form-input w-full text-xs file:me-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer">
+                        @error('update_package')
+                            <p class="text-[11px] text-rose-600 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                        <p class="text-[11px] text-default-400">Maksimal 200 MB. Mendukung arsip ZIP langsung dari rilis resmi maupun repositori ZIP.</p>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label for="manual_target_version" class="block font-semibold text-default-800 uppercase tracking-wider">
+                            Versi Target (Opsional)
+                        </label>
+                        <input type="text" id="manual_target_version" name="target_version" value="{{ old('target_version') }}" placeholder="Contoh: 1.2.0"
+                            class="form-input font-mono w-full">
+                        @error('target_version')
+                            <p class="text-[11px] text-rose-600 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                        <p class="text-[11px] text-default-400">Kosongkan untuk deteksi otomatis dari berkas paket.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs inline-flex items-center gap-2 cursor-pointer">
+                        <i data-lucide="upload-cloud" class="size-4"></i>
+                        <span>Unggah &amp; Terapkan Pembaruan ZIP</span>
+                    </button>
+                </div>
+            </form>
+        @else
+            <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <strong class="block font-bold">Aktivasi Lisensi Diperlukan</strong>
+                    <span class="text-[11px] text-amber-800">Aktifkan Lisensi Komunitas (Gratis) atau Supporter License dari <code>{{ $donateServerUrl }}</code> terlebih dahulu untuk membuka fitur pembaruan manual via unggah berkas ZIP.</span>
+                </div>
+                <a href="{{ $donateServerUrl }}/register" target="_blank" class="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition shrink-0">
+                    Ambil Lisensi Resmi
+                </a>
             </div>
         @endif
     </div>

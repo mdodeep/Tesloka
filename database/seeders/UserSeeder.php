@@ -37,7 +37,8 @@ class UserSeeder extends Seeder
             $mustChangePassword = false;
         }
 
-        $defaultPassword = Hash::make('Tesloka2026!');
+        $rawDefaultPassword = 'Tesloka2026!';
+        $defaultPassword = Hash::make($rawDefaultPassword);
 
         $adminRole = Role::where('name', 'admin')->first();
         $teacherRole = Role::where('name', 'teacher')->first();
@@ -229,6 +230,7 @@ class UserSeeder extends Seeder
                 'postal_code' => '12240',
                 'status' => 'active',
                 'must_change_password' => false,
+                'metadata' => User::mergeExamCardPasswordMetadata(null, $rawDefaultPassword),
             ]
         );
         if ($studentRole && ! $student1->hasRole('student')) {
@@ -245,6 +247,7 @@ class UserSeeder extends Seeder
                 'identity_number' => 'NIM20260002',
                 'status' => 'active',
                 'must_change_password' => false,
+                'metadata' => User::mergeExamCardPasswordMetadata(null, $rawDefaultPassword),
             ]
         );
         if ($studentRole && ! $student2->hasRole('student')) {

@@ -20,6 +20,8 @@
         $showPassword = (bool) ($showPassword ?? false);
         $passwordFallback = (string) ($passwordFallback ?? 'Sesuai akun / Hubungi panitia');
         $tzAbbr = (string) ($tzAbbr ?? \App\Services\DocumentConfigService::timezoneAbbreviation());
+        $missingPasswordCount = (int) ($missingPasswordCount ?? $cardsSource->filter(fn ($p) => $p->student && $p->student->getExamCardPassword() === null)->unique('student_id')->count());
+        $canManagePasswords = auth('staff')->check() && auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'exam_coordinator', 'academic_operator']);
         $pdfParams = [
             'show_username' => $showUsername ? '1' : '0',
             'show_password' => $showPassword ? '1' : '0',
@@ -61,14 +63,75 @@
             padding: 12px 20px;
             border-bottom: 1px solid #cbd5e1;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
+            flex-direction: column;
+            gap: 8px;
             font-size: 13px;
             position: sticky;
             top: 0;
             z-index: 40;
+        }
+        .no-print-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .no-print-alert {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            font-weight: 600;
+        }
+        .no-print-hint {
+            padding: 7px 11px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .btn-generate {
+            background: #0f766e;
+            color: #ffffff;
+            border: none;
+            padding: 7px 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn-generate:hover {
+            background: #115e59;
+        }
+        .btn-reset-pass {
+            background: #ffffff;
+            color: #b45309;
+            border: 1px solid #f59e0b;
+            padding: 6px 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn-reset-pass:hover {
+            background: #fef3c7;
+        }
+        .cred-val {
+            margin-left: 3px;
+            font-family: monospace;
         }
         .toolbar-controls {
             display: flex;
@@ -375,28 +438,60 @@
 <body>
     @if(! $isPdfMode)
         <div class="no-print">
-            <div>
-                <strong>Pratinjau Cetak Kartu Ujian Sesi (Ukuran Standar KTP / A4 Grid)</strong> &bull; Sesi: {{ $session->session_code }} &bull; Total: {{ $cardsSource->count() }} Peserta
-            </div>
-            <div class="toolbar-controls">
-                <form method="GET" action="{{ route('staff.sessions.print-cards', $session) }}" class="toggle-form">
-                    <label class="toggle-label">
-                        <input type="hidden" name="show_username" value="0">
-                        <input type="checkbox" name="show_username" value="1" {{ $showUsername ? 'checked' : '' }} onchange="this.form.submit()">
-                        <span>Tampilkan Username</span>
-                    </label>
-                    <label class="toggle-label">
-                        <input type="hidden" name="show_password" value="0">
-                        <input type="checkbox" name="show_password" value="1" {{ $showPassword ? 'checked' : '' }} onchange="this.form.submit()">
-                        <span>Tampilkan Password</span>
-                    </label>
-                </form>
-                <div class="no-print-actions" style="display: flex; gap: 8px;">
-                    <button onclick="window.print()" class="btn-print">Cetak Kartu Ujian (A4)</button>
-                    <a href="{{ route('staff.sessions.pdf.cards', ['session' => $session] + $pdfParams) }}" class="btn-print" style="background: #14213d;">Unduh PDF Asli</a>
-                    <a href="{{ route('staff.sessions.show', $session) }}" class="btn-close">Kembali</a>
+            <div class="no-print-top">
+                <div>
+                    <strong>Pratinjau Cetak Kartu Ujian Sesi (Ukuran Standar KTP / A4 Grid)</strong> &bull; Sesi: {{ $session->session_code }} &bull; Total: {{ $cardsSource->count() }} Peserta
+                </div>
+                <div class="toolbar-controls">
+                    <form method="GET" action="{{ route('staff.sessions.print-cards', $session) }}" class="toggle-form">
+                        <label class="toggle-label">
+                            <input type="hidden" name="show_username" value="0">
+                            <input type="checkbox" name="show_username" value="1" {{ $showUsername ? 'checked' : '' }} onchange="this.form.submit()">
+                            <span>Tampilkan Username</span>
+                        </label>
+                        <label class="toggle-label">
+                            <input type="hidden" name="show_password" value="0">
+                            <input type="checkbox" name="show_password" value="1" {{ $showPassword ? 'checked' : '' }} onchange="this.form.submit()">
+                            <span>Tampilkan Password</span>
+                        </label>
+                    </form>
+                    <div class="no-print-actions" style="display: flex; gap: 8px;">
+                        <button onclick="window.print()" class="btn-print">Cetak Kartu Ujian (A4)</button>
+                        <a href="{{ route('staff.sessions.pdf.cards', ['session' => $session] + $pdfParams) }}" class="btn-print" style="background: #14213d;">Unduh PDF Asli</a>
+                        <a href="{{ route('staff.sessions.show', $session) }}" class="btn-close">Kembali</a>
+                    </div>
                 </div>
             </div>
+
+            @if(session('success'))
+                <div class="no-print-alert">{{ session('success') }}</div>
+            @endif
+
+            @if($canManagePasswords && $cardsSource->isNotEmpty())
+                <div class="no-print-hint">
+                    <span>
+                        @if($missingPasswordCount > 0)
+                            Terdapat <strong>{{ $missingPasswordCount }}</strong> peserta yang belum memiliki password kartu tercetak (misal akun lama atau tanpa email pribadi). Klik tombol di kanan untuk membuatkan password 8 karakter siap cetak.
+                        @else
+                            Seluruh peserta pada sesi ini sudah memiliki password terenkripsi siap cetak. Gunakan tombol di kanan hanya bila ingin mereset ulang seluruh password kartu.
+                        @endif
+                    </span>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        @if($missingPasswordCount > 0)
+                            <form method="POST" action="{{ route('staff.sessions.generate-card-passwords', $session) }}">
+                                @csrf
+                                <input type="hidden" name="mode" value="missing">
+                                <button type="submit" class="btn-generate">Generate Password Kosong ({{ $missingPasswordCount }})</button>
+                            </form>
+                        @endif
+                        <form method="POST" action="{{ route('staff.sessions.generate-card-passwords', $session) }}" onsubmit="return confirm('Reset dan generate ulang password acak baru untuk seluruh peserta pada sesi {{ $session->session_code }}?')">
+                            @csrf
+                            <input type="hidden" name="mode" value="all">
+                            <button type="submit" class="btn-reset-pass">Reset Semua Password Kartu</button>
+                        </form>
+                    </div>
+                </div>
+            @endif
         </div>
     @endif
 
@@ -470,13 +565,13 @@
                                                 <tr>
                                                     <td style="vertical-align: middle;" class="credentials-line">
                                                         @if($showUsername)
-                                                            <div>Username: <strong style="font-family: monospace; color: #2e33ff;">{{ $ptc->student->username }}</strong></div>
+                                                            <div>Username:<strong class="cred-val" style="color: #2e33ff;">{{ $ptc->student->username }}</strong></div>
                                                         @endif
                                                         @if($showPassword)
-                                                            <div>Password: <strong style="font-family: monospace; color: #14213d;">{{ $cardPasswordText }}</strong></div>
+                                                            <div>Password:<strong class="cred-val" style="color: #14213d;">{{ $cardPasswordText }}</strong></div>
                                                         @endif
                                                         @if(! $showUsername && ! $showPassword)
-                                                            <div>Portal: <strong>{{ $studentHost }}</strong></div>
+                                                            <div>Portal:<strong style="margin-left: 3px;">{{ $studentHost }}</strong></div>
                                                         @endif
                                                         <div style="color: #64728b;">Wajib Membawa Kartu Saat Ujian</div>
                                                     </td>
@@ -566,13 +661,13 @@
                                 <div class="footer">
                                     <div class="credentials-line">
                                         @if($showUsername)
-                                            <div>Username: <strong style="font-family: monospace; color: #2e33ff;">{{ $ptc->student->username }}</strong></div>
+                                            <div>Username:<strong class="cred-val" style="color: #2e33ff;">{{ $ptc->student->username }}</strong></div>
                                         @endif
                                         @if($showPassword)
-                                            <div>Password: <strong style="font-family: monospace; color: #14213d;">{{ $cardPasswordText }}</strong></div>
+                                            <div>Password:<strong class="cred-val" style="color: #14213d;">{{ $cardPasswordText }}</strong></div>
                                         @endif
                                         @if(! $showUsername && ! $showPassword)
-                                            <div>Portal: <strong>{{ $studentHost }}</strong></div>
+                                            <div>Portal:<strong style="margin-left: 3px;">{{ $studentHost }}</strong></div>
                                         @endif
                                         <div style="color: #64728b;">Wajib Membawa Kartu Saat Ujian</div>
                                     </div>

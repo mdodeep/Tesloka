@@ -9,6 +9,15 @@
         $institution = $session->exam->institution ?? \App\Models\Institution::first();
         $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
         $instName = $institution?->name ?: $branding['institution_name'];
+        $tzAbbr = \App\Services\DocumentConfigService::timezoneAbbreviation();
+        $cleanRoomName = ($session->isOnline() || ! $session->exam_room_id)
+            ? 'Daring (Online)'
+            : str_replace("\u{2014}", '-', (string) ($session->room->name ?? 'Ruang 01'));
+        $cleanSessionName = str_replace("\u{2014}", '-', (string) $session->name);
+        $deskDateText = $session->start_time?->translatedFormat('d M Y') ?? '-';
+        $deskTimeText = $session->start_time
+            ? ($session->start_time->format('H:i') . ($session->end_time ? ' - ' . $session->end_time->format('H:i') : '') . ' ' . $tzAbbr)
+            : '-';
     @endphp
     <style>
         @font-face {
@@ -297,14 +306,24 @@
                                         <td class="info-val">{{ $session->exam->subject->name ?? $session->exam->title }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="info-label">Ruang / Sesi</td>
+                                        <td class="info-label">Ruang</td>
                                         <td class="info-colon">:</td>
-                                        <td class="info-val">{{ $session->room->name ?? 'Ruang 01' }} / {{ $session->session_code }}</td>
+                                        <td class="info-val">{{ $cleanRoomName }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="info-label">Jadwal</td>
+                                        <td class="info-label">Sesi</td>
                                         <td class="info-colon">:</td>
-                                        <td class="info-val">{{ $session->start_time?->translatedFormat('d M Y, H:i') ?? '-' }} WIB</td>
+                                        <td class="info-val">{{ $cleanSessionName }} ({{ $session->session_code }})</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-label">Tanggal</td>
+                                        <td class="info-colon">:</td>
+                                        <td class="info-val">{{ $deskDateText }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-label">Waktu</td>
+                                        <td class="info-colon">:</td>
+                                        <td class="info-val">{{ $deskTimeText }}</td>
                                     </tr>
                                 </table>
                             </div>

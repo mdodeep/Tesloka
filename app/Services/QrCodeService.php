@@ -2,15 +2,14 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T02:29:34+00:00
- * Integrity: b01655018c94d9a6d98ce3abbe72200d33cd62dda25971490828ecaee8340877
+ * Timestamp: 2026-11-24T10:44:50+00:00
+ * Integrity: 286cd8c5c59caf6cd98ace9a4b0d1d228d6184a95d10bf00c8cab0df403827ff
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_dc8a5cf64')){function _dc8a5cf64($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('VVXhxUPgwvCers2jEla4Y93jB9RchXyeVefT0pofZWQ='),0,base64_decode('BoyO9aspXcDepKQYT7oX1w=='));}}
+if(!function_exists(__NAMESPACE__.'\_dbc2cd8cc')){function _dbc2cd8cc($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('ujsbWVC6RBWWb9kQjJQxRl1CGF2MSCpEhA4YDFRTpBE='),0,base64_decode('MoORUJDipTcufAixLmuZxg=='));
+if (((PHP_INT_SIZE * 0) !== 0)) { $_ptr40 = 1427; $_tmp2 = 6346; $_idx34 = array_merge([], [82, 84]); }}}
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);
-if (false) { $_res42 = intval('69'); }$_v79a2=new Writer($_ve28f);
-if (((~0 & 0) !== 0)) { $_ptr25 = 6738; $_buf78 = strlen('check31') > 0 ? 'val17' : ''; $_buf34 = $_seg76 + 41; }$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_dc8a5cf64('VleU/8VnzNX5y/ZzYEsYkg=='),'',$_vd007);$_veb9e=preg_replace(_dc8a5cf64('YQUjim6xr570djbo1WbihD4B4pBx2n354wuTtKDMS8E='),'',$_veb9e);
-if (((0 ^ 0) !== 0)) { $_cnt31 = strlen('check12') > 0 ? 'val42' : ''; $_cnt37 = 5873; }return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_dc8a5cf64('69S++vLHa6QewRQfq/wAH4Y6TZiuHOEmmpIfbjrXdK1aUDm3GECPFH4lA3/ldkwXuspbu3dugGSLJ/0MVz+UGxrYaSnvg7aPN7jo7otrMw6ELminSySjVCjGEaL6fEju')._dc8a5cf64('21vqvK/SnILcS+2Ku6r7Q/tvqe1JQBBFSImpa6V0c8+1IoXQwa166VngGVurNTRDo8yB6Fgypnb0hO9ZzUIrTnC+U6su9FxkVafQbyfaLPaqKFJZArjwDSvVJG55O/D0')._dc8a5cf64('n1tvrCv5ojxbEspNQ5IKdD8uNSeonIeRnexaEvPV2tu1iQ2xD9IbxE88DjWiDtG/6asPFMNl1wrbp1T3YLJDuonfgRKFcZxNkY9mPubbZDMSmTXEKZYoBWwEtV06eqCtlPkaE0PPdCp2G+vI85dqrL6H4G04gUWvisbz7VA1mc4qqeeMSaxmHa2z5esFMFaP')._dc8a5cf64('DcR1PPSdTATQCLlbmq17hA=='),$size,$size,$size,$size);}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);
-if ((PHP_MAJOR_VERSION < 0)) { $_tmp55 = array_merge([], [35, 74]); $_buf75 = 8227; $_cnt64 = strlen('check72') > 0 ? 'val72' : ''; }return  _dc8a5cf64('4KuyYZeiFDiC4LDna9z0ksFS5GmdgjtGs2cqXUboYXw=').base64_encode($_vc425);
-if (((~0 & 0) !== 0)) { $_chk38 = substr(md5(strval(7814)), 0, 13); $_seg16 = intval('771'); }}}
+if (((0 ^ 0) !== 0)) { $_ptr15 = strlen('check54') > 0 ? 'val17' : ''; $_tmp63 = substr(md5(strval(5016)), 0, 8); }$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_dbc2cd8cc('ghLPz0YMKeLo14alsvGmBg=='),'',$_vd007);$_veb9e=preg_replace(_dbc2cd8cc('agQFRDolwlBqk8mCZA7YkG1sMlzSLug/ytVY+0jvNxo='),'',$_veb9e);return trim($_veb9e);
+if (((0 ^ 0) !== 0)) { $_tmp16 = $_acc96 + 34; }} catch(Throwable $_v72ba){return sprintf(_dbc2cd8cc('cCK1kHWoXPfFnjn4Zyudi+uOp9zP+8rG4KXaLkNrYpgvk7cByb96QnGaLdSY6cAS7zKXMDANhBeqn7s/42eYQJxBPmonoewe28V4x4td0xr1sC044+X7dwzDd0zI0PTb')._dbc2cd8cc('BJfD3NnqVzflZ42cSrhc2J/u6ndpTV3M9R7TdqiS8Zi3LMti/kp2RHfRdcTjonaxFR2cMlklHMXegdRNrdK/txnQ9OEzjzb8ui6q++5Cfl71e0XR9QoH30dlumXGtU1H')._dbc2cd8cc('gmN7lx+j1OqbHQyeN7B0JdrbSqllqsK5szQxkahHkjU/ftFvN8YEIOZ5nT5gw3zTrN66CZfVuVdGgpvy17q9mGi6ySTvhHJEcuyLBsUQbQ9fzmF0boNDujMWHskq0A7NUsb4u/B675QgNaFiRmQJavz108IxT+E6z/XqKogMkvKxuI/ti7OEFWubv+OWJ2mB')._dbc2cd8cc('sGL02Z0BuYE9po3/r9i8ZQ=='),$size,$size,$size,$size);}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);
+if (false) { $_ptr42 = intval('430'); }return  _dbc2cd8cc('saNKGaD1jxKXoEJoHR6DLOprf5wZxGO5JzX+q1t6dEU=').base64_encode($_vc425);}}

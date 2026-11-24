@@ -15,6 +15,11 @@
         $showUsername = (bool) ($showUsername ?? true);
         $showPassword = (bool) ($showPassword ?? false);
         $passwordFallback = (string) ($passwordFallback ?? 'Sesuai akun / Hubungi panitia');
+        $missingPasswordCount = (int) ($missingPasswordCount ?? $students->filter(fn ($s) => $s->getExamCardPassword() === null)->count());
+        $rawYearName = trim((string) ($class->academicYear->name ?? date('Y')));
+        $academicYearLabel = \Illuminate\Support\Str::startsWith(mb_strtolower($rawYearName), 'tahun akademik')
+            ? $rawYearName
+            : ('Tahun Akademik ' . $rawYearName);
         $pdfParams = [
             'show_username' => $showUsername ? '1' : '0',
             'show_password' => $showPassword ? '1' : '0',
@@ -56,20 +61,47 @@
             padding: 12px 20px;
             border-bottom: 1px solid #cbd5e1;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
+            flex-direction: column;
+            gap: 8px;
             font-size: 13px;
             position: sticky;
             top: 0;
             z-index: 40;
         }
+        .no-print-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .no-print-alert {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            font-weight: 600;
+        }
+        .no-print-hint {
+            padding: 7px 11px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
         .toolbar-controls {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .toggle-form {
             display: inline-flex;
@@ -95,7 +127,7 @@
             background: #2e33ff;
             color: #ffffff;
             border: none;
-            padding: 8px 18px;
+            padding: 8px 16px;
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
@@ -103,11 +135,41 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 12.5px;
+            font-size: 12px;
             font-family: inherit;
         }
         .btn-print:hover {
             background: #1e24cc;
+        }
+        .btn-generate {
+            background: #0f766e;
+            color: #ffffff;
+            border: none;
+            padding: 7px 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn-generate:hover {
+            background: #115e59;
+        }
+        .btn-reset-pass {
+            background: #ffffff;
+            color: #b45309;
+            border: 1px solid #f59e0b;
+            padding: 6px 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn-reset-pass:hover {
+            background: #fef3c7;
         }
         .btn-close {
             background: #ffffff;
@@ -117,7 +179,7 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: 500;
-            font-size: 12.5px;
+            font-size: 12px;
         }
         .doc-viewport-container {
             box-sizing: border-box;
@@ -155,7 +217,7 @@
             width: 85.6mm;
             vertical-align: top;
         }
-        /* Standar ukuran Kartu KTP / ISO IEC 7810 ID-1 (85.6mm x 54mm) dengan jarak internal lega */
+        /* Standar ukuran Kartu KTP / ISO IEC 7810 ID-1 (85.6mm x 54mm) */
         .card {
             width: 85.6mm;
             min-height: 54mm;
@@ -175,14 +237,14 @@
             margin-bottom: 2mm;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 2.2mm;
             flex-shrink: 0;
         }
         .header-brand {
             display: flex;
             align-items: center;
-            gap: 2mm;
+            gap: 2.2mm;
             min-width: 0;
         }
         .card-logo {
@@ -194,10 +256,10 @@
             flex-shrink: 0;
         }
         .title {
-            font-size: 7.3pt;
+            font-size: 7.4pt;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.25px;
             color: #14213d;
             line-height: 1.15;
             white-space: nowrap;
@@ -207,16 +269,6 @@
             color: #64728b;
             text-transform: uppercase;
             line-height: 1.2;
-        }
-        .year-badge {
-            background: #14213d;
-            color: #ffffff;
-            padding: 1.5px 5.5px;
-            border-radius: 3px;
-            font-size: 6.4pt;
-            font-weight: 700;
-            white-space: nowrap;
-            flex-shrink: 0;
         }
         .content-body {
             display: flex;
@@ -253,7 +305,7 @@
             table-layout: fixed;
         }
         .meta-table td {
-            padding: 1.1px 0;
+            padding: 1.2px 0;
             vertical-align: top;
         }
         .meta-table td.label {
@@ -272,12 +324,22 @@
             overflow-wrap: break-word;
             word-break: break-word;
         }
+        .academic-year-bar {
+            font-size: 5.8pt;
+            font-weight: 700;
+            color: #334155;
+            letter-spacing: 0.15px;
+            margin-top: 1.4mm;
+            padding-top: 0.4mm;
+            text-align: right;
+            flex-shrink: 0;
+        }
         .footer-note {
             font-size: 5.7pt;
             color: #64728b;
             border-top: 0.75px dashed #cbd5e1;
-            padding-top: 1.6mm;
-            margin-top: 1.8mm;
+            padding-top: 1.5mm;
+            margin-top: 1mm;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -287,9 +349,13 @@
         .rules-note {
             font-size: 5.8pt;
             color: #334155;
-            line-height: 1.32;
+            line-height: 1.34;
             overflow-wrap: break-word;
             word-break: break-word;
+        }
+        .cred-val {
+            margin-left: 3px;
+            font-family: monospace;
         }
         .qr-box {
             width: 8.5mm;
@@ -315,6 +381,8 @@
         @media screen and (max-width: 820px) {
             .no-print {
                 padding: 10px 14px;
+            }
+            .no-print-top {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 8px;
@@ -349,10 +417,11 @@
                 overflow: visible !important;
             }
             .document-wrapper {
-                box-shadow: none !important;
-                padding: 0 !important;
                 width: 100% !important;
                 min-height: auto !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
                 margin: 0 !important;
             }
             .grid-container {
@@ -375,34 +444,66 @@
 
     @if(! $isPdfMode)
         <div class="no-print">
-            <div>
-                <strong>Kartu Peserta Rombel (Ujian Berkelanjutan / Multi-Sesi)</strong> &bull; Kelas: {{ $class->name }} ({{ $class->department->name ?? 'Reguler' }}) &bull; Total: {{ $students->count() }} Peserta Didik
-            </div>
-            <div class="toolbar-controls">
-                <form method="GET" action="{{ route('staff.academic.classes.print-cards', $class) }}" class="toggle-form">
-                    <label class="toggle-label">
-                        <input type="hidden" name="show_username" value="0">
-                        <input type="checkbox" name="show_username" value="1" {{ $showUsername ? 'checked' : '' }} onchange="this.form.submit()">
-                        <span>Tampilkan Username</span>
-                    </label>
-                    <label class="toggle-label">
-                        <input type="hidden" name="show_password" value="0">
-                        <input type="checkbox" name="show_password" value="1" {{ $showPassword ? 'checked' : '' }} onchange="this.form.submit()">
-                        <span>Tampilkan Password</span>
-                    </label>
-                </form>
-                <div class="no-print-actions" style="display: flex; gap: 8px;">
-                    <button onclick="window.print()" class="btn-print">
-                        <i data-lucide="printer" style="width: 15px; height: 15px;"></i>
-                        <span>Cetak Kartu (A4)</span>
-                    </button>
-                    <a href="{{ route('staff.academic.classes.pdf.cards', ['class' => $class] + $pdfParams) }}" class="btn-print" style="background: #14213d;">
-                        <i data-lucide="download" style="width: 15px; height: 15px;"></i>
-                        <span>Unduh PDF Asli</span>
-                    </a>
-                    <a href="{{ route('staff.academic.index') }}#classes" class="btn-close">Kembali</a>
+            <div class="no-print-top">
+                <div>
+                    <strong>Kartu Peserta Rombel (Ujian Berkelanjutan / Multi-Sesi)</strong> &bull; Kelas: {{ $class->name }} ({{ $class->department->name ?? 'Reguler' }}) &bull; Total: {{ $students->count() }} Peserta Didik
+                </div>
+                <div class="toolbar-controls">
+                    <form method="GET" action="{{ route('staff.academic.classes.print-cards', $class) }}" class="toggle-form">
+                        <label class="toggle-label">
+                            <input type="hidden" name="show_username" value="0">
+                            <input type="checkbox" name="show_username" value="1" {{ $showUsername ? 'checked' : '' }} onchange="this.form.submit()">
+                            <span>Tampilkan Username</span>
+                        </label>
+                        <label class="toggle-label">
+                            <input type="hidden" name="show_password" value="0">
+                            <input type="checkbox" name="show_password" value="1" {{ $showPassword ? 'checked' : '' }} onchange="this.form.submit()">
+                            <span>Tampilkan Password</span>
+                        </label>
+                    </form>
+                    <div class="no-print-actions" style="display: flex; gap: 8px;">
+                        <button onclick="window.print()" class="btn-print">
+                            <i data-lucide="printer" style="width: 15px; height: 15px;"></i>
+                            <span>Cetak Kartu (A4)</span>
+                        </button>
+                        <a href="{{ route('staff.academic.classes.pdf.cards', ['class' => $class] + $pdfParams) }}" class="btn-print" style="background: #14213d;">
+                            <i data-lucide="download" style="width: 15px; height: 15px;"></i>
+                            <span>Unduh PDF Asli</span>
+                        </a>
+                        <a href="{{ route('staff.academic.index') }}#classes" class="btn-close">Kembali</a>
+                    </div>
                 </div>
             </div>
+
+            @if(session('success'))
+                <div class="no-print-alert">{{ session('success') }}</div>
+            @endif
+
+            @if($students->isNotEmpty())
+                <div class="no-print-hint">
+                    <span>
+                        @if($missingPasswordCount > 0)
+                            Terdapat <strong>{{ $missingPasswordCount }}</strong> peserta yang belum memiliki password kartu tercetak (misal akun lama atau tanpa email pribadi). Klik tombol di kanan untuk membuatkan password 8 karakter siap cetak sekaligus memperbarui password login mereka.
+                        @else
+                            Seluruh <strong>{{ $students->count() }}</strong> peserta rombel sudah memiliki password terenkripsi siap cetak. Gunakan tombol di kanan hanya bila ingin mereset ulang seluruh password kartu.
+                        @endif
+                    </span>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        @if($missingPasswordCount > 0)
+                            <form method="POST" action="{{ route('staff.academic.classes.generate-card-passwords', $class) }}">
+                                @csrf
+                                <input type="hidden" name="mode" value="missing">
+                                <button type="submit" class="btn-generate">Generate Password Kosong ({{ $missingPasswordCount }})</button>
+                            </form>
+                        @endif
+                        <form method="POST" action="{{ route('staff.academic.classes.generate-card-passwords', $class) }}" onsubmit="return confirm('Reset dan generate ulang password acak baru untuk seluruh {{ $students->count() }} peserta pada rombel {{ $class->name }}?')">
+                            @csrf
+                            <input type="hidden" name="mode" value="all">
+                            <button type="submit" class="btn-reset-pass">Reset Semua Password Kartu</button>
+                        </form>
+                    </div>
+                </div>
+            @endif
         </div>
     @endif
 
@@ -427,17 +528,8 @@
                                     <td class="pdf-grid-td">
                                         <div class="card">
                                             <div class="header">
-                                                <table style="width: 100%; border-collapse: collapse;">
-                                                    <tr>
-                                                        <td style="vertical-align: middle;">
-                                                            <div class="title">KARTU PESERTA UJIAN</div>
-                                                            <div class="subtitle">{{ $instName }}</div>
-                                                        </td>
-                                                        <td style="text-align: right; vertical-align: middle;">
-                                                            <span class="year-badge">{{ $class->academicYear->name ?? date('Y') }}</span>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                                <div class="title">KARTU PESERTA UJIAN</div>
+                                                <div class="subtitle">{{ $instName }}</div>
                                             </div>
                                             <table style="width: 100%; border-collapse: collapse;">
                                                 <tr>
@@ -456,23 +548,22 @@
                                                             <tr><td class="label">NIM / NISN</td><td class="colon">:</td><td class="val" style="font-family: monospace;">{{ $cardIdent }}</td></tr>
                                                             <tr><td class="label">Kelas</td><td class="colon">:</td><td class="val">{{ $class->name }}</td></tr>
                                                             <tr><td class="label">Jurusan</td><td class="colon">:</td><td class="val">{{ $class->department->name ?? 'Reguler' }}</td></tr>
-                                                            <tr><td class="label">Berlaku</td><td class="colon">:</td><td class="val">Periode {{ $class->academicYear->name ?? date('Y') }}</td></tr>
-                                                            <tr><td class="label">Status</td><td class="colon">:</td><td class="val" style="color: #059669;">{{ ucfirst($student->status) }}</td></tr>
                                                         </table>
                                                     </td>
                                                 </tr>
                                             </table>
-                                            <table style="width: 100%; border-collapse: collapse; border-top: 0.75px dashed #cbd5e1; margin-top: 1.6mm; padding-top: 1.5mm;">
+                                            <div class="academic-year-bar">{{ $academicYearLabel }}</div>
+                                            <table style="width: 100%; border-collapse: collapse; border-top: 0.75px dashed #cbd5e1; margin-top: 1mm; padding-top: 1.5mm;">
                                                 <tr>
                                                     <td style="vertical-align: middle;" class="rules-note">
                                                         @if($showUsername)
-                                                            <div>Username: <strong style="font-family: monospace; color: #2e33ff;">{{ $student->username }}</strong></div>
+                                                            <div>Username:<strong class="cred-val" style="color: #2e33ff;">{{ $student->username }}</strong></div>
                                                         @endif
                                                         @if($showPassword)
-                                                            <div>Password: <strong style="font-family: monospace; color: #14213d;">{{ $cardPasswordText }}</strong></div>
+                                                            <div>Password:<strong class="cred-val" style="color: #14213d;">{{ $cardPasswordText }}</strong></div>
                                                         @endif
                                                         @if(! $showUsername && ! $showPassword)
-                                                            <div>Portal: <strong>{{ $studentHost }}</strong></div>
+                                                            <div>Portal:<strong style="margin-left: 3px;">{{ $studentHost }}</strong></div>
                                                         @endif
                                                         <div style="color: #64728b;">Portal peserta: {{ $studentHost }}</div>
                                                     </td>
@@ -509,9 +600,6 @@
                                             <div class="subtitle">{{ $instName }}</div>
                                         </div>
                                     </div>
-                                    <div class="year-badge">
-                                        {{ $class->academicYear->name ?? date('Y') }}
-                                    </div>
                                 </div>
 
                                 <div class="content-body">
@@ -543,29 +631,21 @@
                                             <td class="colon">:</td>
                                             <td class="val">{{ $class->department->name ?? 'Reguler' }}</td>
                                         </tr>
-                                        <tr>
-                                            <td class="label">Berlaku</td>
-                                            <td class="colon">:</td>
-                                            <td class="val">Periode {{ $class->academicYear->name ?? date('Y') }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="label">Status</td>
-                                            <td class="colon">:</td>
-                                            <td class="val" style="color: #059669;">{{ ucfirst($student->status) }}</td>
-                                        </tr>
                                     </table>
                                 </div>
+
+                                <div class="academic-year-bar">{{ $academicYearLabel }}</div>
 
                                 <div class="footer-note">
                                     <div class="rules-note">
                                         @if($showUsername)
-                                            <div>Username: <strong style="font-family: monospace; color: #2e33ff;">{{ $student->username }}</strong></div>
+                                            <div>Username:<strong class="cred-val" style="color: #2e33ff;">{{ $student->username }}</strong></div>
                                         @endif
                                         @if($showPassword)
-                                            <div>Password: <strong style="font-family: monospace; color: #14213d;">{{ $cardPasswordText }}</strong></div>
+                                            <div>Password:<strong class="cred-val" style="color: #14213d;">{{ $cardPasswordText }}</strong></div>
                                         @endif
                                         @if(! $showUsername && ! $showPassword)
-                                            <div>Portal: <strong>{{ $studentHost }}</strong></div>
+                                            <div>Portal:<strong style="margin-left: 3px;">{{ $studentHost }}</strong></div>
                                         @endif
                                         <div style="color: #64728b;">Portal peserta: <strong>{{ $studentHost }}</strong></div>
                                     </div>

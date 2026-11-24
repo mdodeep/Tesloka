@@ -47,7 +47,8 @@ class RealisticExamSimulationSeeder extends Seeder
             return;
         }
 
-        $password = Hash::make('Tesloka2026!');
+        $rawPassword = 'Tesloka2026!';
+        $password = Hash::make($rawPassword);
         $studentRole = Role::where('name', 'student')->first();
         $adminUser = User::where('username', 'admin')->first() ?? User::first();
         $teacher = User::where('username', 'ahmad_guru')->first() ?? $adminUser;
@@ -114,6 +115,7 @@ class RealisticExamSimulationSeeder extends Seeder
                     'postal_code' => '12240',
                     'status' => 'active',
                     'must_change_password' => false,
+                    'metadata' => User::mergeExamCardPasswordMetadata(null, $rawPassword),
                 ]
             );
 

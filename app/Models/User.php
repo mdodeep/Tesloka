@@ -370,6 +370,23 @@ class User extends Authenticatable
     }
 
     /**
+     * Menghasilkan password awal/ujian 8 karakter yang mudah dibaca saat dicetak di kartu
+     * (menghindari karakter rancu seperti 0/O, 1/I/l).
+     */
+    public static function generateReadableExamPassword(int $length = 8): string
+    {
+        $alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        $maxIndex = strlen($alphabet) - 1;
+        $result = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $result .= $alphabet[random_int(0, $maxIndex)];
+        }
+
+        return $result;
+    }
+
+    /**
      * Menghasilkan array metadata dengan password kartu ujian terenkripsi (AES-256 Laravel Crypt).
      * Mengirim null akan menghapus password awal kartu apabila peserta mengganti password pribadinya.
      *

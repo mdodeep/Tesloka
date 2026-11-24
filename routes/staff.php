@@ -87,6 +87,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::post('classes/{class}/students', [AcademicStructureController::class, 'enrollStudent'])->name('classes.students.enroll');
             Route::delete('classes/{class}/students/{student}', [AcademicStructureController::class, 'unenrollStudent'])->name('classes.students.unenroll');
             Route::get('classes/{class}/print-cards', [AcademicStructureController::class, 'printClassCards'])->name('classes.print-cards');
+            Route::post('classes/{class}/generate-card-passwords', [AcademicStructureController::class, 'generateClassCardPasswords'])->name('classes.generate-card-passwords');
             Route::get('classes/{class}/pdf/cards', [AcademicStructureController::class, 'downloadClassCardsPdf'])->name('classes.pdf.cards');
 
             // Mata Pelajaran / Kuliah
@@ -246,6 +247,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::delete('participants/{participant}', [ExamSessionController::class, 'removeParticipant'])->name('participants.destroy');
             Route::patch('{session}/status', [ExamSessionController::class, 'updateStatus'])->name('update-status');
             Route::get('{session}/print-cards', [ExamSessionController::class, 'printCards'])->name('print-cards');
+            Route::post('{session}/generate-card-passwords', [ExamSessionController::class, 'generateSessionCardPasswords'])->name('generate-card-passwords');
             Route::get('{session}/print-attendance', [ExamSessionController::class, 'printAttendance'])->name('print-attendance');
             Route::get('{session}/print-minutes', [ExamSessionController::class, 'printMinutes'])->name('print-minutes');
             Route::get('{session}/print-desk-labels', [ExamSessionController::class, 'printDeskLabels'])->name('print-desk-labels');

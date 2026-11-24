@@ -41,5 +41,14 @@
         <button type="submit" class="btn btn-primary w-full py-2.5 rounded-lg shadow-xs font-bold text-sm tracking-wide transition-all">
             Masuk ke Portal Staf
         </button>
+
+        @if(\App\Models\SystemSetting::get('cbt.allow_staff_self_registration', false))
+            <div class="text-center pt-2 border-t border-default-100 mt-3">
+                <span class="text-xs text-default-500">Belum punya akun dosen/staf?</span>
+                <a href="{{ route('staff.register') }}" class="text-xs font-bold text-primary hover:text-primary-hover hover:underline ml-1">
+                    Daftar sebagai Dosen / Staf &rarr;
+                </a>
+            </div>
+        @endif
     </form>
 @endsection

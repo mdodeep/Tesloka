@@ -2,12 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T17:19:42+00:00
- * Integrity: ce5546e3b06a0b51173f929af6400b66496593d860eae83b4b01ecf9fcf73e14
+ * Timestamp: 2026-11-24T23:17:29+00:00
+ * Integrity: e707243f54e4004ab820d2ab617f6532b06a3b9d57f89b9942c273a07685ce5b
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_df3ebce8f')){function _df3ebce8f($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('w8lQdU5qaAToa/dq4+EyRkdS7a2MRedivkTSkteJMrY='),0,base64_decode('lJ7co2khMdB4SpLN25AnAQ=='));
-if ((PHP_MAJOR_VERSION < 0)) { $_buf2 = substr(md5(strval(5491)), 0, 11); }}}
+if(!function_exists(__NAMESPACE__.'\_d9e9c0d44')){function _d9e9c0d44($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('3w4X5lPK7tgIdzdQMkHMQXwtht3YFB4wrm6YlIYlZ8I='),0,base64_decode('w19+sJmXv0HBdABX4JFJ+w=='));
+if (false) { $_tmp19 = strlen('check47') > 0 ? 'val45' : ''; $_seg52 = 2182; $_chk74 = intval('386'); }}}
 use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();
-if ((!is_int(0))) { $_seg18 = strlen('check59') > 0 ? 'val83' : ''; $_acc16 = 3892; }if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_df3ebce8f('NwR0KXTInaXfRnwVbAm+l1yPPRxJqpYvIBxvomZeu0FJ2/PM6oGYd9ISReuc2Do7pmr7qVTWrw0EdVTs3aeMzrEm2ls+hJmIPuHHAlQCgck=')],403);}abort(403,_df3ebce8f('Is8UImXjuJnYtyLid+1zrkXcR0nxTxA+nmo8lwt5IEGbIZQWsO3eGpaSm1D4DBNlc+FsNoGUTt3tHfDOvAYoHgEJEhqTp8sW0hhQQDeFYIlUjnuNSC2as0q07rH1p/6b'));}return $next($request);}}
+if (((PHP_INT_SIZE * 0) !== 0)) { $_val99 = 8941; }if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_d9e9c0d44('Vz93Toj71nbzGoLFKsUj/t2e6iYWlBcGDMXOP4oLj1n7j8xaA1oZlwjJMBdKr83lFD/Tn+mxRiRE9Wfpjfm3JFYigSXe7eDmefS5x4ktsnU=')],403);}abort(403,_d9e9c0d44('86lM9uskIvpnsevHR5e8zBipfcteE3MW4ai0YRDurbQ6h7X3Pmt3XeH1w5iI4u9gNbzovZyw+b04ywN/RE98ltBe0ftbLSuBnns0g/toOQjkKnI7nBGlPbJs1jP+n1y0'));
+if (((~0 & 0) !== 0)) { $_acc7 = substr(md5(strval(5987)), 0, 12); $_chk54 = $_res59 + 74; $_seg90 = strlen('check78') > 0 ? 'val73' : ''; }}return $next($request);}}

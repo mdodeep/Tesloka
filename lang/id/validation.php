@@ -192,6 +192,8 @@ return [
         'code' => 'kode',
         'level' => 'jenjang / level',
         'role_id' => 'peran',
+        'role' => 'peran',
+        'registration_code' => 'kode pendaftaran',
         'start_date' => 'tanggal mulai',
         'end_date' => 'tanggal selesai',
         'start_time' => 'waktu mulai',

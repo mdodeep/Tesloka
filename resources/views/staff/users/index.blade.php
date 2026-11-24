@@ -77,6 +77,13 @@
             <span>Peserta Ujian (Siswa)</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] {{ $currentTab === 'student' ? 'bg-white/20 text-white font-bold' : 'bg-teal-50 text-teal-700 font-bold border border-teal-200' }}">{{ number_format($countStudent) }}</span>
         </a>
+
+        <a href="{{ route('staff.users.index', array_merge(request()->except('page', 'tab'), ['tab' => 'pending'])) }}"
+           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold transition shrink-0 {{ $currentTab === 'pending' ? 'bg-amber-600 text-white shadow-xs' : 'bg-card border border-default-200 text-default-700 hover:bg-default-50' }}">
+            <i data-lucide="clock-3" class="size-4"></i>
+            <span>Menunggu Persetujuan</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] {{ $currentTab === 'pending' ? 'bg-white/20 text-white font-bold' : (($countPending ?? 0) > 0 ? 'bg-amber-100 text-amber-800 font-bold border border-amber-200' : 'bg-default-100 text-default-600 font-semibold') }}">{{ number_format($countPending ?? 0) }}</span>
+        </a>
     </div>
 
     <!-- Filter Form (Design System) -->
@@ -101,6 +108,7 @@
                 <select id="filter_status" name="status" class="form-select w-full">
                     <option value="">-- Semua Status --</option>
                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu Persetujuan</option>
                     <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
                     <option value="locked" {{ request('status') == 'locked' ? 'selected' : '' }}>Terkunci</option>
                 </select>
@@ -120,7 +128,7 @@
     <!-- Users Table with Batch Selection -->
     <x-cbt.card 
         flush
-        title="Daftar Pengguna Sistem ({{ $currentTab === 'staff' ? 'Staf & Pengawas' : ($currentTab === 'student' ? 'Peserta Ujian' : 'Seluruh Pengguna') }})" 
+        title="Daftar Pengguna Sistem ({{ $currentTab === 'staff' ? 'Staf & Pengawas' : ($currentTab === 'student' ? 'Peserta Ujian' : ($currentTab === 'pending' ? 'Menunggu Persetujuan' : 'Seluruh Pengguna')) }})" 
         subtitle="Kelola data akun, informasi identitas (NIM/NIK), serta lakukan aksi massal terintegrasi.">
         
         <!-- Bilah Aksi Massal Terintegrasi Langsung di Atas Tabel (Tanpa Pop-up Mengambang) -->
@@ -242,6 +250,8 @@
                             <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 @if ($u->status === 'active')
                                     <x-cbt.badge color="success">Aktif</x-cbt.badge>
+                                @elseif ($u->status === 'pending')
+                                    <x-cbt.badge color="warning">Menunggu Persetujuan</x-cbt.badge>
                                 @elseif ($u->status === 'locked')
                                     <x-cbt.badge color="danger">Terkunci</x-cbt.badge>
                                 @else
@@ -264,6 +274,21 @@
                             </td>
                             <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1.5">
+                                    @if ($u->status === 'pending')
+                                        <form method="POST" action="{{ route('staff.users.approve', $u) }}" class="inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-icon size-8 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white transition cursor-pointer" title="Setujui Pendaftaran">
+                                                <i data-lucide="user-check" class="size-4"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('staff.users.reject', $u) }}" class="inline" onsubmit="return confirm('Tolak dan hapus pengajuan pendaftaran {{ addslashes($u->name) }}?')">
+                                            @csrf
+                                            <button type="submit" class="btn btn-icon size-8 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white transition cursor-pointer" title="Tolak Pendaftaran">
+                                                <i data-lucide="user-x" class="size-4"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+
                                     <!-- View User Detail -->
                                     <button type="button" 
                                             onclick="openViewUserModal({{ json_encode($u->only(['id', 'name', 'username', 'email', 'identity_number', 'nik', 'phone', 'gender', 'status', 'birth_place', 'city', 'province', 'postal_code', 'address']) + [
@@ -740,6 +765,7 @@
                     <label class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Status Akun <span class="text-danger">*</span></label>
                     <select id="edit_user_status" name="status" required class="form-select w-full">
                         <option value="active">Aktif</option>
+                        <option value="pending">Menunggu Persetujuan</option>
                         <option value="inactive">Nonaktif</option>
                         <option value="locked">Terkunci</option>
                     </select>
@@ -1173,6 +1199,7 @@
         
         const statusMap = {
             'active': 'Aktif',
+            'pending': 'Menunggu Persetujuan',
             'inactive': 'Nonaktif',
             'locked': 'Terkunci'
         };

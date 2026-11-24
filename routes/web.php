@@ -63,6 +63,16 @@ Route::get('login', function (Request $request) {
     return redirect()->route('student.login');
 })->name('login');
 
+// Alias Pengalihan Registrasi Mandiri Ramah Pengguna Antar-Subdomain
+Route::get('register', function (Request $request) {
+    $host = $request->getHost();
+    if (str_starts_with($host, 'staff.')) {
+        return redirect()->route('staff.register');
+    }
+
+    return redirect()->route('student.register');
+})->name('register');
+
 // Authorized Media Streaming Endpoint (FULL-FEATURE 47.2 & 50.3)
 Route::get('media/{file}/stream', [MediaController::class, 'stream'])
     ->name('media.stream');

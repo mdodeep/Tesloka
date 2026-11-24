@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-372%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="372 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-3.079%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="3.079 Assertions">
+  <img src="https://img.shields.io/badge/Tests-379%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="379 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-3.180%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="3.180 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -145,7 +145,9 @@ Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang t
 12. **WebRTC Live-Only Camera Proctoring & CCTV Zoom Grid (DEC-004):**
     Widget kamera Picture-in-Picture di antarmuka siswa yang secara otomatis menangkap snapshot saat mulai ujian, secara berkala setiap 45 detik, saat berpindah tab (*tab blur*), dan saat keluar layar penuh (*fullscreen exit*). Sisi pengawas dilengkapi **Modal Zoom CCTV** interaktif beresolusi tinggi, telemetri live, histori foto insiden, dan penangkapan snapshot instan on-demand.
 13. **Master Data Akademik Ber-Retensi Tab & Enrolment Rombel:**
-    Navigasi master akademik yang mempertahankan tab aktif saat submit data, filter jenjang program studi (S1, S2, D3), serta alur pendaftaran siswa ke rombongan belajar dengan fasilitas cetak kartu ujian rombel massal.
+    Navigasi master akademik yang mempertahankan tab aktif saat submit data, filter jenjang program studi (S1, S2, D3), serta alur pendaftaran siswa ke rombongan belajar (maksimal 50 peserta per rombel) dengan fasilitas cetak kartu ujian rombel massal.
+14. **Pendaftaran Mandiri Peserta (SPMB) & Dosen/Staf dengan Persetujuan Admin:**
+    Mendukung registrasi publik peserta (`/ujian/register` atau alias `/register`) serta pendaftaran mandiri dosen, guru, korektor, dan pengawas (`/staff/register` atau alias `/register` pada domain staf), lengkap dengan opsi kode undangan/token pendaftaran, pilihan rombel berbatas kuota, allowlist peran non-admin (menolak eskalasi hak akses admin), notifikasi in-app admin, dan alur persetujuan/penolakan di tab **Menunggu Persetujuan**.
 
 ---
 
@@ -164,9 +166,10 @@ Panduan operasional lengkap step-by-step telah didokumentasikan secara rinci pad
    - Masuk ke `/staff/settings/smtp` untuk konfigurasi server email notifikasi transaksional.
 3. **Penyusunan Master Data Akademik Terstruktur:**
    - Masuk ke menu `/staff/academic` dan isi data berurutan: Tahun Ajaran -> Semester -> Jurusan & Dept -> Kelas & Rombel -> Mata Pelajaran.
-4. **Pendaftaran Pengguna & Enrolment Rombel:**
-   - Masuk ke `/staff/users` untuk membuat akun Guru dan Pengawas.
-   - Impor massal data siswa via berkas template Excel/CSV.
+4. **Pendaftaran Pengguna, Registrasi Mandiri & Enrolment Rombel:**
+   - Masuk ke `/staff/users` untuk membuat akun Guru dan Pengawas atau meninjau pengajuan baru di tab **Menunggu Persetujuan**.
+   - Aktifkan pendaftaran mandiri peserta (SPMB: `/ujian/register` / `/register`) dan pendaftaran mandiri dosen/staf (`/staff/register` / `/register`) di `/staff/settings/general` Tab **Sistem** bila diperlukan.
+   - Impor massal data staf/siswa via berkas template CSV multi-peran.
    - Daftarkan siswa ke rombongan belajar di `/staff/academic?tab=classes` untuk pencetakan kartu kelas massal.
 5. **Penyusunan Bank Soal & Stimulus Media:**
    - Masuk ke `/staff/question-banks` untuk membuat bank soal dari 7 tipe soal terstandar.

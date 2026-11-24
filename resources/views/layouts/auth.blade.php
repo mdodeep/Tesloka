@@ -41,7 +41,7 @@
     <x-cbt.branding-styles />
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 sm:p-6 {{ $bgFile ? 'bg-default-900/60 backdrop-blur-xs' : 'bg-default-50' }}">
-    <div class="w-full max-w-md z-10 mx-auto">
+    <div class="w-full @yield('card_width', 'max-w-md') z-10 mx-auto">
         <!-- Logo & Brand Header -->
         <div class="text-center mb-6">
             <a href="/" class="inline-block hover:opacity-95 transition">

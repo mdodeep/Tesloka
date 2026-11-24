@@ -84,8 +84,12 @@ class StaffLoginRequest extends FormRequest
                 "Akses ditolak: Status akun {$user->status}"
             );
 
+            $blockedMessage = $user->status === 'pending'
+                ? __('Pendaftaran akun staf/dosen Anda masih menunggu persetujuan Administrator.')
+                : __('Akun Anda dinonaktifkan atau terkunci. Hubungi administrator.');
+
             throw ValidationException::withMessages([
-                'login' => __('Akun Anda dinonaktifkan atau terkunci. Hubungi administrator.'),
+                'login' => $blockedMessage,
             ]);
         }
 

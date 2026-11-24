@@ -42,6 +42,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::middleware('guest:staff')->group(function () {
         Route::get('login', [StaffAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [StaffAuthController::class, 'login'])->name('login.post');
+        Route::get('register', [StaffAuthController::class, 'showRegisterForm'])->name('register');
+        Route::post('register', [StaffAuthController::class, 'register'])->middleware('throttle:10,1')->name('register.post');
         Route::get('2fa/challenge', [StaffAuthController::class, 'showTwoFactorChallenge'])->name('2fa.challenge');
         Route::post('2fa/challenge', [StaffAuthController::class, 'verifyTwoFactorChallenge'])->middleware('throttle:10,1')->name('2fa.challenge.verify');
     });
@@ -109,6 +111,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::put('{user}', [UserController::class, 'update'])->whereNumber('user')->name('update');
             Route::delete('{user}', [UserController::class, 'destroy'])->whereNumber('user')->name('destroy');
             Route::patch('{user}/status', [UserController::class, 'updateStatus'])->whereNumber('user')->name('status');
+            Route::post('{user}/approve', [UserController::class, 'approveRegistration'])->whereNumber('user')->name('approve');
+            Route::post('{user}/reject', [UserController::class, 'rejectRegistration'])->whereNumber('user')->name('reject');
             Route::post('{user}/reset-password', [UserController::class, 'resetPassword'])->whereNumber('user')->name('reset-password');
             Route::post('{user}/reset-photo', [UserController::class, 'resetPhoto'])->whereNumber('user')->name('reset-photo');
         });

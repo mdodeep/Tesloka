@@ -848,19 +848,127 @@
                         </select>
                     </div>
 
-                    <div class="sm:col-span-2 p-4 bg-default-50 border border-default-200 rounded-lg flex items-center justify-between gap-4">
-                        <div>
-                            <label for="allow_student_self_registration" class="text-xs font-bold text-default-800 uppercase tracking-wider block cursor-pointer">
-                                Pendaftaran Mandiri Peserta Baru (SPMB / Registrasi Publik)
+                    <input type="hidden" name="registration_settings_present" value="1">
+                    @php
+                        $studentRegisterUrl = route('student.register');
+                        $staffRegisterUrl = route('staff.register');
+                        $selectedStaffRegRoles = old('staff_registration_allowed_roles', $settings['staff_registration_allowed_roles'] ?? ['teacher', 'proctor']);
+                    @endphp
+
+                    <!-- Panel Pendaftaran Mandiri Peserta Baru (SPMB) -->
+                    <div class="sm:col-span-2 p-4 sm:p-5 bg-default-50 border border-default-200 rounded-xl space-y-4">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <label for="allow_student_self_registration" class="text-xs font-bold text-default-800 uppercase tracking-wider block cursor-pointer">
+                                    Pendaftaran Mandiri Peserta Baru (SPMB / Registrasi Publik)
+                                </label>
+                                <p class="text-xs text-default-500 mt-0.5 leading-relaxed">
+                                    Izinkan calon peserta ujian mendaftar mandiri melalui URL publik:
+                                    <code class="px-1.5 py-0.5 rounded bg-white border border-default-200 font-mono text-[11px] text-primary">{{ $studentRegisterUrl }}</code>
+                                    <span class="text-default-400">(atau alias <code>/register</code> pada domain portal ujian)</span>
+                                </p>
+                                <div class="mt-2 flex flex-wrap items-center gap-2">
+                                    <button type="button" onclick="copyTextToClipboard('{{ $studentRegisterUrl }}', this)" class="px-2.5 py-1 rounded border border-default-200 bg-white hover:bg-default-100 text-[11px] font-semibold text-default-700 inline-flex items-center gap-1 cursor-pointer transition">
+                                        <i data-lucide="copy" class="size-3"></i>
+                                        <span>Salin URL Peserta</span>
+                                    </button>
+                                    <a href="{{ $studentRegisterUrl }}" target="_blank" rel="noopener" class="px-2.5 py-1 rounded border border-primary/20 bg-primary/5 hover:bg-primary/10 text-[11px] font-semibold text-primary inline-flex items-center gap-1 transition">
+                                        <i data-lucide="external-link" class="size-3"></i>
+                                        <span>Buka Formulir Peserta</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                                <input type="checkbox" id="allow_student_self_registration" name="allow_student_self_registration" value="1" {{ old('allow_student_self_registration', $settings['allow_student_self_registration'] ?? false) ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-11 h-6 bg-default-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-default-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                             </label>
-                            <p class="text-xs text-default-500 mt-0.5">
-                                Jika diaktifkan, calon peserta ujian atau siswa baru dapat mendaftarkan akun secara mandiri melalui URL <code>https://ujian.tesloka.test/register</code>.
-                            </p>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer shrink-0">
-                            <input type="checkbox" id="allow_student_self_registration" name="allow_student_self_registration" value="1" {{ old('allow_student_self_registration', $settings['allow_student_self_registration'] ?? false) ? 'checked' : '' }} class="sr-only peer">
-                            <div class="w-11 h-6 bg-default-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-default-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                        </label>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-default-200/80">
+                            <div class="space-y-3">
+                                <label class="flex items-start gap-2.5 text-xs cursor-pointer">
+                                    <input type="checkbox" name="student_registration_require_approval" value="1" {{ old('student_registration_require_approval', $settings['student_registration_require_approval'] ?? false) ? 'checked' : '' }} class="form-checkbox mt-0.5 rounded text-primary">
+                                    <span>
+                                        <strong class="block text-default-800">Wajib Persetujuan Admin Sebelum Login</strong>
+                                        <span class="text-[11px] text-default-500">Akun berstatus Menunggu Persetujuan hingga disetujui di Manajemen Pengguna.</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-start gap-2.5 text-xs cursor-pointer">
+                                    <input type="checkbox" name="student_registration_allow_class_choice" value="1" {{ old('student_registration_allow_class_choice', $settings['student_registration_allow_class_choice'] ?? true) ? 'checked' : '' }} class="form-checkbox mt-0.5 rounded text-primary">
+                                    <span>
+                                        <strong class="block text-default-800">Izinkan Pilihan Rombel / Kelas Saat Mendaftar</strong>
+                                        <span class="text-[11px] text-default-500">Peserta dapat memilih kelas aktif yang masih memiliki sisa kuota.</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="student_registration_code" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Kode Pendaftaran SPMB (Opsional)</label>
+                                <input type="text" id="student_registration_code" name="student_registration_code" value="{{ old('student_registration_code', $settings['student_registration_code'] ?? '') }}" placeholder="Kosongkan jika pendaftaran terbuka tanpa kode" class="form-input font-mono text-xs">
+                                <p class="text-[11px] text-default-500">Jika diisi, pendaftar wajib memasukkan kode ini.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Pendaftaran Mandiri Dosen / Guru / Staf -->
+                    <div class="sm:col-span-2 p-4 sm:p-5 bg-default-50 border border-default-200 rounded-xl space-y-4">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <label for="allow_staff_self_registration" class="text-xs font-bold text-default-800 uppercase tracking-wider block cursor-pointer">
+                                    Pendaftaran Mandiri Dosen, Guru &amp; Staf Pengawas
+                                </label>
+                                <p class="text-xs text-default-500 mt-0.5 leading-relaxed">
+                                    Izinkan dosen, guru, korektor, atau pengawas mendaftar mandiri melalui URL:
+                                    <code class="px-1.5 py-0.5 rounded bg-white border border-default-200 font-mono text-[11px] text-primary">{{ $staffRegisterUrl }}</code>
+                                    <span class="text-default-400">(atau alias <code>/register</code> pada domain portal staf)</span>
+                                </p>
+                                <div class="mt-2 flex flex-wrap items-center gap-2">
+                                    <button type="button" onclick="copyTextToClipboard('{{ $staffRegisterUrl }}', this)" class="px-2.5 py-1 rounded border border-default-200 bg-white hover:bg-default-100 text-[11px] font-semibold text-default-700 inline-flex items-center gap-1 cursor-pointer transition">
+                                        <i data-lucide="copy" class="size-3"></i>
+                                        <span>Salin URL Dosen/Staf</span>
+                                    </button>
+                                    <a href="{{ $staffRegisterUrl }}" target="_blank" rel="noopener" class="px-2.5 py-1 rounded border border-primary/20 bg-primary/5 hover:bg-primary/10 text-[11px] font-semibold text-primary inline-flex items-center gap-1 transition">
+                                        <i data-lucide="external-link" class="size-3"></i>
+                                        <span>Buka Formulir Dosen/Staf</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                                <input type="checkbox" id="allow_staff_self_registration" name="allow_staff_self_registration" value="1" {{ old('allow_staff_self_registration', $settings['allow_staff_self_registration'] ?? false) ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-11 h-6 bg-default-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-default-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-default-200/80">
+                            <div class="space-y-3">
+                                <label class="flex items-start gap-2.5 text-xs cursor-pointer">
+                                    <input type="checkbox" name="staff_registration_require_approval" value="1" {{ old('staff_registration_require_approval', $settings['staff_registration_require_approval'] ?? true) ? 'checked' : '' }} class="form-checkbox mt-0.5 rounded text-primary">
+                                    <span>
+                                        <strong class="block text-default-800">Wajib Persetujuan Administrator (Direkomendasikan)</strong>
+                                        <span class="text-[11px] text-default-500">Mencegah akun dosen/staf tak terverifikasi mengakses portal internal sebelum ditinjau admin.</span>
+                                    </span>
+                                </label>
+                                <div class="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-[11px] text-amber-900">
+                                    Peran hak tinggi (<strong>Administrator</strong>, <strong>Admin Institusi</strong>, <strong>Pejabat Penyetuju</strong>, <strong>Auditor</strong>) dikunci secara permanen dari pendaftaran mandiri.
+                                </div>
+                            </div>
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="staff_registration_code" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Kode Undangan Staf (Direkomendasikan)</label>
+                                <input type="text" id="staff_registration_code" name="staff_registration_code" value="{{ old('staff_registration_code', $settings['staff_registration_code'] ?? '') }}" placeholder="Contoh: STAF-PTIQ-2026" class="form-input font-mono text-xs">
+                                <p class="text-[11px] text-default-500">Bagikan kode ini hanya kepada dosen atau pengawas yang berhak mendaftar.</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-default-200/80 space-y-2">
+                            <span class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Peran yang Diizinkan Saat Dosen / Staf Mendaftar Mandiri</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                @foreach($registrableStaffRoles ?? [] as $staffRole)
+                                    <label class="flex items-center gap-2 p-2 rounded-lg border border-default-200 bg-white hover:border-primary/40 text-xs cursor-pointer">
+                                        <input type="checkbox" name="staff_registration_allowed_roles[]" value="{{ $staffRole->name }}" {{ in_array($staffRole->name, is_array($selectedStaffRegRoles) ? $selectedStaffRegRoles : [], true) ? 'checked' : '' }} class="form-checkbox rounded text-primary">
+                                        <span class="font-medium text-default-800 truncate">{{ $staffRole->display_name }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </x-cbt.card>
@@ -1558,6 +1666,20 @@
 
         const secBox = document.getElementById('preview_secondary_box');
         if (secBox) secBox.style.backgroundColor = secondary;
+    }
+
+    function copyTextToClipboard(text, btn) {
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(text).then(function () {
+            if (!btn) return;
+            const span = btn.querySelector('span');
+            if (!span) return;
+            const original = span.textContent;
+            span.textContent = 'Tersalin!';
+            setTimeout(function () {
+                span.textContent = original;
+            }, 1800);
+        });
     }
 
     function setCertColors(primary, accent) {

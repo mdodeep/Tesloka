@@ -80,8 +80,12 @@ class StudentLoginRequest extends FormRequest
                 "Akses peserta ditolak: Status akun {$user->status}"
             );
 
+            $blockedMessage = $user->status === 'pending'
+                ? __('Akun pendaftaran Anda masih menunggu persetujuan Administrator / Panitia Ujian.')
+                : __('Akun ujian Anda dinonaktifkan atau terkunci. Hubungi pengawas / panitia ujian.');
+
             throw ValidationException::withMessages([
-                'login' => __('Akun ujian Anda dinonaktifkan atau terkunci. Hubungi pengawas / panitia ujian.'),
+                'login' => $blockedMessage,
             ]);
         }
 

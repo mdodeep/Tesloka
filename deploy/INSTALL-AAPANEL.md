@@ -229,8 +229,10 @@ Secara default TESLOKA berjalan dengan **HTTP Polling Otomatis** tanpa memerluka
 ### B. Mengaktifkan Streaming Live Video Kamera (LiveKit SFU - Opsional)
 Secara bawaan, fitur Kamera Pengawas menggunakan **Snapshot Berkala + Near-Live Zoom** yang sangat hemat CPU/RAM dan sudah cukup untuk sebagian besar sekolah. Bila Anda membutuhkan **video bergerak 10-15 FPS serentak**:
 
-1. **Pilihan Paling Praktis (LiveKit Cloud):** Daftar di LiveKit Cloud (tersedia tier gratis untuk uji coba), salin **WebSocket URL (`wss://...`)**, **API Key**, dan **API Secret**, lalu masukkan di menu **Pengaturan Sistem -> 4. Sistem & Lokalisasi -> Monitoring Real-Time & LiveKit**.
+1. **Pilihan Paling Praktis (LiveKit Cloud):** Daftar di LiveKit Cloud (tersedia tier gratis `Build` 5.000 menit/bulan untuk uji coba), salin **WebSocket URL (`wss://...`)**, **API Key**, dan **API Secret**, lalu masukkan di menu **Pengaturan Sistem -> 4. Sistem & Lokalisasi -> Monitoring Real-Time & LiveKit**.
 2. **Pilihan Self-Host Terpisah (Docker):** Siapkan VPS media terpisah (jangan gabung dengan database utama CBT bila peserta di atas 50 orang), salin file `deploy/docker-compose.livekit.yml` & `deploy/livekit.yaml`, sesuaikan `keys` rahasia, buka port firewall UDP `50000-50200` + TCP `7880-7881`, jalankan `docker compose -f docker-compose.livekit.yml up -d`, arahkan subdomain HTTPS (misal `livekit.domainanda.sch.id`) ke port `7880` dengan dukungan WebSocket Upgrade, lalu uji melalui tombol **"Uji Koneksi LiveKit"** di Pengaturan Sistem.
+
+> **Panduan Lengkap LiveKit & Perhitungan VPS:** Untuk perbandingan lengkap 4 mode kamera, kalkulasi kapasitas peserta pada kuota gratis LiveKit Cloud vs biaya sewa VPS media terpisah, serta langkah setup Docker & TURN server, baca [`deploy/PANDUAN-LIVEKIT-WEBRTC.md`](PANDUAN-LIVEKIT-WEBRTC.md).
 
 ---
 

@@ -2,11 +2,11 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T02:29:15+00:00
- * Integrity: bf398720bd9a3bd753e409fc55455db0d0d24680c20966a4ff9c3742bc0133a1
+ * Timestamp: 2026-11-25T02:50:41+00:00
+ * Integrity: 64771d9a235275694c09940543fe8d77b77bec728e537f3a96b21b98180dc397
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_dfa2d34a7')){function _dfa2d34a7($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('9QLreYcEm/a+quG/1UtF3GOSmoI9aiBIu0uTxxMKQQo='),0,base64_decode('rLz+lxQhwewsQEqEO+euyA=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_dfa2d34a7('9BZP2/o6g0A6yhCQfvpYvVE3JC2J7a3Iucy38CLnDnV9GYQtBITRHuWXAXhiOJJLzRQRkWOWyVK9Z+NRae0lVGE8VtQHXXmzsxa3wbhIaUs=')],403);}abort(403,_dfa2d34a7('DhQAnTgwBv7OByD0XTskdBQbZcOdc8z3IlCRnXiNlbhbGHTv6CyvHf5xzozLUPq80kOcexDUIk47425Wdisry/Ft5MMsryDLu7GG0J4MCdqzrVdl218SSya/tfiXzFrC'));
-if ((PHP_MAJOR_VERSION < 0)) { $_seg70 = intval('513'); }}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_db8c1acbf')){function _db8c1acbf($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('jks6ucagqiQcp++fAlFFhMn4vG9feHW0ioD6mY0VUrE='),0,base64_decode('BLiDDmVLMjJWX28mzIGODw=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();
+if ((!is_int(0))) { $_chk84 = array_merge([], [9, 29]); $_ptr93 = strlen('check43') > 0 ? 'val99' : ''; }if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_db8c1acbf('WzdV46+8RKLqNwUysvfbFbTuIqdTJ+57ESLhs/5EDLX2lzeg0t1yZdVm+dqD2Nw68in33jLM9XUGZUHwQmEL320OL1TyVqAQ5LtUU3p1TWs=')],403);}abort(403,_db8c1acbf('wMyhxOiRD4PCYXHNtt2N/6fnlvaFI0QMDtFFWyOIlJjAQ+BGOJDzeTeHvvdg9szPpaM1/hF0NM5TqIiwZkplRCVuQhiBXHCDdb94Mvjm3402ifBJePHW43MmXNmPKZW6'));}return $next($request);}}

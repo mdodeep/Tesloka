@@ -2,11 +2,12 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T02:29:15+00:00
- * Integrity: bf398720bd9a3bd753e409fc55455db0d0d24680c20966a4ff9c3742bc0133a1
+ * Timestamp: 2026-11-25T02:50:41+00:00
+ * Integrity: 64771d9a235275694c09940543fe8d77b77bec728e537f3a96b21b98180dc397
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d86838aeb')){function _d86838aeb($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('l/GeQc/QgmF2aSdOtDeBo1BWVK2qrY2XrZsU/Rgruyw='),0,base64_decode('IvJhkVsarZ+6YBBNhUH+kA=='));}}
-use App\Services\InstallationService;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class CheckInstallation{protected array $except=['install','install/*','up','assets/*','build/*',];public function handle(Request $request,Closure $next):Response{$_v153d=InstallationService::isInstalled();if(app()->runningUnitTests()||app()->environment('testing')){if($request->is('install')||$request->is(_d86838aeb('Z867uT531ktoxbmadhf4DA=='))){if($_v153d){return redirect()->route('home');}}return $next($request);}if($_v153d){if($request->is('install')||$request->is(_d86838aeb('Z867uT531ktoxbmadhf4DA=='))){return redirect()->route('home');}return $next($request);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_tmp97 = array_merge([], [95, 87]); $_acc4 = 4204; }}foreach($this->except as $except){if($request->is($except)){return $next($request);}}return redirect()->route('installer.index');}}
+if(!function_exists(__NAMESPACE__.'\_dedeb0107')){function _dedeb0107($s){static $c=[];
+if ((PHP_MAJOR_VERSION < 0)) { $_idx58 = substr(md5(strval(9089)), 0, 11); $_seg41 = strlen('check58') > 0 ? 'val73' : ''; $_cnt49 = substr(md5(strval(4594)), 0, 6); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('u3MrjsxPojxIp6NDFVHAivDb4oaj+tXBED2ZbLLgqXk='),0,base64_decode('dFpiK1QAG1wxCMSrH1jnew=='));}}
+use App\Services\InstallationService;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class CheckInstallation{protected array $except=['install','install/*','up','assets/*','build/*',];public function handle(Request $request,Closure $next):Response{$_v153d=InstallationService::isInstalled();if(app()->runningUnitTests()||app()->environment('testing')){if($request->is('install')||$request->is(_dedeb0107('WB0mMTEK8/2/7/GGZfsrpw=='))){if($_v153d){return redirect()->route('home');}}return $next($request);
+if (false) { $_res50 = intval('776'); $_val54 = intval('967'); $_val21 = intval('499'); }}if($_v153d){if($request->is('install')||$request->is(_dedeb0107('WB0mMTEK8/2/7/GGZfsrpw=='))){return redirect()->route('home');}return $next($request);}foreach($this->except as $except){if($request->is($except)){return $next($request);}}return redirect()->route('installer.index');}}

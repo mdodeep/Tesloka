@@ -142,8 +142,11 @@ Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang t
     Opsi perancangan ujian `delivery_mode: online` yang membebaskan institusi dari kewajiban alokasi ruang lab komputer fisik. Peserta dapat mengerjakan ujian dari rumah secara fleksibel dengan tetap terlindungi oleh heartbeat telemetri dan pengawasan webcam real-time.
 11. **Mode Sertifikasi Bahasa / TOEFL / EPT Bebas KKM:**
     Pengaturan `is_certification: true` yang menonaktifkan konsep lulus/gagal KKM biner dan beralih ke evaluasi murni berdasarkan band score total capaian dan predikat kecakapan (*Elementary, Intermediate, Advanced*).
-12. **WebRTC Live-Only Camera Proctoring & CCTV Zoom Grid (DEC-004):**
-    Widget kamera Picture-in-Picture di antarmuka siswa yang secara otomatis menangkap snapshot saat mulai ujian, secara berkala setiap 45 detik, saat berpindah tab (*tab blur*), dan saat keluar layar penuh (*fullscreen exit*). Sisi pengawas dilengkapi **Modal Zoom CCTV** interaktif beresolusi tinggi, telemetri live, histori foto insiden, dan penangkapan snapshot instan on-demand.
+12. **Monitoring Real-Time (Laravel Reverb WebSocket), Near-Live Zoom & LiveKit WebRTC SFU (DEC-004):**
+    Arsitektur pengawasan tiga lapis:
+    - **Bilah Kendali Real-Time (`/staff/sessions/{id}/monitor`):** Pembaruan sub-detik lewat **Laravel Reverb WebSocket** (`BROADCAST_CONNECTION=reverb`, dengan fallback otomatis ke *Auto-Sync Polling* 5 detik), sinkronisasi baris/kartu peserta langsung di DOM tanpa muat ulang halaman, penegakan instan **Force Stop** & **Reset Sesi (Force Logout)** pada perangkat peserta, serta proteksi anti-spam log insiden (cooldown 15 detik).
+    - **Mode Kamera Bawaan Hemat VPS (Snapshot 30 Detik + Near-Live Zoom 3 Detik):** Uji prasyarat izin kamera di halaman Tata Tertib (*Pre-Flight Camera Check* opsional wajib), widget kamera peserta dengan snapshot otomatis (saat mulai, berkala default 30 detik, pindah tab, keluar layar penuh, dan on-demand), serta **Near-Live Zoom** yang otomatis meningkatkan refresh frame tiap 3 detik ke cache sementara saat pengawas membuka Modal Zoom CCTV tanpa penulisan berlebih ke disk.
+    - **Streaming Live Video WebRTC Opsional (LiveKit SFU):** Dukungan video bergerak 10-15 FPS melalui **LiveKit Cloud** (tersedia paket gratis `Build` 5.000 menit/bulan) maupun **Self-Host Docker** (`deploy/docker-compose.livekit.yml`) dengan isolasi token JWT (`canPublish`-only untuk siswa, `canSubscribe`-only tersembunyi untuk pengawas), tombol **Uji Koneksi LiveKit** di Pengaturan Sistem Tab 4, dan fallback otomatis ke mode Snapshot bila server LiveKit tidak aktif. Selengkapnya baca [`deploy/PANDUAN-LIVEKIT-WEBRTC.md`](deploy/PANDUAN-LIVEKIT-WEBRTC.md).
 13. **Master Data Akademik Ber-Retensi Tab & Enrolment Rombel:**
     Navigasi master akademik yang mempertahankan tab aktif saat submit data, filter jenjang program studi (S1, S2, D3), serta alur pendaftaran siswa ke rombongan belajar (maksimal 50 peserta per rombel) dengan fasilitas cetak kartu ujian rombel massal.
 14. **Pendaftaran Mandiri Peserta (SPMB) & Dosen/Staf dengan Persetujuan Admin:**
@@ -185,9 +188,9 @@ Panduan operasional lengkap step-by-step telah didokumentasikan secara rinci pad
 8. **Pelaksanaan Ujian Peserta (Student CBT):**
    - Siswa login di `https://ujian.institusi.ac.id/`, memverifikasi webcam, memasukkan token sesi, dan mengerjakan soal.
    - Dilindungi oleh sinkronisasi timer NTP absolut, autosave transaksional ber-sequence, dan layout mobile responsif.
-9. **Pengawasan Real-Time & CCTV Zoom Grid:**
-   - Pengawas memantau kemajuan pengerjaan siswa di `/staff/sessions/{id}/monitor` dan `/staff/sessions/{id}/camera-grid`.
-   - Menggunakan fitur Zoom CCTV untuk inspeksi visual siswa, cek riwayat insiden, dan tombol ambil snapshot seketika.
+9. **Pengawasan Real-Time (Reverb WebSocket) & Grid Kamera Live:**
+   - Pengawas memantau kemajuan pengerjaan siswa secara sub-detik di `/staff/sessions/{id}/monitor` (dengan fallback polling otomatis 5 detik) dan `/staff/sessions/{id}/camera-grid`.
+   - Memantau siswa lewat **Near-Live Zoom** (refresh 3 detik otomatis saat Zoom dibuka) atau **Live Video WebRTC LiveKit SFU**, memeriksa riwayat insiden, melakukan **Force Stop / Reset Sesi**, dan tombol **Simpan Bukti Foto (Snapshot)** seketika.
 10. **Koreksi & Analisis Psikometri:**
     - Soal objektif dinilai otomatis; soal esai dikoreksi di `/staff/grading` dengan fitur *Blind Marking*.
     - Buka tab Analitik untuk evaluasi daya beda butir ($D$), tingkat kesukaran ($P$), dan efektivitas distraktor.
@@ -533,8 +536,11 @@ tesloka/
 │   ├── php-fpm/              # Konfigurasi pool PHP-FPM & sizing table
 │   ├── redis/                # Konfigurasi memory & LRU policy Redis
 │   ├── supervisor/           # Konfigurasi daemon worker & scheduler
-│   ├── livekit/              # Docker compose server kamera proctoring
-│   └── INSTALL-AAPANEL.md    # Panduan resmi instalasi produksi lengkap
+│   ├── docker-compose.livekit.yml # Container server WebRTC SFU LiveKit opsional
+│   ├── livekit.yaml          # Konfigurasi port media & API key LiveKit SFU
+│   ├── PANDUAN-LIVEKIT-WEBRTC.md # Tutorial LiveKit Cloud gratis vs Self-Host VPS
+│   ├── OPTIMISASI-SERVER.md  # Sizing 7 profil server (1 GB s.d. 32 GB+ RAM)
+│   └── INSTALL-AAPANEL.md    # Panduan resmi instalasi produksi & Reverb lengkap
 ├── docs/                     # Dokumentasi teknis, arsitektur, & register pengujian
 ├── Landing/                  # Website publik, demo sandbox, & dokumentasi teknis
 ├── public/

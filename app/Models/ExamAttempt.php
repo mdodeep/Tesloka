@@ -87,11 +87,19 @@ class ExamAttempt extends Model
     }
 
     /**
-     * Periksa apakah waktu pengerjaan server telah habis (FULL-FEATURE 14.4).
+     * Periksa apakah attempt sudah ditutup (dikumpulkan atau dihentikan paksa oleh pengawas).
+     */
+    public function isClosed(): bool
+    {
+        return in_array($this->status, ['submitted', 'terminated'], true);
+    }
+
+    /**
+     * Periksa apakah waktu pengerjaan server telah habis atau attempt telah ditutup (FULL-FEATURE 14.4).
      */
     public function isExpired(): bool
     {
-        if ($this->status === 'submitted') {
+        if ($this->isClosed()) {
             return true;
         }
 
@@ -103,7 +111,7 @@ class ExamAttempt extends Model
      */
     public function getRemainingSeconds(): int
     {
-        if ($this->status === 'submitted') {
+        if ($this->isClosed()) {
             return 0;
         }
 

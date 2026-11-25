@@ -1,0 +1,9 @@
+services:
+  livekit:
+    image: livekit/livekit-server:latest
+    container_name: tesloka-livekit-sfu
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    command: --config /etc/livekit.yaml

@@ -25,8 +25,11 @@
     "dependencies": {
         "apexcharts": "^8.7.0",
         "dropzone": "^6.3.5",
+        "laravel-echo": "^2.6.3",
+        "livekit-client": "^2.25.0",
         "lucide": "^1.70.0",
         "preline": "^4.2.0",
+        "pusher-js": "^8.6.0",
         "simplebar": "^6.3.3"
     }
 }

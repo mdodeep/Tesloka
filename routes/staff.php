@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\StaffAuthController;
+use App\Http\Controllers\BroadcastAuthController;
 use App\Http\Controllers\InAppNotificationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProfileController;
@@ -50,6 +51,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
     // Authenticated Staff Routes
     Route::middleware(['portal:staff', 'active:staff'])->group(function () {
+        Route::post('broadcasting/auth', [BroadcastAuthController::class, 'authenticateStaff'])->name('broadcasting.auth');
         Route::post('logout', [StaffAuthController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -232,7 +234,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
         });
 
         // Exam Sessions, Proctors & Participants (FULL-FEATURE Sec 10, 11)
-        Route::prefix('sessions')->name('sessions.')->group(function () {
+        Route::prefix('sessions')->middleware('role:admin,super_admin,institution_admin,proctor,teacher,exam_coordinator,academic_coordinator,academic_operator,auditor')->name('sessions.')->group(function () {
             Route::get('/', [ExamSessionController::class, 'index'])->name('index');
             Route::get('create', [ExamSessionController::class, 'create'])->name('create');
             Route::post('/', [ExamSessionController::class, 'store'])->name('store');
@@ -262,22 +264,31 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('{session}/pdf/attendance', [ExamSessionController::class, 'downloadAttendancePdf'])->name('pdf.attendance');
             Route::get('{session}/pdf/minutes', [ExamSessionController::class, 'downloadMinutesPdf'])->name('pdf.minutes');
 
-            // Proctor Live Monitoring & Incident Management (FULL-FEATURE Sec 20, 21, 22, 23)
-            Route::get('{session}/monitor', [ExamProctorMonitoringController::class, 'show'])->name('monitor');
-            Route::get('{session}/monitor/feed', [ExamProctorMonitoringController::class, 'feed'])->name('monitor.feed');
-            Route::post('{session}/attempts/{attempt}/add-time', [ExamProctorMonitoringController::class, 'addTime'])->name('monitor.add-time');
-            Route::post('{session}/attempts/{attempt}/force-refresh', [ExamProctorMonitoringController::class, 'forceRefresh'])->name('monitor.force-refresh');
-            Route::post('{session}/attempts/{attempt}/force-stop', [ExamProctorMonitoringController::class, 'forceStop'])->name('monitor.force-stop');
-            Route::post('{session}/attempts/{attempt}/force-logout', [ExamProctorMonitoringController::class, 'forceLogout'])->name('monitor.force-logout');
-            Route::post('{session}/announcements', [ExamProctorMonitoringController::class, 'storeAnnouncement'])->name('monitor.announcements.store');
-            Route::post('{session}/incidents', [ExamProctorMonitoringController::class, 'storeIncident'])->name('monitor.incidents.store');
-            Route::patch('{session}/incidents/{incident}/resolve', [ExamProctorMonitoringController::class, 'resolveIncident'])->name('monitor.incidents.resolve');
+            // Proctor Live Monitoring & Incident Management (Baca: Pengawas, Guru, Koordinator, Auditor)
+            Route::middleware('role:admin,super_admin,institution_admin,proctor,teacher,exam_coordinator,academic_coordinator,auditor')->group(function () {
+                Route::get('{session}/monitor', [ExamProctorMonitoringController::class, 'show'])->name('monitor');
+                Route::get('{session}/monitor/feed', [ExamProctorMonitoringController::class, 'feed'])->name('monitor.feed');
 
-            // WebRTC Live-Only Camera Proctoring & Incident Snapshots (DEC-004 & FULL-FEATURE Sec 19, 98)
-            Route::get('{session}/camera-grid', [ExamCameraController::class, 'cameraGrid'])->name('camera-grid');
-            Route::get('{session}/camera-feed', [ExamCameraController::class, 'cameraFeed'])->name('camera-feed');
-            Route::post('{session}/attempts/{attempt}/request-snapshot', [ExamCameraController::class, 'requestSnapshot'])->name('request-snapshot');
-            Route::get('snapshots/{snapshot}', [ExamCameraController::class, 'viewSnapshot'])->name('snapshots.view');
+                // WebRTC Live-Only Camera Proctoring & Incident Snapshots
+                Route::get('{session}/camera-grid', [ExamCameraController::class, 'cameraGrid'])->name('camera-grid');
+                Route::get('{session}/camera-feed', [ExamCameraController::class, 'cameraFeed'])->name('camera-feed');
+                Route::post('{session}/livekit-token', [ExamCameraController::class, 'livekitTokenForStaff'])->name('livekit-token');
+                Route::get('{session}/attempts/{attempt}/live-frame', [ExamCameraController::class, 'viewLiveFrame'])->name('live-frame');
+                Route::get('snapshots/{snapshot}', [ExamCameraController::class, 'viewSnapshot'])->name('snapshots.view');
+            });
+
+            // Aksi Intervensi Pengawas (Khusus Admin, Pengawas, dan Koordinator)
+            Route::middleware('role:admin,super_admin,institution_admin,proctor,exam_coordinator,academic_coordinator')->group(function () {
+                Route::post('{session}/attempts/{attempt}/add-time', [ExamProctorMonitoringController::class, 'addTime'])->name('monitor.add-time');
+                Route::post('{session}/attempts/{attempt}/force-refresh', [ExamProctorMonitoringController::class, 'forceRefresh'])->name('monitor.force-refresh');
+                Route::post('{session}/attempts/{attempt}/force-stop', [ExamProctorMonitoringController::class, 'forceStop'])->name('monitor.force-stop');
+                Route::post('{session}/attempts/{attempt}/force-logout', [ExamProctorMonitoringController::class, 'forceLogout'])->name('monitor.force-logout');
+                Route::post('{session}/announcements', [ExamProctorMonitoringController::class, 'storeAnnouncement'])->name('monitor.announcements.store');
+                Route::post('{session}/incidents', [ExamProctorMonitoringController::class, 'storeIncident'])->name('monitor.incidents.store');
+                Route::patch('{session}/incidents/{incident}/resolve', [ExamProctorMonitoringController::class, 'resolveIncident'])->name('monitor.incidents.resolve');
+                Route::post('{session}/attempts/{attempt}/request-snapshot', [ExamCameraController::class, 'requestSnapshot'])->name('request-snapshot');
+                Route::post('{session}/attempts/{attempt}/zoom-focus', [ExamCameraController::class, 'zoomFocus'])->name('zoom-focus');
+            });
         });
 
         // Security, Device Sessions, Password & 2FA (FULL-FEATURE Sec 44, 45, 48)
@@ -365,6 +376,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::post('tools/run-diagnostics', [SystemSettingController::class, 'runDiagnosticsTest'])->name('tools.run-diagnostics');
             Route::get('tools/export-settings', [SystemSettingController::class, 'exportSettings'])->name('tools.export-settings');
             Route::post('tools/restore-settings', [SystemSettingController::class, 'restoreSettings'])->name('tools.restore-settings');
+            Route::post('tools/test-livekit', [SystemSettingController::class, 'testLiveKitConnection'])->name('tools.test-livekit');
 
             // SMTP & Mail Gateway (FULL-FEATURE 40.1)
             Route::get('smtp', [SmtpSettingsController::class, 'index'])->name('smtp.index');

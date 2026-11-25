@@ -168,6 +168,72 @@ sudo systemctl status tesloka-worker
 
 ---
 
+## Langkah Tambahan 2: WebSocket Real-Time (Laravel Reverb) & Kamera Live Video (LiveKit SFU)
+
+### A. Mengaktifkan Monitoring Real-Time WebSocket (Laravel Reverb)
+Secara default TESLOKA berjalan dengan **HTTP Polling Otomatis** tanpa memerlukan daemon tambahan. Jika Anda ingin pembaruan status peserta, log insiden, paksa stop/logout, dan notifikasi pengawas terkirim secara instan dalam hitungan **< 1 detik**, aktifkan **Laravel Reverb**:
+
+1. **Ubah `.env` di folder root website:**
+   ```env
+   BROADCAST_CONNECTION=reverb
+   REVERB_APP_ID=tesloka-app
+   REVERB_APP_KEY=tesloka-reverb-key
+   REVERB_APP_SECRET=ganti-dengan-string-acak-minimal-24-karakter
+   REVERB_HOST=staff.domainanda.sch.id
+   REVERB_PORT=443
+   REVERB_SCHEME=https
+   REVERB_SERVER_HOST=127.0.0.1
+   REVERB_SERVER_PORT=8080
+   ```
+   *(Bersihkan cache config setelah ubah `.env`: `php artisan optimize:clear`).*
+
+2. **Jalankan daemon Reverb lewat Systemd Linux:**
+   ```bash
+   sudo tee /etc/systemd/system/tesloka-reverb.service > /dev/null <<'EOF'
+   [Unit]
+   Description=TESLOKA CBT WebSocket Reverb Server
+   After=network.target redis.service
+
+   [Service]
+   User=www
+   Group=www
+   Restart=always
+   RestartSec=3
+   ExecStart=/www/server/php/85/bin/php /www/wwwroot/domainanda.sch.id/artisan reverb:start --host=127.0.0.1 --port=8080
+
+   [Install]
+   WantedBy=multi-user.target
+   EOF
+
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now tesloka-reverb
+   sudo systemctl status tesloka-reverb
+   ```
+
+3. **Tambahkan Reverse Proxy WebSocket di aaPanel Nginx:**
+   Buka **Website -> Nama Domain -> Config** (lakukan pada domain `staff.*` dan `ujian.*`), lalu tambahkan blok ini di dalam `server { ... }` (sebelum `location /`):
+   ```nginx
+   location /app {
+       proxy_http_version 1.1;
+       proxy_set_header Host $http_host;
+       proxy_set_header Scheme $scheme;
+       proxy_set_header SERVER_PORT $server_port;
+       proxy_set_header REMOTE_ADDR $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection "Upgrade";
+       proxy_pass http://127.0.0.1:8080;
+   }
+   ```
+
+### B. Mengaktifkan Streaming Live Video Kamera (LiveKit SFU - Opsional)
+Secara bawaan, fitur Kamera Pengawas menggunakan **Snapshot Berkala + Near-Live Zoom** yang sangat hemat CPU/RAM dan sudah cukup untuk sebagian besar sekolah. Bila Anda membutuhkan **video bergerak 10-15 FPS serentak**:
+
+1. **Pilihan Paling Praktis (LiveKit Cloud):** Daftar di LiveKit Cloud (tersedia tier gratis untuk uji coba), salin **WebSocket URL (`wss://...`)**, **API Key**, dan **API Secret**, lalu masukkan di menu **Pengaturan Sistem -> 4. Sistem & Lokalisasi -> Monitoring Real-Time & LiveKit**.
+2. **Pilihan Self-Host Terpisah (Docker):** Siapkan VPS media terpisah (jangan gabung dengan database utama CBT bila peserta di atas 50 orang), salin file `deploy/docker-compose.livekit.yml` & `deploy/livekit.yaml`, sesuaikan `keys` rahasia, buka port firewall UDP `50000-50200` + TCP `7880-7881`, jalankan `docker compose -f docker-compose.livekit.yml up -d`, arahkan subdomain HTTPS (misal `livekit.domainanda.sch.id`) ke port `7880` dengan dukungan WebSocket Upgrade, lalu uji melalui tombol **"Uji Koneksi LiveKit"** di Pengaturan Sistem.
+
+---
+
 ## Pemecahan Masalah Umum (Ringkas & Solutif)
 
 ### 1. Halaman `/install` menampilkan "Permission denied" saat klik Pasang Vendor

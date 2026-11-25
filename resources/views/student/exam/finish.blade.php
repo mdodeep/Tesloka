@@ -4,16 +4,28 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6 py-6">
-    <!-- Success Banner -->
-    <div class="card bg-emerald-50/70 border border-emerald-200 rounded-xl p-5 sm:p-6 text-center space-y-2.5 shadow-2xs">
-        <div class="inline-flex items-center justify-center size-14 rounded-xl bg-emerald-100 text-emerald-600 mb-1 shadow-xs">
-            <i data-lucide="check" class="size-7"></i>
+    <!-- Status Banner -->
+    @if($attempt->status === 'terminated')
+        <div class="card bg-rose-50/80 border border-rose-200 rounded-xl p-5 sm:p-6 text-center space-y-2.5 shadow-2xs">
+            <div class="inline-flex items-center justify-center size-14 rounded-xl bg-rose-100 text-rose-600 mb-1 shadow-xs">
+                <i data-lucide="shield-alert" class="size-7"></i>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-bold text-default-900 tracking-tight">Percobaan Ujian Dihentikan oleh Pengawas</h1>
+            <p class="text-xs sm:text-sm text-default-600 max-w-md mx-auto leading-relaxed">
+                Sesi pengerjaan ujian Anda telah diakhiri secara resmi oleh Pengawas Ruang. Jawaban yang telah masuk sebelum penghentian tetap tercatat di server {{ $branding['system_label'] ?? 'Ujian' }}.
+            </p>
         </div>
-        <h1 class="text-xl sm:text-2xl font-bold text-default-900 tracking-tight">Ujian Berhasil Dikumpulkan</h1>
-        <p class="text-xs sm:text-sm text-default-600 max-w-md mx-auto leading-relaxed">
-            Jawaban Anda telah tersimpan secara permanen dan sah di server {{ $branding['system_label'] ?? 'Ujian' }}.
-        </p>
-    </div>
+    @else
+        <div class="card bg-emerald-50/70 border border-emerald-200 rounded-xl p-5 sm:p-6 text-center space-y-2.5 shadow-2xs">
+            <div class="inline-flex items-center justify-center size-14 rounded-xl bg-emerald-100 text-emerald-600 mb-1 shadow-xs">
+                <i data-lucide="check" class="size-7"></i>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-bold text-default-900 tracking-tight">Ujian Berhasil Dikumpulkan</h1>
+            <p class="text-xs sm:text-sm text-default-600 max-w-md mx-auto leading-relaxed">
+                Jawaban Anda telah tersimpan secara permanen dan sah di server {{ $branding['system_label'] ?? 'Ujian' }}.
+            </p>
+        </div>
+    @endif
 
     <!-- Official Receipt Card -->
     <div class="card bg-white border border-default-200/90 rounded-xl shadow-2xs overflow-hidden print:border-none print:shadow-none">

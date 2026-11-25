@@ -238,8 +238,8 @@
 
                         <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer">
                             <div>
-                                <span class="text-xs font-bold text-default-800 block">Kamera Pengawas (WebRTC SFU Live)</span>
-                                <p class="text-[11px] text-default-400">Pengawasan video langsung per ruang.</p>
+                                <span class="text-xs font-bold text-default-800 block">Kamera Pengawas (Snapshot &amp; Live Video WebRTC)</span>
+                                <p class="text-[11px] text-default-400">Pengawasan kamera &amp; snapshot berkala (mendukung streaming WebRTC LiveKit bila dikonfigurasi).</p>
                             </div>
                             <input type="checkbox" name="camera_proctoring_enabled" value="1" {{ old('camera_proctoring_enabled') ? 'checked' : '' }} class="form-switch">
                         </label>

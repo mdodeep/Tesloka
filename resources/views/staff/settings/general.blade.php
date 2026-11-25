@@ -970,6 +970,118 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Panel Monitoring Real-Time (Reverb) & Kamera Live Video WebRTC (LiveKit SFU) -->
+                    <input type="hidden" name="proctoring_settings_present" value="1">
+                    <div class="sm:col-span-2 p-4 sm:p-5 bg-default-50 border border-default-200 rounded-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                            <div>
+                                <h4 class="text-xs font-bold text-default-800 uppercase tracking-wider">
+                                    Monitoring Real-Time (Reverb WebSocket) &amp; Kamera Live Video (LiveKit SFU)
+                                </h4>
+                                <p class="text-xs text-default-500 mt-0.5 leading-relaxed">
+                                    Konfigurasikan pemantauan instan via WebSocket dan video kamera bergerak (WebRTC SFU LiveKit). Tanpa LiveKit, sistem otomatis memakai mode Snapshot &amp; Near-Live Zoom yang hemat CPU/RAM.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                @if(!empty($settings['reverb_enabled']) && !empty($settings['reverb_reachable']))
+                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">Reverb Live Aktif</span>
+                                @elseif(!empty($settings['reverb_enabled']))
+                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">Reverb Menunggu Daemon</span>
+                                @else
+                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-200 text-default-700">Mode HTTP Polling ({{ $settings['reverb_driver'] ?? 'null' }})</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-white border border-default-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div>
+                                <strong class="text-default-800 block">Status Saluran WebSocket Laravel Reverb</strong>
+                                <span class="text-[11px] text-default-500">
+                                    Driver: <code class="font-mono text-primary">{{ $settings['reverb_driver'] ?? 'null' }}</code>
+                                    @if(!empty($settings['reverb_enabled']))
+                                        &bull; Target: <code class="font-mono">{{ $settings['reverb_host'] }}:{{ $settings['reverb_port'] }}</code>
+                                    @else
+                                        &bull; Atur <code>BROADCAST_CONNECTION=reverb</code> di file <code>.env</code> dan jalankan <code>php artisan reverb:start</code> untuk push &lt; 1 detik.
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-4 pt-2 border-t border-default-200/80">
+                            <div>
+                                <label for="livekit_enabled" class="text-xs font-bold text-default-800 block cursor-pointer">
+                                    Aktifkan Streaming Live Video WebRTC (LiveKit SFU)
+                                </label>
+                                <span class="text-[11px] text-default-500">Bila aktif, kamera siswa melakukan streaming video bergerak 10-15 FPS ke Grid Kamera Pengawas (membutuhkan server LiveKit Cloud atau Docker LiveKit).</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                                <input type="checkbox" id="livekit_enabled" name="livekit_enabled" value="1" {{ old('livekit_enabled', $settings['livekit_enabled'] ?? false) ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-11 h-6 bg-default-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-default-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="livekit_url" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">URL Server WebSocket LiveKit</label>
+                                <input type="text" id="livekit_url" name="livekit_url" value="{{ old('livekit_url', $settings['livekit_url'] ?? '') }}" placeholder="Contoh: wss://livekit.institusi.ac.id" class="form-input font-mono text-xs">
+                            </div>
+
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="livekit_video_resolution" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Resolusi Streaming Video Peserta</label>
+                                <select id="livekit_video_resolution" name="livekit_video_resolution" class="form-select text-xs">
+                                    @foreach(\App\Services\RealtimeConfigService::VIDEO_PROFILES as $resKey => $resMeta)
+                                        <option value="{{ $resKey }}" {{ old('livekit_video_resolution', $settings['livekit_video_resolution'] ?? '360p') === $resKey ? 'selected' : '' }}>{{ $resMeta['label'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="livekit_api_key" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">LiveKit API Key</label>
+                                <input type="text" id="livekit_api_key" name="livekit_api_key" value="{{ old('livekit_api_key', $settings['livekit_api_key'] ?? '') }}" placeholder="APIxxxxx" class="form-input font-mono text-xs">
+                            </div>
+
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="livekit_api_secret" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">
+                                    LiveKit API Secret
+                                    @if(!empty($settings['livekit_has_secret']))
+                                        <span class="text-emerald-600 font-normal normal-case">(Tersimpan Terenkripsi)</span>
+                                    @endif
+                                </label>
+                                <input type="password" id="livekit_api_secret" name="livekit_api_secret" value="" placeholder="{{ !empty($settings['livekit_has_secret']) ? 'Biarkan kosong jika tidak ingin mengganti secret' : 'Masukkan API Secret LiveKit' }}" class="form-input font-mono text-xs" autocomplete="new-password">
+                            </div>
+
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="snapshot_interval_seconds" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Interval Snapshot Berkala (Detik)</label>
+                                <input type="number" id="snapshot_interval_seconds" name="snapshot_interval_seconds" min="15" max="120" value="{{ old('snapshot_interval_seconds', $settings['snapshot_interval_seconds'] ?? 30) }}" class="form-input font-mono text-xs">
+                                <p class="text-[11px] text-default-500">Default 30 detik (15-120 detik). Digunakan sebagai cadangan maupun bukti arsip insiden.</p>
+                            </div>
+
+                            <div class="space-y-1.5 min-w-0">
+                                <label for="zoom_snapshot_interval_seconds" class="block text-xs font-semibold text-default-800 uppercase tracking-wider">Interval Near-Live Zoom Modal (Detik)</label>
+                                <input type="number" id="zoom_snapshot_interval_seconds" name="zoom_snapshot_interval_seconds" min="2" max="15" value="{{ old('zoom_snapshot_interval_seconds', $settings['zoom_snapshot_interval_seconds'] ?? 3) }}" class="form-input font-mono text-xs">
+                                <p class="text-[11px] text-default-500">Kecepatan refresh frame sementara saat pengawas membuka modal Zoom peserta tanpa LiveKit (default 3 detik).</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-default-200/80">
+                            <label class="flex items-start gap-2.5 text-xs cursor-pointer">
+                                <input type="checkbox" name="enforce_camera_before_start" value="1" {{ old('enforce_camera_before_start', $settings['enforce_camera_before_start'] ?? false) ? 'checked' : '' }} class="form-checkbox mt-0.5 rounded text-primary">
+                                <span>
+                                    <strong class="block text-default-800">Wajibkan Uji Kamera Lulus Sebelum Tombol Mulai Ujian</strong>
+                                    <span class="text-[11px] text-default-500">Jika ujian memakai kamera pengawas, tombol Mulai Ujian pada halaman Petunjuk dikunci sampai peserta mengizinkan kamera.</span>
+                                </span>
+                            </label>
+
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button type="button" onclick="testLiveKitServerConnection()" id="btnTestLiveKit" class="btn btn-sm bg-white border border-default-300 hover:bg-default-100 text-default-800 font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer transition">
+                                    <i data-lucide="wifi" class="size-3.5 text-primary"></i>
+                                    <span>Uji Koneksi LiveKit</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="livekitTestResult" class="hidden p-3 rounded-lg text-xs font-medium"></div>
+                    </div>
                 </div>
             </x-cbt.card>
         </div>
@@ -1698,6 +1810,53 @@
         textarea.value = text.substring(0, start) + tag + text.substring(end);
         textarea.focus();
         textarea.selectionStart = textarea.selectionEnd = start + tag.length;
+    }
+
+    function testLiveKitServerConnection() {
+        const btn = document.getElementById('btnTestLiveKit');
+        const resultEl = document.getElementById('livekitTestResult');
+        const url = document.getElementById('livekit_url')?.value || '';
+        const key = document.getElementById('livekit_api_key')?.value || '';
+        const secret = document.getElementById('livekit_api_secret')?.value || '';
+
+        if (btn) btn.disabled = true;
+        if (resultEl) {
+            resultEl.className = 'p-3 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200';
+            resultEl.textContent = 'Menguji konektivitas ke server LiveKit SFU...';
+            resultEl.classList.remove('hidden');
+        }
+
+        fetch('{{ route('staff.settings.tools.test-livekit') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                livekit_url: url,
+                livekit_api_key: key,
+                livekit_api_secret: secret
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (btn) btn.disabled = false;
+            if (!resultEl) return;
+            if (data.ok) {
+                resultEl.className = 'p-3 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200';
+            } else {
+                resultEl.className = 'p-3 rounded-lg text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200';
+            }
+            resultEl.textContent = data.message || 'Selesai menguji koneksi LiveKit.';
+        })
+        .catch(() => {
+            if (btn) btn.disabled = false;
+            if (resultEl) {
+                resultEl.className = 'p-3 rounded-lg text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200';
+                resultEl.textContent = 'Gagal mengirim permintaan uji koneksi LiveKit.';
+            }
+        });
     }
 
     // Auto-restore tab from query param, hash, or sessionStorage on load

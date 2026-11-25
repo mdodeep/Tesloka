@@ -111,6 +111,36 @@
                 </div>
 
                 <div id="preflightAlert" class="hidden p-3 rounded-lg text-xs font-medium"></div>
+
+                @if($exam->isCameraProctoringEnabled())
+                    @php
+                        $proctoringCfg = app(\App\Services\RealtimeConfigService::class)->getPublicProctoringConfig();
+                    @endphp
+                    <div class="mt-3 p-3.5 bg-slate-900 text-white rounded-lg border border-slate-800 space-y-3" id="preflightCameraBox" data-enforce-camera="{{ $proctoringCfg['enforce_camera_before_start'] ? '1' : '0' }}">
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="camera" class="size-4 text-emerald-400"></i>
+                                <span class="text-xs font-bold uppercase tracking-wider">Uji Kamera Pengawas (Diwajibkan Ujian Ini)</span>
+                            </div>
+                            <span id="badgePreflightCamera" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                Belum Diuji
+                            </span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-center gap-3">
+                            <div class="w-40 aspect-video bg-black rounded border border-slate-700 overflow-hidden relative flex items-center justify-center shrink-0">
+                                <video id="preflightCameraVideo" autoplay playsinline muted class="w-full h-full object-cover -scale-x-100 hidden"></video>
+                                <i data-lucide="video-off" id="preflightCameraPlaceholder" class="size-6 text-slate-600"></i>
+                            </div>
+                            <div class="flex-1 space-y-2 text-xs text-slate-300">
+                                <p id="preflightCameraMessage">Klik tombol di bawah untuk memastikan webcam/kamera perangkat Anda berfungsi dan izin peramban aktif sebelum masuk ruang ujian.</p>
+                                <button type="button" id="btnTestPreflightCamera" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-semibold inline-flex items-center gap-1.5 cursor-pointer">
+                                    <i data-lucide="video" class="size-3.5"></i>
+                                    <span>Uji &amp; Izinkan Kamera</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             @if($exam->seb_required)
@@ -271,6 +301,65 @@ document.addEventListener('DOMContentLoaded', function() {
                 overallBadge.textContent = 'Perangkat Siap';
             }
         });
+
+    // 5. Camera Pre-Flight Check (Bila Kamera Pengawas Aktif)
+    const camBox = document.getElementById('preflightCameraBox');
+    if (camBox) {
+        const enforceCam = camBox.dataset.enforceCamera === '1';
+        const btnStart = document.getElementById('btnStartExam');
+        const btnTest = document.getElementById('btnTestPreflightCamera');
+        const badgeCam = document.getElementById('badgePreflightCamera');
+        const videoCam = document.getElementById('preflightCameraVideo');
+        const placeholderCam = document.getElementById('preflightCameraPlaceholder');
+        const msgCam = document.getElementById('preflightCameraMessage');
+
+        if (enforceCam && btnStart) {
+            btnStart.disabled = true;
+            btnStart.classList.add('opacity-50', 'cursor-not-allowed');
+            btnStart.title = 'Harap selesaikan uji kamera terlebih dahulu.';
+        }
+
+        async function runCameraPreflight() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                if (badgeCam) {
+                    badgeCam.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                    badgeCam.textContent = 'Tidak Didukung';
+                }
+                if (msgCam) msgCam.textContent = 'Browser ini tidak mendukung akses kamera atau situs tidak diakses melalui HTTPS.';
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                if (videoCam) {
+                    videoCam.srcObject = stream;
+                    videoCam.classList.remove('hidden');
+                    await videoCam.play();
+                }
+                if (placeholderCam) placeholderCam.classList.add('hidden');
+                if (badgeCam) {
+                    badgeCam.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                    badgeCam.textContent = 'Kamera Siap';
+                }
+                if (msgCam) msgCam.textContent = 'Kamera berhasil terdeteksi! Anda siap memulai ujian.';
+                if (btnStart) {
+                    btnStart.disabled = false;
+                    btnStart.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnStart.title = '';
+                }
+            } catch (e) {
+                if (badgeCam) {
+                    badgeCam.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                    badgeCam.textContent = 'Izin Ditolak';
+                }
+                if (msgCam) msgCam.textContent = 'Akses kamera ditolak atau tidak ditemukan perangkat webcam yang aktif.';
+            }
+        }
+
+        if (btnTest) {
+            btnTest.addEventListener('click', runCameraPreflight);
+        }
+    }
 });
 </script>
 @endsection

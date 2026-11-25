@@ -1,0 +1,23 @@
+port: 7880
+bind_addresses:
+  - ""
+
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 50200
+  use_external_ip: true
+
+# Ganti kunci di bawah ini dengan kredensial acak panjang (openssl rand -hex 24)
+# Lalu masukkan pasangan API Key & Secret yang sama ke Pengaturan Sistem TESLOKA.
+keys:
+  APITESLOKALIVEKITKEY: GANTI_DENGAN_SECRET_ACAK_MINIMAL_32_KARAKTER
+
+logging:
+  level: info
+  pion_level: error
+
+room:
+  auto_create: true
+  empty_timeout: 300
+  max_participants: 60

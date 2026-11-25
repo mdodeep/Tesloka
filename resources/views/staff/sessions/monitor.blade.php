@@ -5,6 +5,7 @@
 @section('page-title', 'Monitoring Real-Time')
 
 @section('content')
+@vite(['resources/js/proctoring.js'])
 <div class="space-y-6 w-full" id="monitoring-root" data-feed-url="{{ route('staff.sessions.monitor.feed', $session) }}">
 
     <!-- Top Session Header -->
@@ -90,9 +91,9 @@
                 <input type="text" id="search-input" onkeyup="filterParticipants()" placeholder="Cari nama / meja..." class="form-input w-full pl-9 pr-3 h-9 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
                 <i data-lucide="search" class="size-4 text-default-400 absolute left-3 top-2.5"></i>
             </div>
-            <div class="flex items-center gap-1 text-[11px] text-default-500 shrink-0">
-                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span id="feed-status">Auto-Sync Live</span>
+            <div class="flex items-center gap-1.5 text-[11px] text-default-600 shrink-0 px-2.5 py-1 rounded-full border border-default-200 bg-default-50" id="feed-status-badge">
+                <span class="inline-block w-2 h-2 rounded-full bg-blue-500 animate-pulse" id="feed-status-dot"></span>
+                <span id="feed-status" class="font-semibold">Auto-Sync Polling (5d)</span>
             </div>
         </div>
     </div>
@@ -101,6 +102,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="participants-grid">
         @foreach($participantsData as $part)
             <div class="participant-card bg-white border border-default-200 rounded p-4 shadow-sm hover:shadow transition relative flex flex-col justify-between"
+                 id="participant-card-{{ $part['student_id'] }}"
                  data-student-id="{{ $part['student_id'] }}"
                  data-attempt-id="{{ $part['attempt_id'] ?? '' }}"
                  data-name="{{ strtolower($part['student_name']) }}"
@@ -115,11 +117,11 @@
                             <span class="px-2 py-0.5 bg-slate-900 text-white font-mono text-xs font-bold rounded">
                                 {{ $part['seat_number'] }}
                             </span>
-                            <span class="px-1.5 py-0.5 bg-default-100 text-default-600 text-[10px] font-semibold rounded font-mono">
+                            <span class="px-1.5 py-0.5 bg-default-100 text-default-600 text-[10px] font-semibold rounded font-mono" id="part-pkg-{{ $part['student_id'] }}">
                                 {{ $part['package_code'] }}
                             </span>
                         </div>
-                        <div class="flex items-center gap-1">
+                        <div class="flex items-center gap-1" id="part-status-badge-{{ $part['student_id'] }}">
                             @if($part['is_online'])
                                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Online
@@ -150,51 +152,63 @@
                     </h3>
                     <span class="text-xs text-default-400 block font-mono">NISN: {{ $part['student_nisn'] ?? '-' }}</span>
 
-                    <!-- Warnings (Tab blur / fullscreen) -->
-                    @if(! $part['is_tab_focused'])
-                        <div class="mt-2 px-2 py-1 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-800 font-medium flex items-center gap-1.5">
-                            <i data-lucide="alert-triangle" class="size-3.5 text-amber-600 shrink-0"></i>
-                            <span>Fokus Tab Lepas (Blur)</span>
-                        </div>
-                    @endif
+                    <!-- Warnings (Tab blur / Camera denied) -->
+                    <div id="part-warnings-{{ $part['student_id'] }}" class="space-y-1">
+                        @if(! $part['is_tab_focused'])
+                            <div class="mt-2 px-2 py-1 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-800 font-medium flex items-center gap-1.5">
+                                <i data-lucide="alert-triangle" class="size-3.5 text-amber-600 shrink-0"></i>
+                                <span>Fokus Tab Lepas (Blur)</span>
+                            </div>
+                        @endif
+                        @if($part['camera_status'] === 'denied')
+                            <div class="mt-2 px-2 py-1 bg-rose-50 border border-rose-200 rounded text-[11px] text-rose-800 font-medium flex items-center gap-1.5">
+                                <i data-lucide="camera-off" class="size-3.5 text-rose-600 shrink-0"></i>
+                                <span>Izin Kamera Ditolak</span>
+                            </div>
+                        @endif
+                    </div>
 
                     <!-- Progress Bar & Answer Count -->
-                    @if($part['attempt_id'])
-                        <div class="mt-3 space-y-1">
-                            <div class="flex items-center justify-between text-[11px] text-default-600">
-                                <span>Terjawab: <strong>{{ $part['answered_count'] }}/{{ $part['total_questions'] }}</strong></span>
-                                <span class="font-semibold">{{ $part['progress_percent'] }}%</span>
+                    <div id="part-progress-{{ $part['student_id'] }}">
+                        @if($part['attempt_id'])
+                            <div class="mt-3 space-y-1">
+                                <div class="flex items-center justify-between text-[11px] text-default-600">
+                                    <span>Terjawab: <strong>{{ $part['answered_count'] }}/{{ $part['total_questions'] }}</strong></span>
+                                    <span class="font-semibold">{{ $part['progress_percent'] }}%</span>
+                                </div>
+                                <div class="w-full bg-default-100 h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-1.5 rounded-full transition-all duration-300" style="width: {{ $part['progress_percent'] }}%"></div>
+                                </div>
+                                @if($part['doubtful_count'] > 0)
+                                    <span class="text-[10px] text-amber-600 block">Ragu-ragu: {{ $part['doubtful_count'] }} soal</span>
+                                @endif
                             </div>
-                            <div class="w-full bg-default-100 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-primary h-1.5 rounded-full" style="width: {{ $part['progress_percent'] }}%"></div>
-                            </div>
-                            @if($part['doubtful_count'] > 0)
-                                <span class="text-[10px] text-amber-600 block">Ragu-ragu: {{ $part['doubtful_count'] }} soal</span>
-                            @endif
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Intervention Actions Menu -->
-                @if($part['attempt_id'] && $part['attempt_status'] === 'in_progress')
-                    <div class="mt-4 pt-3 border-t border-default-100 flex items-center justify-between gap-1 flex-wrap">
-                        <button type="button" onclick="openStudentWarningModal({{ $part['student_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 rounded transition" title="Kirim Peringatan Langsung ke Peserta Ini">
-                            Peringatkan
-                        </button>
-                        <button type="button" onclick="openAddTimeModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-primary hover:bg-blue-50 rounded transition" title="Tambah Waktu">
-                            +15 Mnt
-                        </button>
-                        <button type="button" onclick="confirmForceRefresh({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-default-600 hover:bg-default-100 rounded transition" title="Paksa Reload Layar">
-                            Reload
-                        </button>
-                        <button type="button" onclick="openForceLogoutModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-amber-600 hover:bg-amber-50 rounded transition" title="Logout Paksa Sesi Perangkat (Jawaban Aman)">
-                            Reset Sesi
-                        </button>
-                        <button type="button" onclick="openForceStopModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-rose-700 hover:bg-rose-50 rounded transition" title="Hentikan Ujian Permanen">
-                            Stop
-                        </button>
-                    </div>
-                @endif
+                <div id="part-actions-{{ $part['student_id'] }}">
+                    @if($part['attempt_id'] && $part['attempt_status'] === 'in_progress')
+                        <div class="mt-4 pt-3 border-t border-default-100 flex items-center justify-between gap-1 flex-wrap">
+                            <button type="button" onclick="openStudentWarningModal({{ $part['student_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 rounded transition cursor-pointer" title="Kirim Peringatan Langsung ke Peserta Ini">
+                                Peringatkan
+                            </button>
+                            <button type="button" onclick="openAddTimeModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-primary hover:bg-blue-50 rounded transition cursor-pointer" title="Tambah Waktu">
+                                +15 Mnt
+                            </button>
+                            <button type="button" onclick="confirmForceRefresh({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-default-600 hover:bg-default-100 rounded transition cursor-pointer" title="Paksa Reload Layar">
+                                Reload
+                            </button>
+                            <button type="button" onclick="openForceLogoutModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer" title="Logout Paksa Sesi Perangkat (Jawaban Aman)">
+                                Reset Sesi
+                            </button>
+                            <button type="button" onclick="openForceStopModal({{ $part['attempt_id'] }}, '{{ addslashes($part['student_name']) }}')" class="px-2 py-1 text-[11px] font-semibold text-rose-700 hover:bg-rose-50 rounded transition cursor-pointer" title="Hentikan Ujian Permanen">
+                                Stop
+                            </button>
+                        </div>
+                    @endif
+                </div>
             </div>
         @endforeach
     </div>
@@ -533,6 +547,21 @@
 <script>
     const sessionId = {{ $session->id }};
     const feedUrl = document.getElementById('monitoring-root').dataset.feedUrl;
+    window.CBT_REALTIME = @json($realtimeConfig);
+
+    let monitorParticipantsMap = {};
+    @json($participantsData).forEach(p => {
+        monitorParticipantsMap[p.student_id] = p;
+    });
+
+    function escapeHtml(str) {
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
 
     function openAnnouncementModal() { document.getElementById('modal-announcement').classList.remove('hidden'); }
     function closeAnnouncementModal() { document.getElementById('modal-announcement').classList.add('hidden'); }
@@ -594,7 +623,7 @@
             body: JSON.stringify({ reason: 'Instruksi refresh oleh pengawas ruang.' })
         }).then(r => r.json()).then(data => {
             alert(data.message || 'Instruksi reload terkirim.');
-        }).catch(err => alert('Gagal mengirim instruksi reload.'));
+        }).catch(() => alert('Gagal mengirim instruksi reload.'));
     }
 
     let currentFilter = 'all';
@@ -638,20 +667,266 @@
         });
     }
 
-    // Polling live telemetry setiap 10 detik
-    setInterval(() => {
+    function computeDataStatus(p) {
+        if (p.is_online) return 'online';
+        if (p.attempt_status === 'submitted' || p.attempt_status === 'terminated') return 'completed';
+        if (p.attempt_status === 'in_progress') return 'offline';
+        return 'not_started';
+    }
+
+    function updateParticipantCardDom(p) {
+        monitorParticipantsMap[p.student_id] = p;
+        const card = document.getElementById(`participant-card-${p.student_id}`);
+        if (!card) return;
+
+        card.dataset.attemptId = p.attempt_id || '';
+        card.dataset.status = computeDataStatus(p);
+        card.dataset.focus = p.is_tab_focused ? 'focused' : 'blur';
+
+        const pkgEl = document.getElementById(`part-pkg-${p.student_id}`);
+        if (pkgEl) pkgEl.textContent = p.package_code || '-';
+
+        const badgeBox = document.getElementById(`part-status-badge-${p.student_id}`);
+        if (badgeBox) {
+            if (p.is_online) {
+                badgeBox.innerHTML = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Online</span>`;
+            } else if (p.attempt_status === 'submitted') {
+                badgeBox.innerHTML = `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-100 text-blue-800">Submitted</span>`;
+            } else if (p.attempt_status === 'terminated') {
+                badgeBox.innerHTML = `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-100 text-rose-800">Dihentikan</span>`;
+            } else if (p.attempt_status === 'in_progress') {
+                badgeBox.innerHTML = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-100 text-rose-800"><span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Offline</span>`;
+            } else {
+                badgeBox.innerHTML = `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-default-100 text-default-600">Belum Mulai</span>`;
+            }
+        }
+
+        const warnBox = document.getElementById(`part-warnings-${p.student_id}`);
+        if (warnBox) {
+            let warnHtml = '';
+            if (!p.is_tab_focused) {
+                warnHtml += `<div class="mt-2 px-2 py-1 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-800 font-medium flex items-center gap-1.5"><i data-lucide="alert-triangle" class="size-3.5 text-amber-600 shrink-0"></i><span>Fokus Tab Lepas (Blur)</span></div>`;
+            }
+            if (p.camera_status === 'denied') {
+                warnHtml += `<div class="mt-2 px-2 py-1 bg-rose-50 border border-rose-200 rounded text-[11px] text-rose-800 font-medium flex items-center gap-1.5"><i data-lucide="camera-off" class="size-3.5 text-rose-600 shrink-0"></i><span>Izin Kamera Ditolak</span></div>`;
+            }
+            warnBox.innerHTML = warnHtml;
+        }
+
+        const progBox = document.getElementById(`part-progress-${p.student_id}`);
+        if (progBox) {
+            if (p.attempt_id) {
+                const doubtfulHtml = p.doubtful_count > 0 ? `<span class="text-[10px] text-amber-600 block">Ragu-ragu: ${p.doubtful_count} soal</span>` : '';
+                progBox.innerHTML = `
+                    <div class="mt-3 space-y-1">
+                        <div class="flex items-center justify-between text-[11px] text-default-600">
+                            <span>Terjawab: <strong>${p.answered_count}/${p.total_questions}</strong></span>
+                            <span class="font-semibold">${p.progress_percent}%</span>
+                        </div>
+                        <div class="w-full bg-default-100 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-primary h-1.5 rounded-full transition-all duration-300" style="width: ${p.progress_percent}%"></div>
+                        </div>
+                        ${doubtfulHtml}
+                    </div>
+                `;
+            } else {
+                progBox.innerHTML = '';
+            }
+        }
+
+        const actBox = document.getElementById(`part-actions-${p.student_id}`);
+        if (actBox) {
+            if (p.attempt_id && p.attempt_status === 'in_progress') {
+                const safeNameJs = escapeHtml(String(p.student_name).replace(/\\/g, '\\\\').replace(/'/g, "\\'"));
+                actBox.innerHTML = `
+                    <div class="mt-4 pt-3 border-t border-default-100 flex items-center justify-between gap-1 flex-wrap">
+                        <button type="button" onclick="openStudentWarningModal(${p.student_id}, '${safeNameJs}')" class="px-2 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 rounded transition cursor-pointer" title="Kirim Peringatan Langsung ke Peserta Ini">Peringatkan</button>
+                        <button type="button" onclick="openAddTimeModal(${p.attempt_id}, '${safeNameJs}')" class="px-2 py-1 text-[11px] font-semibold text-primary hover:bg-blue-50 rounded transition cursor-pointer" title="Tambah Waktu">+15 Mnt</button>
+                        <button type="button" onclick="confirmForceRefresh(${p.attempt_id}, '${safeNameJs}')" class="px-2 py-1 text-[11px] font-semibold text-default-600 hover:bg-default-100 rounded transition cursor-pointer" title="Paksa Reload Layar">Reload</button>
+                        <button type="button" onclick="openForceLogoutModal(${p.attempt_id}, '${safeNameJs}')" class="px-2 py-1 text-[11px] font-semibold text-amber-600 hover:bg-amber-50 rounded transition cursor-pointer" title="Logout Paksa Sesi Perangkat (Jawaban Aman)">Reset Sesi</button>
+                        <button type="button" onclick="openForceStopModal(${p.attempt_id}, '${safeNameJs}')" class="px-2 py-1 text-[11px] font-semibold text-rose-700 hover:bg-rose-50 rounded transition cursor-pointer" title="Hentikan Ujian Permanen">Stop</button>
+                    </div>
+                `;
+            } else {
+                actBox.innerHTML = '';
+            }
+        }
+    }
+
+    function recomputeStatsFromMap() {
+        const list = Object.values(monitorParticipantsMap);
+        document.getElementById('stat-total').textContent = list.length;
+        document.getElementById('stat-online').textContent = list.filter(p => p.is_online).length;
+        document.getElementById('stat-offline').textContent = list.filter(p => !p.is_online && p.attempt_status === 'in_progress').length;
+        document.getElementById('stat-completed').textContent = list.filter(p => p.attempt_status === 'submitted' || p.attempt_status === 'terminated').length;
+        document.getElementById('stat-not-started').textContent = list.filter(p => !p.attempt_id).length;
+        document.getElementById('stat-warning').textContent = list.filter(p => !p.is_tab_focused).length;
+    }
+
+    function renderIncidentItemHtml(inc) {
+        const sevBg = inc.severity === 'critical'
+            ? 'bg-rose-50/50 border-rose-200'
+            : (inc.severity === 'warning' ? 'bg-amber-50/50 border-amber-200' : 'bg-default-50');
+        const sevBadge = inc.severity === 'critical'
+            ? 'bg-rose-100 text-rose-800'
+            : (inc.severity === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-default-700');
+        const footerRight = inc.status === 'resolved'
+            ? `<span class="text-emerald-600 font-semibold">Terselesaikan (${escapeHtml(inc.resolved_by_name || 'Staff')})</span>`
+            : `<button type="button" onclick="openResolveIncidentModal(${Number(inc.id)}, '${escapeHtml(inc.incident_code)}')" class="text-primary font-semibold hover:underline cursor-pointer">Tindak Lanjuti</button>`;
+
+        return `
+            <div class="p-3 border border-default-200 rounded text-xs space-y-1.5 ${sevBg}" data-incident-id="${Number(inc.id)}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-mono font-bold text-default-700">${escapeHtml(inc.incident_code)}</span>
+                        <span class="px-1.5 py-0.2 rounded font-semibold uppercase text-[10px] ${sevBadge}">${escapeHtml(inc.severity)}</span>
+                    </div>
+                    <span class="text-default-400 font-mono">${escapeHtml(inc.created_at_time || '')}</span>
+                </div>
+                <p class="text-default-700 font-medium">${escapeHtml(inc.description)}</p>
+                <div class="flex items-center justify-between text-[11px] text-default-500 pt-1 border-t border-default-200">
+                    <span>Peserta: ${escapeHtml(inc.student_name || 'Sistem / Umum')}</span>
+                    ${footerRight}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderIncidentsList(incidents) {
+        const container = document.getElementById('incidents-list');
+        if (!container || !Array.isArray(incidents)) return;
+        if (incidents.length === 0) {
+            container.innerHTML = '<p class="text-xs text-default-400 text-center py-6">Belum ada insiden yang tercatat pada sesi ini.</p>';
+            return;
+        }
+        container.innerHTML = incidents.map(renderIncidentItemHtml).join('');
+    }
+
+    function renderAnnouncementsList(announcements) {
+        const container = document.getElementById('announcements-list');
+        if (!container || !Array.isArray(announcements)) return;
+        if (announcements.length === 0) {
+            container.innerHTML = '<p class="text-xs text-default-400 text-center py-6">Belum ada pengumuman yang disiarkan.</p>';
+            return;
+        }
+        container.innerHTML = announcements.map(ann => {
+            const cardBg = ann.priority === 'emergency'
+                ? 'bg-rose-50 border-rose-300'
+                : (ann.priority === 'urgent' ? 'bg-amber-50 border-amber-300' : 'bg-default-50');
+            return `
+                <div class="p-3 border border-default-200 rounded text-xs space-y-1 ${cardBg}">
+                    <div class="flex items-center justify-between">
+                        <strong class="text-default-800 font-bold">${escapeHtml(ann.title)}</strong>
+                        <span class="text-[10px] text-default-400 font-mono">${escapeHtml(ann.created_at_time || ann.created_at || '')}</span>
+                    </div>
+                    <p class="text-default-600">${escapeHtml(ann.message)}</p>
+                    <div class="text-[10px] text-default-400 pt-1 flex items-center justify-between">
+                        <span>Oleh: ${escapeHtml(ann.sender_name || 'Pengawas')}</span>
+                        <span class="capitalize">Target: ${escapeHtml(ann.target_type)}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function applyMonitoringFeed(data) {
+        if (!data || !data.stats) return;
+        document.getElementById('stat-total').textContent = data.stats.total_registered;
+        document.getElementById('stat-online').textContent = data.stats.online;
+        document.getElementById('stat-offline').textContent = data.stats.offline;
+        document.getElementById('stat-completed').textContent = data.stats.completed;
+        document.getElementById('stat-not-started').textContent = data.stats.not_started;
+        document.getElementById('stat-warning').textContent = data.stats.warning_focus;
+
+        if (Array.isArray(data.participants)) {
+            data.participants.forEach(updateParticipantCardDom);
+            filterParticipants();
+        }
+        if (Array.isArray(data.incidents)) {
+            renderIncidentsList(data.incidents);
+        }
+        if (Array.isArray(data.announcements)) {
+            renderAnnouncementsList(data.announcements);
+        }
+        if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+    }
+
+    function fetchMonitoringFeed() {
         fetch(feedUrl, { headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
-            .then(data => {
-                if (!data || !data.stats) return;
-                document.getElementById('stat-total').textContent = data.stats.total_registered;
-                document.getElementById('stat-online').textContent = data.stats.online;
-                document.getElementById('stat-offline').textContent = data.stats.offline;
-                document.getElementById('stat-completed').textContent = data.stats.completed;
-                document.getElementById('stat-not-started').textContent = data.stats.not_started;
-                document.getElementById('stat-warning').textContent = data.stats.warning_focus;
-            })
+            .then(applyMonitoringFeed)
             .catch(e => console.error('Feed sync error:', e));
-    }, 10000);
+    }
+
+    function setFeedConnectionBadge(state) {
+        const dot = document.getElementById('feed-status-dot');
+        const label = document.getElementById('feed-status');
+        if (!dot || !label) return;
+
+        if (state === 'connected') {
+            dot.className = 'inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+            label.textContent = 'WebSocket Live (Reverb)';
+        } else if (state === 'connecting') {
+            dot.className = 'inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse';
+            label.textContent = 'Menghubungkan Reverb...';
+        } else {
+            dot.className = 'inline-block w-2 h-2 rounded-full bg-blue-500 animate-pulse';
+            label.textContent = 'Auto-Sync Polling (5d)';
+        }
+    }
+
+    let pollingTimer = null;
+    function scheduleFeedPolling(intervalMs) {
+        if (pollingTimer) clearInterval(pollingTimer);
+        pollingTimer = setInterval(fetchMonitoringFeed, intervalMs);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        let isWsConnected = false;
+        const echo = typeof window.createTeslokaEcho === 'function'
+            ? window.createTeslokaEcho(window.CBT_REALTIME, {
+                onStateChange: (state) => {
+                    setFeedConnectionBadge(state);
+                    isWsConnected = (state === 'connected');
+                    scheduleFeedPolling(isWsConnected ? 15000 : 5000);
+                }
+            })
+            : null;
+
+        if (echo) {
+            echo.private(`exam.session.${sessionId}`)
+                .listen('.telemetry.updated', (e) => {
+                    if (e && e.participant) {
+                        updateParticipantCardDom(e.participant);
+                        recomputeStatsFromMap();
+                        filterParticipants();
+                        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                    }
+                })
+                .listen('.incident.reported', (e) => {
+                    if (e && e.incident) {
+                        const list = document.getElementById('incidents-list');
+                        if (list) {
+                            const existing = list.querySelector(`[data-incident-id="${Number(e.incident.id)}"]`);
+                            const html = renderIncidentItemHtml(e.incident);
+                            if (existing) {
+                                existing.outerHTML = html;
+                            } else {
+                                const emptyP = list.querySelector('p.text-center');
+                                if (emptyP) emptyP.remove();
+                                list.insertAdjacentHTML('afterbegin', html);
+                            }
+                        }
+                    }
+                })
+                .listen('.announcement.broadcasted', () => {
+                    fetchMonitoringFeed();
+                });
+        }
+
+        scheduleFeedPolling(5000);
+    });
 </script>
 @endsection

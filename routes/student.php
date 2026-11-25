@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\StudentAuthController;
+use App\Http\Controllers\BroadcastAuthController;
 use App\Http\Controllers\InAppNotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ExamCameraController;
@@ -21,6 +22,7 @@ Route::prefix('ujian')->name('student.')->group(function () {
 
     // Authenticated Student Routes
     Route::middleware(['portal:student', 'active:student'])->group(function () {
+        Route::post('broadcasting/auth', [BroadcastAuthController::class, 'authenticateStudent'])->name('broadcasting.auth');
         Route::post('logout', [StudentAuthController::class, 'logout'])->name('logout');
 
         // Profile & Completion
@@ -61,6 +63,8 @@ Route::prefix('ujian')->name('student.')->group(function () {
                 Route::get('{attempt}/announcements', [ExamAttemptController::class, 'checkAnnouncements'])->name('announcements');
                 Route::post('{attempt}/announcements/{announcement}/acknowledge', [ExamAttemptController::class, 'acknowledgeAnnouncement'])->name('announcements.acknowledge');
                 Route::post('{attempt}/incident-snapshot', [ExamCameraController::class, 'uploadIncidentSnapshot'])->name('incident-snapshot');
+                Route::post('{attempt}/livekit-token', [ExamCameraController::class, 'livekitTokenForStudent'])->name('livekit-token');
+                Route::post('{attempt}/live-frame', [ExamCameraController::class, 'uploadLiveFrame'])->name('live-frame');
             });
 
             // In-App Notification Center (FULL-FEATURE 40.7)

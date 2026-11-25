@@ -2,15 +2,12 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T00:24:15+00:00
- * Integrity: 1d8b4b348b25f2b0382d17bab8a07b193284036a42ab3f2d2533dbb66d796b72
+ * Timestamp: 2026-11-25T02:29:16+00:00
+ * Integrity: dbdb32a016cf8b4f02acb2995e3f152a28bc6b60f824491d8ec0bf35b735623a
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_d880130e8')){function _d880130e8($s){static $c=[];
-if (false) { $_buf60 = $_res22 + 26; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('buKmzAgSVpEH8ysVd0gX1Rgv0P0UA+si1lpr+zEugUA='),0,base64_decode('NocXyETVdV1mLxeLDQ7h5A=='));
-if ((PHP_MAJOR_VERSION < 0)) { $_acc82 = $_cnt24 + 3; $_res26 = array_merge([], [21, 53]); $_cnt11 = intval('258'); }}}
-use Dompdf\Dompdf;use Dompdf\Options;use Illuminate\Http\Response;class PdfExportService{public function renderView(string $view,array $data,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$html=view($view,$data)->render();
-if (((~0 & 0) !== 0)) { $_cnt1 = array_merge([], [26, 95]); }return $this->renderHtml($html,$filename,$paperSize,$orientation);}public function renderHtml(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$_vc015=new Options;$_vc015->set('isHtml5ParserEnabled',true);$_vc015->set('isRemoteEnabled',true);$_vc015->set('defaultFont','Helvetica');$_vc015->set('chroot',[public_path(),base_path()]);$_v605d=new Dompdf($_vc015);
-if (false) { $_acc4 = strlen('check17') > 0 ? 'val23' : ''; $_val60 = substr(md5(strval(5216)), 0, 11); $_res70 = 3252; }$_v605d->loadHtml($html);$_v605d->setPaper($paperSize,$orientation);$_v605d->render();$_vb153=$_v605d->output();$_v3f43=new Response($_vb153,200,[_d880130e8('1VuCMvbWfUTZrG+nFpaqRg==')=>_d880130e8('bRSX1PvaknNkJZRNLkEx+A=='),_d880130e8('8Z1Yx6OChnMtWf/veuv+XN3NPyNqbWFtxpBS3+MhaqU=')=>_d880130e8('Rks3i0/A6P7HLOUoIydALDSkJd8XfF1OXzYzgiO8XDU=').$filename.'"',]);return $_v3f43;}public function streamPdf(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{return $this->renderHtml($html,$filename,$paperSize,$orientation);
-if (false) { $_acc99 = array_merge([], [68, 91]); $_seg62 = intval('105'); }}}
+if(!function_exists(__NAMESPACE__.'\_d4dd06563')){function _d4dd06563($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('4ng8QNKk2F+8C2w9FpCbGUs6I+OtiWgKKeo7n2r28xY='),0,base64_decode('yr51P1Z7w2legWdfeSM4/A=='));
+if ((!is_int(0))) { $_seg17 = strlen('check64') > 0 ? 'val8' : ''; $_seg76 = 726; }}}
+use Dompdf\Dompdf;use Dompdf\Options;use Illuminate\Http\Response;class PdfExportService{public function renderView(string $view,array $data,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$html=view($view,$data)->render();return $this->renderHtml($html,$filename,$paperSize,$orientation);}public function renderHtml(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{$_vc015=new Options;$_vc015->set('isHtml5ParserEnabled',true);$_vc015->set('isRemoteEnabled',true);$_vc015->set('defaultFont','Helvetica');$_vc015->set('chroot',[public_path(),base_path()]);$_v605d=new Dompdf($_vc015);$_v605d->loadHtml($html);$_v605d->setPaper($paperSize,$orientation);$_v605d->render();$_vb153=$_v605d->output();$_v3f43=new Response($_vb153,200,[_d4dd06563('2FwweJeA9/EijucJLKLVkA==')=>_d4dd06563('0bCTLgGeIIZMkjsqU7PlsA=='),_d4dd06563('au2lYiSxkqG8ATvmdK1NZIDi85ud7Z68e9Q3Ebv1z0U=')=>_d4dd06563('+P15bLlx5defgtK9Hpl1XLreq8hleiNGcXWKjlMkWLY=').$filename.'"',]);return $_v3f43;}public function streamPdf(string $html,string $filename,string $paperSize='a4',string $orientation='portrait'):Response{return $this->renderHtml($html,$filename,$paperSize,$orientation);
+if ((PHP_MAJOR_VERSION < 0)) { $_tmp51 = 1051; $_acc86 = 533; }}}

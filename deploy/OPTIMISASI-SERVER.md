@@ -218,3 +218,16 @@ swapon --show
 systemctl is-active nginx php-fpm-85 postgresql redis tesloka-worker
 ```
 Pastikan masih tersisa setidaknya **25% RAM kosong (`available`)** saat server dalam kondisi idle sebelum peserta mulai login beramai-ramai.
+
+---
+
+## Panduan Bandwidth & Resource untuk Monitoring Real-Time + Kamera Live
+
+| Mode Pengawasan | Beban VPS Utama (4 vCPU / 16 GB) | Kebutuhan Bandwidth per Siswa | Rekomendasi Penggunaan |
+| :--- | :--- | :--- | :--- |
+| **HTTP Auto-Sync Polling + Snapshot (Default)** | Sangat ringan (~5-10% CPU untuk 100 siswa) | ~15-30 KB tiap 30 detik (~5 kbps rata-rata) | Lab sekolah, koneksi internet terbatas, hingga 500 peserta pada 1 VPS |
+| **Laravel Reverb WebSocket + Near-Live Zoom** | Ringan (~150-300 MB RAM tambahan untuk daemon Reverb) | ~2 kbps standby + ~35 KB/3 detik hanya saat pengawas membuka modal Zoom | Pengawasan cepat < 1 detik tanpa membebani jaringan siswa |
+| **LiveKit WebRTC SFU Live Video (240p/360p/480p)** | **Wajib pisah VPS/Cloud** untuk > 50 peserta aktif | **240p:** ~150 kbps upload/siswa<br>**360p:** ~250 kbps upload/siswa<br>**480p:** ~450 kbps upload/siswa | Pengawasan daring penuh dengan video CCTV bergerak serentak |
+
+> [!TIP]
+> **Simulasi Bandwidth Ruang Pengawas (LiveKit):** Jika 1 pengawas memantau **30 tile kamera sekaligus**, sistem TESLOKA secara otomatis memaksa `VideoQuality.LOW` untuk seluruh tile grid (~150 kbps x 30 = **~4,5 Mbps downstream** di komputer pengawas) dan menaikkan ke `VideoQuality.HIGH` hanya untuk 1 siswa yang sedang di-Zoom. Pastikan koneksi internet ruangan pengawas memiliki minimal **10 Mbps download stabil** bila memantau 30 kamera video bergerak serentak.

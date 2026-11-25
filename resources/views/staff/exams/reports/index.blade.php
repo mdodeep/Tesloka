@@ -15,7 +15,13 @@
                     {{ $exam->exam_type }}
                 </span>
                 <span class="text-xs text-default-400">Kode: <strong class="text-white">{{ $exam->code }}</strong></span>
-                <span class="text-xs text-default-400">KKM: <strong class="text-emerald-400">{{ $exam->passing_grade ?? 75 }}</strong></span>
+                <span class="text-xs text-default-400">
+                    @if(!($exam->has_passing_grade ?? true) || $exam->isCertification())
+                        Mode: <strong class="text-teal-300">Tanpa KKM (Sertifikasi)</strong>
+                    @else
+                        KKM: <strong class="text-emerald-400">{{ $exam->passing_grade ?? 75 }}</strong>
+                    @endif
+                </span>
             </div>
             <h2 class="text-2xl font-bold">Laporan Psikometri & Analisis Ujian</h2>
             <p class="text-xs text-default-400 mt-1">
@@ -278,7 +284,7 @@
 
             <!-- Pass / Remedial Donut Chart -->
             <div>
-                <x-cbt.card title="Rasio Kelulusan KKM ({{ $exam->passing_grade ?? 75 }})">
+                <x-cbt.card :title="(!($exam->has_passing_grade ?? true) || $exam->isCertification()) ? 'Rasio Evaluasi (Mode Tanpa KKM)' : 'Rasio Kelulusan KKM (' . ($exam->passing_grade ?? 75) . ')'">
                     <div id="passFailDonutApexChart" class="w-full min-h-[260px] flex items-center justify-center"></div>
                 </x-cbt.card>
             </div>
@@ -307,7 +313,7 @@
 
     <!-- Tab 3: Remedial Students -->
     <div id="tab-remedial" class="tab-content hidden space-y-4">
-        <x-cbt.card flush title="Daftar Siswa Rekomendasi Program Remedial (Di Bawah KKM {{ $exam->passing_grade ?? 75 }})">
+        <x-cbt.card flush :title="(!($exam->has_passing_grade ?? true) || $exam->isCertification()) ? 'Daftar Evaluasi Remedial (Mode Tanpa KKM / Sertifikasi)' : 'Daftar Siswa Rekomendasi Program Remedial (Di Bawah KKM ' . ($exam->passing_grade ?? 75) . ')'">
             @slot('actions')
                 @if($remedialStudents->isNotEmpty())
                     <a href="{{ route('staff.exams.remedial', $exam) }}" class="btn btn-sm bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-xs transition inline-flex items-center gap-1.5 cursor-pointer">

@@ -73,7 +73,7 @@
                     <option value="">Semua Ujian</option>
                     @foreach($exams as $ex)
                         <option value="{{ $ex->id }}" @selected(request('exam_id') == $ex->id)>
-                            {{ $ex->code }} - {{ $ex->title }} (KKM: {{ $ex->passing_grade }})
+                            {{ $ex->code }} - {{ $ex->title }} ({{ (!($ex->has_passing_grade ?? true) || $ex->isCertification()) ? 'Tanpa KKM' : 'KKM: ' . $ex->passing_grade }})
                         </option>
                     @endforeach
                 </select>

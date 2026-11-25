@@ -521,9 +521,12 @@
                         </td>
                         <td style="text-align: center;">100.0</td>
                     </tr>
+                    @php
+                        $isCert = $attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification());
+                    @endphp
                     <tr>
                         <td colspan="2" style="text-align: right; padding-right: 14px;">Kriteria Ketuntasan Minimal (KKM):</td>
-                        <td colspan="2" style="text-align: center; font-weight: bold;">{{ number_format($attempt->exam->passing_grade ?? 75.0, 1) }}</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">{{ $isCert ? 'Tanpa KKM (Sertifikasi)' : number_format($attempt->exam->passing_grade ?? 75.0, 1) }}</td>
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: right; padding-right: 14px;">Predikat Huruf &amp; Sebutan:</td>
@@ -531,9 +534,6 @@
                             {{ $letterGrade }} ({{ $gradePredicate }})
                         </td>
                     </tr>
-                    @php
-                        $isCert = $attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification());
-                    @endphp
                     <tr style="background-color: {{ ($isCert || $isPassed) ? '#f0fdf4' : '#fef2f2' }};">
                         <td colspan="2" style="text-align: right; padding-right: 14px; font-weight: bold;">
                             {{ $isCert ? 'STATUS EVALUASI / CAPAIAN:' : 'STATUS KELULUSAN / KETUNTASAN:' }}

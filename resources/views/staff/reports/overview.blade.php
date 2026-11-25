@@ -97,7 +97,11 @@
                                 {{ $ex->subject->name ?? '-' }}
                             </td>
                             <td class="px-3 py-3.5 text-center font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">
-                                {{ $ex->passing_grade ?? 75 }}
+                                @if(!($ex->has_passing_grade ?? true) || $ex->isCertification())
+                                    <span class="text-xs font-sans text-teal-600">Tanpa KKM</span>
+                                @else
+                                    {{ $ex->passing_grade ?? 75 }}
+                                @endif
                             </td>
                             <td class="px-3 py-3.5 text-center font-bold text-indigo-600 whitespace-nowrap">
                                 {{ $ex->graded_count }} Peserta

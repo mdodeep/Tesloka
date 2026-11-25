@@ -138,7 +138,8 @@
                                     <span class="text-xs font-bold text-default-800 block">Terapkan Nilai Batas Kelulusan (KKM)</span>
                                     <p class="text-[11px] text-default-500">Nonaktifkan untuk sertifikasi bahasa (TOEFL/EPT/ITP) di mana seluruh peserta memperoleh skor tanpa status Remedial.</p>
                                 </div>
-                                <input type="checkbox" name="has_passing_grade" id="toggle-has-passing-grade" value="1" {{ old('has_passing_grade', '1') ? 'checked' : '' }} class="form-switch">
+                                <input type="hidden" name="has_passing_grade" value="0">
+                                <input type="checkbox" name="has_passing_grade" id="toggle-has-passing-grade" value="1" {{ filter_var(old('has_passing_grade', '1'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
                             </label>
 
                             <div id="container-passing-grade" class="pt-3 border-t border-default-200">
@@ -189,7 +190,8 @@
                                 <span class="text-xs font-bold text-default-800 block">Acak Urutan Soal</span>
                                 <p class="text-[11px] text-default-400">Setiap paket peserta menerima urutan soal yang berbeda.</p>
                             </div>
-                            <input type="checkbox" name="randomize_questions" value="1" {{ old('randomize_questions', '1') ? 'checked' : '' }} class="form-switch">
+                            <input type="hidden" name="randomize_questions" value="0">
+                            <input type="checkbox" name="randomize_questions" value="1" {{ filter_var(old('randomize_questions', '1'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
                         </label>
 
                         <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer">
@@ -197,7 +199,8 @@
                                 <span class="text-xs font-bold text-default-800 block">Acak Opsi Pilihan Jawaban</span>
                                 <p class="text-[11px] text-default-400">Pilihan A, B, C, D diacak tanpa mengubah kunci penilaian.</p>
                             </div>
-                            <input type="checkbox" name="randomize_options" value="1" {{ old('randomize_options', '1') ? 'checked' : '' }} class="form-switch">
+                            <input type="hidden" name="randomize_options" value="0">
+                            <input type="checkbox" name="randomize_options" value="1" {{ filter_var(old('randomize_options', '1'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
                         </label>
 
                         <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer">
@@ -205,7 +208,8 @@
                                 <span class="text-xs font-bold text-default-800 block">Tampilkan Skor Instan</span>
                                 <p class="text-[11px] text-default-400">Peserta dapat melihat nilai saat menekan selesai.</p>
                             </div>
-                            <input type="checkbox" name="show_result_on_finish" value="1" {{ old('show_result_on_finish') ? 'checked' : '' }} class="form-switch">
+                            <input type="hidden" name="show_result_on_finish" value="0">
+                            <input type="checkbox" name="show_result_on_finish" value="1" {{ filter_var(old('show_result_on_finish', '0'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
                         </label>
 
                         <label class="flex items-center justify-between p-2.5 rounded bg-amber-50/60 border border-amber-200/70 hover:bg-amber-50 transition cursor-pointer">
@@ -216,7 +220,8 @@
                                 </span>
                                 <p class="text-[11px] text-amber-700">Ujian latihan mandiri. Nilai tidak dimasukkan ke dalam penentuan kelulusan resmi / SKL.</p>
                             </div>
-                            <input type="checkbox" name="is_simulation" value="1" {{ old('is_simulation') ? 'checked' : '' }} class="form-switch text-amber-500">
+                            <input type="hidden" name="is_simulation" value="0">
+                            <input type="checkbox" name="is_simulation" value="1" {{ filter_var(old('is_simulation', '0'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch text-amber-500">
                         </label>
 
                         <div class="pt-2 border-t border-default-100">
@@ -233,7 +238,8 @@
                                 <span class="text-xs font-bold text-default-800 block">Kunci Layar Penuh (Fullscreen Lock)</span>
                                 <p class="text-[11px] text-default-400">Peringatan saat peserta keluar dari layar ujian.</p>
                             </div>
-                            <input type="checkbox" name="fullscreen_lock_enabled" value="1" {{ old('fullscreen_lock_enabled', '1') ? 'checked' : '' }} class="form-switch">
+                            <input type="hidden" name="fullscreen_lock_enabled" value="0">
+                            <input type="checkbox" name="fullscreen_lock_enabled" value="1" {{ filter_var(old('fullscreen_lock_enabled', '1'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
                         </label>
 
                         <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer">
@@ -241,7 +247,8 @@
                                 <span class="text-xs font-bold text-default-800 block">Kamera Pengawas (Snapshot &amp; Live Video WebRTC)</span>
                                 <p class="text-[11px] text-default-400">Pengawasan kamera &amp; snapshot berkala (mendukung streaming WebRTC LiveKit bila dikonfigurasi).</p>
                             </div>
-                            <input type="checkbox" name="camera_proctoring_enabled" value="1" {{ old('camera_proctoring_enabled') ? 'checked' : '' }} class="form-switch">
+                            <input type="hidden" name="camera_proctoring_enabled" value="0">
+                            <input type="checkbox" name="camera_proctoring_enabled" value="1" {{ filter_var(old('camera_proctoring_enabled', '0'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
                         </label>
 
                         <label class="flex items-center justify-between p-2.5 rounded hover:bg-default-50 transition cursor-pointer pt-2 border-t border-default-100">
@@ -249,7 +256,8 @@
                                 <span class="text-xs font-bold text-default-800 block">Wajib Gunakan Safe Exam Browser (SEB)</span>
                                 <p class="text-[11px] text-default-400">Hanya izinkan klien SEB resmi (Sec 18).</p>
                             </div>
-                            <input type="checkbox" name="seb_required" value="1" {{ old('seb_required') ? 'checked' : '' }} class="form-switch">
+                            <input type="hidden" name="seb_required" value="0">
+                            <input type="checkbox" name="seb_required" value="1" {{ filter_var(old('seb_required', '0'), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
                         </label>
 
                         <div>
@@ -368,6 +376,9 @@
                     if (togglePassingGrade) {
                         togglePassingGrade.checked = true;
                         updatePassingGradeVisibility();
+                    }
+                    if (inputPassingGrade && (!inputPassingGrade.value || parseFloat(inputPassingGrade.value) === 0)) {
+                        inputPassingGrade.value = '75.0';
                     }
                     if (selectScoreScale) selectScoreScale.value = 'standard_100';
                     if (selectCertificateType) selectCertificateType.value = 'standard';

@@ -30,7 +30,7 @@
         <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-default-500 uppercase">Ujian Induk (Parent Exam)</span>
             <span class="px-2 py-0.5 bg-primary-100 text-primary-800 text-[10px] font-bold rounded">
-                KKM: {{ $exam->passing_grade }}
+                {{ (!($exam->has_passing_grade ?? true) || $exam->isCertification()) ? 'Mode Tanpa KKM' : 'KKM: ' . $exam->passing_grade }}
             </span>
         </div>
         <div class="text-base font-bold text-default-900">{{ $exam->title }} (<code>{{ $exam->code }}</code>)</div>

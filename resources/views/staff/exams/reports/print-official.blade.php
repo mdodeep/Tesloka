@@ -334,7 +334,7 @@
                     <td>{{ $exam->code }} - {{ $exam->title }}</td>
                     <td style="font-weight: bold;">KKM / Passing Grade</td>
                     <td>:</td>
-                    <td><strong>{{ $exam->passing_grade ?? 75 }}</strong></td>
+                    <td><strong>{{ (!($exam->has_passing_grade ?? true) || $exam->isCertification()) ? 'Tanpa KKM (Sertifikasi)' : ($exam->passing_grade ?? 75) }}</strong></td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Penyusun / Guru</td>

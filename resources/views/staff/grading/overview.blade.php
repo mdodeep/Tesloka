@@ -99,7 +99,11 @@
                                 {{ $exam->subject->name ?? '-' }}
                             </td>
                             <td class="px-3 py-3.5 text-center font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">
-                                {{ $exam->passing_grade ?? 75 }}
+                                @if(!($exam->has_passing_grade ?? true) || $exam->isCertification())
+                                    <span class="text-xs font-sans text-teal-600">Tanpa KKM</span>
+                                @else
+                                    {{ $exam->passing_grade ?? 75 }}
+                                @endif
                             </td>
                             <td class="px-3 py-3.5 text-center whitespace-nowrap">
                                 <span class="font-bold text-default-800">{{ $exam->submitted_attempts_count }}</span>

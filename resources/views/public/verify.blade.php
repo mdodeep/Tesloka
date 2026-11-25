@@ -100,12 +100,17 @@
                             <div class="text-3xl font-black text-default-800 mt-1">{{ $letterGrade }}</div>
                             <span class="text-[10px] text-default-500 font-medium">{{ $gradePredicate }}</span>
                         </div>
+                        @php
+                            $isCertVerify = $attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification());
+                        @endphp
                         <div class="p-4 sm:p-5 rounded-xl {{ $isPassed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} border shadow-2xs text-center">
-                            <span class="text-xs font-semibold {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status Kelulusan</span>
+                            <span class="text-xs font-semibold {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status {{ $isCertVerify ? 'Sertifikasi' : 'Kelulusan' }}</span>
                             <div class="text-lg font-black {{ $isPassed ? 'text-emerald-800' : 'text-rose-800' }} mt-1">
-                                {{ $isPassed ? 'LULUS' : 'REMEDIAL' }}
+                                {{ $isCertVerify ? 'TERSERTIFIKASI' : ($isPassed ? 'LULUS' : 'REMEDIAL') }}
                             </div>
-                            <span class="text-[10px] {{ $isPassed ? 'text-emerald-600' : 'text-rose-600' }}">KKM: {{ (float) ($attempt->exam->passing_grade ?? $breakdown['passing_grade'] ?? 75) }}%</span>
+                            <span class="text-[10px] {{ $isPassed ? 'text-emerald-600' : 'text-rose-600' }}">
+                                {{ $isCertVerify ? 'Tanpa Batas KKM' : 'KKM: ' . (float) ($attempt->exam->passing_grade ?? $breakdown['passing_grade'] ?? 75) . '%' }}
+                            </span>
                         </div>
                     </div>
 

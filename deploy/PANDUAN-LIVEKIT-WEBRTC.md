@@ -61,13 +61,16 @@ Tabel simulasi pemakaian nyata paket gratis `5.000 menit/bulan`:
 
 Gunakan langkah berikut untuk mencoba live video WebRTC tanpa memasang server tambahan:
 
-### Langkah 1: Daftar & Buat Project di LiveKit Cloud
-1. Buka [https://cloud.livekit.io](https://cloud.livekit.io) lalu buat akun gratis dan pilih paket **Build** (`$0/month`).
-2. Buat **Project** baru (misal: `tesloka-proctoring`) dan pilih wilayah (*region*) terdekat dengan Indonesia (misalnya **Singapore / Asia-Southeast**) agar latensi video rendah.
-3. Di dalam Project Dashboard, buka menu **Settings -> Keys**, lalu salin tiga nilai penting ini:
-   - **WebSocket URL:** contoh format `wss://nama-project-anda.livekit.cloud`
-   - **API Key:** contoh format `APIxxxxxxxxxxxx`
-   - **API Secret:** contoh format string panjang acak rahasia.
+### Langkah 1: Daftar, Buat Project, & Ambil Kredensial di LiveKit Cloud
+1. Buka [https://cloud.livekit.io](https://cloud.livekit.io) lalu buat akun gratis (otomatis masuk paket **Build** `$0/month`).
+2. Buat **Project** baru (misal: `Tesloka`). Jika pada dashboard muncul `PROJECT DATA REGION: United States` (atau pilihan wilayah lain), biarkan saja tidak masalah karena jaringan media WebRTC LiveKit menggunakan *global mesh* yang tetap merutekan kamera lewat server terdekat peserta.
+3. Pada dashboard proyek LiveKit Cloud (`Overview`), ambil kredensial dengan salah satu dari dua cara berikut:
+   - **Cara Tercepat (Langsung di Overview):** Klik kotak kartu **`Manage API keys`** (terletak di baris pertama kolom tengah pada halaman **Overview**).
+   - **Cara Lewat Sidebar Kiri:** Klik menu **`Settings >`** di pojok kiri bawah daftar menu utama, lalu pilih sub-menu **API keys** / **Keys** (atau **Project** untuk melihat URL WebSocket proyek).
+4. Di halaman **API keys**, klik tombol **Add new key** (atau **Create key**), beri deskripsi (misal `tesloka-cbt`), lalu salin **tiga nilai penting** berikut *(Catatan: **API Secret hanya ditampilkan 1 kali saat key baru dibuat**; jika Anda lupa menyalin secret key lama, cukup buat key baru lewat **Add new key**)*:
+   - **WebSocket URL (`LIVEKIT_URL`):** contoh format `wss://tesloka-xxxxxx.livekit.cloud` (juga tampil di bagian atas / menu **Settings** proyek).
+   - **API Key (`LIVEKIT_API_KEY`):** contoh format `APIxxxxxxxxxxxx`.
+   - **API Secret (`LIVEKIT_API_SECRET`):** string acak panjang yang muncul sekali saat pembuatan key.
 
 ### Langkah 2: Konfigurasi di Portal Staf TESLOKA
 1. Login ke Portal Staf sebagai **Administrator** (`https://staff.domainanda.sch.id`).

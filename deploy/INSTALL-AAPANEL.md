@@ -173,7 +173,7 @@ sudo systemctl status tesloka-worker
 ### A. Mengaktifkan Monitoring Real-Time WebSocket (Laravel Reverb)
 Secara default TESLOKA berjalan dengan **HTTP Polling Otomatis** tanpa memerlukan daemon tambahan. Jika Anda ingin pembaruan status peserta, log insiden, paksa stop/logout, dan notifikasi pengawas terkirim secara instan dalam hitungan **< 1 detik**, aktifkan **Laravel Reverb**:
 
-1. **Ubah `.env` di folder root website:**
+1. **Ubah `.env` di folder root website (pastikan `REVERB_APP_ID`, `REVERB_APP_KEY`, dan `REVERB_APP_SECRET` terisi LENGKAP sebelum menyalakan `BROADCAST_CONNECTION=reverb`, serta pastikan `composer install --no-dev` sudah dijalankan agar `pusher/pusher-php-server` tersedia):**
    ```env
    BROADCAST_CONNECTION=reverb
    REVERB_APP_ID=tesloka-app
@@ -185,7 +185,7 @@ Secara default TESLOKA berjalan dengan **HTTP Polling Otomatis** tanpa memerluka
    REVERB_SERVER_HOST=127.0.0.1
    REVERB_SERVER_PORT=8080
    ```
-   *(Bersihkan cache config setelah ubah `.env`: `php artisan optimize:clear`).*
+   *(Bersihkan dan cache ulang config setelah mengubah `.env`: `php artisan optimize:clear && php artisan optimize`).*
 
 2. **Jalankan daemon Reverb lewat Systemd Linux:**
    ```bash
@@ -197,6 +197,7 @@ Secara default TESLOKA berjalan dengan **HTTP Polling Otomatis** tanpa memerluka
    [Service]
    User=www
    Group=www
+   WorkingDirectory=/www/wwwroot/domainanda.sch.id
    Restart=always
    RestartSec=3
    ExecStart=/www/server/php/85/bin/php /www/wwwroot/domainanda.sch.id/artisan reverb:start --host=127.0.0.1 --port=8080
@@ -210,18 +211,33 @@ Secara default TESLOKA berjalan dengan **HTTP Polling Otomatis** tanpa memerluka
    sudo systemctl status tesloka-reverb
    ```
 
-3. **Tambahkan Reverse Proxy WebSocket di aaPanel Nginx:**
-   Buka **Website -> Nama Domain -> Config** (lakukan pada domain `staff.*` dan `ujian.*`), lalu tambahkan blok ini di dalam `server { ... }` (sebelum `location /`):
+3. **Tambahkan Reverse Proxy WebSocket di aaPanel Nginx (`/app/` dan `/apps/`):**
+   Buat file `/www/server/panel/vhost/nginx/extension/domainanda.sch.id/reverb.conf` (atau tempel di **Website -> Nama Domain -> Config** sebelum `location /` pada domain `staff.*` dan `ujian.*`). Memakai folder `extension/` mencegah konfigurasi terhapus otomatis ketika Rewrite/SSL disimpan ulang di panel:
    ```nginx
-   location /app {
+   location ^~ /app/ {
        proxy_http_version 1.1;
        proxy_set_header Host $http_host;
        proxy_set_header Scheme $scheme;
        proxy_set_header SERVER_PORT $server_port;
        proxy_set_header REMOTE_ADDR $remote_addr;
        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header X-Forwarded-Proto $scheme;
        proxy_set_header Upgrade $http_upgrade;
        proxy_set_header Connection "Upgrade";
+       proxy_read_timeout 86400s;
+       proxy_send_timeout 86400s;
+       proxy_pass http://127.0.0.1:8080;
+   }
+
+   location ^~ /apps/ {
+       proxy_http_version 1.1;
+       proxy_set_header Host $http_host;
+       proxy_set_header Scheme $scheme;
+       proxy_set_header SERVER_PORT $server_port;
+       proxy_set_header REMOTE_ADDR $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header X-Forwarded-Proto $scheme;
+       proxy_read_timeout 60s;
        proxy_pass http://127.0.0.1:8080;
    }
    ```
@@ -266,4 +282,12 @@ Secara bawaan, fitur Kamera Pengawas menggunakan **Snapshot Berkala + Near-Live 
   rm -rf public/storage
   ln -s /www/wwwroot/domainanda.sch.id/storage/app/public /www/wwwroot/domainanda.sch.id/public/storage
   chown -h www:www public/storage
+  ```
+
+### 6. Error `Class "Pusher\Pusher" not found` atau Pembaruan Manual ZIP / GitHub di VPS
+- **Penyebab:** Arsip kode dari GitHub (`Source code .zip`) tidak menyertakan folder `vendor/`, sehingga mengunggah/mengekstrak ZIP baru di atas instalasi lama memperbarui `composer.json`/`composer.lock` tanpa menginstal paket baru (`laravel/reverb`, `pusher/pusher-php-server`), atau `.env` menyetel `BROADCAST_CONNECTION=reverb` sebelum `REVERB_APP_ID/KEY/SECRET` terisi.
+- **Solusi (Catatan Praktis Setiap Kali Upload Update ZIP/GitHub secara Manual):**
+  Pastikan hak kepemilikan file milik `www:www`, sinkronkan dependensi Composer, jalankan migrasi & cache ulang, lalu restart daemon Reverb/Worker dan PHP-FPM:
+  ```bash
+  cd /www/wwwroot/domainanda.sch.id && chown -R www:www . && su -s /bin/bash www -c 'COMPOSER_MEMORY_LIMIT=-1 /www/server/php/85/bin/php /usr/bin/composer install --no-dev --optimize-autoloader && /www/server/php/85/bin/php artisan migrate --force && /www/server/php/85/bin/php artisan optimize:clear && /www/server/php/85/bin/php artisan optimize' && systemctl restart tesloka-reverb tesloka-worker && /etc/init.d/php-fpm-85 reload
   ```

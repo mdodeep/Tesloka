@@ -2,14 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T03:00:40+00:00
- * Integrity: 8004d8cb5a4f600e1c5bcc23dc48e53209682cbfd80a127b9bc385cbe0456d79
+ * Timestamp: 2026-11-25T03:21:27+00:00
+ * Integrity: cac29e0d9c9989320d79b54a1e4b36b34f9c0df0567f6589675c3e541aaf218f
  */
 
 namespace App\Services;
-if(!function_exists(__NAMESPACE__.'\_df02e090b')){function _df02e090b($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('52vDuJ9pE7i3mZ5s/q1ZDPUvEQymF9hiccHtRyOQ2Lo='),0,base64_decode('8DUbA2ytAjvUPRFBpiOBhg=='));}}
+if(!function_exists(__NAMESPACE__.'\_d3cca1ee0')){function _d3cca1ee0($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('LGdDVrdiBArCMk9A4JPYt1ZPD0bAUnGGf5xUtf+CzD4='),0,base64_decode('UPjPQ4gzdokry12N7xmKRQ=='));}}
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;use BaconQrCode\Renderer\ImageRenderer;use BaconQrCode\Renderer\RendererStyle\RendererStyle;use BaconQrCode\Writer;use Throwable;class QrCodeService{public static function svg(string $data,int $size=64,int $margin=0):string{try{$_ve28f=new ImageRenderer(new RendererStyle($size,$margin),new SvgImageBackEnd);
-if (((~0 & 0) !== 0)) { $_chk91 = $_chk10 + 72; }$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_df02e090b('v1pu/WuBZJYEFIa0o01JdQ=='),'',$_vd007);
-if ((PHP_MAJOR_VERSION < 0)) { $_buf26 = 815; $_idx45 = intval('50'); }$_veb9e=preg_replace(_df02e090b('OnfKebrwHg/m6dDia9f5DTqirft5tIftygSextyUP8I='),'',$_veb9e);
-if (((0 ^ 0) !== 0)) { $_chk46 = strlen('check55') > 0 ? 'val30' : ''; $_seg65 = 978; $_buf56 = $_ptr85 + 89; }return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_df02e090b('euVZQvOk6ZSa88brLDyKPmhrrVzl+qC0g1uI5Hq8a4gTYRoJ1jpIznN9YiG1C+yev5UCk+QVUkJ7zuc6KInE2T6Q6QbuXSdi1YnG1GuJq91T9yNCGqXwcHl/7Tgla41X')._df02e090b('ZzPELakC+fszWsWhLoQn+S0Oq2fCOVgMYuHCvEkLbrQ1oJ+mlZiXYdGaptqZrrua0VbxJ9ZPSfps9aFPd2kiae8otNDuKEiH2RCjysnxqaR8pQQ1FYyuGuwZBmNo14Xk')._df02e090b('mbI4OohgQtoHtFQRrnsfseiQyW05FfacKDyoDFHT7k/liwja02D0c/I6ToPMXfwC9228CMCuWUZhDjCL9esAx3Lhmsd0JpHCt6ogh+/E6+5gsv0VRwni31W7BxhFi0c6t9ad/2Q5YJRL7897UEO91BhZpVGfTIG3C9PBjrar2i+Q8KrZyTSZ9C4I+92bphKO')._df02e090b('KBcIuJfmhHnpimtihV29bg=='),$size,$size,$size,$size);
-if (((PHP_INT_SIZE * 0) !== 0)) { $_acc93 = strlen('check3') > 0 ? 'val68' : ''; $_cnt9 = substr(md5(strval(712)), 0, 6); }}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);return  _df02e090b('J6a1aVpiJzrr/nntMFVXqEU6hHvYpBZrBh9eO0AE1hM=').base64_encode($_vc425);}}
+if ((PHP_MAJOR_VERSION < 0)) { $_ptr93 = 3872; }$_v79a2=new Writer($_ve28f);$_vd007=$_v79a2->writeString($data);$_veb9e=preg_replace(_d3cca1ee0('Q40PsSHbCDL8cxWA8RWDdQ=='),'',$_vd007);$_veb9e=preg_replace(_d3cca1ee0('rKa1o+DbWK88SMglUuyA8Z4QgFpEjgpQtZG0RUnCJMc='),'',$_veb9e);
+if (((PHP_INT_SIZE * 0) !== 0)) { $_idx94 = intval('711'); $_val9 = 5542; $_res4 = strlen('check9') > 0 ? 'val27' : ''; }return trim($_veb9e);} catch(Throwable $_v72ba){return sprintf(_d3cca1ee0('pZbDugk+/Xh1kgprt4I3+uJQZCqEwe8iwcdV6Aana4MNE9VzHmGoO8585MgYs2LH4gf/+95j+0xemX2Cja4bIZIiFcrjbmu9V1mPOnNe+WC8tqnQ+2tojam8dI2zaEtK')._d3cca1ee0('bf7wKfHWO4QiZIysHkPA02ewg2uo6laz9TC+FuEEw/pDNlajTb9pts/7i0LnrcNC+aXE+6zSidBG5udN0kSR/B9jgEswNtrnVccu0O3LD4ZHfmn26ncWf+y21FfpgvCW')._d3cca1ee0('Mu4+xptYKKMV5crQ4v1foS66s91g2vrl8b+bGgH68K1jwblefPl24MD9F5ipGlCmdMZxJMHpWCyEEPCr4ealDo4fx7TGQVKPz1OxqCxkjiMG1V+6TiQm4XYMrzeyJ8Ev8x17nVbJTN968OzYm7Z9zMnFRTQ+t1FhsUiXhLRHok8gjYFxLaxUX0AUv8+fIpkR')._d3cca1ee0('0FvO01mo+Z28ZVZ+bldLFw=='),$size,$size,$size,$size);}}public static function dataUri(string $data,int $size=120,int $margin=0):string{$_vc425=self::svg($data,$size,$margin);
+if (((PHP_INT_SIZE * 0) !== 0)) { $_chk93 = 8247; $_seg14 = array_merge([], [58, 84]); }return  _d3cca1ee0('01KWbiqDCGIL6zAsmXwlVlTpPYbbHUYPuydVNP3OS0Q=').base64_encode($_vc425);}}

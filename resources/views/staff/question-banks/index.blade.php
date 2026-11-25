@@ -322,7 +322,7 @@
                 <h4 class="text-sm font-bold text-default-800">Buat Bank Soal Baru</h4>
                 <p class="text-xs text-default-500 mt-0.5">Susun bank soal berbasis mata pelajaran dan standar evaluasi.</p>
             </div>
-            <button type="button" onclick="document.getElementById('modal-create-bank').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-create-bank').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -374,7 +374,7 @@
                 <h4 class="text-sm font-bold text-default-800">Edit Metadata Bank Soal</h4>
                 <p class="text-xs text-default-500 mt-0.5">Perbarui mata pelajaran, kode, atau status arsip bank soal.</p>
             </div>
-            <button type="button" onclick="document.getElementById('modal-edit-bank').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-edit-bank').classList.add('hidden')" class="p-1 rounded text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>

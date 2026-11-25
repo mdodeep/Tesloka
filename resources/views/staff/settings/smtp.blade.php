@@ -78,7 +78,7 @@
                                 <input type="password" id="input_password" name="password" autocomplete="new-password"
                                     placeholder="•••••••• (Kosongkan bila tidak diubah)"
                                     class="form-input font-mono pr-10 @error('password') border-rose-500 @enderror">
-                                <button type="button" onclick="togglePasswordVisibility('input_password', this)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-default-400 hover:text-default-700 cursor-pointer">
+                                <button type="button" onclick="togglePasswordVisibility('input_password', this)" aria-label="Tampilkan atau sembunyikan kata sandi SMTP" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-default-400 hover:text-default-700 cursor-pointer">
                                     <span class="eye-open"><i data-lucide="eye" class="size-4"></i></span>
                                     <span class="eye-closed hidden"><i data-lucide="eye-off" class="size-4"></i></span>
                                 </button>

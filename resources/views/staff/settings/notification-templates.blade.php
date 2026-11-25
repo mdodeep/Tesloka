@@ -100,7 +100,7 @@
                 </button>
             </div>
 
-            <button type="button" onclick="closeTemplatePreview()" class="text-default-400 hover:text-default-600 cursor-pointer p-1 rounded hover:bg-default-100">
+            <button aria-label="Tutup dialog" type="button" onclick="closeTemplatePreview()" class="text-default-400 hover:text-default-600 cursor-pointer p-1 rounded hover:bg-default-100">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>

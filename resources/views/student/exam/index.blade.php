@@ -69,7 +69,7 @@
                         </a>
                     @else
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
-                            <a href="{{ route('student.exam.card', $ex) }}" target="_blank" class="btn btn-sm py-2.5 bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 transition">
+                            <a href="{{ route('student.exam.card', $ex) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm py-2.5 bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 transition">
                                 <i data-lucide="printer" class="size-4 text-default-500"></i>
                                 Kartu Ujian
                             </a>

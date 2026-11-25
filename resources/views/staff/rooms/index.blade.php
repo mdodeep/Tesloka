@@ -128,7 +128,7 @@
     <div class="bg-card rounded-md max-w-md w-full p-4 sm:p-5 shadow-2xl border border-default-200 max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 mb-4 shrink-0">
             <h4 class="text-sm font-semibold text-default-800">Tambah Ruang Ujian Baru</h4>
-            <button type="button" onclick="document.getElementById('createRoomModal').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('createRoomModal').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>

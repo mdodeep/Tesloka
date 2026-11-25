@@ -29,21 +29,21 @@
 
         <div id="sessionDocDropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-white border border-default-200 rounded-md shadow-lg z-50 py-1 divide-y divide-default-100">
             <div class="py-1">
-                <a href="{{ route('staff.sessions.print-cards', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                <a href="{{ route('staff.sessions.print-cards', $session) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                     <i data-lucide="credit-card" class="size-4 text-indigo-500"></i>
                     <div>
                         <div class="font-semibold">Kartu Peserta Ujian</div>
                         <div class="text-[10px] text-default-400">Format A4 (Grid 4 kartu per lembar)</div>
                     </div>
                 </a>
-                <a href="{{ route('staff.sessions.print-desk-labels', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                <a href="{{ route('staff.sessions.print-desk-labels', $session) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                     <i data-lucide="tag" class="size-4 text-amber-500"></i>
                     <div>
                         <div class="font-semibold">Tempelan / Label Meja Lab</div>
                         <div class="text-[10px] text-default-400">Label nomor meja &amp; QR login peserta</div>
                     </div>
                 </a>
-                <a href="{{ route('staff.sessions.print-attendance', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                <a href="{{ route('staff.sessions.print-attendance', $session) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                     <i data-lucide="clipboard-list" class="size-4 text-emerald-500"></i>
                     <div>
                         <div class="font-semibold">Daftar Hadir Peserta</div>
@@ -52,28 +52,28 @@
                 </a>
             </div>
             <div class="py-1">
-                <a href="{{ route('staff.sessions.print-minutes', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                <a href="{{ route('staff.sessions.print-minutes', $session) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                     <i data-lucide="file-check-2" class="size-4 text-blue-500"></i>
                     <div>
                         <div class="font-semibold">Berita Acara Pelaksanaan</div>
                         <div class="text-[10px] text-default-400">Format resmi Berita Acara ruang ujian</div>
                     </div>
                 </a>
-                <a href="{{ route('staff.sessions.print-proctor-duties', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                <a href="{{ route('staff.sessions.print-proctor-duties', $session) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                     <i data-lucide="file-text" class="size-4 text-purple-500"></i>
                     <div>
                         <div class="font-semibold">Surat Tugas Pengawas</div>
                         <div class="text-[10px] text-default-400">Surat penugasan kepala institusi</div>
                     </div>
                 </a>
-                <a href="{{ route('staff.sessions.print-integrity-pledge', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                <a href="{{ route('staff.sessions.print-integrity-pledge', $session) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                     <i data-lucide="shield" class="size-4 text-rose-500"></i>
                     <div>
                         <div class="font-semibold">Pakta Integritas Pengawas</div>
                         <div class="text-[10px] text-default-400">Lembar komitmen integritas pengawas</div>
                     </div>
                 </a>
-                <a href="{{ route('staff.sessions.print-proctoring-summary', $session) }}" target="_blank" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
+                <a href="{{ route('staff.sessions.print-proctoring-summary', $session) }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-default-700 hover:bg-default-50 hover:text-primary transition">
                     <i data-lucide="bar-chart" class="size-4 text-slate-500"></i>
                     <div>
                         <div class="font-semibold">Rekapitulasi Pengawasan</div>
@@ -380,7 +380,7 @@
     <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-default-800">Tugaskan Rombongan Belajar (Kelas)</h3>
-            <button type="button" onclick="document.getElementById('assignClassModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('assignClassModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
@@ -415,7 +415,7 @@
     <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-default-800">Tambah Peserta Individual</h3>
-            <button type="button" onclick="document.getElementById('assignStudentModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('assignStudentModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
@@ -459,7 +459,7 @@
                 <h3 class="text-sm font-bold text-default-800">Akomodasi Khusus & Pendamping (Scribe)</h3>
                 <p id="accomStudentName" class="text-[11px] text-default-400 mt-0.5 font-medium"></p>
             </div>
-            <button type="button" onclick="document.getElementById('accommodationModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('accommodationModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>

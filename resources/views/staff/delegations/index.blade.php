@@ -154,7 +154,7 @@
     <div class="card max-w-lg w-full p-4 sm:p-6 shadow-xl border border-default-200 max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-default-100 shrink-0">
             <h3 class="text-sm font-bold text-default-800">Formulir Pelimpahan Delegasi Wewenang</h3>
-            <button onclick="document.getElementById('modal-delegation').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer p-1 rounded hover:bg-default-100">
+            <button aria-label="Tutup dialog" onclick="document.getElementById('modal-delegation').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer p-1 rounded hover:bg-default-100">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>

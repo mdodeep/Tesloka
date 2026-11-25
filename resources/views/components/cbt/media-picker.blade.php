@@ -92,7 +92,7 @@
 </div>
 
 <!-- Modal Dialog Pustaka Media -->
-<div id="{{ $uniqueId }}_modal" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+<div id="{{ $uniqueId }}_modal" role="dialog" aria-modal="true" class="hidden fixed inset-0 bg-default-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
     <div class="card w-full max-w-4xl max-h-[90vh] flex flex-col shadow-xl animate-in fade-in zoom-in-95 duration-150">
         <!-- Modal Header -->
         <div class="card-header flex items-center justify-between p-4 sm:px-5 border-b border-default-200 shrink-0">
@@ -105,7 +105,7 @@
                     <p class="text-[11px] text-default-400">Pilih berkas media untuk ditautkan pada butir soal ini</p>
                 </div>
             </div>
-            <button type="button" onclick="{{ $uniqueId }}_closeModal()" class="btn btn-icon size-8 rounded hover:bg-default-100 text-default-500 cursor-pointer">
+            <button type="button" onclick="{{ $uniqueId }}_closeModal()" aria-label="Tutup dialog pustaka media" class="btn btn-icon size-8 rounded hover:bg-default-100 text-default-500 cursor-pointer">
                 <i data-lucide="x" class="size-4"></i>
             </button>
         </div>

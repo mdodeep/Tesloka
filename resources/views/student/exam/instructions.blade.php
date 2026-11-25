@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="pt-2 flex justify-end">
-                    <a href="{{ route('student.exam.card', $exam) }}" target="_blank" class="btn btn-sm bg-white border border-default-200 hover:bg-default-50 text-default-700 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
+                    <a href="{{ route('student.exam.card', $exam) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-white border border-default-200 hover:bg-default-50 text-default-700 font-semibold inline-flex items-center gap-1.5 shadow-2xs transition">
                         <i data-lucide="printer" class="size-3.5 text-default-500"></i>
                         <span>Cetak Kartu Peserta Ujian</span>
                     </a>

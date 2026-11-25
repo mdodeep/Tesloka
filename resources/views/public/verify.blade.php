@@ -133,7 +133,7 @@
                             <span>Cari Dokumen Lain</span>
                         </a>
                         @if($isPassed)
-                            <a href="{{ route('document.certificate', $token) }}" target="_blank" class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-xs shadow-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer">
+                            <a href="{{ route('document.certificate', $token) }}" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-xs shadow-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer">
                                 <i data-lucide="printer" class="size-4"></i>
                                 <span>Cetak Sertifikat A4</span>
                             </a>

@@ -127,11 +127,11 @@
                             <a href="{{ route('student.exam.finish', $att) }}" class="px-2.5 py-1 bg-default-100 hover:bg-slate-200 text-default-700 font-semibold rounded-lg transition text-[11px]" title="Lihat Tanda Terima Resi">
                                 Resi
                             </a>
-                            <a href="{{ route('student.exam.transcript', $att) }}" target="_blank" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg border border-indigo-200 transition text-[11px]" title="Cetak Surat Keterangan Hasil Ujian">
+                            <a href="{{ route('student.exam.transcript', $att) }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg border border-indigo-200 transition text-[11px]" title="Cetak Surat Keterangan Hasil Ujian">
                                 SKHU
                             </a>
                             @if($att->isPassed())
-                                <a href="{{ route('student.exam.certificate', $att) }}" target="_blank" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold rounded-lg border border-emerald-200 transition text-[11px]" title="Unduh Sertifikat Kelulusan">
+                                <a href="{{ route('student.exam.certificate', $att) }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold rounded-lg border border-emerald-200 transition text-[11px]" title="Unduh Sertifikat Kelulusan">
                                     Sertifikat
                                 </a>
                             @endif

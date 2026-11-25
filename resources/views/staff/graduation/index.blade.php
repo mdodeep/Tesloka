@@ -179,17 +179,17 @@
                                 @endif
                             </td>
                             <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right space-x-1 whitespace-nowrap">
-                                <a href="{{ route('staff.graduation.skl', $res) }}" target="_blank" class="px-2.5 py-1.5 bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg text-xs font-semibold inline-flex items-center gap-1 shadow-2xs transition" title="Cetak Surat Keterangan Lulus (SKL)">
+                                <a href="{{ route('staff.graduation.skl', $res) }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg text-xs font-semibold inline-flex items-center gap-1 shadow-2xs transition" title="Cetak Surat Keterangan Lulus (SKL)">
                                     <i data-lucide="file-text" class="size-3.5 text-primary"></i>
                                     <span>SKL</span>
                                 </a>
 
-                                <a href="{{ route('staff.graduation.certificate', $res) }}" target="_blank" class="px-2.5 py-1.5 bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg text-xs font-semibold inline-flex items-center gap-1 shadow-2xs transition" title="Cetak Sertifikat Kelulusan">
+                                <a href="{{ route('staff.graduation.certificate', $res) }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg text-xs font-semibold inline-flex items-center gap-1 shadow-2xs transition" title="Cetak Sertifikat Kelulusan">
                                     <i data-lucide="award" class="size-3.5 text-amber-600"></i>
                                     <span>Sertifikat</span>
                                 </a>
 
-                                <a href="{{ route('staff.graduation.transcript', $res) }}" target="_blank" class="px-2.5 py-1.5 bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg text-xs font-semibold inline-flex items-center gap-1 shadow-2xs transition" title="Cetak Transkrip SKHU">
+                                <a href="{{ route('staff.graduation.transcript', $res) }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 bg-white hover:bg-default-50 text-default-700 border border-default-200/90 rounded-lg text-xs font-semibold inline-flex items-center gap-1 shadow-2xs transition" title="Cetak Transkrip SKHU">
                                     <i data-lucide="scroll" class="size-3.5 text-indigo-600"></i>
                                     <span>Transkrip</span>
                                 </a>

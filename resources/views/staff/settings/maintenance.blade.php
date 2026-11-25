@@ -97,7 +97,7 @@
                 <div class="flex items-center justify-between py-2 border-b border-default-100">
                     <span class="text-default-500">URL Akses Bypass Manual:</span>
                     @if(!empty($downData['secret']))
-                        <a href="{{ url('/' . $downData['secret']) }}" target="_blank" class="font-mono text-blue-600 hover:underline">
+                        <a href="{{ url('/' . $downData['secret']) }}" target="_blank" rel="noopener noreferrer" class="font-mono text-blue-600 hover:underline">
                             {{ url('/' . $downData['secret']) }} &rarr;
                         </a>
                     @else

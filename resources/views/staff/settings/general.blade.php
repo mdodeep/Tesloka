@@ -497,7 +497,7 @@
                             </div>
                             @if($isSupporter && $settings['certificate_bg'])
                                 <div class="flex items-center gap-3 shrink-0">
-                                    <a href="{{ $settings['certificate_bg'] }}" target="_blank" class="px-2.5 py-1 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">Lihat Blangko Aktif</a>
+                                    <a href="{{ $settings['certificate_bg'] }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">Lihat Blangko Aktif</a>
                                     <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
                                         <input type="checkbox" name="remove_certificate_bg" value="1" class="rounded border-default-300 text-danger focus:ring-danger">
                                         <span>Hapus (Kembali ke Vektor Dinamis)</span>
@@ -542,7 +542,7 @@
                             </div>
                             @if($settings['doc_letterhead_image'])
                                 <div class="flex items-center gap-3 shrink-0">
-                                    <a href="{{ $settings['doc_letterhead_image'] }}" target="_blank" class="px-2.5 py-1 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">Lihat Blangko Aktif</a>
+                                    <a href="{{ $settings['doc_letterhead_image'] }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">Lihat Blangko Aktif</a>
                                     <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
                                         <input type="checkbox" name="remove_doc_letterhead_image" value="1" class="rounded border-default-300 text-danger focus:ring-danger">
                                         <span>Hapus (Gunakan Kop Teks Standar)</span>
@@ -666,7 +666,7 @@
                             </div>
                             @if($settings['cert_stamp'])
                                 <div class="flex items-center gap-3 shrink-0">
-                                    <a href="{{ $settings['cert_stamp'] }}" target="_blank" class="px-2.5 py-1 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">Lihat Stempel Aktif</a>
+                                    <a href="{{ $settings['cert_stamp'] }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 text-xs font-semibold rounded bg-default-100 hover:bg-default-200 text-default-700 transition">Lihat Stempel Aktif</a>
                                     <label class="inline-flex items-center gap-1.5 text-xs text-danger font-semibold cursor-pointer">
                                         <input type="checkbox" name="remove_cert_stamp" value="1" class="rounded border-default-300 text-danger focus:ring-danger">
                                         <span>Hapus Stempel</span>

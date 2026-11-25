@@ -103,7 +103,7 @@
             '{tanggal}' => '<strong>' . e($todayFormatted) . '</strong>',
         ];
 
-        $parsedStatement = str_ireplace(array_keys($statementReplacements), array_values($statementReplacements), $rawStatementTemplate);
+        $parsedStatement = str_ireplace(array_keys($statementReplacements), array_values($statementReplacements), e((string) $rawStatementTemplate));
         
         // Pejabat Utama (Kanan)
         $certSignerName = \App\Models\SystemSetting::get('branding.cert_signer_name', 'Dr. H. Muhammad Zainuddin, M.Pd.');

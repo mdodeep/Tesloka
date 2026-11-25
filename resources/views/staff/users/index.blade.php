@@ -377,7 +377,7 @@
                 <i data-lucide="alert-triangle" class="size-4.5"></i>
                 <span>Konfirmasi Hapus Massal</span>
             </h4>
-            <button type="button" onclick="closeModal('modal-bulk-delete')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-bulk-delete')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -426,7 +426,7 @@
                 <i data-lucide="user-plus" class="size-4.5 text-primary"></i>
                 <span>Buat Akun Pengguna Baru</span>
             </h4>
-            <button type="button" onclick="document.getElementById('modal-create-user').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-create-user').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -537,7 +537,7 @@
     <div class="bg-card rounded-md max-w-lg w-full p-4 sm:p-5 shadow-2xl border border-default-200 max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between pb-3 border-b border-default-200 mb-4 shrink-0">
             <h4 class="text-sm font-semibold text-default-800">Impor Massal Akun Pengguna (CSV)</h4>
-            <button type="button" onclick="document.getElementById('modal-import').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-import').classList.add('hidden')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -588,7 +588,7 @@
                 <i data-lucide="user-check" class="size-4.5 text-primary"></i>
                 <span>Rincian Profil Pengguna</span>
             </h4>
-            <button type="button" onclick="closeModal('modal-view-user')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-view-user')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -597,7 +597,7 @@
             <!-- Header User Card -->
             <div class="p-4 bg-default-50 border border-default-200 rounded-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <img id="view_user_avatar" src="{{ asset('assets/images/tesloka-default-profile.webp') }}" class="size-12 rounded-full object-cover border border-default-200 shrink-0 shadow-xs">
+                    <img id="view_user_avatar" src="{{ asset('assets/images/tesloka-default-profile.webp') }}" alt="Foto profil pengguna" class="size-12 rounded-full object-cover border border-default-200 shrink-0 shadow-xs">
                     <div>
                         <h3 id="view_user_name" class="text-sm font-bold text-default-800">Nama Pengguna</h3>
                         <p id="view_user_email" class="text-xs text-default-500 font-mono">user@tesloka.test</p>
@@ -701,7 +701,7 @@
                 <i data-lucide="edit-3" class="size-4.5 text-primary"></i>
                 <span>Edit Data Pengguna (Akses Penuh Administrator)</span>
             </h4>
-            <button type="button" onclick="closeModal('modal-edit-user')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-edit-user')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -810,7 +810,7 @@
             <!-- Opsi Kelola Foto Profil -->
             <div id="edit_user_photo_section" class="p-3 bg-default-50 border border-default-200 rounded space-y-2 hidden">
                 <div class="flex items-center gap-3">
-                    <img id="edit_user_avatar_preview" src="{{ asset('assets/images/tesloka-default-profile.webp') }}" class="size-10 rounded-full object-cover border border-default-200 shrink-0">
+                    <img id="edit_user_avatar_preview" src="{{ asset('assets/images/tesloka-default-profile.webp') }}" alt="Foto profil pengguna" class="size-10 rounded-full object-cover border border-default-200 shrink-0">
                     <div class="text-xs">
                         <span class="font-medium text-default-800 block">Pengguna Memiliki Foto Profil Kustom</span>
                         <label class="inline-flex items-center gap-1.5 text-danger font-medium cursor-pointer mt-1">
@@ -844,7 +844,7 @@
                 </h4>
                 <p class="text-xs text-default-500 mt-0.5">Setiap peran memiliki menu sidebar, portal login, dan izin rute server yang berbeda sesuai tanggung jawabnya.</p>
             </div>
-            <button type="button" onclick="closeModal('modal-role-guide')" class="text-default-400 hover:text-default-600 cursor-pointer shrink-0">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-role-guide')" class="text-default-400 hover:text-default-600 cursor-pointer shrink-0">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>

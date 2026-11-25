@@ -142,7 +142,7 @@ Repositori Berkas & Media Terisolasi
                                         <div class="text-indigo-500 font-medium text-[10px] uppercase mb-1">Digunakan pada {{ $usage['questions_count'] }} Soal:</div>
                                         <div class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-0.5">
                                             @foreach($usage['questions'] as $q)
-                                                <a href="{{ $q['show_url'] }}" target="_blank" class="px-1.5 py-0.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded text-[10px] font-mono font-bold transition inline-flex items-center gap-1" title="Lihat {{ $q['code'] }}">
+                                                <a href="{{ $q['show_url'] }}" target="_blank" rel="noopener noreferrer" class="px-1.5 py-0.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded text-[10px] font-mono font-bold transition inline-flex items-center gap-1" title="Lihat {{ $q['code'] }}">
                                                     <span>{{ $q['label'] }}</span>
                                                     <i data-lucide="external-link" class="size-2.5"></i>
                                                 </a>
@@ -158,7 +158,7 @@ Repositori Berkas & Media Terisolasi
                                             <span class="truncate">{{ $usage['target_title'] }}</span>
                                         </div>
                                         @if(!empty($usage['questions'][0]['show_url']))
-                                            <a href="{{ $usage['questions'][0]['show_url'] }}" target="_blank" class="text-[10px] text-emerald-700 hover:text-emerald-950 font-bold underline shrink-0 inline-flex items-center gap-0.5">
+                                            <a href="{{ $usage['questions'][0]['show_url'] }}" target="_blank" rel="noopener noreferrer" class="text-[10px] text-emerald-700 hover:text-emerald-950 font-bold underline shrink-0 inline-flex items-center gap-0.5">
                                                 <span>Buka</span>
                                                 <i data-lucide="external-link" class="size-2.5"></i>
                                             </a>

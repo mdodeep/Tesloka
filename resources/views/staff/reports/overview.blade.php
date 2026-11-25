@@ -117,7 +117,7 @@
                                 <a href="{{ route('staff.exams.reports.export-csv', $ex) }}" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-default-100 text-default-600 hover:text-default-900 shadow-2xs transition inline-flex items-center justify-center" title="Unduh CSV Nilai">
                                     <i data-lucide="download" class="size-4"></i>
                                 </a>
-                                <a href="{{ route('staff.exams.reports.print-official', $ex) }}" target="_blank" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-default-100 text-default-600 hover:text-default-900 shadow-2xs transition inline-flex items-center justify-center" title="Cetak Berita Acara / Laporan Resmi">
+                                <a href="{{ route('staff.exams.reports.print-official', $ex) }}" target="_blank" rel="noopener noreferrer" class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-default-100 text-default-600 hover:text-default-900 shadow-2xs transition inline-flex items-center justify-center" title="Cetak Berita Acara / Laporan Resmi">
                                     <i data-lucide="printer" class="size-4"></i>
                                 </a>
                             </td>

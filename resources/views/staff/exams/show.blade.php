@@ -387,7 +387,7 @@
     <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <h3 class="text-sm font-bold text-default-800">Tolak Permohonan Penerbitan</h3>
-            <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 transition cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 transition cursor-pointer">
                 <i data-lucide="x" class="size-4"></i>
             </button>
         </div>

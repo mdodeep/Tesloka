@@ -33,7 +33,7 @@
                     <tr>
                         <td style="color: var(--color-muted);">Portal Staf & Administrasi</td>
                         <td>
-                            <a href="{{ $summary['url_staff'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                            <a href="{{ $summary['url_staff'] ?? '#' }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
                                 {{ $summary['url_staff'] ?? '-' }} &UpperRightArrow;
                             </a>
                             <div class="form-hint">Digunakan oleh Admin, Proktor, Guru, dan Koordinator Ujian.</div>
@@ -42,7 +42,7 @@
                     <tr>
                         <td style="color: var(--color-muted);">Portal Ujian Siswa</td>
                         <td>
-                            <a href="{{ $summary['url_student'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                            <a href="{{ $summary['url_student'] ?? '#' }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
                                 {{ $summary['url_student'] ?? '-' }} &UpperRightArrow;
                             </a>
                             <div class="form-hint">Alamat pengerjaan ujian untuk seluruh peserta didik.</div>
@@ -51,7 +51,7 @@
                     <tr>
                         <td style="color: var(--color-muted);">Portal Verifikasi Publik</td>
                         <td>
-                            <a href="{{ $summary['url_cert'] ?? '#' }}" target="_blank" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                            <a href="{{ $summary['url_cert'] ?? '#' }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
                                 {{ $summary['url_cert'] ?? '-' }} &UpperRightArrow;
                             </a>
                             <div class="form-hint">Verifikasi keaslian ijazah, SKHU, dan sertifikat ber-QR code.</div>

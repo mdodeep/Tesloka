@@ -18,7 +18,7 @@
             <p class="text-xs text-default-500 mt-0.5">Kelola status lisensi resmi institusi, pendataan komunitas, dan pembaruan otomatis 1-klik.</p>
         </div>
         <div class="flex items-center gap-2.5">
-            <a href="{{ $donateServerUrl }}" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs">
+            <a href="{{ $donateServerUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs">
                 <span>Portal Anggota &amp; Lisensi</span>
                 <i data-lucide="external-link" class="size-3.5"></i>
             </a>
@@ -136,7 +136,7 @@
                         <h4 class="text-xs font-bold text-default-900">Tingkatkan ke Supporter License (Akses Auto-Update 1-Klik)</h4>
                         <p class="text-[11px] text-default-600 mt-0.5">Dukung pemeliharaan ekosistem TESLOKA mulai Rp 200.000 untuk menikmati pembaruan otomatis 1-klik dan kustomisasi latar sertifikat.</p>
                     </div>
-                    <a href="{{ $donateServerUrl }}/dashboard" target="_blank" class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shrink-0 shadow-2xs">
+                    <a href="{{ $donateServerUrl }}/dashboard" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shrink-0 shadow-2xs">
                         Upgrade ke Supporter
                     </a>
                 </div>
@@ -147,7 +147,7 @@
                     <h4 class="text-xs font-bold text-amber-900">Dapatkan Lisensi Komunitas Resmi Secara Gratis</h4>
                     <p class="text-[11px] text-amber-700 mt-0.5">Daftarkan institusi Anda di portal resmi (100% Bebas Biaya) agar instalasi sekolah Anda terdata dan terverifikasi.</p>
                 </div>
-                <a href="{{ $donateServerUrl }}/register" target="_blank" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition shrink-0 shadow-2xs">
+                <a href="{{ $donateServerUrl }}/register" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition shrink-0 shadow-2xs">
                     Daftar Lisensi Gratis Sekarang
                 </a>
             </div>
@@ -229,7 +229,7 @@
                                 Masa pembaruan lisensi Anda telah berakhir. Perpanjang donasi untuk menikmati update 1-klik otomatis.
                             @endif
                         </div>
-                        <a href="{{ $donateServerUrl }}/dashboard" target="_blank" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-xs transition shrink-0">
+                        <a href="{{ $donateServerUrl }}/dashboard" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-xs transition shrink-0">
                             Upgrade ke Supporter untuk Update 1-Klik
                         </a>
                     </div>
@@ -314,7 +314,7 @@
                     <strong class="block font-bold">Aktivasi Lisensi Diperlukan</strong>
                     <span class="text-[11px] text-amber-800">Aktifkan Lisensi Komunitas (Gratis) atau Supporter License dari <code>{{ $donateServerUrl }}</code> terlebih dahulu untuk membuka fitur pembaruan manual via unggah berkas ZIP.</span>
                 </div>
-                <a href="{{ $donateServerUrl }}/register" target="_blank" class="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition shrink-0">
+                <a href="{{ $donateServerUrl }}/register" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition shrink-0">
                     Ambil Lisensi Resmi
                 </a>
             </div>
@@ -352,7 +352,7 @@
                     <i data-lucide="check" class="size-4"></i>
                     <span>Simpan &amp; Verifikasi Lisensi</span>
                 </button>
-                <a href="{{ $donateServerUrl }}/register" target="_blank" class="px-4 py-2.5 rounded-xl border border-default-200 hover:bg-default-50 text-default-700 font-semibold text-xs transition">
+                <a href="{{ $donateServerUrl }}/register" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl border border-default-200 hover:bg-default-50 text-default-700 font-semibold text-xs transition">
                     Belum Punya Lisensi? Dapatkan Gratis di Sini
                 </a>
             </div>

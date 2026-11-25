@@ -186,7 +186,7 @@
     <div class="card max-w-xl w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <h3 class="font-bold text-default-900 text-base">Alur Regrade Penilaian Ulang (Koreksi Kunci)</h3>
-            <button type="button" onclick="closeRegradeModal()" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeRegradeModal()" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>

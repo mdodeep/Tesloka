@@ -34,7 +34,7 @@
                 <span>Unduh PDF Asli</span>
             </a>
 
-            <a href="{{ route('staff.exams.reports.print-official', $exam) }}" target="_blank" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center justify-center gap-1.5 border border-slate-700 w-full sm:w-auto">
+            <a href="{{ route('staff.exams.reports.print-official', $exam) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center justify-center gap-1.5 border border-slate-700 w-full sm:w-auto">
                 <i data-lucide="printer" class="size-4 shrink-0 text-slate-300"></i>
                 <span>Cetak Laporan Resmi</span>
             </a>

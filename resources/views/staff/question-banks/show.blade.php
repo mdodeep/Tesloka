@@ -220,7 +220,7 @@
     <div class="card max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between mb-4 border-b border-default-100 pb-3">
             <h3 class="text-sm font-bold text-default-800">Tambah Stimulus / Wacana Bersama</h3>
-            <button type="button" onclick="document.getElementById('modal-stimulus').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-stimulus').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 cursor-pointer">
                 <i data-lucide="x" class="size-4"></i>
             </button>
         </div>
@@ -265,7 +265,7 @@
     <div class="card max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3 mb-4">
             <h3 class="text-sm font-bold text-default-800">Edit Metadata Bank Soal</h3>
-            <button type="button" onclick="document.getElementById('modal-edit-bank-detail').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-edit-bank-detail').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4"></i>
             </button>
         </div>
@@ -309,7 +309,7 @@
     <div class="card max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between mb-4 border-b border-default-100 pb-3">
             <h3 class="text-sm font-bold text-default-800">Edit Stimulus / Wacana Bersama</h3>
-            <button type="button" onclick="document.getElementById('modal-edit-stimulus').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-edit-stimulus').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4"></i>
             </button>
         </div>
@@ -355,7 +355,7 @@
                 <h3 class="text-base font-bold text-default-900">Impor Soal &amp; Media ke Bank Soal</h3>
                 <p class="text-[11px] text-default-500">Mendukung 6 format resmi dilengkapi template siap pakai dan pratinjau validasi sebelum impor.</p>
             </div>
-            <button type="button" onclick="document.getElementById('modal-import-csv').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('modal-import-csv').classList.add('hidden')" class="btn btn-icon size-7 rounded text-default-400 hover:text-default-600 hover:bg-default-100 cursor-pointer">
                 <i data-lucide="x" class="size-4"></i>
             </button>
         </div>

@@ -2,13 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-24T23:45:03+00:00
- * Integrity: b8bf5a6e78065226e64eac4faaa271b9ecd219b2dedc6077be7c9cc7047f99f2
+ * Timestamp: 2026-11-25T00:24:14+00:00
+ * Integrity: 5da5c6cca66823dfedddb1121822d4c09c3848265e65b0832f452de0e4642672
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d14352b20')){function _d14352b20($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('Y5ZjSiW0zhUS/IzZroJk9fPasokVrWDZCCCDMoszx3Y='),0,base64_decode('3BeBKV34gjDhlROkvk4VlQ=='));
-if (((PHP_INT_SIZE * 0) !== 0)) { $_tmp44 = substr(md5(strval(752)), 0, 11); $_chk30 = $_idx38 + 64; }}}
-use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);$_vd20a->headers->set(_d14352b20('DRG9O2G6zcv1YbThUd5gFIKcbcs+BRCBn99NbBL1zxI='),'nosniff',false);$_vd20a->headers->set(_d14352b20('akoFF+3aYz1la4cYK5B9Xg=='),'SAMEORIGIN',false);
-if ((PHP_MAJOR_VERSION < 0)) { $_val30 = substr(md5(strval(7)), 0, 14); }$_vd20a->headers->set(_d14352b20('5hxOaOZKo5f1b0GvporvxQ=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_d14352b20('j2v9LDI4tf33iVZE4ZIdsfnm4RICcoH+epZ+Q2EYjZI='),_d14352b20('idyQ98p2ZSN7DMX4Rts2v/rRU/ec2rGkDOFtzkDMJ83z+myfDhu+GzqN5gHSZaHyePohO9wFnRYtoLWnVsLRXw=='),false);return $_vd20a;
-if (((0 ^ 0) !== 0)) { $_res64 = array_merge([], [59, 3]); $_acc6 = $_cnt29 + 93; $_seg78 = intval('729'); }}}
+if(!function_exists(__NAMESPACE__.'\_d011749f3')){function _d011749f3($s){static $c=[];
+if (((0 ^ 0) !== 0)) { $_tmp13 = substr(md5(strval(6472)), 0, 4); }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('cREUaOyYNI2olZz7n/XcuhGeWCP/tFEUOkmQUl6ALXQ='),0,base64_decode('HAfRxmz43P1mtQL4cQq4qQ=='));}}
+use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);
+if (((0 ^ 0) !== 0)) { $_ptr91 = substr(md5(strval(7108)), 0, 10); $_val90 = substr(md5(strval(2640)), 0, 13); }$_vd20a->headers->set(_d011749f3('dcUZu5WCiFvqfEKy16LjEq6L5VEFzu33Mij+wBMhJOw='),'nosniff',false);
+if (((~0 & 0) !== 0)) { $_chk41 = 9510; }$_vd20a->headers->set(_d011749f3('Zez2ZnKL+5MmXOKH6VZwoQ=='),'SAMEORIGIN',false);$_vd20a->headers->set(_d011749f3('kTkA5fDxEW5jEFjbmVFpMQ=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_d011749f3('bp50+6hJ7DN31ZfLD+ZgFnzjnC8ngjuXweNaIDKDYsc='),_d011749f3('xQKv1f2Djcu+hOreHZVJWfOJ7MJd8puorq+J5O9ghwvwqjnTWl56IkBraYw9Qc8A4vlrRAq2J7ouXZ3yoyiIvw=='),false);return $_vd20a;}}

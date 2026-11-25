@@ -375,7 +375,7 @@
     <div class="card max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 mb-4 shrink-0">
             <h3 class="text-base font-bold text-default-900">Buat API Key Baru</h3>
-            <button type="button" onclick="document.getElementById('createApiKeyModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('createApiKeyModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
@@ -425,7 +425,7 @@
     <div class="card max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[90vh] flex flex-col">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 mb-4 shrink-0">
             <h3 class="text-base font-bold text-default-900">Daftarkan Webhook Baru</h3>
-            <button type="button" onclick="document.getElementById('createWebhookModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="document.getElementById('createWebhookModal').classList.add('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-500 rounded-md transition cursor-pointer">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>

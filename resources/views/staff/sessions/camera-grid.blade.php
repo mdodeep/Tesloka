@@ -127,7 +127,7 @@
                             </div>
                             <div class="aspect-video bg-black rounded overflow-hidden relative group">
                                 <img src="{{ route('staff.sessions.snapshots.view', $snap) }}" alt="Snapshot Insiden" class="w-full h-full object-cover">
-                                <a href="{{ route('staff.sessions.snapshots.view', $snap) }}" target="_blank" class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold">
+                                <a href="{{ route('staff.sessions.snapshots.view', $snap) }}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold">
                                     Buka Foto Penuh
                                 </a>
                             </div>
@@ -198,7 +198,7 @@
                             </button>
                             <span id="snapRequestFeedback" class="text-xs font-medium text-emerald-400 hidden"></span>
                         </div>
-                        <a id="zoomOpenFullImg" href="#" target="_blank" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-2 rounded inline-flex items-center gap-1.5 transition">
+                        <a id="zoomOpenFullImg" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-2 rounded inline-flex items-center gap-1.5 transition">
                             <i data-lucide="external-link" class="size-3.5"></i>
                             <span>Buka Gambar Asli</span>
                         </a>
@@ -498,7 +498,7 @@
                             </div>
                             <div class="aspect-video bg-black rounded overflow-hidden relative group">
                                 <img src="${s.url}" alt="Snapshot Insiden" class="w-full h-full object-cover">
-                                <a href="${s.url}" target="_blank" class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold">
+                                <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold">
                                     Buka Foto Penuh
                                 </a>
                             </div>

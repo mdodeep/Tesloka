@@ -390,7 +390,7 @@
                                                 title="Kelola Peserta Didik (Daftarkan / Keluarkan Siswa)">
                                             <i data-lucide="user-plus" class="size-4"></i>
                                         </button>
-                                        <a href="{{ route('staff.academic.classes.print-cards', $c) }}" target="_blank"
+                                        <a href="{{ route('staff.academic.classes.print-cards', $c) }}" target="_blank" rel="noopener noreferrer"
                                            class="btn btn-icon size-8 rounded-lg border border-default-200/90 bg-card hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 text-default-600 flex items-center justify-center transition cursor-pointer"
                                            title="Cetak Kartu Peserta Rombel (Ujian Berkelanjutan)">
                                             <i data-lucide="printer" class="size-4"></i>
@@ -544,9 +544,9 @@
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <div>
                 <h4 class="text-sm font-bold text-default-800">Tambah Kelas / Rombel Baru</h4>
-                <p class="text-xs text-default-500 mt-0.5">Sesuai DEC-001, kapasitas maksimal dibatasi 30 peserta.</p>
+                <p class="text-xs text-default-500 mt-0.5">Kapasitas maksimal tiap rombel / kelas adalah 50 peserta (murni akun siswa).</p>
             </div>
-            <button type="button" onclick="closeModal('modal-create-class')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button type="button" onclick="closeModal('modal-create-class')" aria-label="Tutup dialog" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -606,7 +606,7 @@
     <div class="bg-white rounded-md max-w-xl w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Edit Rombel / Kelas</h4>
-            <button type="button" onclick="closeModal('modal-edit-class')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-edit-class')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -667,7 +667,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Tambah Tahun Ajaran Baru</h4>
-            <button type="button" onclick="closeModal('modal-create-year')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-create-year')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -704,7 +704,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Edit Tahun Ajaran</h4>
-            <button type="button" onclick="closeModal('modal-edit-year')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-edit-year')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -742,7 +742,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Tambah Semester / Term Baru</h4>
-            <button type="button" onclick="closeModal('modal-create-term')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-create-term')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -793,7 +793,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Edit Semester / Term</h4>
-            <button type="button" onclick="closeModal('modal-edit-term')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-edit-term')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -845,7 +845,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Tambah Jurusan / Program Studi Baru</h4>
-            <button type="button" onclick="closeModal('modal-create-department')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-create-department')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -900,7 +900,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Edit Jurusan / Program Studi</h4>
-            <button type="button" onclick="closeModal('modal-edit-department')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-edit-department')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -956,7 +956,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Tambah Mata Pelajaran / Kuliah Baru</h4>
-            <button type="button" onclick="closeModal('modal-create-subject')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-create-subject')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -998,7 +998,7 @@
     <div class="bg-white rounded-md max-w-lg w-full max-h-[90vh] flex flex-col shadow-lg border border-default-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-default-200 flex items-center justify-between shrink-0">
             <h4 class="text-sm font-bold text-default-800">Edit Mata Pelajaran / Kuliah</h4>
-            <button type="button" onclick="closeModal('modal-edit-subject')" class="text-default-400 hover:text-default-600 cursor-pointer">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-edit-subject')" class="text-default-400 hover:text-default-600 cursor-pointer">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>
@@ -1051,7 +1051,7 @@
                 </h4>
                 <p id="class-students-subtitle" class="text-xs text-default-500 mt-0.5">Memuat data kelas...</p>
             </div>
-            <button type="button" onclick="closeModal('modal-class-students')" class="size-8 rounded-full hover:bg-default-200 text-default-400 hover:text-default-600 flex items-center justify-center cursor-pointer transition">
+            <button aria-label="Tutup dialog" type="button" onclick="closeModal('modal-class-students')" class="size-8 rounded-full hover:bg-default-200 text-default-400 hover:text-default-600 flex items-center justify-center cursor-pointer transition">
                 <i data-lucide="x" class="size-4.5"></i>
             </button>
         </div>

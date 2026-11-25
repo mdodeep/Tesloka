@@ -40,8 +40,10 @@
             box-shadow: 0 10px 25px -5px rgba(20, 33, 61, 0.05), 0 8px 10px -6px rgba(20, 33, 61, 0.02);
         }
         .logo-img {
-            height: 2.75rem;
-            max-width: 180px;
+            width: auto;
+            height: auto;
+            max-height: 5rem;
+            max-width: min(100%, 340px);
             object-fit: contain;
             margin: 0 auto 1.75rem;
         }

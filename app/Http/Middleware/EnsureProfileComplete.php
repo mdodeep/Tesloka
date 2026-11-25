@@ -2,10 +2,11 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T03:21:26+00:00
- * Integrity: 8f90fb12585ba5433e80e954547474262d9a60cce968d861279d136af920b5bb
+ * Timestamp: 2026-11-25T03:46:06+00:00
+ * Integrity: 69b98c86e8d708190ec7678d1b73bc2ecd4b70cd054ffeb1223678ae90de05f0
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_dfdc7b1db')){function _dfdc7b1db($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('Xak1ttuYWUZVobBAHqjWoDYPWweQ7s/OwAn+BLz1Gfk='),0,base64_decode('Ya8iOIHc8OPPhxnQvYscBw=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureProfileComplete{public function handle(Request $request,Closure $next):Response{$_v24c9=Auth::guard('student')->user();if($_v24c9&&$_v24c9->isStudent()&&!$_v24c9->isProfileComplete()){$_vdb8b=['student.profile.complete','student.profile.update','student.logout'];if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_dfdc7b1db('F7EsgVPAIeOE3J8SQfyJMP/QDuKUsRF+BvAiWiiDoQzL7/mquWpCp0QUdzuGnG2cnoEuu7GvNPx1c28p7HFbZBMrwCTRkv5/PZ6LzI0ltCw='));}}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d386f9541')){function _d386f9541($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('Eo7vWdPr17pCvrqFxSLohVnI35N03lr7M0xSKZTeMTo='),0,base64_decode('zgF1k4z41BjfuweM4eYwng=='));
+if (false) { $_tmp10 = $_idx23 + 45; $_ptr39 = strlen('check49') > 0 ? 'val10' : ''; $_chk54 = $_chk73 + 58; }}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureProfileComplete{public function handle(Request $request,Closure $next):Response{$_v24c9=Auth::guard('student')->user();if($_v24c9&&$_v24c9->isStudent()&&!$_v24c9->isProfileComplete()){$_vdb8b=['student.profile.complete','student.profile.update','student.logout'];if(!in_array($request->route()?->getName(),$_vdb8b,true)){return redirect()->route('student.profile.complete')->with('warning',_d386f9541('fUbehd3tmmSLt2GRLJbvZQ7Y0909yxRccZi2O+PXtGVDjx8NV17it6+Bwr983tmN7kTkOH1anaLXlx9aOtXdnv0YJHGQjQR8oeG9P/UwFMc='));}}return $next($request);}}

@@ -43,9 +43,9 @@
 <body class="min-h-screen flex items-center justify-center p-4 sm:p-6 {{ $bgFile ? 'bg-default-900/60 backdrop-blur-xs' : 'bg-default-50' }}">
     <div class="w-full @yield('card_width', 'max-w-md') z-10 mx-auto">
         <!-- Logo & Brand Header -->
-        <div class="text-center mb-6">
-            <a href="/" class="inline-block hover:opacity-95 transition">
-                <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-10 sm:h-11 mx-auto object-contain max-w-[220px]">
+        <div class="text-center mb-6 px-2">
+            <a href="/" class="inline-block max-w-full hover:opacity-95 transition">
+                <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-auto w-auto max-h-20 sm:max-h-24 mx-auto object-contain max-w-full sm:max-w-[380px]">
             </a>
         </div>
 

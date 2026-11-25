@@ -32,7 +32,7 @@
         <div class="w-full px-3.5 sm:px-6 lg:px-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <a href="{{ route('student.dashboard') }}" class="flex items-center gap-2 hover:opacity-90 transition">
-                    <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-7 sm:h-8 max-w-[150px] sm:max-w-[180px] object-contain">
+                    <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="h-auto w-auto max-h-9 sm:max-h-11 max-w-[165px] sm:max-w-[260px] object-contain">
                 </a>
             </div>
 

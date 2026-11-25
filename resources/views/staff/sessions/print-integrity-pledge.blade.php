@@ -125,9 +125,12 @@
             gap: 16px;
         }
         .letterhead-logo {
-            width: 68px;
-            height: 68px;
+            width: auto;
+            height: auto;
+            max-width: 185px;
+            max-height: 72px;
             object-fit: contain;
+            flex-shrink: 0;
         }
         .letterhead-text {
             flex: 1;

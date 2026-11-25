@@ -84,9 +84,12 @@
             gap: 15px;
         }
         .header .kop-logo {
-            width: 65px;
-            height: 65px;
+            width: auto;
+            height: auto;
+            max-width: 180px;
+            max-height: 70px;
             object-fit: contain;
+            flex-shrink: 0;
         }
         .header .header-text {
             flex: 1;

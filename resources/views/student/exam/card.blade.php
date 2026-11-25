@@ -305,7 +305,7 @@
         <div class="card-wrapper">
             <!-- HEADER KOP -->
             <div class="header">
-                <img src="{{ $cardLogoUrl }}" alt="{{ $cardInstName }}" style="height: 30px; max-width: 120px; object-fit: contain;">
+                <img src="{{ $cardLogoUrl }}" alt="{{ $cardInstName }}" style="width: auto; height: auto; max-height: 46px; max-width: 240px; object-fit: contain; flex-shrink: 0;">
                 <div class="inst-title">
                     <div class="inst-name">{{ $cardInstName }}</div>
                     <div class="inst-sub">KARTU TANDA PESERTA EVALUASI AKADEMIK</div>

@@ -45,7 +45,7 @@
             <!-- Brand Logo & Mobile Close Button -->
             <div class="logo-box sticky top-0 flex min-h-topbar-height items-center justify-between px-5 bg-card border-b border-default-200 z-10 transition-all">
                 <a href="{{ route('staff.dashboard') }}" class="flex items-center">
-                    <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="logo-lg h-8 max-w-[170px] object-contain">
+                    <img src="{{ $systemLogoUrl }}" alt="{{ $systemInstName }}" class="logo-lg h-auto w-auto max-h-10 max-w-[190px] object-contain">
                     <img src="{{ $systemFaviconUrl }}" alt="{{ $systemInstName }}" class="logo-sm h-8 w-8 object-contain mx-auto">
                 </a>
                 <button type="button" id="button-close-mobile-menu" class="lg:hidden btn btn-icon size-8 rounded-full bg-default-100 hover:bg-default-200 text-default-600 inline-flex items-center justify-center cursor-pointer transition" aria-label="Tutup Menu">

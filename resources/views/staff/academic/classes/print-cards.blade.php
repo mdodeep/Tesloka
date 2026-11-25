@@ -248,8 +248,8 @@
             min-width: 0;
         }
         .card-logo {
-            max-height: 4.8mm;
-            max-width: 14mm;
+            max-height: 6.5mm;
+            max-width: 26mm;
             width: auto;
             height: auto;
             object-fit: contain;

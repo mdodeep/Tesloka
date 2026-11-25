@@ -124,12 +124,13 @@
             padding-bottom: 7px;
         }
         .card-logo {
-            max-height: 30px;
-            max-width: 115px;
+            max-height: 38px;
+            max-width: 185px;
             width: auto;
             height: auto;
             object-fit: contain;
             display: block;
+            flex-shrink: 0;
         }
         .seat-badge {
             background: #14213d;

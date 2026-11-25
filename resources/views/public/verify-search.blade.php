@@ -31,7 +31,7 @@
     <!-- Top Header Brand -->
     <header class="w-full max-w-4xl mx-auto py-4 flex items-center justify-between border-b border-default-200 mb-8">
         <div class="flex items-center gap-3">
-            <img src="{{ $logoUrl }}" alt="{{ $instName }}" class="h-9 max-w-[180px] object-contain">
+            <img src="{{ $logoUrl }}" alt="{{ $instName }}" class="h-auto w-auto max-h-11 sm:max-h-12 max-w-[200px] sm:max-w-[290px] object-contain">
             <div class="hidden sm:block">
                 <div class="text-xs font-bold text-default-800 uppercase tracking-tight">{{ $instName }}</div>
                 <div class="text-[10px] text-default-400">Verifikasi Resmi Dokumen & Sertifikat</div>

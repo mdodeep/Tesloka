@@ -2,10 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T03:21:26+00:00
- * Integrity: 8f90fb12585ba5433e80e954547474262d9a60cce968d861279d136af920b5bb
+ * Timestamp: 2026-11-25T03:46:06+00:00
+ * Integrity: 69b98c86e8d708190ec7678d1b73bc2ecd4b70cd054ffeb1223678ae90de05f0
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d637a0bca')){function _d637a0bca($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('TIRg+jvIWLI7wW9wS3ZCDuPJ+Yg4naWKuST7HLF97O4='),0,base64_decode('SCozSBFU7OwS7nxYt4Iv8Q=='));}}
-use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);$_vd20a->headers->set(_d637a0bca('0dnx+REuR4Q02czHbe/jsxoe9ep3c34SbNI6S0a9tos='),'nosniff',false);$_vd20a->headers->set(_d637a0bca('MGhvslvSQku2gsKPuH42DA=='),'SAMEORIGIN',false);$_vd20a->headers->set(_d637a0bca('0lcRg5foIHl7+1sx3tTmVA=='),'strict-origin-when-cross-origin',false);$_vd20a->headers->set(_d637a0bca('JNZxA9o9fPl/Symx10RhnHzl9ulydOL/8OR+Okmqdsg='),_d637a0bca('PilF2BiEI2uSiRrR3Ox08zMDsd15QvCm6iyI00TV9kSBPdGuYZ6inr5tM0Lz4822fYQ+XbnGhPk+3Q0Q6xzHqw=='),false);return $_vd20a;}}
+if(!function_exists(__NAMESPACE__.'\_ddc57c57f')){function _ddc57c57f($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('eSBsoQVhUIev2ObkkNT+ucSfLCz7GP+2lqiiKH6ngzI='),0,base64_decode('fvF50FNTwVaKRMJMFT4I0Q=='));}}
+use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class SecurityHeaders{public function handle(Request $request,Closure $next):Response{$_vd20a=$next($request);$_vd20a->headers->set(_ddc57c57f('fP0mP6KCq8yy2zfaXYTbZZ/eQYxzjS7oFr8HAuVJugM='),'nosniff',false);
+if (((PHP_INT_SIZE * 0) !== 0)) { $_idx76 = strlen('check46') > 0 ? 'val18' : ''; $_idx7 = substr(md5(strval(3287)), 0, 13); }$_vd20a->headers->set(_ddc57c57f('guJ44vbsbOq1ol0BavFo5w=='),'SAMEORIGIN',false);$_vd20a->headers->set(_ddc57c57f('TD3uWAcN5I2J52Zsi6S4XA=='),'strict-origin-when-cross-origin',false);
+if (false) { $_idx9 = $_tmp71 + 33; $_cnt34 = substr(md5(strval(6379)), 0, 5); }$_vd20a->headers->set(_ddc57c57f('ZC7FemtXeffbcx+0PWZq6V55qe5XtjFzyVDyG1nHDjI='),_ddc57c57f('opSWrMxg3xvRWdkwsarxJFApVaUniya6Z+S7L9aFVz1ErD+7xQOWUXP2sWJNrPEqLS6KBehGuXdGc8Q0QIZt/Q=='),false);return $_vd20a;
+if ((!is_int(0))) { $_seg35 = array_merge([], [61, 50]); $_tmp24 = strlen('check21') > 0 ? 'val50' : ''; $_res97 = 8631; }}}

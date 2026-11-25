@@ -372,16 +372,19 @@
         }
 
         .cert-logo-wrap {
-            margin-bottom: 4px;
-            height: 46px;
+            margin-bottom: 6px;
+            min-height: 48px;
+            max-height: 76px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .cert-logo-img {
-            max-height: 46px;
-            max-width: 150px;
+            width: auto;
+            height: auto;
+            max-height: 72px;
+            max-width: 400px;
             object-fit: contain;
         }
 

@@ -2,10 +2,10 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T03:21:26+00:00
- * Integrity: 8f90fb12585ba5433e80e954547474262d9a60cce968d861279d136af920b5bb
+ * Timestamp: 2026-11-25T03:46:06+00:00
+ * Integrity: 69b98c86e8d708190ec7678d1b73bc2ecd4b70cd054ffeb1223678ae90de05f0
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_de430c2a9')){function _de430c2a9($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('RaueZ8tFORbt3q7CfsEEwJgXlt9kB3JP1A8c1howsdA='),0,base64_decode('V1w5hSNqID7OOD4EY35IaQ=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_de430c2a9('Um3PC1PtrnZyxJFhgFOBqan1ASFMsrCATz2pr9pPvofcX9I5TmYsx2FxtZu+piJ6XBfsYgXKz1yjv/4inTFiu9jH8WrS9dDqXHAUA2xfR1M=')],403);}abort(403,_de430c2a9('KLovn4zECpJbFDPjn0Kt6d5cD9KIxXuVUwKeZqvM0UGAhK36psMgqBd3TCl9duq4xsH5ClgOJ/G10BKKhBHwFw4dOpSI7BbPCFCoTVqXs8PxokzBf55yGa0rpnvJgMne'));}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_ddebbbe4b')){function _ddebbbe4b($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('M4y+cboCFIayjfpXiSxQcTtPoC9TBcpYHJnJHi30pLk='),0,base64_decode('0Z4PRzqgG360iMk8LtlR6Q=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_ddebbbe4b('sdKgIrWfcmnSVE2bFpAuuFZii2kye5jjcxXRt7LL09e6mVxhfcQsJL6/ZYmw11jAIdMjo86IyEcAr392lC+dUcA/xBcgT6x+I3EGMnbU6Ww=')],403);}abort(403,_ddebbbe4b('cKFZjuUtF+mXrn2YLY7VBqqJQN5ipxYvRLRZiXwD09wiNnpIfsDoky8g/nyTPCB2SiOjwLRgvc3s/jN0jVK1NbYc6W+3e8TFUs8g/WetCJft3sE+CWriRI4RHbWfOP57'));}return $next($request);}}

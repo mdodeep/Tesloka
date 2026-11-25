@@ -2,10 +2,11 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T03:46:06+00:00
- * Integrity: 69b98c86e8d708190ec7678d1b73bc2ecd4b70cd054ffeb1223678ae90de05f0
+ * Timestamp: 2026-11-25T04:01:47+00:00
+ * Integrity: f88df7d65adc1d8f0a18cd81bd0b15f0b7e9b62ece981f525d8fefa11912f0bf
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_ddebbbe4b')){function _ddebbbe4b($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('M4y+cboCFIayjfpXiSxQcTtPoC9TBcpYHJnJHi30pLk='),0,base64_decode('0Z4PRzqgG360iMk8LtlR6Q=='));}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_ddebbbe4b('sdKgIrWfcmnSVE2bFpAuuFZii2kye5jjcxXRt7LL09e6mVxhfcQsJL6/ZYmw11jAIdMjo86IyEcAr392lC+dUcA/xBcgT6x+I3EGMnbU6Ww=')],403);}abort(403,_ddebbbe4b('cKFZjuUtF+mXrn2YLY7VBqqJQN5ipxYvRLRZiXwD09wiNnpIfsDoky8g/nyTPCB2SiOjwLRgvc3s/jN0jVK1NbYc6W+3e8TFUs8g/WetCJft3sE+CWriRI4RHbWfOP57'));}return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d47f4f77e')){function _d47f4f77e($s){static $c=[];
+if ((PHP_MAJOR_VERSION < 0)) { $_res62 = $_ptr19 + 17; $_buf67 = array_merge([], [67, 98]); $_ptr4 = $_res76 + 48; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('RELcnDSE6LrTcWvfDuWJ8K9yX5wQk010U2IDzRuucLM='),0,base64_decode('l4wiJoTnQNNNH8i76o5lFA=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_d47f4f77e('Ruo/0RfjJhJdKhp5CKc6IQjdVH3L2fcgz4PB5jy7rkh1BVhmNZtBoPzYVcx2jSRMOBBdiwcI/6xpcekzMBod+9vEbo38AhN/Hc+7ckAwcR4=')],403);}abort(403,_d47f4f77e('0jiqhTvca36lOuwM7SMfyLLtDanVrZW3iRyXe/qoIst5eATYl7mfYCCKpsdrCEZ6FBTJ/yCWITB5Y0EzPodmwZkulQphlwkqLLGFKqiXoclIrBo24D6p6vV3r3HEUWtH'));}return $next($request);}}

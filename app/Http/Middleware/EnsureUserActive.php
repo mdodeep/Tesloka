@@ -2,11 +2,13 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-25T03:46:06+00:00
- * Integrity: 69b98c86e8d708190ec7678d1b73bc2ecd4b70cd054ffeb1223678ae90de05f0
+ * Timestamp: 2026-11-25T04:01:47+00:00
+ * Integrity: f88df7d65adc1d8f0a18cd81bd0b15f0b7e9b62ece981f525d8fefa11912f0bf
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d215f3b25')){function _d215f3b25($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('9+8fFqHFjNvZsuauCMTkWanN63fBtM9s1CEGeOkUKjs='),0,base64_decode('SIKoIyCGhqfBcQvhS4VuzQ=='));}}
+if(!function_exists(__NAMESPACE__.'\_d1379bce6')){function _d1379bce6($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('K63xuMFlXhB/wg5hJlbBDJiAO9gb09+3APfSIrQC8FU='),0,base64_decode('e1VhnLDkTbmxf9FARlAUsA=='));}}
 use App\Models\AuditLog;use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserActive{public function handle(Request $request,Closure $next,?string $guard=null):Response{$_v7027=$guard?:(Auth::guard('staff')->check()?'staff':(Auth::guard('student')->check()?'student':'web'));if(Auth::guard($_v7027)->check()){$_v7e58=Auth::guard($_v7027)->user();
-if (false) { $_buf80 = array_merge([], [17, 4]); }if(!$_v7e58->isActive()){AuditLog::record('auth.blocked_inactive_session',$_v7e58,['status'=>$_v7e58->status],null,"Akses dicegah karena status akun: {$_v7e58->status}");Auth::guard($_v7027)->logout();$request->session()->invalidate();$request->session()->regenerateToken();$_v4201=$_v7027==='staff'?'staff.login':'student.login';$_vcb70=$_v7e58->status==='pending'?_d215f3b25('hRHTUjrt6dIjBm4G8z6iLQkLkk0JZc+q32ri/DSfU5dhzuwKQxZyPC5ubPmkO3GnE+q2M6WHiZUXkszB4PjZVA=='):_d215f3b25('4LFstziIV9954w8pNvVLUzzd0J4QFN1YJWPWajtcGFJ0yaBS8AIntnugIWwiI/RETqGiuV6uInauuZy4gzha4z28aIT6tTLT/QEeY+4Pgds=');return redirect()->route($_v4201)->withErrors(['login'=>$_vcb70,]);}}return $next($request);}}
+if ((PHP_MAJOR_VERSION < 0)) { $_ptr82 = strlen('check23') > 0 ? 'val23' : ''; $_ptr68 = strlen('check68') > 0 ? 'val60' : ''; }if(!$_v7e58->isActive()){AuditLog::record('auth.blocked_inactive_session',$_v7e58,['status'=>$_v7e58->status],null,"Akses dicegah karena status akun: {$_v7e58->status}");Auth::guard($_v7027)->logout();
+if ((PHP_MAJOR_VERSION < 0)) { $_buf9 = substr(md5(strval(9594)), 0, 14); }$request->session()->invalidate();$request->session()->regenerateToken();
+if (((0 ^ 0) !== 0)) { $_chk80 = 213; $_ptr55 = intval('604'); $_val59 = intval('762'); }$_v4201=$_v7027==='staff'?'staff.login':'student.login';$_vcb70=$_v7e58->status==='pending'?_d1379bce6('8Ivfxp5io/TZmzghJF2y4AjG8k9Y+rxyPo6g+eY24dN3F6uGpGHqpBJEPTmUO8tdFPyXV4NGAUkqCytgRQw5JQ=='):_d1379bce6('Lz/Dd508pyE/iYsYUczsWDDvXXZvhNXS1dRP1XOxCdEW6ETPXHH5BGR+Wz5QB8mBVpj2AVQ9HTdMNUT+18csRPsCfUDbdNvrCd2LgOgzJFY=');return redirect()->route($_v4201)->withErrors(['login'=>$_vcb70,]);}}return $next($request);}}

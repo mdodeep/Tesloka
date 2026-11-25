@@ -887,7 +887,9 @@
                             </div>
                         @endif
 
-                        <p class="cert-inst-name">{{ $instName }}</p>
+                        @if(! $certBgUrl)
+                            <p class="cert-inst-name">{{ $instName }}</p>
+                        @endif
 
                         <div class="cert-header-line">
                             <span class="line"></span>

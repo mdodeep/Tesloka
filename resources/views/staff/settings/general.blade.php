@@ -493,7 +493,7 @@
                                         <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">SUPPORTER ONLY</span>
                                     @endif
                                 </div>
-                                <p class="text-xs text-default-500 mt-0.5">Jika institusi Anda telah memiliki desain blangko siap cetak berukuran A4 Landscape dari tim desainer grafis, unggah di sini. Teks nama, nomor, nilai, dan QR verifikasi akan otomatis dicetak presisi di atas blangko tersebut.</p>
+                                <p class="text-xs text-default-500 mt-0.5">Jika institusi Anda telah memiliki desain blangko siap cetak berukuran A4 Landscape dari tim desainer grafis, unggah di sini. Teks nama, nomor, nilai, dan QR verifikasi akan otomatis dicetak presisi di atas blangko tersebut, dan teks nama institusi di atas header otomatis disembunyikan (menampilkan logo saja bila diaktifkan) agar tidak ganda dengan desain blangko maupun banner logo.</p>
                             </div>
                             @if($isSupporter && $settings['certificate_bg'])
                                 <div class="flex items-center gap-3 shrink-0">

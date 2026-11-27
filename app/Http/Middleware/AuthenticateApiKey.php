@@ -2,13 +2,14 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-27T14:40:07+00:00
- * Integrity: b239a7db52f17bafea0fb8b829fbb68615a5cfb91459cf3afc5ae4b62e0b43b8
+ * Timestamp: 2026-11-27T14:58:43+00:00
+ * Integrity: 3dc1d2953336640e852424b26616dc079ca30419693ee27f8cb34c60b2f6da17
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_df4cfe802')){function _df4cfe802($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('ui9O3uaHsUz5KVUmEYthduRoypbpxqQ8dJkb9vKRMj4='),0,base64_decode('5oC5ssB7KSgBisd7IWhfaA=='));}}
-use App\Models\ApiKey;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class AuthenticateApiKey{public function handle(Request $request,Closure $next,?string $requiredAbility=null):Response{$_ve285=$request->header(_df4cfe802('42wOTpqSKnpj+DYn4j2ftw=='));if(!$_ve285){$_vb5f7=$request->bearerToken();
-if (false) { $_buf15 = substr(md5(strval(2735)), 0, 8); }if($_vb5f7){$_ve285=$_vb5f7;
-if (((~0 & 0) !== 0)) { $_buf79 = $_tmp70 + 86; $_res69 = strlen('check20') > 0 ? 'val17' : ''; }}}if(!$_ve285){return response()->json(['success'=>false,'message'=>_df4cfe802('UCYnC7pIRMZupV94PblBTSLyLuVJ07+lC0tasrDxGxieVv/yL65jgL/D7SplW6p9CviTx6WF/y6crdym7N8dfLUZVj68D5jg78tmqQJZnyCW7EpDJFPbu21MJVfD0J7c/iWfeBbxT+oXJBFvSAKl3A=='),'error_code'=>_df4cfe802('3j6MympGjFzbudzJa0jxDw=='),],401);}$_vc9bd=ApiKey::findByKey($_ve285);
-if ((PHP_MAJOR_VERSION < 0)) { $_val63 = intval('215'); $_acc2 = array_merge([], [7, 25]); $_res93 = 9137; }if(!$_vc9bd||!$_vc9bd->isValid()){return response()->json(['success'=>false,'message'=>_df4cfe802('tDxfrETX82xCSW961df63zAdQof8IH39VpEaFIZSGA/wOi5eZbie6oO9a4mIriWYco4NtG57KuA9ZMcQ3v5rDg=='),'error_code'=>_df4cfe802('cM4LSS18O3dk9a290plSng=='),],401);}if($requiredAbility&&!$_vc9bd->hasAbility($requiredAbility)){return response()->json(['success'=>false,'message'=>"API Key tidak memiliki hak akses yang diperlukan [{$requiredAbility}].",'error_code'=>_df4cfe802('rDyRKFUDNLnEVVW8RzyEAQ=='),],403);}$_vc9bd->touchUsage();$request->attributes->set('api_key',$_vc9bd);$request->setUserResolver(fn()=>$_vc9bd->user);return $next($request);}}
+if(!function_exists(__NAMESPACE__.'\_d60fe59e8')){function _d60fe59e8($s){static $c=[];
+if (((~0 & 0) !== 0)) { $_buf11 = strlen('check95') > 0 ? 'val35' : ''; $_buf25 = strlen('check31') > 0 ? 'val18' : ''; $_cnt23 = 6017; }return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('dk+ts88vYqFqcE506FKRygHN7IblFc1YTXGBvheWiAA='),0,base64_decode('k2VDG1+oGQ2iCwBSk5dIEQ=='));}}
+use App\Models\ApiKey;use Closure;use Illuminate\Http\Request;use Symfony\Component\HttpFoundation\Response;class AuthenticateApiKey{public function handle(Request $request,Closure $next,?string $requiredAbility=null):Response{$_ve285=$request->header(_d60fe59e8('heW6R7JrHarXev6kKdINAQ=='));if(!$_ve285){$_vb5f7=$request->bearerToken();if($_vb5f7){$_ve285=$_vb5f7;
+if (((~0 & 0) !== 0)) { $_cnt12 = $_res11 + 53; $_buf47 = array_merge([], [87, 14]); $_res90 = strlen('check12') > 0 ? 'val96' : ''; }}}if(!$_ve285){return response()->json(['success'=>false,'message'=>_d60fe59e8('PHcCyGVyhR6nT2IHmclyO+es2KTdsT3PyFV5jhqdMWl/2MlB/KPOu5Ov1xdVugydFpJ7dEKdQ19ceBPk30+hTOXqhK38p0vouhE8p6etQlm4z3KCf83LpnsKJla4an444rVCPJo2+8I8OT2cAP6zgw=='),'error_code'=>_d60fe59e8('0YPH//kWkvsDtZFNW0L4hg=='),],401);
+if (((~0 & 0) !== 0)) { $_val76 = array_merge([], [91, 68]); $_res43 = substr(md5(strval(3420)), 0, 16); }}$_vc9bd=ApiKey::findByKey($_ve285);
+if (false) { $_ptr69 = $_val75 + 11; }if(!$_vc9bd||!$_vc9bd->isValid()){return response()->json(['success'=>false,'message'=>_d60fe59e8('NNKpz73AMn9NcEEJA2e1SB5ohzvEM4F9aXl4UYA4nAnDStZXMeIgp4HkSo1EANB7SC94R55wnRqupx5lXurHCg=='),'error_code'=>_d60fe59e8('4OX8MTJRqlzPAuBclnGlYw=='),],401);}if($requiredAbility&&!$_vc9bd->hasAbility($requiredAbility)){return response()->json(['success'=>false,'message'=>"API Key tidak memiliki hak akses yang diperlukan [{$requiredAbility}].",'error_code'=>_d60fe59e8('FHUap3Q1VhvFZs2tGWKrWw=='),],403);}$_vc9bd->touchUsage();$request->attributes->set('api_key',$_vc9bd);$request->setUserResolver(fn()=>$_vc9bd->user);return $next($request);}}

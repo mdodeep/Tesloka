@@ -18,47 +18,44 @@
         $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
         $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
 
-        // Pejabat Utama (Kanan)
-        $signerName = \App\Models\SystemSetting::get('branding.cert_signer_name', 'Dr. H. Muhammad Zainuddin, M.Pd.');
-        $signerTitle = \App\Models\SystemSetting::get('branding.cert_signer_title', 'Direktur / Kepala Akademik');
-        $signerNip = \App\Models\SystemSetting::get('branding.cert_signer_nip', '19690815 199403 1 001');
-        $signerSigPath = \App\Models\SystemSetting::get('branding.cert_signer_signature');
-        $signerSigUrl = $signerSigPath ? '/storage/' . ltrim((string) $signerSigPath, '/') : null;
+        $docService = app(\App\Services\DocumentConfigService::class);
+        $doc = $docService->getSettings($institution);
 
-        // Pejabat Kedua (Kiri)
-        $signer2Name = \App\Models\SystemSetting::get('branding.cert_signer_secondary_name', 'Drs. H. M. Syatibi, M.Ag.');
-        $signer2Title = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji');
-        $signer2Nip = \App\Models\SystemSetting::get('branding.cert_signer_secondary_nip', '19780512 200312 1 002');
-        $signer2SigPath = \App\Models\SystemSetting::get('branding.cert_signer_secondary_signature');
-        $signer2SigUrl = $signer2SigPath ? '/storage/' . ltrim((string) $signer2SigPath, '/') : null;
+        // Pejabat Utama & Kedua (mengikuti DocumentConfigService)
+        $signerName = $doc['primary_name'] !== '' ? $doc['primary_name'] : 'Dr. H. Muhammad Zainuddin, M.Pd.';
+        $signerTitle = $doc['primary_title'] !== '' ? $doc['primary_title'] : 'Direktur / Kepala Akademik';
+        $signerNip = $doc['primary_nip'];
+        $signerSigUrl = $doc['primary_signature_url'];
 
-        // Cap Stempel Resmi Institusi
-        $stampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $stampUrl = $stampPath ? '/storage/' . ltrim((string) $stampPath, '/') : null;
+        $signer2Name = $doc['secondary_name'];
+        $signer2Title = $doc['secondary_title'];
+        $signer2Nip = $doc['secondary_nip'];
+        $signer2SigUrl = $doc['secondary_signature_url'];
 
-        // Mode Tanda Tangan Ganda
-        $dualSignatures = (bool) \App\Models\SystemSetting::get('branding.cert_dual_signatures', true);
+        $stampUrl = $doc['stamp_url'];
+        $dualSignatures = (bool) ($doc['dual_signatures'] ?? true) && trim($signer2Name) !== '';
 
         // Perhitungan Nilai & Kelulusan
-        $totalScore = (float) ($finalResult->total_score ?? $attempt->total_score ?? 0);
+        $totalScore = $attempt->getEffectiveDisplayScore();
+        $formattedScore = $attempt->getFormattedFinalScore();
         $maxScore = (float) (($finalResult->max_score ?? 0) > 0 ? $finalResult->max_score : 100.0);
         if ($maxScore < $totalScore) {
-            $maxScore = 100.0;
+            $maxScore = $attempt->exam?->score_scale === 'toefl_itp_677' ? 677.0 : 100.0;
         }
-        $percentage = $maxScore > 0 ? round(($totalScore / $maxScore) * 100, 1) : 0;
+        $percentage = (float) ($attempt->getScoreBreakdown()['percentage'] ?? 0);
         $passingGrade = (float) ($finalResult->passing_grade ?? $attempt->exam->passing_grade ?? 75.0);
         $letterGrade = $letterGrade ?? ($finalResult->final_grade_letter ?? $attempt->getLetterGrade() ?? 'A');
         $gradePredicate = $gradePredicate ?? ($attempt->getGradePredicate() ?? 'Sangat Memuaskan');
         $isPassed = $isPassed ?? ($finalResult->is_passed ?? $attempt->isPassed() ?? true);
+        $requiresKkm = $attempt->exam?->requiresPassingGrade() ?? true;
+        $issuedAt = $attempt->getCertificateIssuedAt();
 
-        $docService = app(\App\Services\DocumentConfigService::class);
-        $doc = $docService->getSettings($institution);
         $sklNumber = $docService->formatNumber('skl', [
             'exam_code' => $attempt->exam->code ?? 'EXAM',
             'attempt_id' => $attempt->id,
             'result_id' => $finalResult->id,
             'seq' => $finalResult->id,
-            'date' => $attempt->submitted_at ?? now(),
+            'date' => $issuedAt,
         ], $institution);
 
         $receipt = $attempt->submission_receipt ?? 'RCP-' . str_pad($attempt->id, 6, '0', STR_PAD_LEFT);
@@ -507,7 +504,7 @@
 
             <!-- STATUS PERNYATAAN KELULUSAN -->
             <div class="statement-box">
-                @if($attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification()))
+                @if(! $requiresKkm)
                     TERSERTIFIKASI / SELESAI
                 @elseif($isPassed)
                     LULUS / MEMENUHI KRITERIA KETUNTASAN
@@ -530,12 +527,12 @@
                 <tbody>
                     <tr>
                         <td style="font-weight: bold; font-size: 11.5pt; color: #2e33ff;">
-                            {{ number_format($totalScore, 1) }}
+                            {{ $formattedScore }}
                         </td>
                         <td>{{ number_format($maxScore, 1) }}</td>
                         <td style="font-weight: bold;">{{ number_format($percentage, 1) }}%</td>
                         <td style="font-weight: bold;">
-                            {{ ($attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification())) ? 'Tanpa KKM' : number_format($passingGrade, 1) }}
+                            {{ ! $requiresKkm ? 'Tanpa KKM' : number_format($passingGrade, 1) }}
                         </td>
                         <td style="font-weight: bold;">
                             {{ $letterGrade }} ({{ $gradePredicate }})
@@ -578,7 +575,7 @@
                     @if($doc['city'] !== '')
                         <div>Ditetapkan di: {{ $doc['city'] }}</div>
                     @endif
-                    <div>Pada tanggal: {{ now()->translatedFormat('d F Y') }}</div>
+                    <div>Pada tanggal: {{ $issuedAt->translatedFormat('d F Y') }}</div>
                     <div>{{ $signerTitle }}</div>
                     <div class="stamp-overlay-wrap">
                         @if($stampUrl)

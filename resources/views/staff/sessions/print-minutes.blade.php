@@ -16,11 +16,42 @@
 
         $docService = app(\App\Services\DocumentConfigService::class);
         $doc = $docService->getSettings($institution);
+        $tzAbbr = \App\Services\DocumentConfigService::timezoneAbbreviation();
+
+        $resolveImgSrc = static function (?string $urlOrPath) use ($isPdfMode): ?string {
+            if (! $urlOrPath) {
+                return null;
+            }
+            if (! $isPdfMode) {
+                return $urlOrPath;
+            }
+            $cleanPath = ltrim(parse_url($urlOrPath, PHP_URL_PATH) ?? $urlOrPath, '/');
+            $candidates = [
+                public_path($cleanPath),
+                str_starts_with($cleanPath, 'storage/')
+                    ? storage_path('app/public/' . substr($cleanPath, 8))
+                    : null,
+            ];
+            foreach (array_filter($candidates) as $candidate) {
+                if (is_file($candidate)) {
+                    $mime = @mime_content_type($candidate) ?: 'image/png';
+                    $raw = @file_get_contents($candidate);
+                    if ($raw !== false) {
+                        return 'data:' . $mime . ';base64,' . base64_encode($raw);
+                    }
+                }
+            }
+            return $urlOrPath;
+        };
+
+        $logoSrc = $resolveImgSrc($logoUrl);
         $docLetterheadUrl = $doc['letterhead_url'];
+        $docLetterheadSrc = $resolveImgSrc($docLetterheadUrl);
         $stampUrl = $doc['stamp_url'];
+        $stampSrc = $resolveImgSrc($stampUrl);
 
         $docNumber = $docService->formatNumber('minutes', [
-            'exam_code' => $session->exam->code ?? 'EXAM',
+            'exam_code' => $session->exam?->code ?? 'EXAM',
             'session_code' => $session->session_code,
             'session_id' => $session->id,
             'seq' => $session->id,
@@ -30,6 +61,12 @@
         $resolvedProctors = $docService->resolveSessionProctors($session);
         $leadProctorUser = $docService->proctorUser($resolvedProctors['lead']);
         $leadProctorRole = $resolvedProctors['lead']?->role_title ?: 'Pengawas Ruang / Petugas Pengawas';
+
+        $useDual = (bool) ($doc['dual_signatures'] ?? true);
+        $rightSignerTitle = $useDual ? ($doc['secondary_title'] ?: 'Koordinator Pelaksana Ujian') : ($doc['title'] ?: 'Koordinator Pelaksana Ujian');
+        $rightSignerName = $useDual ? ($doc['secondary_name'] ?: ($doc['name'] ?: '( .................................................... )')) : ($doc['name'] ?: '( .................................................... )');
+        $rightSignerNip = $useDual ? ($doc['secondary_nip'] ?: ($doc['nip'] ?: '................................')) : ($doc['nip'] ?: '................................');
+        $rightSignerSigSrc = $resolveImgSrc($useDual ? ($doc['secondary_signature_url'] ?: $doc['primary_signature_url']) : $doc['primary_signature_url']);
     @endphp
     <style>
         *, *::before, *::after {
@@ -100,8 +137,8 @@
             background: #ffffff;
             box-shadow: {{ $isPdfMode ? 'none' : '0 4px 6px -1px rgb(0 0 0 / 0.1)' }};
             position: relative;
-            @if($docLetterheadUrl && ! $isPdfMode)
-                background-image: url('{{ $docLetterheadUrl }}');
+            @if($docLetterheadSrc)
+                background-image: url('{{ $docLetterheadSrc }}');
                 background-size: 100% 100%;
                 background-repeat: no-repeat;
                 background-position: top center;
@@ -110,13 +147,15 @@
                 padding: 15mm 20mm 15mm 20mm;
             @endif
         }
-        .kop-surat {
+        .kop-table {
+            width: 100%;
+            border-collapse: collapse;
             border-bottom: 3px double #000;
-            padding-bottom: 8px;
             margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        }
+        .kop-table td {
+            padding-bottom: 8px;
+            vertical-align: middle;
         }
         .kop-logo {
             width: auto;
@@ -124,11 +163,6 @@
             max-width: 180px;
             max-height: 70px;
             object-fit: contain;
-            flex-shrink: 0;
-        }
-        .kop-text {
-            flex: 1;
-            text-align: center;
         }
         .kop-inst {
             font-size: 14pt;
@@ -193,25 +227,24 @@
             font-weight: bold;
             font-size: 10pt;
         }
-        .signatures {
-            margin-top: 25px;
-            display: flex;
-            justify-content: space-between;
+        .signatures-table {
+            width: 100%;
+            margin-top: 24px;
+            border-collapse: collapse;
             page-break-inside: avoid;
-            position: relative;
         }
-        .sign-box {
-            width: 45%;
+        .signatures-table td.sign-box {
+            width: 50%;
             text-align: center;
+            vertical-align: top;
             font-size: 10.5pt;
-            position: relative;
+            padding: 0 12px;
         }
         .sign-space {
-            height: 62px;
+            height: 68px;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
+            line-height: 68px;
         }
         .sign-name {
             font-weight: bold;
@@ -219,20 +252,18 @@
         }
         .stamp-mark {
             position: absolute;
-            left: 12px;
-            top: -8px;
-            width: 75px;
-            height: 75px;
+            left: 24px;
+            top: -4px;
+            width: 72px;
+            height: 72px;
             object-fit: contain;
             opacity: 0.85;
-            pointer-events: none;
         }
         .sig-img {
-            max-height: 54px;
+            max-height: 56px;
             max-width: 160px;
             object-fit: contain;
-            position: relative;
-            z-index: 1;
+            vertical-align: middle;
         }
         @media screen and (max-width: 820px) {
             .no-print {
@@ -310,15 +341,21 @@
 
     <div class="doc-viewport-container">
     <div class="document-container">
-        @if(! $docLetterheadUrl)
-            <div class="kop-surat">
-                <img src="{{ $logoUrl }}" alt="Logo Institusi" class="kop-logo">
-                <div class="kop-text">
-                    <h2 class="kop-inst">{{ $instName }}</h2>
-                    <div class="kop-sub">{{ $doc['kop_subtitle'] }}</div>
-                    <p class="kop-addr">{{ $instAddress }}@if($instPhone) &bull; Telp: {{ $instPhone }}@endif @if($instEmail) &bull; Email: {{ $instEmail }}@endif</p>
-                </div>
-            </div>
+        @if(! $docLetterheadSrc)
+            <table class="kop-table">
+                <tr>
+                    <td style="width: 120px; text-align: left;">
+                        @if($logoSrc)
+                            <img src="{{ $logoSrc }}" alt="Logo Institusi" class="kop-logo">
+                        @endif
+                    </td>
+                    <td style="text-align: center;">
+                        <h2 class="kop-inst">{{ $instName }}</h2>
+                        <div class="kop-sub">{{ $doc['kop_subtitle'] }}</div>
+                        <p class="kop-addr">{{ $instAddress }}@if($instPhone) &bull; Telp: {{ $instPhone }}@endif @if($instEmail) &bull; Email: {{ $instEmail }}@endif</p>
+                    </td>
+                </tr>
+            </table>
         @endif
 
         <div class="doc-title">
@@ -334,17 +371,17 @@
             <tr>
                 <td class="label">Nama Ujian</td>
                 <td class="colon">:</td>
-                <td><strong>{{ $session->exam->title }}</strong></td>
+                <td><strong>{{ $session->exam?->title ?? '-' }}</strong></td>
             </tr>
             <tr>
                 <td class="label">Kode Ujian</td>
                 <td class="colon">:</td>
-                <td><code>{{ $session->exam->code }}</code></td>
+                <td><code>{{ $session->exam?->code ?? '-' }}</code></td>
             </tr>
             <tr>
                 <td class="label">Mata Pelajaran / Bidang</td>
                 <td class="colon">:</td>
-                <td>{{ $session->exam->subject->name ?? '-' }}</td>
+                <td>{{ $session->exam?->subject?->name ?? '-' }}</td>
             </tr>
             <tr>
                 <td class="label">Nama Sesi &amp; Kode</td>
@@ -352,16 +389,25 @@
                 <td>{{ $session->name }} (<code>{{ $session->session_code }}</code>)</td>
             </tr>
             <tr>
-                <td class="label">Ruang / Laboratorium</td>
+                <td class="label">Lokasi / Moda Pelaksanaan</td>
                 <td class="colon">:</td>
-                <td>{{ $session->room->name ?? 'Ruang Ujian Utama' }} (Kapasitas: {{ $session->room->capacity ?? '-' }} Peserta)</td>
+                <td>
+                    @if($session->isOnline())
+                        Pelaksanaan Daring / Online CBT
+                    @else
+                        {{ $session->room?->name ?? 'Ruang Ujian Utama' }}
+                        @if($session->room?->capacity)
+                            (Kapasitas: {{ $session->room->capacity }} Peserta)
+                        @endif
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td class="label">Waktu Pelaksanaan</td>
                 <td class="colon">:</td>
                 <td>
-                    Pukul {{ $session->start_time?->format('H:i') ?? '08:00' }} s.d. {{ $session->end_time?->format('H:i') ?? '10:00' }} WIB
-                    (Durasi Ujian: {{ $session->exam->duration_minutes }} Menit)
+                    Pukul {{ $session->start_time?->format('H:i') ?? '08:00' }} s.d. {{ $session->end_time?->format('H:i') ?? '10:00' }} {{ $tzAbbr }}
+                    (Durasi Ujian: {{ $session->exam?->duration_minutes ?? '-' }} Menit)
                 </td>
             </tr>
         </table>
@@ -440,10 +486,10 @@
                 <tbody>
                     @foreach($accommodatedParticipants as $ap)
                         <tr>
-                            <td><strong>{{ $ap->student->name }}</strong> ({{ $ap->student->identity_number ?? '-' }})</td>
+                            <td><strong>{{ $ap->student?->name ?? 'Peserta Dihapus' }}</strong> ({{ $ap->student?->identity_number ?? '-' }})</td>
                             <td style="text-align: center;">{{ $ap->time_extension_percent > 0 ? "+{$ap->time_extension_percent}%" : 'Standar' }}</td>
                             <td>{{ $ap->needs_scribe ? ($ap->scribe_name ?? 'Ada Scribe') : 'Mandiri' }}</td>
-                            <td style="font-size: 10pt;">{{ $ap->accommodation_notes ?? ($ap->accommodations['notes'] ?? '-') }}</td>
+                            <td style="font-size: 10pt;">{{ $ap->accommodation_notes ?: '-' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -458,33 +504,35 @@
             Demikian Berita Acara Pelaksanaan Ujian ini dibuat dengan sebenar-benarnya sesuai dengan kondisi fisik dan digital di lokasi ujian, untuk dapat dipergunakan sebagaimana mestinya.
         </p>
 
-        <div class="signatures">
-            <div class="sign-box">
-                <div>{{ $leadProctorRole }},</div>
-                <div class="sign-space"></div>
-                <div class="sign-name">
-                    {{ $leadProctorUser?->name ?? '( .................................................... )' }}
-                </div>
-                <div style="font-size: 10pt;">
-                    NIP/ID: {{ $leadProctorUser?->identity_number ?: '................................' }}
-                </div>
-            </div>
+        <table class="signatures-table">
+            <tr>
+                <td class="sign-box">
+                    <div>{{ $leadProctorRole }},</div>
+                    <div class="sign-space"></div>
+                    <div class="sign-name">
+                        {{ $leadProctorUser?->name ?? '( .................................................... )' }}
+                    </div>
+                    <div style="font-size: 10pt;">
+                        NIP/ID: {{ $leadProctorUser?->identity_number ?: '................................' }}
+                    </div>
+                </td>
 
-            <div class="sign-box">
-                <div>{{ $doc['city'] !== '' ? $doc['city'] . ', ' . ($session->start_time?->translatedFormat('d F Y') ?? now()->translatedFormat('d F Y')) : 'Mengetahui,' }}</div>
-                <div>{{ $doc['secondary_title'] ?: 'Koordinator Pelaksana Ujian' }},</div>
-                <div class="sign-space">
-                    @if($stampUrl)
-                        <img src="{{ $stampUrl }}" alt="Stempel Resmi" class="stamp-mark">
-                    @endif
-                    @if($doc['secondary_signature_url'])
-                        <img src="{{ $doc['secondary_signature_url'] }}" alt="Tanda Tangan" class="sig-img">
-                    @endif
-                </div>
-                <div class="sign-name">{{ $doc['secondary_name'] ?: '( .................................................... )' }}</div>
-                <div style="font-size: 10pt;">NIP/ID: {{ $doc['secondary_nip'] ?: '................................' }}</div>
-            </div>
-        </div>
+                <td class="sign-box">
+                    <div>{{ $doc['city'] !== '' ? $doc['city'] . ', ' . ($session->start_time?->translatedFormat('d F Y') ?? now()->translatedFormat('d F Y')) : 'Mengetahui,' }}</div>
+                    <div>{{ $rightSignerTitle }},</div>
+                    <div class="sign-space">
+                        @if($stampSrc)
+                            <img src="{{ $stampSrc }}" alt="Stempel Resmi" class="stamp-mark">
+                        @endif
+                        @if($rightSignerSigSrc)
+                            <img src="{{ $rightSignerSigSrc }}" alt="Tanda Tangan" class="sig-img">
+                        @endif
+                    </div>
+                    <div class="sign-name">{{ $rightSignerName }}</div>
+                    <div style="font-size: 10pt;">NIP/ID: {{ $rightSignerNip }}</div>
+                </td>
+            </tr>
+        </table>
     </div>
     </div>
 </body>

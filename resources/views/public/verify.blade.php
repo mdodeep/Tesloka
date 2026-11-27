@@ -82,9 +82,22 @@
                             <span class="text-default-500 text-[11px]">{{ $attempt->exam->subject->name ?? 'Evaluasi Terstandar' }} &bull; Kode: {{ $attempt->exam->code }}</span>
                         </div>
                         <div>
-                            <span class="text-default-500 font-semibold block text-xs">Waktu Pengumpulan Sah:</span>
-                            <span class="text-default-900 font-bold text-xs block mt-0.5">{{ $attempt->submitted_at?->translatedFormat('d F Y, H:i') ?? '-' }} WIB</span>
-                            <span class="text-default-500 text-[11px]">Tipe Kumpul: {{ ucfirst($attempt->submission_type ?? 'Resmi') }}</span>
+                            <span class="text-default-500 font-semibold block text-xs">Tanggal Pelaksanaan &amp; Penerbitan:</span>
+                            <span class="text-default-900 font-bold text-xs block mt-0.5">Ujian: {{ $verifyMeta['exam_date'] ?? ($attempt->started_at?->translatedFormat('d F Y') ?? '-') }}</span>
+                            <span class="text-default-500 text-[11px]">Terbit: {{ ($verifyMeta['issuance_city'] ?? '') !== '' ? $verifyMeta['issuance_city'] . ', ' : '' }}{{ $verifyMeta['issued_at'] ?? ($attempt->getCertificateIssuedAt()->translatedFormat('d F Y')) }}</span>
+                        </div>
+                        <div>
+                            <span class="text-default-500 font-semibold block text-xs">Status Masa Berlaku Sertifikat:</span>
+                            @if(! empty($verifyMeta['expires_at']))
+                                @if(! empty($verifyMeta['is_expired']))
+                                    <span class="text-rose-700 font-bold text-xs block mt-0.5">Kedaluwarsa sejak {{ $verifyMeta['expires_at'] }}</span>
+                                @else
+                                    <span class="text-emerald-700 font-bold text-xs block mt-0.5">Aktif s.d. {{ $verifyMeta['expires_at'] }}</span>
+                                @endif
+                            @else
+                                <span class="text-emerald-700 font-bold text-xs block mt-0.5">Berlaku Seumur Hidup</span>
+                            @endif
+                            <span class="text-default-500 text-[11px]">Pengumpulan: {{ $attempt->submitted_at?->translatedFormat('d F Y, H:i') ?? '-' }} WIB</span>
                         </div>
                     </div>
 
@@ -92,8 +105,8 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="p-4 sm:p-5 rounded-xl bg-white border border-default-200/90 shadow-2xs text-center">
                             <span class="text-xs font-semibold text-default-500">Nilai Akhir Ujian</span>
-                            <div class="text-3xl font-black text-primary mt-1">{{ number_format($breakdown['total_score'], 1) }}</div>
-                            <span class="text-[10px] text-default-500 font-medium">Skala 0 - 100</span>
+                            <div class="text-3xl font-black text-primary mt-1">{{ $verifyMeta['formatted_score'] ?? $attempt->getFormattedFinalScore() }}</div>
+                            <span class="text-[10px] text-default-500 font-medium">{{ $verifyMeta['scale_label'] ?? 'Skala Standar' }}</span>
                         </div>
                         <div class="p-4 sm:p-5 rounded-xl bg-white border border-default-200/90 shadow-2xs text-center">
                             <span class="text-xs font-semibold text-default-500">Predikat Nilai</span>
@@ -101,18 +114,49 @@
                             <span class="text-[10px] text-default-500 font-medium">{{ $gradePredicate }}</span>
                         </div>
                         @php
-                            $isCertVerify = $attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification());
+                            $requiresKkm = $verifyMeta['requires_kkm'] ?? ($attempt->exam?->requiresPassingGrade() ?? true);
                         @endphp
                         <div class="p-4 sm:p-5 rounded-xl {{ $isPassed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200' }} border shadow-2xs text-center">
-                            <span class="text-xs font-semibold {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status {{ $isCertVerify ? 'Sertifikasi' : 'Kelulusan' }}</span>
+                            <span class="text-xs font-semibold {{ $isPassed ? 'text-emerald-700' : 'text-rose-700' }}">Status {{ ! $requiresKkm ? 'Sertifikasi' : 'Kelulusan' }}</span>
                             <div class="text-lg font-black {{ $isPassed ? 'text-emerald-800' : 'text-rose-800' }} mt-1">
-                                {{ $isCertVerify ? 'TERSERTIFIKASI' : ($isPassed ? 'LULUS' : 'REMEDIAL') }}
+                                {{ ! $requiresKkm ? 'TERSERTIFIKASI' : ($isPassed ? 'LULUS' : 'REMEDIAL') }}
                             </div>
                             <span class="text-[10px] {{ $isPassed ? 'text-emerald-600' : 'text-rose-600' }}">
-                                {{ $isCertVerify ? 'Tanpa Batas KKM' : 'KKM: ' . (float) ($attempt->exam->passing_grade ?? $breakdown['passing_grade'] ?? 75) . '%' }}
+                                {{ ! $requiresKkm ? 'Tanpa Batas KKM' : 'KKM: ' . number_format((float) ($verifyMeta['passing_grade'] ?? $attempt->exam->passing_grade ?? 75), 1) }}
                             </span>
                         </div>
                     </div>
+
+                    @if(! empty($verifyMeta['sections']))
+                        <div class="p-4 sm:p-5 rounded-xl bg-white border border-default-200/90 shadow-2xs space-y-3">
+                            <div class="flex items-center justify-between flex-wrap gap-2">
+                                <span class="text-xs font-bold text-default-800 uppercase tracking-wider">Rincian Skor per Kategori Bagian Bahasa</span>
+                                <span class="px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 text-[11px] font-bold">
+                                    CEFR: {{ $verifyMeta['cefr_level'] ?? '-' }}
+                                </span>
+                            </div>
+                            <div class="overflow-x-auto -mx-3.5 sm:mx-0">
+                                <table class="w-full min-w-[460px] text-left text-xs divide-y divide-default-200">
+                                    <thead class="bg-default-100 text-default-700 font-semibold">
+                                        <tr>
+                                            <th class="px-3 py-2 whitespace-nowrap">Bagian / Seksi</th>
+                                            <th class="px-3 py-2 text-center whitespace-nowrap">Jawaban Benar</th>
+                                            <th class="px-3 py-2 text-right whitespace-nowrap">Skor Seksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-default-100">
+                                        @foreach($verifyMeta['sections'] as $sec)
+                                            <tr>
+                                                <td class="px-3 py-2 font-semibold text-default-800 whitespace-nowrap">{{ $sec['label'] }}</td>
+                                                <td class="px-3 py-2 text-center font-mono whitespace-nowrap">{{ $sec['correct_count'] }} / {{ $sec['total_questions'] }}</td>
+                                                <td class="px-3 py-2 text-right font-mono font-bold text-primary whitespace-nowrap">{{ $sec['formatted_score'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Cryptographic Proof Box -->
                     <div class="p-4 rounded-xl bg-secondary text-slate-100 font-mono text-xs space-y-2 border border-secondary-800 shadow-2xs">

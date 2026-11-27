@@ -47,24 +47,65 @@
             color="success" />
     </div>
 
-    <!-- Interactive Visual Analytics Charts (Grid 2x2) -->
+    <!-- Interactive Visual Analytics Charts -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Chart 1: Histogram Sebaran Rentang Nilai -->
         <x-cbt.card title="Distribusi Rentang Nilai Peserta (Histogram Skor)">
-            <div id="chartScoreDistribution" class="w-full min-h-[270px]"></div>
+            <div class="mb-3 p-3 rounded-lg bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+                <strong>Cara Membaca Grafik:</strong> Setiap batang menunjukkan jumlah peserta dalam rentang capaian persentase nilai. Idealnya sebaran terbanyak berada di rentang <strong>71 - 85</strong> dan <strong>86 - 100</strong>. Jika batang merah (0 - 50) atau kuning (51 - 70) dominan, tinjau tingkat kesulitan soal atau jadwalkan remedial.
+            </div>
+            <div id="chartScoreDistribution" class="w-full min-h-[260px]"></div>
         </x-cbt.card>
 
         <!-- Chart 2: Donut Chart Rasio Kelulusan -->
         <x-cbt.card title="Rasio Kelulusan Peserta (Lulus vs Remedial)">
-            <div id="chartPassFailOverview" class="w-full min-h-[270px] flex items-center justify-center"></div>
+            <div class="mb-3 p-3 rounded-lg bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+                <strong>Cara Membaca Grafik:</strong> Lingkaran ini membandingkan persentase peserta yang telah melampaui batas kelulusan (hijau) terhadap peserta yang belum tuntas / wajib remedial (merah). Target institusi yang sehat umumnya berada di atas <strong>75% tuntas</strong>.
+            </div>
+            <div id="chartPassFailOverview" class="w-full min-h-[260px] flex items-center justify-center"></div>
         </x-cbt.card>
 
         <!-- Chart 3: Komparasi Nilai Rata-rata per Ujian -->
         <div class="lg:col-span-2">
             <x-cbt.card title="Perbandingan Nilai Rata-rata Peserta vs Batas Standar KKM per Ujian">
-                <div id="chartExamComparison" class="w-full min-h-[300px]"></div>
+                <div class="mb-3 p-3 rounded-lg bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+                    <strong>Cara Membaca Grafik:</strong> Batang biru menunjukkan <strong>Rerata Skor Peserta</strong>, sedangkan batang hijau menunjukkan <strong>Target KKM</strong> pada ujian tersebut. Ujian dengan batang biru berada di bawah batang hijau menandakan rata-rata kelas belum memenuhi standar kelulusan.
+                </div>
+                <div id="chartExamComparison" class="w-full min-h-[290px]"></div>
             </x-cbt.card>
         </div>
+
+        <!-- Chart 4: Performa per Mata Pelajaran -->
+        <x-cbt.card title="Analisis Performa &amp; Tingkat Kelulusan per Mata Pelajaran">
+            <div class="mb-3 p-3 rounded-lg bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+                <strong>Cara Membaca Grafik:</strong> Membandingkan rata-rata persentase nilai (biru) dan tingkat kelulusan (hijau) lintas mata pelajaran/bidang studi untuk memetakan bidang yang membutuhkan penguatan materi.
+            </div>
+            <div id="chartSubjectComparison" class="w-full min-h-[260px]"></div>
+        </x-cbt.card>
+
+        <!-- Chart 5: Tren Aktivitas 30 Hari Terakhir -->
+        <x-cbt.card title="Tren Aktivitas Ujian &amp; Rata-rata Skor (30 Hari Terakhir)">
+            <div class="mb-3 p-3 rounded-lg bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+                <strong>Cara Membaca Grafik:</strong> Area biru menggambarkan volume penyelesaian ujian per hari, sedangkan garis hijau memantau tren rata-rata nilai peserta dari hari ke hari dalam 30 hari terakhir.
+            </div>
+            <div id="chartDailyTrend" class="w-full min-h-[260px]"></div>
+        </x-cbt.card>
+
+        <!-- Chart 6: Perangkat Peserta -->
+        <x-cbt.card title="Sebaran Perangkat yang Digunakan Peserta Ujian">
+            <div class="mb-3 p-3 rounded-lg bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+                <strong>Cara Membaca Grafik:</strong> Menampilkan proporsi jenis perangkat peserta (PC Desktop, Laptop, HP/Smartphone, Tablet) yang tercatat oleh sensor multi-sinyal perangkat saat peserta mengikuti ujian.
+            </div>
+            <div id="chartDeviceOverview" class="w-full min-h-[250px] flex items-center justify-center"></div>
+        </x-cbt.card>
+
+        <!-- Chart 7: Ringkasan Insiden Integritas & Pengawasan -->
+        <x-cbt.card title="Log &amp; Analisis Sinyal Integritas Pengawasan ({{ $stats['total_incidents'] ?? 0 }} Kejadian)">
+            <div class="mb-3 p-3 rounded-lg bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+                <strong>Cara Membaca Grafik:</strong> Merangkum sinyal pelanggaran keamanan otomatis seperti keluar tab ujian, keluar layar penuh, indikasi screenshot/cetak, serta penolakan izin kamera agar tim pengawas dapat mengevaluasi pola risiko.
+            </div>
+            <div id="chartIncidentBreakdown" class="w-full min-h-[250px]"></div>
+        </x-cbt.card>
     </div>
 
     <!-- Tabel Ujian & Tautan Analisis Psikometri Terperinci -->
@@ -264,6 +305,89 @@ document.addEventListener('DOMContentLoaded', function() {
             new ApexCharts(compEl, compOptions).render();
         } else {
             compEl.innerHTML = '<div class="text-xs text-default-400 py-12 text-center">Belum ada ujian yang memiliki nilai terkumpul untuk dikomparasi.</div>';
+        }
+    }
+
+    // 4. Bar Chart Performa per Mata Pelajaran
+    const subjEl = document.getElementById('chartSubjectComparison');
+    if (subjEl) {
+        const subjData = @json($subjectComparisons ?? []);
+        if (subjData.length > 0) {
+            new ApexCharts(subjEl, {
+                chart: { type: 'bar', height: 260, fontFamily: 'Sora, sans-serif', toolbar: { show: false } },
+                series: [
+                    { name: 'Rerata Capaian (%)', data: subjData.map(s => s.avg_percentage) },
+                    { name: 'Tingkat Kelulusan (%)', data: subjData.map(s => s.pass_rate) }
+                ],
+                xaxis: { categories: subjData.map(s => s.subject.length > 18 ? s.subject.substring(0, 18) + '...' : s.subject), labels: { style: { fontSize: '11px' } } },
+                colors: ['#2e33ff', '#14bba6'],
+                plotOptions: { bar: { horizontal: false, columnWidth: '48%', borderRadius: 4 } },
+                legend: { position: 'top' },
+                dataLabels: { enabled: false },
+                yaxis: { max: 100 }
+            }).render();
+        } else {
+            subjEl.innerHTML = '<div class="text-xs text-default-400 py-12 text-center">Belum ada data hasil evaluasi lintas mata pelajaran.</div>';
+        }
+    }
+
+    // 5. Line/Area Tren Aktivitas 30 Hari Terakhir
+    const trendEl = document.getElementById('chartDailyTrend');
+    if (trendEl) {
+        const trendData = @json($activityTrend ?? []);
+        const hasActivity = trendData.some(t => t.attempts > 0);
+        if (hasActivity) {
+            new ApexCharts(trendEl, {
+                chart: { type: 'area', height: 260, fontFamily: 'Sora, sans-serif', toolbar: { show: false } },
+                series: [
+                    { name: 'Ujian Dikumpulkan', data: trendData.map(t => t.attempts) },
+                    { name: 'Rerata Skor Harian', data: trendData.map(t => t.avg_score) }
+                ],
+                xaxis: { categories: trendData.map(t => t.date), tickAmount: 8, labels: { style: { fontSize: '10px' } } },
+                colors: ['#2e33ff', '#059669'],
+                stroke: { curve: 'smooth', width: 2 },
+                fill: { type: 'gradient', gradient: { opacityFrom: 0.35, opacityTo: 0.05 } },
+                legend: { position: 'top' },
+                dataLabels: { enabled: false }
+            }).render();
+        } else {
+            trendEl.innerHTML = '<div class="text-xs text-default-400 py-12 text-center">Belum ada pengumpulan ujian dalam 30 hari terakhir.</div>';
+        }
+    }
+
+    // 6. Donut Distribusi Perangkat Peserta
+    const devEl = document.getElementById('chartDeviceOverview');
+    if (devEl) {
+        const devData = @json($deviceDistribution ?? []);
+        if (devData.length > 0) {
+            new ApexCharts(devEl, {
+                chart: { type: 'donut', height: 250, fontFamily: 'Sora, sans-serif' },
+                series: devData.map(d => d.count),
+                labels: devData.map(d => `${d.label} (Avg: ${d.avg_score})`),
+                colors: ['#2e33ff', '#14bba6', '#f59e0b', '#8b5cf6', '#64748b'],
+                legend: { position: 'bottom', fontSize: '11px' },
+                dataLabels: { enabled: true }
+            }).render();
+        } else {
+            devEl.innerHTML = '<div class="text-xs text-default-400 py-12 text-center">Belum ada telemetri perangkat peserta yang tercatat.</div>';
+        }
+    }
+
+    // 7. Horizontal Bar Sinyal Integritas Pengawasan
+    const incEl = document.getElementById('chartIncidentBreakdown');
+    if (incEl) {
+        const incData = @json($incidentSummary ?? []);
+        if (incData.length > 0) {
+            new ApexCharts(incEl, {
+                chart: { type: 'bar', height: 250, fontFamily: 'Sora, sans-serif', toolbar: { show: false } },
+                series: [{ name: 'Jumlah Kejadian', data: incData.map(i => i.count) }],
+                xaxis: { categories: incData.map(i => i.label), labels: { style: { fontSize: '11px' } } },
+                colors: ['#e11d48'],
+                plotOptions: { bar: { horizontal: true, borderRadius: 4 } },
+                dataLabels: { enabled: true }
+            }).render();
+        } else {
+            incEl.innerHTML = '<div class="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-center">Nihil insiden pengawasan: Seluruh sesi berlangsung tertib tanpa sinyal anomali.</div>';
         }
     }
 });

@@ -10,6 +10,7 @@
 
     <form method="POST" action="{{ route('student.login.post') }}" class="space-y-4">
         @csrf
+        <input type="hidden" name="device_telemetry" value="">
 
         <div class="space-y-1.5">
             <label for="login" class="block text-xs font-semibold text-default-700">

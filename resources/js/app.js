@@ -1,4 +1,6 @@
 import ApexCharts from "apexcharts";
+import Choices from "choices.js";
+import "choices.js/public/assets/styles/choices.min.css";
 import "preline";
 import { createIcons, icons } from "lucide";
 import { CbtApp, CbtLayout } from "./tailwick.js";
@@ -6,6 +8,7 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
 window.ApexCharts = ApexCharts;
+window.Choices = Choices;
 window.Quill = Quill;
 window.lucide = {
     createIcons: (options = {}) => createIcons({ icons, ...options }),
@@ -242,3 +245,50 @@ window.resetDropzone = function (inputId, previewId, currentId) {
         dropzoneBox.classList.remove("hidden");
     }
 };
+
+// Deteksi Telemetri Perangkat (PC Desktop, Laptop, HP, Tablet, Lainnya)
+window.collectDeviceTelemetry = async function () {
+    const info = {
+        user_agent: navigator.userAgent || "",
+        platform: navigator.platform || "",
+        screen_width: window.screen ? window.screen.width : window.innerWidth,
+        screen_height: window.screen ? window.screen.height : window.innerHeight,
+        viewport_width: window.innerWidth || 0,
+        viewport_height: window.innerHeight || 0,
+        pixel_ratio: window.devicePixelRatio || 1,
+        max_touch_points: navigator.maxTouchPoints || 0,
+        pointer_coarse: Boolean(window.matchMedia && window.matchMedia("(pointer: coarse)").matches),
+        pointer_fine: Boolean(window.matchMedia && window.matchMedia("(pointer: fine)").matches),
+        has_battery: false,
+        battery_charging: null,
+        battery_level: null,
+        battery_discharging_finite: false
+    };
+
+    if (typeof navigator.getBattery === "function") {
+        try {
+            const battery = await navigator.getBattery();
+            if (battery) {
+                info.has_battery = true;
+                info.battery_charging = Boolean(battery.charging);
+                info.battery_level = typeof battery.level === "number" ? Number(battery.level.toFixed(2)) : null;
+                info.battery_discharging_finite = Number.isFinite(battery.dischargingTime) && battery.dischargingTime > 0 && battery.dischargingTime < Infinity;
+            }
+        } catch {
+            // Abaikan bila Browser memblokir Battery API
+        }
+    }
+
+    return info;
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const inputs = document.querySelectorAll('input[name="device_telemetry"]');
+    if (inputs.length > 0 && typeof window.collectDeviceTelemetry === "function") {
+        const telemetry = await window.collectDeviceTelemetry();
+        const serialized = JSON.stringify(telemetry);
+        inputs.forEach((el) => {
+            el.value = serialized;
+        });
+    }
+});

@@ -15,6 +15,8 @@ class ExamFinalResult extends Model
         'student_id',
         'exam_attempt_id',
         'total_score',
+        'scaled_score',
+        'section_scores',
         'max_score',
         'percentage',
         'passing_grade',
@@ -24,6 +26,7 @@ class ExamFinalResult extends Model
         'status',
         'finalized_by_id',
         'finalized_at',
+        'certificate_expires_at',
         'notes',
     ];
 
@@ -31,12 +34,15 @@ class ExamFinalResult extends Model
     {
         return [
             'total_score' => 'decimal:2',
+            'scaled_score' => 'decimal:2',
+            'section_scores' => 'array',
             'max_score' => 'decimal:2',
             'percentage' => 'decimal:2',
             'passing_grade' => 'decimal:2',
             'effective_score' => 'decimal:2',
             'is_passed' => 'boolean',
             'finalized_at' => 'datetime',
+            'certificate_expires_at' => 'datetime',
         ];
     }
 

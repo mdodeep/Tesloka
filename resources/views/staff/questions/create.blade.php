@@ -74,6 +74,17 @@
                         </div>
 
                         <div>
+                            <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Kategori Seksi Soal (Khusus Ujian Bahasa / TOEFL / TOAFL)</label>
+                            <select name="section_category" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <option value="">-- Umum / Tanpa Seksi --</option>
+                                @foreach(\App\Services\ScoreScaleService::questionSectionOptions() as $secKey => $secLabel)
+                                    <option value="{{ $secKey }}" {{ old('section_category') === $secKey ? 'selected' : '' }}>{{ $secLabel }}</option>
+                                @endforeach
+                            </select>
+                            <p class="text-[11px] text-default-400 mt-1">Digunakan untuk rekap nilai per sub-bagian pada sertifikat kecakapan bahasa (misal Listening, Structure, Reading).</p>
+                        </div>
+
+                        <div>
                             <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Kode Butir Soal (Opsional)</label>
                             <input type="text" name="code" value="{{ old('code') }}" placeholder="Otomatis jika dikosongkan (cth: Q-AB12CD)" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
                         </div>

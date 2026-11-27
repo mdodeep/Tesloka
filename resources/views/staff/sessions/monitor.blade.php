@@ -146,11 +146,29 @@
                         </div>
                     </div>
 
-                    <!-- Student Name -->
-                    <h3 class="font-bold text-default-800 text-sm truncate" title="{{ $part['student_name'] }}">
-                        {{ $part['student_name'] }}
-                    </h3>
-                    <span class="text-xs text-default-400 block font-mono">NISN: {{ $part['student_nisn'] ?? '-' }}</span>
+                    <!-- Student Name & Device Badge -->
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0">
+                            <h3 class="font-bold text-default-800 text-sm truncate" title="{{ $part['student_name'] }}">
+                                {{ $part['student_name'] }}
+                            </h3>
+                            <span class="text-xs text-default-400 block font-mono">NISN: {{ $part['student_nisn'] ?? '-' }}</span>
+                        </div>
+                        @if(! empty($part['device_label']))
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-default-100 text-default-700 border border-default-200 text-[10px] font-semibold shrink-0" title="{{ ($part['os_name'] ?? '-') . ' - ' . ($part['browser_name'] ?? '-') }}">
+                                @if(($part['device_type'] ?? '') === 'hp')
+                                    <i data-lucide="smartphone" class="size-3 text-primary"></i>
+                                @elseif(($part['device_type'] ?? '') === 'tablet')
+                                    <i data-lucide="tablet" class="size-3 text-primary"></i>
+                                @elseif(($part['device_type'] ?? '') === 'laptop')
+                                    <i data-lucide="laptop" class="size-3 text-primary"></i>
+                                @else
+                                    <i data-lucide="monitor" class="size-3 text-primary"></i>
+                                @endif
+                                <span>{{ $part['device_label'] }}</span>
+                            </span>
+                        @endif
+                    </div>
 
                     <!-- Warnings (Tab blur / Camera denied) -->
                     <div id="part-warnings-{{ $part['student_id'] }}" class="space-y-1">
@@ -685,6 +703,20 @@
 
         const pkgEl = document.getElementById(`part-pkg-${p.student_id}`);
         if (pkgEl) pkgEl.textContent = p.package_code || '-';
+
+        const headerEl = card.querySelector('h3')?.closest('.flex.items-start.justify-between');
+        if (headerEl && p.device_label) {
+            const devIcon = p.device_type === 'hp' ? 'smartphone' : (p.device_type === 'tablet' ? 'tablet' : (p.device_type === 'laptop' ? 'laptop' : 'monitor'));
+            let devSpan = headerEl.querySelector('.device-telemetry-badge');
+            if (!devSpan) {
+                devSpan = document.createElement('span');
+                devSpan.className = 'device-telemetry-badge inline-flex items-center gap-1 px-2 py-0.5 rounded bg-default-100 text-default-700 border border-default-200 text-[10px] font-semibold shrink-0';
+                headerEl.appendChild(devSpan);
+            }
+            devSpan.title = `${p.os_name || '-'} - ${p.browser_name || '-'}`;
+            devSpan.innerHTML = `<i data-lucide="${devIcon}" class="size-3 text-primary"></i><span>${escapeHtml(p.device_label)}</span>`;
+            if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        }
 
         const badgeBox = document.getElementById(`part-status-badge-${p.student_id}`);
         if (badgeBox) {

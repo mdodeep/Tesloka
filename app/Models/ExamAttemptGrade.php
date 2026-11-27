@@ -14,6 +14,8 @@ class ExamAttemptGrade extends Model
         'exam_attempt_id',
         'grade_version',
         'total_score',
+        'scaled_score',
+        'section_scores',
         'max_score',
         'percentage',
         'is_passed',
@@ -27,6 +29,8 @@ class ExamAttemptGrade extends Model
     {
         return [
             'total_score' => 'decimal:2',
+            'scaled_score' => 'decimal:2',
+            'section_scores' => 'array',
             'max_score' => 'decimal:2',
             'percentage' => 'decimal:2',
             'is_passed' => 'boolean',

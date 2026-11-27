@@ -45,12 +45,24 @@
         @if($assignedParticipants->isNotEmpty())
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach($assignedParticipants as $p)
+                    @php
+                        $needsPay = $p->exam->requiresPayment();
+                        $payRecord = isset($paymentsByExam) ? $paymentsByExam->get($p->exam_id) : null;
+                        $isPaid = !$needsPay || ($payRecord && $payRecord->isApproved());
+                    @endphp
                     <div class="card bg-white border border-default-200/90 rounded-xl p-5 sm:p-6 shadow-2xs space-y-4 hover:border-primary/50 hover:shadow-xs transition">
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0 flex-1">
-                                <x-cbt.badge color="primary">
-                                    {{ $p->exam->exam_type }}
-                                </x-cbt.badge>
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <x-cbt.badge color="primary">
+                                        {{ $p->exam->exam_type }}
+                                    </x-cbt.badge>
+                                    @if($needsPay)
+                                        <x-cbt.badge color="{{ $isPaid ? 'success' : ($payRecord && $payRecord->isRejected() ? 'danger' : 'warning') }}">
+                                            {{ $isPaid ? 'Lunas' : ($payRecord ? $payRecord->getStatusLabel() : 'Wajib Bayar') }}
+                                        </x-cbt.badge>
+                                    @endif
+                                </div>
                                 <h3 class="text-base font-bold text-default-900 mt-2 truncate">{{ $p->exam->title }}</h3>
                                 <p class="text-xs text-default-500 mt-0.5">{{ $p->exam->subject->name ?? '-' }} &bull; <code>{{ $p->exam->code }}</code></p>
                             </div>
@@ -70,15 +82,37 @@
                             </div>
                         </div>
 
+                        @if($needsPay && ! $isPaid)
+                            <div class="p-3 rounded-lg text-xs border {{ $payRecord && $payRecord->isRejected() ? 'bg-rose-50 border-rose-200 text-rose-900' : ($payRecord && $payRecord->isPending() ? 'bg-amber-50 border-amber-200 text-amber-900' : 'bg-sky-50 border-sky-200 text-sky-900') }}">
+                                @if($payRecord && $payRecord->isRejected())
+                                    <strong class="block font-bold">Bukti Pembayaran Ditolak Admin</strong>
+                                    <span class="block mt-0.5">Alasan: {{ $payRecord->rejection_reason }}</span>
+                                @elseif($payRecord && $payRecord->isPending())
+                                    <strong class="block font-bold">Menunggu Verifikasi Pembayaran</strong>
+                                    <span class="block mt-0.5">Bukti transfer sebesar Rp {{ number_format((float) $payRecord->amount, 0, ',', '.') }} sedang diperiksa Administrator.</span>
+                                @else
+                                    <strong class="block font-bold">Biaya Ujian: Rp {{ number_format((float) $p->exam->payment_amount, 0, ',', '.') }}</strong>
+                                    <span class="block mt-0.5">Silakan transfer dan unggah bukti pembayaran agar dapat memulai ujian.</span>
+                                @endif
+                            </div>
+                        @endif
+
                         <div class="grid grid-cols-2 gap-2 pt-1">
-                            <a href="{{ route('student.exam.card', $p->exam) }}" target="_blank" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 transition">
+                            <a href="{{ route('student.exam.card', $p->exam) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 transition">
                                 <i data-lucide="printer" class="size-3.5 text-default-500"></i>
                                 <span>{{ __('Kartu Ujian') }}</span>
                             </a>
-                            <a href="{{ route('student.exam.instructions', $p->exam) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
-                                <i data-lucide="arrow-right-circle" class="size-3.5"></i>
-                                <span>{{ __('Buka Petunjuk') }}</span>
-                            </a>
+                            @if($needsPay && ! $isPaid)
+                                <a href="{{ route('student.exam.payment', $p->exam) }}" class="btn btn-sm bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
+                                    <i data-lucide="credit-card" class="size-3.5"></i>
+                                    <span>{{ $payRecord && $payRecord->isPending() ? 'Status Pembayaran' : 'Bayar & Upload Bukti' }}</span>
+                                </a>
+                            @else
+                                <a href="{{ route('student.exam.instructions', $p->exam) }}" class="btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
+                                    <i data-lucide="arrow-right-circle" class="size-3.5"></i>
+                                    <span>{{ __('Buka Petunjuk') }}</span>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 @endforeach

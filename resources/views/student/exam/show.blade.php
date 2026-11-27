@@ -9,13 +9,70 @@
     <x-cbt.branding-styles />
     <style>
         [v-cloak] { display: none; }
-        .no-select { user-select: none; -webkit-user-select: none; }
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        input, textarea, .allow-select {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+        #cbtForensicWatermark {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 35;
+            opacity: 0.065;
+            background-repeat: repeat;
+        }
+        body.privacy-obscured header,
+        body.privacy-obscured main,
+        body.privacy-obscured #paletteSidebar {
+            filter: blur(22px) brightness(0.25) !important;
+            transition: filter 0.04s linear;
+        }
+        @media print {
+            body * {
+                display: none !important;
+                visibility: hidden !important;
+            }
+            body::after {
+                content: "Pencetakan atau pengambilan salinan halaman ujian dilarang oleh kebijakan keamanan CBT.";
+                display: block !important;
+                visibility: visible !important;
+                padding: 40px;
+                text-align: center;
+                font-size: 16pt;
+                font-weight: bold;
+                color: #991b1b;
+            }
+        }
         @media (min-width: 1024px) {
             #paletteSidebar { display: block !important; }
         }
     </style>
 </head>
 <body class="bg-default-100 text-default-800 font-sans min-h-screen flex flex-col no-select">
+    <!-- Forensik Watermark & Lapisan Proteksi Anti-Tangkapan Layar -->
+    <div id="cbtForensicWatermark" aria-hidden="true"></div>
+    <div id="privacySecurityCurtain" class="fixed inset-0 z-[9999] hidden bg-slate-950/95 backdrop-blur-2xl flex items-center justify-center p-6 text-white text-center select-none">
+        <div class="max-w-md w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 sm:p-7 shadow-2xl space-y-4">
+            <div class="size-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center mx-auto">
+                <i data-lucide="shield-alert" class="size-7"></i>
+            </div>
+            <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-white">Layar Ujian Diamankan</h2>
+            <p id="privacyCurtainReason" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Sistem mendeteksi jendela ujian kehilangan fokus atau indikasi percobaan tangkapan layar. Konten soal disembunyikan untuk menjaga integritas ujian.
+            </p>
+            <p class="text-[11px] font-mono text-amber-300/90 bg-slate-950/70 border border-slate-800 rounded-lg px-3 py-2">
+                Peserta: {{ $attempt->student->name }} ({{ $attempt->student->identity_number ?? $attempt->student->username }}) &bull; Sesi #{{ $attempt->id }}
+            </p>
+            <button type="button" onclick="dismissPrivacyShield()" class="w-full btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-xl py-2.5 cursor-pointer transition">
+                Lanjutkan Mengerjakan Ujian
+            </button>
+        </div>
+    </div>
     <!-- Top Bar Navigation (Fixed) -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-default-200/90 shadow-2xs">
         <div class="w-full px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
@@ -170,12 +227,12 @@
 
                         <div class="flex items-center gap-2 w-full sm:w-auto">
                             <button type="button" id="btnNext" onclick="navigateQuestion(1)" class="flex-1 sm:flex-none btn btn-sm bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer px-4 py-2.5 transition active:scale-[0.98]">
-                                <span>Soal Berikutnya</span>
+                                <span id="btnNextText">Soal Berikutnya</span>
                                 <i data-lucide="chevron-right" class="size-4"></i>
                             </button>
-                            <button type="button" onclick="openFinishModal()" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer px-4 py-2.5 transition active:scale-[0.98]">
-                                <i data-lucide="check" class="size-4"></i>
-                                <span>Selesai</span>
+                            <button type="button" id="btnFinishTop" onclick="openFinishModal()" disabled aria-disabled="true" title="Tersedia setelah membuka soal nomor terakhir" class="btn btn-sm bg-default-300 text-default-500 font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-2 cursor-not-allowed opacity-75 px-4 py-2.5 transition">
+                                <i data-lucide="lock" id="btnFinishTopIcon" class="size-4"></i>
+                                <span id="btnFinishTopText">Selesai</span>
                             </button>
                         </div>
                     </div>
@@ -255,11 +312,14 @@
                         </div>
                     </div>
 
-                    <div class="pt-2">
-                        <button type="button" onclick="openFinishModal()" class="w-full btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer">
-                            <i data-lucide="check-circle" class="size-4"></i>
+                    <div class="pt-2 space-y-1.5">
+                        <button type="button" id="btnFinishSidebar" onclick="openFinishModal()" disabled aria-disabled="true" title="Tersedia setelah membuka soal nomor terakhir" class="w-full btn btn-sm bg-default-300 text-default-500 font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-2 cursor-not-allowed opacity-75 transition">
+                            <i data-lucide="lock" id="btnFinishSidebarIcon" class="size-4"></i>
                             <span>Kumpulkan Ujian</span>
                         </button>
+                        <p id="finishLockHint" class="text-[11px] text-amber-800 bg-amber-50 border border-amber-200/80 rounded px-2.5 py-1.5 text-center leading-snug">
+                            Tombol selesai aktif otomatis saat Anda membuka soal terakhir.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -449,6 +509,8 @@
             return map[key] || key;
         }
 
+        let lastRenderedIndex = -1;
+
         function buildAudioPlayerHtml(src, label, q) {
             const safeSrc = String(src || '').replace(/"/g, '&quot;');
             const examCfg = window.CBT_DATA.mediaConfig || {};
@@ -457,7 +519,7 @@
                 : (typeof examCfg.audioMaxPlays === 'number' ? examCfg.audioMaxPlays : 2);
             const allowSeek = examCfg.audioAllowSeek === false ? '0' : '1';
             return `<div class="cbt-audio-container mb-3.5 p-3 rounded-lg bg-slate-50 border border-default-200 space-y-2">
-                <audio controls preload="metadata" controlsList="nodownload" src="${safeSrc}" data-max-plays="${maxPlays}" data-allow-seek="${allowSeek}" class="w-full" onerror="window.handleCbtAudioError(this, '${safeSrc}')">
+                <audio controls preload="metadata" controlsList="nodownload noplaybackrate" src="${safeSrc}" data-max-plays="${maxPlays}" data-allow-seek="${allowSeek}" class="w-full block" oncontextmenu="return false;" onerror="window.handleCbtAudioError(this, '${safeSrc}')">
                     Browser Anda tidak mendukung pemutar audio HTML5.
                 </audio>
                 <div class="cbt-audio-error hidden p-2.5 rounded bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between gap-2">
@@ -519,11 +581,13 @@
         };
 
         function renderQuestion(idx) {
-            // Hentikan seluruh pemutar audio yang sedang aktif sebelum berpindah soal
-            document.querySelectorAll('.cbt-audio-container audio').forEach(a => {
-                try { a.pause(); a.currentTime = 0; } catch (e) {}
-            });
-
+            // Hanya hentikan pemutar audio ketika benar-benar berpindah nomor soal
+            if (lastRenderedIndex !== -1 && lastRenderedIndex !== idx) {
+                document.querySelectorAll('.cbt-audio-container audio').forEach(a => {
+                    try { a.pause(); a.currentTime = 0; } catch (e) {}
+                });
+            }
+            lastRenderedIndex = idx;
             currentIndex = idx;
             const q = window.CBT_DATA.questions[idx];
 
@@ -577,7 +641,14 @@
                 qContentEl.classList.remove('text-right', 'font-serif', 'text-xl');
             }
 
-            // Options Rendering
+            renderOptionsPanel(q);
+            updateFlagButtonState(q);
+            updateNavigationAndFinishButtons(idx);
+            initAudioListeningLimiter();
+            updatePaletteCurrent();
+        }
+
+        function renderOptionsPanel(q) {
             const optBox = document.getElementById('optionsContainer');
             optBox.innerHTML = '';
             const examMediaCfg = window.CBT_DATA.mediaConfig || {};
@@ -640,24 +711,58 @@
                     </div>
                 `;
             }
+        }
 
-            // Flag Button State
+        function updateFlagButtonState(q) {
             const btnFlag = document.getElementById('btnFlag');
             const btnFlagText = document.getElementById('btnFlagText');
+            if (!btnFlag || !btnFlagText) return;
             if (q.isFlagged) {
-                btnFlag.className = 'w-full sm:w-auto px-4 py-2.5 bg-amber-500 text-white font-bold text-xs rounded shadow-xs inline-flex items-center justify-center gap-1.5';
+                btnFlag.className = 'w-full sm:w-auto px-4 py-2.5 bg-amber-500 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer transition';
                 btnFlagText.innerText = 'Ragu-ragu (Ditandai)';
             } else {
-                btnFlag.className = 'w-full sm:w-auto px-4 py-2.5 bg-default-100 hover:bg-slate-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5';
-                btnFlagText.innerText = 'Tandai Ragu-ragu';
+                btnFlag.className = 'w-full sm:w-auto px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs rounded-xl border border-amber-200 inline-flex items-center justify-center gap-1.5 cursor-pointer transition';
+                btnFlagText.innerText = 'Ragu-ragu';
+            }
+        }
+
+        function updateNavigationAndFinishButtons(idx) {
+            const isFirst = idx <= 0;
+            const isLast = idx >= total - 1;
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            const btnNextText = document.getElementById('btnNextText');
+            if (btnPrev) btnPrev.disabled = isFirst;
+            if (btnNext) {
+                btnNext.disabled = isLast;
+                btnNext.classList.toggle('opacity-50', isLast);
+                btnNext.classList.toggle('cursor-not-allowed', isLast);
+            }
+            if (btnNextText) {
+                btnNextText.innerText = isLast ? 'Soal Terakhir' : 'Soal Berikutnya';
             }
 
-            // Prev/Next Button States
-            document.getElementById('btnPrev').disabled = (idx === 0);
-            document.getElementById('btnNext').innerText = (idx === total - 1) ? 'Soal Terakhir' : 'Soal Berikutnya';
+            const btnFinishTop = document.getElementById('btnFinishTop');
+            const btnFinishSidebar = document.getElementById('btnFinishSidebar');
+            const finishLockHint = document.getElementById('finishLockHint');
 
-            initAudioListeningLimiter();
-            updatePaletteCurrent();
+            [btnFinishTop, btnFinishSidebar].forEach(btn => {
+                if (!btn) return;
+                btn.disabled = !isLast;
+                btn.setAttribute('aria-disabled', isLast ? 'false' : 'true');
+                btn.title = isLast ? 'Kumpulkan lembar jawaban ujian sekarang' : 'Tersedia setelah membuka soal nomor terakhir';
+                if (isLast) {
+                    btn.classList.remove('bg-default-300', 'text-default-500', 'cursor-not-allowed', 'opacity-75');
+                    btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700', 'text-white', 'cursor-pointer', 'active:scale-[0.98]');
+                } else {
+                    btn.classList.add('bg-default-300', 'text-default-500', 'cursor-not-allowed', 'opacity-75');
+                    btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700', 'text-white', 'cursor-pointer', 'active:scale-[0.98]');
+                }
+            });
+
+            if (finishLockHint) {
+                finishLockHint.classList.toggle('hidden', isLast);
+            }
         }
 
         function navigateQuestion(offset) {
@@ -680,7 +785,9 @@
             q.currentAnswer = key;
             q.isAnswered = true;
             q.revisionSequence++;
-            renderQuestion(currentIndex);
+            // Hanya perbarui panel opsi & palet agar pemutar audio tidak hilang
+            renderOptionsPanel(q);
+            updatePaletteCurrent();
             triggerAutosave(q);
         }
 
@@ -695,7 +802,8 @@
             q.currentAnswer = arr;
             q.isAnswered = (arr.length > 0);
             q.revisionSequence++;
-            renderQuestion(currentIndex);
+            renderOptionsPanel(q);
+            updatePaletteCurrent();
             triggerAutosave(q);
         }
 
@@ -713,7 +821,8 @@
         function toggleCurrentFlag() {
             const q = window.CBT_DATA.questions[currentIndex];
             q.isFlagged = !q.isFlagged;
-            renderQuestion(currentIndex);
+            updateFlagButtonState(q);
+            updatePaletteCurrent();
 
             fetch(window.CBT_DATA.flagUrl, {
                 method: 'POST',
@@ -872,6 +981,7 @@
 
             if (instruction === 'force_stop') {
                 isRedirectingOut = true;
+                isSystemDialogOpen = true;
                 stopCameraAndStreams();
                 alert('Percobaan ujian Anda telah dihentikan secara resmi oleh Pengawas Ujian.');
                 window.location.href = payload.redirect_url || window.CBT_DATA.finishUrl;
@@ -880,6 +990,7 @@
 
             if (instruction === 'force_logout') {
                 isRedirectingOut = true;
+                isSystemDialogOpen = true;
                 stopCameraAndStreams();
                 alert('Sesi perangkat Anda telah di-reset / di-logout paksa oleh Pengawas Ujian. Jawaban Anda tersimpan aman di server. Silakan hubungi pengawas atau login kembali.');
                 window.location.href = payload.redirect_url || window.CBT_DATA.loginUrl;
@@ -1114,14 +1225,20 @@
             .catch(e => console.warn('Gagal upload snapshot:', e));
         }
 
+        let cachedDeviceTelemetry = null;
+        if (typeof window.collectDeviceTelemetry === 'function') {
+            window.collectDeviceTelemetry().then((t) => { cachedDeviceTelemetry = t; }).catch(() => {});
+        }
+
         function sendHeartbeat(options = {}) {
             if (isRedirectingOut) return;
 
             const payload = {
                 is_fullscreen: !(!document.fullscreenElement),
                 is_tab_focused: document.hasFocus(),
-                battery_level: null,
+                battery_level: cachedDeviceTelemetry && typeof cachedDeviceTelemetry.battery_level === 'number' ? cachedDeviceTelemetry.battery_level : null,
                 camera_status: isCameraActive ? cameraState : (['denied', 'unsupported'].includes(cameraState) ? cameraState : 'inactive'),
+                ...(cachedDeviceTelemetry ? { device_telemetry: cachedDeviceTelemetry } : {}),
                 ...options
             };
 
@@ -1326,43 +1443,108 @@
                         return;
                     }
 
-                    const counterEl = wrapper.querySelector('.audio-play-counter');
-                    if (playedCount >= maxPlays) {
+                    const setAudioExhaustedState = (showBanner) => {
                         audio.pause();
-                        audio.controls = false;
+                        // Tetap tampilkan controls agar elemen <audio> tidak hilang di browser Chromium
+                        audio.classList.add('opacity-60');
                         if (counterEl) {
                             counterEl.className = 'audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] bg-rose-100 text-rose-800 font-bold';
                             counterEl.textContent = 'Batas Putar Habis (0x)';
                         }
+                        if (showBanner && !wrapper.querySelector('.cbt-audio-exhausted-note')) {
+                            const note = document.createElement('div');
+                            note.className = 'cbt-audio-exhausted-note px-2.5 py-1.5 rounded bg-rose-50 border border-rose-200 text-[11px] text-rose-800 font-semibold';
+                            note.textContent = `Batas pemutaran audio (${maxPlays}x) untuk soal ini telah selesai.`;
+                            wrapper.appendChild(note);
+                        }
+                    };
+
+                    const counterEl = wrapper.querySelector('.audio-play-counter');
+                    if (playedCount >= maxPlays && audio.dataset.sessionActive !== '1') {
+                        setAudioExhaustedState(true);
                         return;
                     }
 
                     audio.onplay = () => {
                         playedCount = parseInt(sessionStorage.getItem(storageKey) || '0', 10);
-                        if (playedCount >= maxPlays) {
-                            audio.pause();
-                            audio.controls = false;
+                        // Pause & resume selama siklus pemutaran yang sama tidak mengurangi kuota tambahan
+                        if (audio.dataset.sessionActive === '1') {
                             return;
                         }
+                        if (playedCount >= maxPlays) {
+                            audio.currentTime = 0;
+                            setAudioExhaustedState(true);
+                            return;
+                        }
+                        audio.dataset.sessionActive = '1';
                         playedCount++;
                         sessionStorage.setItem(storageKey, playedCount);
                         if (counterEl) {
                             const remaining = Math.max(0, maxPlays - playedCount);
-                            counterEl.textContent = `Sisa Putar: ${remaining}x (Maks. ${maxPlays}x)`;
+                            counterEl.textContent = remaining === 0
+                                ? 'Pemutaran Terakhir Berjalan...'
+                                : `Sisa Putar: ${remaining}x (Maks. ${maxPlays}x)`;
                             if (remaining === 0) {
-                                counterEl.className = 'audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] bg-rose-100 text-rose-800 font-bold';
-                                counterEl.textContent = 'Batas Putar Habis (0x)';
-                                audio.onended = () => {
-                                    audio.controls = false;
-                                };
+                                counterEl.className = 'audio-play-counter px-2 py-0.5 rounded font-mono text-[11px] bg-amber-100 text-amber-800 font-bold';
                             }
+                        }
+                    };
+
+                    audio.onended = () => {
+                        audio.dataset.sessionActive = '0';
+                        playedCount = parseInt(sessionStorage.getItem(storageKey) || '0', 10);
+                        if (playedCount >= maxPlays) {
+                            setAudioExhaustedState(true);
                         }
                     };
                 });
             });
         }
 
+        let isSystemDialogOpen = false;
+        let lastSecurityEventTs = 0;
+
+        function updateForensicWatermark() {
+            const wmEl = document.getElementById('cbtForensicWatermark');
+            if (!wmEl) return;
+            const nowText = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            const textLine = `${@json($attempt->student->name)} | ${@json($attempt->student->identity_number ?? $attempt->student->username)} | ${@json($attempt->exam->code)} #{{ $attempt->id }} | {{ request()->ip() }} | ${nowText}`;
+            const safeSvgText = textLine.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="380" height="210" viewBox="0 0 380 210"><text x="15" y="105" transform="rotate(-24 190 105)" fill="#0f172a" font-family="sans-serif" font-size="11" font-weight="700">${safeSvgText}</text></svg>`;
+            wmEl.style.backgroundImage = `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
+        }
+
+        function activatePrivacyShield(reason, eventTrigger = null, details = '') {
+            if (isRedirectingOut || isSystemDialogOpen) return;
+            document.body.classList.add('privacy-obscured');
+            const curtain = document.getElementById('privacySecurityCurtain');
+            const reasonEl = document.getElementById('privacyCurtainReason');
+            if (reasonEl && reason) {
+                reasonEl.textContent = reason;
+            }
+            if (curtain) {
+                curtain.classList.remove('hidden');
+            }
+            const now = Date.now();
+            if (eventTrigger && now - lastSecurityEventTs > 2500) {
+                lastSecurityEventTs = now;
+                sendHeartbeat({ is_tab_focused: false, event_trigger: eventTrigger, details });
+                takeAndUploadSnapshot(eventTrigger);
+            }
+        }
+
+        window.dismissPrivacyShield = function() {
+            document.body.classList.remove('privacy-obscured');
+            const curtain = document.getElementById('privacySecurityCurtain');
+            if (curtain) {
+                curtain.classList.add('hidden');
+            }
+        };
+
         function startServerSyncHeartbeat() {
+            updateForensicWatermark();
+            setInterval(updateForensicWatermark, 30000);
+
             // Inisialisasi Kamera Pengawas & LiveKit
             if (window.CBT_DATA.cameraProctoring) {
                 initCameraProctoring();
@@ -1396,12 +1578,50 @@
             sendHeartbeat();
             setInterval(sendHeartbeat, 15000);
 
-            // Deteksi seketika saat window blur atau fullscreen exit
+            // Deteksi seketika saat window blur, tab hidden, screenshot shortcut, devtools, atau fullscreen exit
             window.addEventListener('blur', () => {
-                sendHeartbeat({ is_tab_focused: false, event_trigger: 'tab_blur' });
-                takeAndUploadSnapshot('tab_blur');
+                activatePrivacyShield('Jendela ujian kehilangan fokus (kemungkinan perpindahan aplikasi atau alat tangkap layar).', 'tab_blur');
+            });
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    activatePrivacyShield('Tab peramban disembunyikan atau diminimalkan saat ujian berlangsung.', 'tab_blur');
+                }
             });
             window.addEventListener('focus', () => sendHeartbeat({ is_tab_focused: true }));
+
+            window.addEventListener('keydown', (e) => {
+                const key = (e.key || '').toLowerCase();
+                const isScreenshotKey = (e.key === 'PrintScreen' || e.code === 'PrintScreen')
+                    || ((e.ctrlKey || e.metaKey) && e.shiftKey && ['s', '3', '4', '5'].includes(key));
+                const isPrintOrSave = (e.ctrlKey || e.metaKey) && ['p', 's', 'u'].includes(key);
+                const isDevtools = e.key === 'F12' || ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c'].includes(key));
+
+                if (isScreenshotKey || isPrintOrSave || isDevtools) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (isScreenshotKey && navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText('').catch(() => {});
+                    }
+                    activatePrivacyShield(
+                        isDevtools
+                            ? 'Akses Developer Tools tidak diizinkan selama sesi ujian aktif.'
+                            : 'Percobaan tangkapan layar, cetak halaman, atau penyalinan konten soal terdeteksi dan dicatat ke Pengawas.',
+                        isDevtools ? 'devtools_attempt' : 'screenshot_attempt',
+                        `Tombol terlarang: ${e.key || e.code}`
+                    );
+                }
+            }, true);
+
+            ['contextmenu', 'copy', 'cut', 'dragstart'].forEach(evtName => {
+                document.addEventListener(evtName, (e) => {
+                    const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
+                    if ((tag === 'INPUT' || tag === 'TEXTAREA') && (evtName === 'copy' || evtName === 'cut' || evtName === 'contextmenu')) {
+                        return;
+                    }
+                    e.preventDefault();
+                });
+            });
+
             document.addEventListener('fullscreenchange', () => {
                 const isFull = !(!document.fullscreenElement);
                 sendHeartbeat({ is_fullscreen: isFull, event_trigger: isFull ? 'fullscreen_enter' : 'fullscreen_exit' });
@@ -1412,6 +1632,15 @@
         }
 
         function openFinishModal() {
+            if (currentIndex < total - 1) {
+                const hint = document.getElementById('finishLockHint');
+                if (hint) {
+                    hint.classList.remove('hidden');
+                    hint.classList.add('ring-2', 'ring-amber-400');
+                    setTimeout(() => hint.classList.remove('ring-2', 'ring-amber-400'), 1800);
+                }
+                return;
+            }
             updateSummaryCounts();
             document.getElementById('finishModal').classList.remove('hidden');
         }

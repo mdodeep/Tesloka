@@ -8,6 +8,7 @@ use App\Http\Controllers\Staff\ExamCameraController;
 use App\Http\Controllers\Staff\ExamSebConfigController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\ExamAttemptController;
+use App\Http\Controllers\Student\ExamPaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,10 +45,17 @@ Route::prefix('ujian')->name('student.')->group(function () {
             // Exam Execution Engine (FULL-FEATURE Sec 13, 14, 15, 16, 18, 39.1)
             Route::prefix('exams')->name('exam.')->group(function () {
                 Route::get('/', [ExamAttemptController::class, 'index'])->name('index');
+                Route::get('{exam}/payment', [ExamPaymentController::class, 'show'])->name('payment');
+                Route::post('{exam}/payment', [ExamPaymentController::class, 'store'])->name('payment.store');
                 Route::get('{exam}/card', [ExamAttemptController::class, 'card'])->name('card');
                 Route::get('{exam}/seb-config', [ExamSebConfigController::class, 'downloadStudent'])->name('seb-config');
                 Route::get('{exam}/instructions', [ExamAttemptController::class, 'instructions'])->middleware('seb')->name('instructions');
                 Route::post('{exam}/start', [ExamAttemptController::class, 'start'])->middleware('seb')->name('start');
+            });
+
+            Route::prefix('payments')->name('payments.')->group(function () {
+                Route::get('/', [ExamPaymentController::class, 'index'])->name('index');
+                Route::get('{payment}/proof', [ExamPaymentController::class, 'viewProof'])->name('proof');
             });
 
             Route::prefix('attempts')->name('exam.')->group(function () {

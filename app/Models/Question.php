@@ -18,6 +18,7 @@ class Question extends Model
     protected $fillable = [
         'question_bank_id',
         'stimulus_id',
+        'section_category',
         'code',
         'type',
         'content',

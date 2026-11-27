@@ -47,12 +47,31 @@
                         <input type="text" id="subject-{{ $tmpl->id }}" name="subject" value="{{ old('subject', $tmpl->subject) }}" class="form-input" required>
                     </div>
 
-                    <div class="space-y-1.5">
-                        <label for="body-{{ $tmpl->id }}" class="block text-xs font-semibold text-default-700 uppercase tracking-wider">Bodi Pesan (HTML / Teks)</label>
-                        <textarea id="body-{{ $tmpl->id }}" name="body_template" rows="5" class="form-textarea font-mono text-xs" required>{{ old('body_template', $tmpl->body_template) }}</textarea>
-                        <p class="text-[11px] text-default-500 mt-1.5 leading-normal">
-                            Variabel tersedia: <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{nama_siswa}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{username}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{judul_ujian}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{token}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{kode_sesi}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{waktu_mulai}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{nama_ruang}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{durasi}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{nilai}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{kkm}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{status_kelulusan}}</code>, <code class="px-1 py-0.5 rounded bg-default-100 text-default-700 text-[10px] font-mono">@{{nama_institusi}}</code>.
-                        </p>
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <label for="body-{{ $tmpl->id }}" class="block text-xs font-semibold text-default-700 uppercase tracking-wider">Bodi Pesan Email (Editor Visual)</label>
+                            <button type="button" onclick="toggleTemplateCodeMode({{ $tmpl->id }})" id="btn-code-mode-{{ $tmpl->id }}" class="px-2.5 py-1 rounded border border-default-200 bg-default-50 hover:bg-default-100 text-[11px] font-semibold text-default-700 cursor-pointer transition">
+                                Mode Kode HTML
+                            </button>
+                        </div>
+
+                        <!-- Quick Insert Merge Tags Bar -->
+                        <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+                            <span class="text-default-500 font-semibold mr-1">Sisipkan Variabel:</span>
+                            @foreach(['nama_siswa', 'username', 'judul_ujian', 'token', 'kode_sesi', 'waktu_mulai', 'nama_ruang', 'durasi', 'nilai', 'kkm', 'status_kelulusan', 'nama_institusi'] as $tag)
+                                <button type="button" onclick="insertTemplateTag({{ $tmpl->id }}, '{{ $tag }}')" class="px-2 py-0.5 rounded bg-primary/10 hover:bg-primary/20 text-primary font-mono text-[10px] font-bold border border-primary/20 cursor-pointer transition">
+                                    &#123;&#123;{{ $tag }}&#125;&#125;
+                                </button>
+                            @endforeach
+                        </div>
+
+                        <!-- Quill WYSIWYG Visual Editor Container -->
+                        <div id="quill-wrapper-{{ $tmpl->id }}" class="rounded-lg overflow-hidden border border-default-200 bg-white">
+                            <div id="quill-editor-{{ $tmpl->id }}" data-tmpl-id="{{ $tmpl->id }}" class="min-h-[180px] text-sm text-default-800 bg-white"></div>
+                        </div>
+
+                        <!-- Underlying Form Textarea (hidden in Visual Mode, visible in HTML Code Mode) -->
+                        <textarea id="body-{{ $tmpl->id }}" name="body_template" rows="6" class="form-textarea font-mono text-xs hidden" required>{{ old('body_template', $tmpl->body_template) }}</textarea>
                     </div>
 
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-default-100">
@@ -225,12 +244,114 @@ function renderMergeTags(text, data) {
     return result;
 }
 
+const templateQuillEditors = {};
+const templateCodeModes = {};
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof window.Quill !== 'function') {
+        // Fallback aman: tampilkan textarea jika Quill tidak tersedia
+        document.querySelectorAll('textarea[id^="body-"]').forEach(ta => ta.classList.remove('hidden'));
+        return;
+    }
+
+    document.querySelectorAll('[id^="quill-editor-"]').forEach(editorEl => {
+        const tmplId = editorEl.dataset.tmplId;
+        const textarea = document.getElementById(`body-${tmplId}`);
+        if (!textarea) return;
+
+        const quill = new window.Quill(editorEl, {
+            theme: 'snow',
+            placeholder: 'Tulis isi email di sini...',
+            modules: {
+                toolbar: [
+                    [{ header: [2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ color: [] }, { background: [] }],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['link', 'clean']
+                ]
+            }
+        });
+
+        const initialHtml = (textarea.value || '').trim();
+        if (initialHtml) {
+            quill.clipboard.dangerouslyPasteHTML(initialHtml);
+        }
+
+        quill.on('text-change', () => {
+            if (!templateCodeModes[tmplId]) {
+                textarea.value = quill.root.innerHTML;
+            }
+        });
+
+        templateQuillEditors[tmplId] = quill;
+        templateCodeModes[tmplId] = false;
+
+        const form = document.getElementById(`form-template-${tmplId}`);
+        if (form) {
+            form.addEventListener('submit', () => {
+                if (!templateCodeModes[tmplId] && templateQuillEditors[tmplId]) {
+                    textarea.value = templateQuillEditors[tmplId].root.innerHTML;
+                }
+            });
+        }
+    });
+});
+
+function toggleTemplateCodeMode(id) {
+    const wrapper = document.getElementById(`quill-wrapper-${id}`);
+    const textarea = document.getElementById(`body-${id}`);
+    const btn = document.getElementById(`btn-code-mode-${id}`);
+    const quill = templateQuillEditors[id];
+    if (!wrapper || !textarea || !quill) return;
+
+    const toCodeMode = !templateCodeModes[id];
+    templateCodeModes[id] = toCodeMode;
+
+    if (toCodeMode) {
+        textarea.value = quill.root.innerHTML;
+        wrapper.classList.add('hidden');
+        textarea.classList.remove('hidden');
+        if (btn) btn.textContent = 'Kembali ke Editor Visual';
+    } else {
+        quill.clipboard.dangerouslyPasteHTML(textarea.value || '');
+        textarea.classList.add('hidden');
+        wrapper.classList.remove('hidden');
+        if (btn) btn.textContent = 'Mode Kode HTML';
+    }
+}
+
+function insertTemplateTag(id, tag) {
+    const token = '{' + '{' + tag + '}' + '}';
+    const quill = templateQuillEditors[id];
+    const textarea = document.getElementById(`body-${id}`);
+
+    if (!templateCodeModes[id] && quill) {
+        const range = quill.getSelection(true);
+        const index = range ? range.index : Math.max(0, quill.getLength() - 1);
+        quill.insertText(index, token);
+        quill.setSelection(index + token.length, 0);
+        if (textarea) textarea.value = quill.root.innerHTML;
+        return;
+    }
+
+    if (textarea) {
+        const start = textarea.selectionStart ?? textarea.value.length;
+        const end = textarea.selectionEnd ?? textarea.value.length;
+        textarea.value = textarea.value.slice(0, start) + token + textarea.value.slice(end);
+        textarea.focus();
+    }
+}
+
 function openTemplatePreview(id, code, name) {
     const subjectInput = document.getElementById(`subject-${id}`);
     const bodyInput = document.getElementById(`body-${id}`);
+    const quill = templateQuillEditors[id];
 
     const rawSubject = subjectInput ? subjectInput.value : '';
-    const rawBody = bodyInput ? bodyInput.value : '';
+    const rawBody = (!templateCodeModes[id] && quill)
+        ? quill.root.innerHTML
+        : (bodyInput ? bodyInput.value : '');
 
     const renderedSubject = renderMergeTags(rawSubject, sampleTemplateData);
     const renderedBody = renderMergeTags(rawBody, sampleTemplateData);

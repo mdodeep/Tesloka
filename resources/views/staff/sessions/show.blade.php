@@ -157,9 +157,10 @@
                             Pilih Guru / Staf Pengawas
                         </label>
                         <select id="proctor_id_select" name="proctor_id" class="form-select w-full text-xs h-10 rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
-                            <option value="">-- Pilih Guru / Pengawas --</option>
+                            <option value="">-- Pilih Guru / Pengawas / Staf --</option>
                             @foreach($staffMembers as $stf)
-                                <option value="{{ $stf->id }}">{{ $stf->name }} ({{ $stf->email }})</option>
+                                @php $roleNames = $stf->roles->pluck('display_name')->filter()->implode(', '); @endphp
+                                <option value="{{ $stf->id }}">{{ $stf->name }} ({{ $roleNames !== '' ? $roleNames : 'Staf' }} &bull; {{ $stf->email }})</option>
                             @endforeach
                         </select>
                     </div>

@@ -78,10 +78,18 @@ Manajemen Sesi & Perangkat Aktif
                     $isCurrent = $session->session_id === $currentSessionId;
                 @endphp
                 <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 {{ $session->is_revoked ? 'opacity-50' : '' }}">
+                    @php
+                        $friendlyDev = $session->getFriendlyDeviceLabel();
+                        $devCat = $session->device_category ?? $session->device_type;
+                    @endphp
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 rounded {{ $isCurrent ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-default-100 text-default-600' }} flex items-center justify-center shrink-0">
-                            @if($session->device_type === 'mobile')
+                            @if($devCat === 'hp' || $devCat === 'mobile')
                                 <i data-lucide="smartphone" class="size-5"></i>
+                            @elseif($devCat === 'tablet')
+                                <i data-lucide="tablet" class="size-5"></i>
+                            @elseif($devCat === 'laptop')
+                                <i data-lucide="laptop" class="size-5"></i>
                             @else
                                 <i data-lucide="monitor" class="size-5"></i>
                             @endif
@@ -90,7 +98,10 @@ Manajemen Sesi & Perangkat Aktif
                         <div>
                             <div class="flex items-center gap-2 flex-wrap">
                                 <span class="font-bold text-sm text-default-900">
-                                    {{ $session->browser ?? 'Browser' }} pada {{ $session->platform ?? 'Perangkat' }}
+                                    {{ $session->browser ?? 'Browser' }} pada {{ $session->os_name ?? $session->platform ?? 'Perangkat' }}
+                                </span>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-primary border border-blue-200">
+                                    {{ $friendlyDev }}
                                 </span>
                                 @if($isCurrent)
                                     <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">

@@ -78,16 +78,91 @@
             ];
         @endphp
 
-        <!-- Visual Analytics ApexCharts: Difficulty & Discrimination -->
+        <!-- Ringkasan Reliabilitas KR-20 & Panduan Psikometri -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div class="bg-white border border-default-200/90 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-default-500 block">Reliabilitas Tes (KR-20)</span>
+                    <div class="text-3xl font-black text-primary mt-1 font-mono">
+                        {{ $insights['kr20'] !== null ? number_format($insights['kr20'], 3) : '-' }}
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-{{ $insights['kr20_color'] ?? 'slate' }}-100 text-{{ $insights['kr20_color'] ?? 'slate' }}-800">
+                        {{ $insights['kr20_label'] ?? 'Menunggu Sampel' }}
+                    </span>
+                </div>
+            </div>
+            <div class="lg:col-span-3 p-4 rounded-xl bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 space-y-1.5 leading-relaxed">
+                <strong class="block text-xs uppercase tracking-wider text-sky-950">Cara Membaca Grafik &amp; Tabel Psikometri Butir Soal:</strong>
+                <ul class="list-disc list-inside space-y-1 text-[11.5px]">
+                    <li><strong>Reliabilitas (KR-20):</strong> Mengukur konsistensi internal soal secara keseluruhan (ideal <strong>&ge; 0.70</strong>; skor &ge; 0.80 menandakan instrumen ujian sangat ajeg).</li>
+                    <li><strong>Indeks Kesukaran (P):</strong> Proporsi peserta yang menjawab benar. Rentang <strong>0.30 - 0.70 (Sedang)</strong> paling ideal; di bawah 0.30 berarti sukar, di atas 0.70 berarti mudah.</li>
+                    <li><strong>Daya Pembeda (D):</strong> Kemampuan soal membedakan peserta paham dan belum paham. Nilai <strong>&ge; 0.30 Baik</strong>; nilai <strong>&lt; 0.20 atau negatif</strong> menandakan butir soal/kunci jawaban perlu ditinjau ulang.</li>
+                    <li><strong>Rasch Fit (MNSQ):</strong> Kesesuaian pola jawaban dengan teori respons butir (ideal <strong>0.70 - 1.30</strong>). Di atas 1.50 berarti banyak tebakan acak / ambiguitas soal.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Visual Analytics ApexCharts: Difficulty, Discrimination, Scatter & Sections -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <x-cbt.card title="Distribusi Tingkat Kesukaran Soal (Facility Index)">
+                <p class="text-[11px] text-default-500 mb-2">Cara baca: Ujian seimbang umumnya didominasi kategori <strong>Sedang (hijau)</strong> dengan porsi soal Mudah dan Sukar yang terukur.</p>
                 <div id="difficultyApexChart" class="w-full min-h-[250px] flex items-center justify-center"></div>
             </x-cbt.card>
 
             <x-cbt.card title="Kualitas Daya Pembeda Butir Soal (Discrimination Index)">
+                <p class="text-[11px] text-default-500 mb-2">Cara baca: Perhatikan kategori <strong>Perlu Revisi (merah)</strong>; soal pada kelompok tersebut gagal membedakan siswa kelompok atas dan bawah.</p>
                 <div id="discriminationApexChart" class="w-full min-h-[250px]"></div>
             </x-cbt.card>
+
+            <x-cbt.card title="Peta Kuadran Kualitas Butir: Kesukaran (P) vs Daya Pembeda (D)">
+                <p class="text-[11px] text-default-500 mb-2">Cara baca: Titik ideal berada di tengah-atas (<strong>P: 0.30 - 0.70</strong> dan <strong>D &ge; 0.30</strong>). Titik di bagian paling bawah (D &lt; 0.20) sebaiknya direvisi.</p>
+                <div id="psychometricScatterChart" class="w-full min-h-[260px]"></div>
+            </x-cbt.card>
+
+            <x-cbt.card title="Rata-rata Akurasi per Seksi / Kategori Soal">
+                <p class="text-[11px] text-default-500 mb-2">Cara baca: Membandingkan persentase jawaban benar antar seksi (mis. Listening, Structure, Reading) maupun komposisi perangkat peserta.</p>
+                <div id="sectionAccuracyChart" class="w-full min-h-[260px]"></div>
+            </x-cbt.card>
         </div>
+
+        @if(! empty($itemAnalysis))
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <x-cbt.card title="5 Soal Paling Sukar">
+                    <ul class="space-y-2 text-xs">
+                        @foreach($insights['hardest_items'] ?? [] as $hi)
+                            <li class="flex items-center justify-between gap-2 pb-1.5 border-b border-default-100 last:border-0">
+                                <span class="font-mono font-bold text-default-800 truncate">{{ $hi['question_code'] }}</span>
+                                <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-mono text-[11px] shrink-0">P = {{ number_format($hi['facility_index'], 2) }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </x-cbt.card>
+                <x-cbt.card title="5 Butir Pembeda Terbaik">
+                    <ul class="space-y-2 text-xs">
+                        @foreach($insights['best_items'] ?? [] as $bi)
+                            <li class="flex items-center justify-between gap-2 pb-1.5 border-b border-default-100 last:border-0">
+                                <span class="font-mono font-bold text-default-800 truncate">{{ $bi['question_code'] }}</span>
+                                <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono text-[11px] shrink-0">D = {{ number_format($bi['discrimination_index'], 2) }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </x-cbt.card>
+                <x-cbt.card title="Butir Disarankan untuk Revisi ({{ count($insights['revision_items'] ?? []) }})">
+                    <ul class="space-y-2 text-xs max-h-44 overflow-y-auto">
+                        @forelse(array_slice($insights['revision_items'] ?? [], 0, 5) as $ri)
+                            <li class="flex items-center justify-between gap-2 pb-1.5 border-b border-default-100 last:border-0">
+                                <span class="font-mono font-bold text-default-800 truncate">{{ $ri['question_code'] }}</span>
+                                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-mono text-[10px] shrink-0">P={{ number_format($ri['facility_index'], 2) }} / D={{ number_format($ri['discrimination_index'], 2) }}</span>
+                            </li>
+                        @empty
+                            <li class="text-emerald-700 font-semibold">Seluruh butir memenuhi ambang kualitas minimal.</li>
+                        @endforelse
+                    </ul>
+                </x-cbt.card>
+            </div>
+        @endif
 
         <x-cbt.card flush title="Karakteristik Psikometrik Butir Soal Ujian">
             <div class="overflow-x-auto">
@@ -154,6 +229,9 @@
 
         <!-- Matriks Efektivitas Pengecoh / Distraktor (FULL-FEATURE 35.4) -->
         <x-cbt.card flush title="Matriks Analisis Efektivitas Pengecoh / Distraktor (Distractor Analysis)" subtitle="Evaluasi pilihan ganda: Pola sebaran pilihan Kelompok Atas (Upper 27%) vs Kelompok Bawah (Lower 27%)">
+            <div class="p-3.5 sm:px-6 border-b border-default-200/80 bg-sky-50/70 text-xs text-sky-900 leading-relaxed">
+                <strong>Cara Membaca Tabel Pengecoh:</strong> Pengecoh (opsi salah) berfungsi baik apabila dipilih oleh minimal 5% peserta dan <strong>lebih banyak menarik Kelompok Bawah (27%) dibanding Kelompok Atas (27%)</strong>. Jika pengecoh bertanda merah (<em>Menyesatkan</em>), siswa pintar lebih banyak tertipu opsi tersebut daripada kunci jawaban; periksa kejelasan redaksi atau kunci soal.
+            </div>
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[850px] divide-y divide-default-200/80 text-left text-xs" id="table-exam-distractors">
                     <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
@@ -274,6 +352,9 @@
         </div>
 
         <!-- Interactive Visual Analytics Charts -->
+        <div class="p-3.5 rounded-xl bg-sky-50/70 border border-sky-200/80 text-xs text-sky-900 leading-relaxed">
+            <strong>Cara Membaca Statistik &amp; Histogram Skor:</strong> Jika <strong>Mean &lt; Median</strong>, distribusi condong ke kanan (banyak nilai tinggi); bila <strong>Standar Deviasi (&sigma;)</strong> kecil, kemampuan peserta relatif merata, sedangkan &sigma; besar menunjukkan kesenjangan skor lebar antar peserta.
+        </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Score Distribution Bar Chart -->
             <div class="lg:col-span-2">
@@ -284,10 +365,22 @@
 
             <!-- Pass / Remedial Donut Chart -->
             <div>
-                <x-cbt.card :title="(!($exam->has_passing_grade ?? true) || $exam->isCertification()) ? 'Rasio Evaluasi (Mode Tanpa KKM)' : 'Rasio Kelulusan KKM (' . ($exam->passing_grade ?? 75) . ')'">
+                <x-cbt.card :title="!($exam->requiresPassingGrade()) ? 'Rasio Evaluasi (Mode Tanpa KKM)' : 'Rasio Kelulusan KKM (' . ($exam->passing_grade ?? 75) . ')'">
                     <div id="passFailDonutApexChart" class="w-full min-h-[260px] flex items-center justify-center"></div>
                 </x-cbt.card>
             </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <x-cbt.card title="Rerata Durasi Pengerjaan vs Hasil (Menit)">
+                <p class="text-[11px] text-default-500 mb-2">Cara baca: Membandingkan rata-rata waktu penyelesaian ujian peserta yang Lulus terhadap peserta Remedial agar evaluator melihat apakah durasi ujian terlalu sempit atau peserta terburu-buru.</p>
+                <div id="durationOutcomeChart" class="w-full min-h-[230px]"></div>
+            </x-cbt.card>
+
+            <x-cbt.card title="Statistik Perangkat Peserta pada Ujian Ini">
+                <p class="text-[11px] text-default-500 mb-2">Cara baca: Melihat distribusi jenis perangkat peserta beserta rata-rata skor capaian pada masing-masing tipe perangkat.</p>
+                <div id="examDeviceStatsChart" class="w-full min-h-[230px]"></div>
+            </x-cbt.card>
         </div>
 
         <!-- Score Distribution Frequency Table -->
@@ -372,6 +465,10 @@
     let passFailChart = null;
     let difficultyChart = null;
     let discriminationChart = null;
+    let scatterChart = null;
+    let sectionAccChart = null;
+    let durationChart = null;
+    let examDeviceChart = null;
 
     function initItemAnalysisCharts() {
         if (typeof ApexCharts === 'undefined') return;
@@ -444,6 +541,48 @@
                 discriminationChart.render();
             } else {
                 discEl.innerHTML = '<div class="text-xs text-default-400 py-8">Belum ada data butir soal.</div>';
+            }
+        }
+
+        // Scatter P vs D
+        const scatterEl = document.getElementById('psychometricScatterChart');
+        if (scatterEl && !scatterChart) {
+            const rawItems = @json($itemAnalysis ?? []);
+            if (rawItems.length > 0) {
+                const points = rawItems.map(it => ({
+                    x: Number(it.facility_index || 0),
+                    y: Number(it.discrimination_index || 0)
+                }));
+                scatterChart = new ApexCharts(scatterEl, {
+                    chart: { type: 'scatter', height: 250, fontFamily: 'Sora, sans-serif', toolbar: { show: false } },
+                    series: [{ name: 'Butir Soal (P, D)', data: points }],
+                    xaxis: { min: 0, max: 1, title: { text: 'Indeks Kesukaran (P)', style: { fontSize: '11px' } } },
+                    yaxis: { min: -0.5, max: 1, title: { text: 'Daya Pembeda (D)', style: { fontSize: '11px' } } },
+                    colors: ['#2e33ff']
+                });
+                scatterChart.render();
+            } else {
+                scatterEl.innerHTML = '<div class="text-xs text-default-400 py-8 text-center">Belum ada sampel pengerjaan untuk peta kuadran butir.</div>';
+            }
+        }
+
+        // Section Category Accuracy
+        const secAccEl = document.getElementById('sectionAccuracyChart');
+        if (secAccEl && !sectionAccChart) {
+            const secData = @json($insights['section_breakdown'] ?? []);
+            if (secData.length > 0) {
+                sectionAccChart = new ApexCharts(secAccEl, {
+                    chart: { type: 'bar', height: 250, fontFamily: 'Sora, sans-serif', toolbar: { show: false } },
+                    series: [{ name: 'Akurasi Benar (%)', data: secData.map(s => s.avg_accuracy) }],
+                    xaxis: { categories: secData.map(s => `${s.label} (${s.question_count} soal)`), labels: { style: { fontSize: '10px' } } },
+                    yaxis: { max: 100 },
+                    colors: ['#14bba6'],
+                    plotOptions: { bar: { borderRadius: 4, columnWidth: '45%' } },
+                    dataLabels: { enabled: true, formatter: v => v + '%' }
+                });
+                sectionAccChart.render();
+            } else {
+                secAccEl.innerHTML = '<div class="text-xs text-default-400 py-8 text-center">Belum ada butir soal dengan kategori seksi bahasa (Listening, Structure, Reading).</div>';
             }
         }
     }
@@ -537,6 +676,48 @@
             };
             passFailChart = new ApexCharts(donutEl, donutOptions);
             passFailChart.render();
+        }
+
+        // Duration vs Outcome Chart
+        const durEl = document.getElementById('durationOutcomeChart');
+        if (durEl && !durationChart) {
+            const durStats = @json($insights['duration_stats'] ?? []);
+            if ((durStats.completed_samples || 0) > 0) {
+                durationChart = new ApexCharts(durEl, {
+                    chart: { type: 'bar', height: 220, fontFamily: 'Sora, sans-serif', toolbar: { show: false } },
+                    series: [{ name: 'Rata-rata Menit', data: [durStats.avg_all_minutes || 0, durStats.avg_passed_minutes || 0, durStats.avg_remedial_minutes || 0] }],
+                    xaxis: { categories: ['Semua Peserta', 'Peserta Lulus', 'Peserta Remedial'] },
+                    colors: ['#2e33ff', '#10b981', '#e11d48'],
+                    plotOptions: { bar: { distributed: true, borderRadius: 4, columnWidth: '45%' } },
+                    legend: { show: false },
+                    dataLabels: { enabled: true, formatter: v => v + ' mnt' }
+                });
+                durationChart.render();
+            } else {
+                durEl.innerHTML = '<div class="text-xs text-default-400 py-8 text-center">Belum ada peserta yang menyelesaikan ujian untuk statistik durasi.</div>';
+            }
+        }
+
+        // Device Stats for This Exam
+        const devExamEl = document.getElementById('examDeviceStatsChart');
+        if (devExamEl && !examDeviceChart) {
+            const devList = @json($insights['device_stats'] ?? []);
+            if (devList.length > 0) {
+                examDeviceChart = new ApexCharts(devExamEl, {
+                    chart: { type: 'bar', height: 220, fontFamily: 'Sora, sans-serif', toolbar: { show: false } },
+                    series: [
+                        { name: 'Jumlah Peserta', data: devList.map(d => d.count) },
+                        { name: 'Rerata Skor', data: devList.map(d => d.avg_score) }
+                    ],
+                    xaxis: { categories: devList.map(d => d.label) },
+                    colors: ['#14213d', '#14bba6'],
+                    plotOptions: { bar: { borderRadius: 4, columnWidth: '45%' } },
+                    legend: { position: 'top' }
+                });
+                examDeviceChart.render();
+            } else {
+                devExamEl.innerHTML = '<div class="text-xs text-default-400 py-8 text-center">Belum ada data perangkat peserta pada ujian ini.</div>';
+            }
         }
     }
 

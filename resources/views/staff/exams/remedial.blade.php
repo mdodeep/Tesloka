@@ -82,7 +82,7 @@
 
                 <div>
                     <label for="passing_grade" class="block text-xs font-bold text-default-700 uppercase mb-1">Batas Kelulusan (KKM) *</label>
-                    <input type="number" step="0.01" id="passing_grade" name="passing_grade" value="{{ old('passing_grade', $exam->passing_grade) }}" min="0" max="100" required class="form-input w-full text-xs font-mono border-default-200 rounded focus:ring-2 focus:ring-primary/20 focus:border-primary h-10">
+                    <input type="number" step="0.01" id="passing_grade" name="passing_grade" value="{{ old('passing_grade', $exam->passing_grade) }}" min="0" max="10000" required class="form-input w-full text-xs font-mono border-default-200 rounded focus:ring-2 focus:ring-primary/20 focus:border-primary h-10">
                 </div>
 
                 <div class="md:col-span-2">

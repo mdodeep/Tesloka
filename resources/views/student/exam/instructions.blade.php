@@ -108,6 +108,15 @@
                         </div>
                         <span id="badgeFullscreen" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">Tersedia</span>
                     </div>
+
+                    <!-- Tipe Perangkat Peserta -->
+                    <div class="p-2.5 bg-default-50 border border-default-200 rounded-lg flex items-center justify-between sm:col-span-2">
+                        <div class="space-y-0.5">
+                            <span class="text-default-500 font-medium block">Jenis Perangkat Terdeteksi:</span>
+                            <span id="preflightDeviceType" class="font-semibold text-default-800">Mendeteksi perangkat...</span>
+                        </div>
+                        <span id="badgeDeviceType" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">Scan</span>
+                    </div>
                 </div>
 
                 <div id="preflightAlert" class="hidden p-3 rounded-lg text-xs font-medium"></div>
@@ -176,8 +185,9 @@
             </div>
 
             <!-- Form Verifikasi Token & Mulai Ujian -->
-            <form action="{{ route('student.exam.start', $exam) }}" method="POST" class="pt-4 border-t border-default-200 space-y-4">
+            <form action="{{ route('student.exam.start', $exam) }}" method="POST" id="startExamForm" class="pt-4 border-t border-default-200 space-y-4">
                 @csrf
+                <input type="hidden" name="device_telemetry" id="deviceTelemetryInput" value="">
                 <div>
                     <label for="student_exam_token" class="block text-xs font-bold text-default-800 uppercase mb-1.5">
                         Masukkan Token Rilis Ujian *
@@ -248,6 +258,44 @@ document.addEventListener('DOMContentLoaded', function() {
             badgeRes.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/80';
             badgeRes.textContent = 'Cukup';
         }
+    }
+
+    // 2.5 Multi-Signal Device Category Detection (PC Desktop, Laptop, HP, Tablet)
+    const deviceEl = document.getElementById('preflightDeviceType');
+    const badgeDevice = document.getElementById('badgeDeviceType');
+    const telemetryInput = document.getElementById('deviceTelemetryInput');
+    const detectFriendlyDevice = (telemetry) => {
+        const currentUa = (telemetry.user_agent || navigator.userAgent || '').toLowerCase();
+        const maxTouch = Number(telemetry.max_touch_points || 0);
+        const minSide = Math.min(Number(telemetry.screen_width || 0), Number(telemetry.screen_height || 0));
+        const maxSide = Math.max(Number(telemetry.screen_width || 0), Number(telemetry.screen_height || 0));
+        const isTabletUa = /ipad|tablet|playbook|silk|sm-t|gt-p|lenovo.*tab|xiaomi.*pad|redmi.*pad/i.test(currentUa);
+        const isPhoneUa = /iphone|ipod|android.*mobile|windows phone|blackberry|bb10|opera mini|mobile/i.test(currentUa);
+
+        if (isTabletUa || (/android/i.test(currentUa) && !isPhoneUa && maxSide >= 768) || (/macintosh/i.test(currentUa) && maxTouch > 1)) {
+            return { label: 'Tablet', desc: 'Tablet Layar Sentuh' };
+        }
+        if (isPhoneUa || (telemetry.pointer_coarse && maxTouch > 0 && minSide > 0 && minSide < 720)) {
+            return { label: 'HP / Smartphone', desc: 'Perangkat Seluler' };
+        }
+        if (/windows|macintosh|linux|cros|x11/i.test(currentUa) && !/android/i.test(currentUa)) {
+            if (telemetry.has_battery === true || maxTouch > 0) {
+                return { label: 'Laptop / Notebook', desc: 'Perangkat Portabel' };
+            }
+            return { label: 'PC Desktop / Workstation', desc: 'Komputer Meja / Lab' };
+        }
+        return { label: 'Perangkat Lain', desc: 'Tercatat Otomatis' };
+    };
+
+    if (typeof window.collectDeviceTelemetry === 'function') {
+        window.collectDeviceTelemetry().then((telemetry) => {
+            if (telemetryInput) {
+                telemetryInput.value = JSON.stringify(telemetry);
+            }
+            const detected = detectFriendlyDevice(telemetry);
+            if (deviceEl) deviceEl.textContent = `${detected.label} (${browser} di ${os})`;
+            if (badgeDevice) badgeDevice.textContent = detected.label;
+        }).catch(() => {});
     }
 
     // 3. Fullscreen Capability

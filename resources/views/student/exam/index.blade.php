@@ -20,10 +20,13 @@
                 $attempt = $attempts->get($ex->id);
                 $isSubmitted = $attempt && $attempt->status === 'submitted';
                 $isInProgress = $attempt && $attempt->status === 'in_progress' && !$attempt->isExpired();
+                $needsPayment = $ex->requiresPayment();
+                $payRecord = isset($payments) ? $payments->get($ex->id) : null;
+                $isPaid = !$needsPayment || ($payRecord && $payRecord->isApproved());
             @endphp
             <x-cbt.card class="flex flex-col justify-between h-full">
                 <div class="space-y-3">
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between gap-1 flex-wrap">
                         <x-cbt.badge color="primary">
                             {{ $ex->exam_type }}
                         </x-cbt.badge>
@@ -31,6 +34,10 @@
                             <x-cbt.badge color="success">Sudah Selesai</x-cbt.badge>
                         @elseif($isInProgress)
                             <x-cbt.badge color="primary">Sedang Berjalan</x-cbt.badge>
+                        @elseif($needsPayment && ! $isPaid)
+                            <x-cbt.badge color="{{ $payRecord && $payRecord->isRejected() ? 'danger' : 'warning' }}">
+                                {{ $payRecord ? $payRecord->getStatusLabel() : 'Menunggu Pembayaran' }}
+                            </x-cbt.badge>
                         @else
                             <x-cbt.badge color="info">Siap Dikerjakan</x-cbt.badge>
                         @endif
@@ -53,7 +60,18 @@
                             <i data-lucide="map-pin" class="size-4 text-default-400 shrink-0"></i>
                             <span>Ruang: <strong class="text-default-800 font-semibold">{{ $session->room->name ?? '-' }}</strong> &bull; Kursi: <strong class="text-default-800 font-semibold">{{ $enrollment->seat_number ?? '-' }}</strong></span>
                         </div>
+                        @if($needsPayment)
+                            <div class="flex items-center gap-2 text-primary font-semibold">
+                                <i data-lucide="credit-card" class="size-4 shrink-0"></i>
+                                <span>Biaya: Rp {{ number_format((float) $ex->payment_amount, 0, ',', '.') }} ({{ $isPaid ? 'Lunas' : 'Wajib Diverifikasi' }})</span>
+                            </div>
+                        @endif
                     </div>
+                    @if($needsPayment && $payRecord && $payRecord->isRejected() && $payRecord->rejection_reason)
+                        <div class="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-rose-800">
+                            <strong>Ditolak:</strong> {{ $payRecord->rejection_reason }}
+                        </div>
+                    @endif
                 </div>
 
                 <div class="pt-4 mt-4 border-t border-default-100">
@@ -67,6 +85,17 @@
                             <i data-lucide="play-circle" class="size-4"></i>
                             Lanjutkan Ujian
                         </a>
+                    @elseif($needsPayment && ! $isPaid)
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+                            <a href="{{ route('student.exam.card', $ex) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm py-2.5 bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="printer" class="size-4 text-default-500"></i>
+                                Kartu Ujian
+                            </a>
+                            <a href="{{ route('student.exam.payment', $ex) }}" class="btn btn-sm py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded inline-flex items-center justify-center gap-1.5 shadow-xs transition">
+                                <i data-lucide="credit-card" class="size-4"></i>
+                                {{ $payRecord && $payRecord->isPending() ? 'Status Bayar' : 'Bayar Sekarang' }}
+                            </a>
+                        </div>
                     @else
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
                             <a href="{{ route('student.exam.card', $ex) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm py-2.5 bg-default-100 hover:bg-default-200 text-default-700 font-semibold text-xs rounded inline-flex items-center justify-center gap-1.5 transition">

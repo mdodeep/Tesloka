@@ -26,11 +26,17 @@ class Exam extends Model
         'exam_type',
         'delivery_mode',
         'assessment_type',
-        'has_passing_grade',
-        'score_scale',
-        'certificate_type',
-        'duration_minutes',
         'passing_grade',
+        'has_passing_grade',
+        'duration_minutes',
+        'score_scale',
+        'score_decimal_places',
+        'section_config',
+        'certificate_type',
+        'certificate_validity_months',
+        'requires_payment',
+        'payment_amount',
+        'payment_instructions',
         'scheduled_start',
         'scheduled_end',
         'status',
@@ -56,6 +62,11 @@ class Exam extends Model
             'duration_minutes' => 'integer',
             'has_passing_grade' => 'boolean',
             'passing_grade' => 'decimal:2',
+            'score_decimal_places' => 'integer',
+            'section_config' => 'array',
+            'certificate_validity_months' => 'integer',
+            'requires_payment' => 'boolean',
+            'payment_amount' => 'decimal:2',
             'scheduled_start' => 'datetime',
             'scheduled_end' => 'datetime',
             'published_at' => 'datetime',
@@ -150,6 +161,36 @@ class Exam extends Model
         return $this->hasMany(ExamAttempt::class);
     }
 
+    public function payments(): HasMany
+    {
+        return $this->hasMany(ExamPayment::class);
+    }
+
+    public function requiresPayment(): bool
+    {
+        return (bool) $this->requires_payment;
+    }
+
+    public function latestPaymentForStudent(int $studentId): ?ExamPayment
+    {
+        return $this->payments()
+            ->where('student_id', $studentId)
+            ->latest('id')
+            ->first();
+    }
+
+    public function hasStudentPaid(int $studentId): bool
+    {
+        if (! $this->requiresPayment()) {
+            return true;
+        }
+
+        return $this->payments()
+            ->where('student_id', $studentId)
+            ->where('status', ExamPayment::STATUS_APPROVED)
+            ->exists();
+    }
+
     public function parentExam(): BelongsTo
     {
         return $this->belongsTo(Exam::class, 'parent_exam_id');
@@ -177,8 +218,8 @@ class Exam extends Model
         if ($this->duration_minutes <= 0) {
             $criticalErrors[] = 'Durasi ujian harus lebih besar dari 0 menit.';
         }
-        if ($this->has_passing_grade && ($this->passing_grade < 0 || $this->passing_grade > 100)) {
-            $criticalErrors[] = 'Nilai batas kelulusan (KKM) harus berada di antara 0 dan 100.';
+        if ($this->has_passing_grade && ($this->passing_grade < 0 || $this->passing_grade > 10000)) {
+            $criticalErrors[] = 'Nilai batas kelulusan (KKM) harus berada di antara 0 dan 10000.';
         }
         if ($this->scheduled_start && $this->scheduled_end && $this->scheduled_end->lte($this->scheduled_start)) {
             $criticalErrors[] = 'Waktu jadwal selesai harus setelah waktu jadwal mulai.';
@@ -228,7 +269,7 @@ class Exam extends Model
 
         $isValid = empty($criticalErrors);
 
-        $hasBaseConfig = ! empty($this->title) && $this->duration_minutes > 0 && (! $this->has_passing_grade || ($this->passing_grade >= 0 && $this->passing_grade <= 100));
+        $hasBaseConfig = ! empty($this->title) && $this->duration_minutes > 0 && (! $this->has_passing_grade || ($this->passing_grade >= 0 && $this->passing_grade <= 10000));
         $hasBlueprints = $blueprints->isNotEmpty() && ($totalBlueprintQuestions ?? 0) > 0;
         $hasSufficientQuota = $blueprints->isNotEmpty() && ! collect($criticalErrors)->contains(fn ($err) => str_contains($err, 'kurang dari kebutuhan blueprint'));
         $hasAnswerKeys = ! collect($criticalErrors)->contains(fn ($err) => str_contains($err, 'belum memiliki kunci jawaban benar'));
@@ -309,13 +350,17 @@ class Exam extends Model
                 foreach ($blueprints as $bp) {
                     $bankQuestions = $bp->questionBank->questions;
 
-                    // Filter berdasarkan rules blueprint jika ada (misal per difficulty)
+                    // Filter berdasarkan rules blueprint jika ada (kesulitan, tipe, atau bagian bahasa)
                     $rules = $bp->rules ?? [];
                     if (! empty($rules['difficulty'])) {
                         $bankQuestions = $bankQuestions->where('difficulty', $rules['difficulty']);
                     }
                     if (! empty($rules['type'])) {
                         $bankQuestions = $bankQuestions->where('type', $rules['type']);
+                    }
+                    $sectionFilter = $bp->section_category ?? ($rules['section_category'] ?? null);
+                    if (! empty($sectionFilter)) {
+                        $bankQuestions = $bankQuestions->filter(fn ($bq) => strtolower((string) ($bq->section_category ?? ($bq->metadata['section_category'] ?? ''))) === strtolower((string) $sectionFilter));
                     }
 
                     // Ambil sejumlah total_questions secara acak
@@ -364,6 +409,7 @@ class Exam extends Model
                         'weight' => (float) $q->weight,
                         'explanation' => $q->explanation,
                         'is_rtl' => (bool) $q->is_rtl,
+                        'section_category' => $q->section_category ?? ($q->metadata['section_category'] ?? null),
                         'metadata' => $q->metadata ?? [],
                         'version' => $q->version,
                         'stimulus' => $q->stimulus ? [

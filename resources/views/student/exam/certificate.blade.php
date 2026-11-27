@@ -3,47 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Sertifikat Kelulusan - {{ $attempt->student->name ?? 'Peserta' }} - {{ $attempt->exam->title ?? 'Ujian' }}</title>
+    <title>Sertifikat Resmi - {{ $attempt->student->name ?? 'Peserta' }} - {{ $attempt->exam->title ?? 'Ujian' }}</title>
     @vite(['resources/js/app.js'])
     @php
         $branding = $branding ?? app(\App\Services\BrandingService::class)->getBranding();
-        $letterGrade = $letterGrade ?? ($attempt->finalResult->final_grade_letter ?? $attempt->getLetterGrade());
-        $gradePredicate = $gradePredicate ?? $attempt->getGradePredicate();
+        $scoreScaleService = app(\App\Services\ScoreScaleService::class);
+        $docService = app(\App\Services\DocumentConfigService::class);
+
         $institution = $attempt->exam->institution ?? \App\Models\Institution::first();
+        $doc = $docService->getSettings($institution);
         $instName = $institution?->name ?: $branding['institution_name'];
         $faviconUrl = $institution?->favicon_url ?: $branding['favicon_url'];
         $logoUrl = $institution?->logo_url ?: $branding['logo_url'];
-        
-        // Konfigurasi Desain & Warna Sertifikat
+
+        $certType = $attempt->exam?->certificate_type ?? 'standard';
+        $scoreScale = (string) ($attempt->exam?->score_scale ?? 'standard_100');
+        $scaleLabel = \App\Services\ScoreScaleService::scoreScaleLabel($scoreScale);
+        $formattedFinalScore = $attempt->getFormattedFinalScore();
+        $sectionScores = $attempt->getSectionScores();
+        $cefrLevel = \App\Services\ScoreScaleService::mapPercentageToCefr((float) (($attempt->getScoreBreakdown()['percentage'] ?? 0)));
+
+        $letterGrade = $letterGrade ?? ($attempt->finalResult->final_grade_letter ?? $attempt->getLetterGrade());
+        $gradePredicate = $gradePredicate ?? $attempt->getGradePredicate();
+        $isPassed = $attempt->isPassed();
+        $requiresKkm = $attempt->exam?->requiresPassingGrade() ?? true;
+
+        $examTakenAt = $attempt->started_at ?? $attempt->submitted_at ?? $attempt->created_at ?? now();
+        $issuedAt = $attempt->getCertificateIssuedAt();
+        $expiresAt = $attempt->getCertificateExpiresAt();
+        $isExpired = $attempt->isCertificateExpired();
+        $issuanceCity = trim((string) ($doc['city'] ?? ''));
+
+        // Konfigurasi Desain & Palet Warna sesuai Tipe Sertifikat
         $certPrimaryColor = \App\Models\SystemSetting::get('branding.cert_primary_color', '#14213d');
         $certAccentColor = \App\Models\SystemSetting::get('branding.cert_accent_color', '#c59b27');
         $certTitle = \App\Models\SystemSetting::get('branding.cert_title', 'SERTIFIKAT KELULUSAN');
         $certSubtitle = \App\Models\SystemSetting::get('branding.cert_subtitle', 'CERTIFICATE OF ACHIEVEMENT');
 
-        if ($attempt->exam && $attempt->exam->certificate_type === 'language_proficiency') {
+        if ($certType === 'language_proficiency') {
+            $certPrimaryColor = '#0f3d3e';
+            $certAccentColor = '#0f9b8e';
             $certTitle = 'SERTIFIKAT KECAKAPAN BAHASA';
             $certSubtitle = 'CERTIFICATE OF LANGUAGE PROFICIENCY';
-        } elseif ($attempt->exam && $attempt->exam->certificate_type === 'competency') {
-            $certTitle = 'SERTIFIKAT KOMPETENSI';
-            $certSubtitle = 'CERTIFICATE OF COMPETENCY';
+        } elseif ($certType === 'competency') {
+            $certPrimaryColor = '#1e293b';
+            $certAccentColor = '#2e33ff';
+            $certTitle = 'SERTIFIKAT KOMPETENSI & PROFESI';
+            $certSubtitle = 'PROFESSIONAL COMPETENCY CREDENTIAL';
         }
-        
+
         // Template Narasi Pernyataan Kelulusan Sertifikat
-        $rawStatementTemplate = \App\Models\SystemSetting::get(
-            'branding.cert_statement_template',
-            'Atas keberhasilan menuntaskan seluruh rangkaian evaluasi terstandar pada mata pelajaran {{mata pelajaran}} dalam ujian "{{nama ujian}}" yang diselenggarakan oleh '.$instName.' dengan capaian:'
-        );
+        $defaultNarration = match ($certType) {
+            'language_proficiency' => 'Telah mengikuti dan menyelesaikan evaluasi uji kecakapan bahasa pada program {{mata pelajaran}} ({{nama ujian}}) yang diselenggarakan oleh {{nama institusi}} pada tanggal '.$examTakenAt->translatedFormat('d F Y').' dengan perolehan capaian sebagai berikut:',
+            'competency' => 'Telah memenuhi standar asesmen uji kompetensi keahlian pada bidang {{mata pelajaran}} melalui ujian {{nama ujian}} yang diselenggarakan oleh {{nama institusi}} pada tanggal '.$examTakenAt->translatedFormat('d F Y').' dengan hasil kualifikasi:',
+            default => 'Atas keberhasilan menuntaskan seluruh rangkaian evaluasi terstandar pada mata pelajaran {{mata pelajaran}} dalam ujian "{{nama ujian}}" yang diselenggarakan oleh '.$instName.' pada tanggal '.$examTakenAt->translatedFormat('d F Y').' dengan capaian:',
+        };
+        $rawStatementTemplate = \App\Models\SystemSetting::get('branding.cert_statement_template');
+        if ($certType !== 'standard' || trim((string) $rawStatementTemplate) === '') {
+            $rawStatementTemplate = $defaultNarration;
+        }
 
         $subjectName = $attempt->exam->subject->name ?? 'Evaluasi Ujian';
         $examTitle = $attempt->exam->title ?? 'Ujian';
         $studentName = $attempt->student->name ?? 'Peserta';
         $studentId = $attempt->student->identity_number ?? ($attempt->student->username ?? '-');
-        $totalScoreFormatted = number_format($attempt->total_score ?? 0, 1);
         $gradeSummary = ($letterGrade ?? '') . ' (' . ($gradePredicate ?? '') . ')';
-        $todayFormatted = now()->translatedFormat('d F Y');
+        $issuedDateFormatted = $issuedAt->translatedFormat('d F Y');
 
         $statementReplacements = [
-            // Mata Pelajaran (Format Utama {{mata pelajaran}})
             '{{mata pelajaran}}' => '<strong>' . e($subjectName) . '</strong>',
             '{{mata_pelajaran}}' => '<strong>' . e($subjectName) . '</strong>',
             '[mata pelajaran]' => '<strong>' . e($subjectName) . '</strong>',
@@ -51,7 +78,6 @@
             '{mata_pelajaran}' => '<strong>' . e($subjectName) . '</strong>',
             '{subject}' => '<strong>' . e($subjectName) . '</strong>',
 
-            // Nama Ujian (Format Utama {{nama ujian}})
             '{{nama ujian}}' => '<strong>' . e($examTitle) . '</strong>',
             '{{nama_ujian}}' => '<strong>' . e($examTitle) . '</strong>',
             '{{judul_ujian}}' => '<strong>' . e($examTitle) . '</strong>',
@@ -61,7 +87,6 @@
             '{exam}' => '<strong>' . e($examTitle) . '</strong>',
             '{judul_ujian}' => '<strong>' . e($examTitle) . '</strong>',
 
-            // Nama Institusi (Format Utama {{nama institusi}})
             '{{nama institusi}}' => '<strong>' . e($instName) . '</strong>',
             '{{nama_institusi}}' => '<strong>' . e($instName) . '</strong>',
             '[nama institusi]' => '<strong>' . e($instName) . '</strong>',
@@ -69,7 +94,6 @@
             '{nama_institusi}' => '<strong>' . e($instName) . '</strong>',
             '{institusi}' => '<strong>' . e($instName) . '</strong>',
 
-            // Nama Siswa (Format Utama {{nama siswa}})
             '{{nama siswa}}' => '<strong>' . e($studentName) . '</strong>',
             '{{nama_siswa}}' => '<strong>' . e($studentName) . '</strong>',
             '[nama siswa]' => '<strong>' . e($studentName) . '</strong>',
@@ -77,7 +101,6 @@
             '{nama_siswa}' => '<strong>' . e($studentName) . '</strong>',
             '{student}' => '<strong>' . e($studentName) . '</strong>',
 
-            // NIM / Nomor Peserta (Format Utama {{nim}} / {{nomor peserta}})
             '{{nim}}' => '<strong>' . e($studentId) . '</strong>',
             '{{nomor peserta}}' => '<strong>' . e($studentId) . '</strong>',
             '{{nomor_peserta}}' => '<strong>' . e($studentId) . '</strong>',
@@ -87,53 +110,45 @@
             '{nim}' => '<strong>' . e($studentId) . '</strong>',
             '{nomor_peserta}' => '<strong>' . e($studentId) . '</strong>',
 
-            // Nilai Akhir (Format Utama {{nilai}})
-            '{{nilai}}' => '<strong>' . $totalScoreFormatted . '</strong>',
-            '[nilai]' => '<strong>' . $totalScoreFormatted . '</strong>',
-            '{nilai}' => '<strong>' . $totalScoreFormatted . '</strong>',
+            '{{nilai}}' => '<strong>' . e($formattedFinalScore) . '</strong>',
+            '[nilai]' => '<strong>' . e($formattedFinalScore) . '</strong>',
+            '{nilai}' => '<strong>' . e($formattedFinalScore) . '</strong>',
 
-            // Predikat (Format Utama {{predikat}})
             '{{predikat}}' => '<strong>' . e($gradeSummary) . '</strong>',
             '[predikat]' => '<strong>' . e($gradeSummary) . '</strong>',
             '{predikat}' => '<strong>' . e($gradeSummary) . '</strong>',
 
-            // Tanggal (Format Utama {{tanggal}})
-            '{{tanggal}}' => '<strong>' . e($todayFormatted) . '</strong>',
-            '[tanggal]' => '<strong>' . e($todayFormatted) . '</strong>',
-            '{tanggal}' => '<strong>' . e($todayFormatted) . '</strong>',
+            '{{tanggal}}' => '<strong>' . e($issuedDateFormatted) . '</strong>',
+            '[tanggal]' => '<strong>' . e($issuedDateFormatted) . '</strong>',
+            '{tanggal}' => '<strong>' . e($issuedDateFormatted) . '</strong>',
         ];
 
         $parsedStatement = str_ireplace(array_keys($statementReplacements), array_values($statementReplacements), e((string) $rawStatementTemplate));
-        
-        // Pejabat Utama (Kanan)
-        $certSignerName = \App\Models\SystemSetting::get('branding.cert_signer_name', 'Dr. H. Muhammad Zainuddin, M.Pd.');
-        $certSignerTitle = \App\Models\SystemSetting::get('branding.cert_signer_title', 'Direktur / Kepala Akademik');
-        $certSignerNip = \App\Models\SystemSetting::get('branding.cert_signer_nip', '19690815 199403 1 001');
-        $certSignerSigPath = \App\Models\SystemSetting::get('branding.cert_signer_signature');
-        $certSignerSigUrl = $certSignerSigPath ? '/storage/' . ltrim((string) $certSignerSigPath, '/') : null;
 
-        // Pejabat Kedua / Penguji (Kiri)
-        $certSignerSecondaryName = \App\Models\SystemSetting::get('branding.cert_signer_secondary_name', 'Drs. H. M. Syatibi, M.Ag.');
-        $certSignerSecondaryTitle = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji');
-        $certSignerSecondaryNip = \App\Models\SystemSetting::get('branding.cert_signer_secondary_nip', '19780512 200312 1 002');
-        $certSignerSecondarySigPath = \App\Models\SystemSetting::get('branding.cert_signer_secondary_signature');
-        $certSignerSecondarySigUrl = $certSignerSecondarySigPath ? '/storage/' . ltrim((string) $certSignerSecondarySigPath, '/') : null;
+        // Penandatangan (1 atau 2 Pejabat)
+        $certSignerName = $doc['primary_name'] !== '' ? $doc['primary_name'] : 'Pimpinan Institusi';
+        $certSignerTitle = $doc['primary_title'] !== '' ? $doc['primary_title'] : 'Direktur / Kepala Akademik';
+        $certSignerNip = $doc['primary_nip'];
+        $certSignerSigUrl = $doc['primary_signature_url'];
 
-        // Cap Stempel Institusi
-        $certStampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $certStampUrl = $certStampPath ? '/storage/' . ltrim((string) $certStampPath, '/') : null;
+        $certSignerSecondaryName = $doc['secondary_name'];
+        $certSignerSecondaryTitle = $doc['secondary_title'];
+        $certSignerSecondaryNip = $doc['secondary_nip'];
+        $certSignerSecondarySigUrl = $doc['secondary_signature_url'];
+
+        $certStampUrl = $doc['stamp_url'];
 
         // Opsi Tampilan
         $certShowWatermark = (bool) \App\Models\SystemSetting::get('branding.cert_show_watermark', true);
         $certShowLogo = (bool) \App\Models\SystemSetting::get('branding.cert_show_logo', true);
         $certShowScore = (bool) \App\Models\SystemSetting::get('branding.cert_show_score', true);
-        $certDualSignatures = (bool) \App\Models\SystemSetting::get('branding.cert_dual_signatures', true);
+        $certDualSignatures = (bool) ($doc['dual_signatures'] ?? true) && trim($certSignerSecondaryName) !== '';
 
         // Blangko Kustom A4 (Khusus Supporter License)
         $isSupporter = app(\App\Services\LicenseService::class)->isSupporter();
         $certBgSetting = $isSupporter ? \App\Models\SystemSetting::get('branding.certificate_bg') : null;
         $certBgUrl = $certBgSetting ? '/storage/' . ltrim((string) $certBgSetting, '/') : null;
-        
+
         // URL Tombol Kembali
         if (! isset($backUrl)) {
             if (request()->routeIs('student.*')) {
@@ -152,16 +167,16 @@
         }
         $backLabel = $backLabel ?? 'Kembali';
 
-        $docService = app(\App\Services\DocumentConfigService::class);
         $certCode = $docService->formatNumber('certificate', [
             'exam_code' => $attempt->exam->code ?? 'EXAM',
             'attempt_id' => $attempt->id,
             'seq' => $attempt->id,
-            'date' => $attempt->submitted_at ?? now(),
+            'date' => $issuedAt,
         ], $institution);
         $receipt = $attempt->submission_receipt ?? (string) $attempt->id;
         $verificationQrUrl = \App\Services\QrCodeService::dataUri(route('document.verify', $receipt), 160);
         $verificationHash = substr(hash('sha256', $attempt->id . $receipt . ($attempt->submitted_at?->timestamp ?? '')), 0, 16);
+        $verifyHost = parse_url(route('certificate.search'), PHP_URL_HOST) ?: request()->getHost();
     @endphp
     <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
     <style>
@@ -171,14 +186,14 @@
         :root {
             --cert-primary: {{ $certPrimaryColor }};
             --cert-accent: {{ $certAccentColor }};
-            --cert-accent-light: {{ $certAccentColor }}18;
+            --cert-accent-light: {{ $certAccentColor }}14;
             --cert-dark: #0f172a;
             --cert-body: #334155;
             --cert-muted: #64748b;
         }
 
         @page {
-            size: 297mm 210mm; /* Standar A4 Landscape */
+            size: 297mm 210mm;
             margin: 0;
         }
 
@@ -199,7 +214,6 @@
             align-items: center;
         }
 
-        /* Top Action Bar (Layar Browser) */
         .no-print {
             width: 297mm;
             max-width: 100%;
@@ -213,6 +227,7 @@
             align-items: center;
             font-size: 13px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            gap: 12px;
         }
 
         .btn-print {
@@ -230,11 +245,6 @@
             box-shadow: 0 2px 6px rgba(46, 51, 255, 0.35);
         }
 
-        .btn-print:hover {
-            background: #2024db;
-            transform: translateY(-1px);
-        }
-
         .btn-back {
             background: #f8fafc;
             color: #334155;
@@ -244,18 +254,11 @@
             border-radius: 6px;
             font-weight: 600;
             font-size: 12px;
-            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
-        .btn-back:hover {
-            background: #e2e8f0;
-            color: #0f172a;
-        }
-
-        /* Lembar Dokumen Sertifikat A4 Landscape Presisi */
         .cert-container {
             width: 297mm;
             height: 210mm;
@@ -267,25 +270,30 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 9mm;
+            padding: 8.5mm;
             @if($certBgUrl)
                 background-image: url('{{ $certBgUrl }}');
                 background-size: 100% 100%;
                 background-repeat: no-repeat;
                 background-position: center;
-                padding: 16mm 20mm;
+                padding: 15mm 19mm;
             @endif
         }
 
-        /* Bingkai Luar Arsitektural */
         .cert-frame-outer {
             width: 100%;
             height: 100%;
             position: relative;
-            box-sizing: border-box;
             @if($certBgUrl)
                 border: none;
                 padding: 0;
+            @elseif($certType === 'competency')
+                border: 4px solid var(--cert-primary);
+                border-top: 8px solid var(--cert-accent);
+                padding: 2mm;
+            @elseif($certType === 'language_proficiency')
+                border: 3px double var(--cert-primary);
+                padding: 2.5mm;
             @else
                 border: 3.5px solid var(--cert-primary);
                 padding: 2.5mm;
@@ -295,20 +303,26 @@
             justify-content: space-between;
         }
 
-        /* Bingkai Dalam Neoklasik Modern */
         .cert-frame-inner {
             width: 100%;
             height: 100%;
             position: relative;
-            box-sizing: border-box;
             @if($certBgUrl)
                 border: none;
                 background: transparent;
-                padding: 6mm 10mm;
+                padding: 5mm 10mm;
+            @elseif($certType === 'language_proficiency')
+                border: 1.5px solid var(--cert-accent);
+                background: radial-gradient(circle at top right, rgba(20, 187, 166, 0.06), transparent 45%), linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+                padding: 6mm 14mm 5mm 14mm;
+            @elseif($certType === 'competency')
+                border: 1px solid #cbd5e1;
+                background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                padding: 6mm 14mm 5mm 14mm;
             @else
                 border: 1px solid var(--cert-accent);
                 background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
-                padding: 7mm 16mm 6mm 16mm;
+                padding: 6mm 14mm 5mm 14mm;
             @endif
             display: flex;
             flex-direction: column;
@@ -316,29 +330,26 @@
             text-align: center;
         }
 
-        /* Sudut Geometris Modern (Minimalist Corner Brackets) */
         .cert-corner {
             position: absolute;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             pointer-events: none;
             z-index: 2;
         }
-
         .cert-corner-tl { top: -1px; left: -1px; }
         .cert-corner-tr { top: -1px; right: -1px; transform: scaleX(-1); }
         .cert-corner-bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
         .cert-corner-br { bottom: -1px; right: -1px; transform: scale(-1, -1); }
 
-        /* Watermark Logo Samar di Latar Tengah */
         .cert-watermark {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 290px;
-            height: 290px;
-            opacity: 0.04;
+            width: 280px;
+            height: 280px;
+            opacity: 0.045;
             pointer-events: none;
             z-index: 1;
             display: flex;
@@ -353,7 +364,6 @@
             filter: grayscale(100%);
         }
 
-        /* Lapisan Konten */
         .cert-content {
             position: relative;
             z-index: 3;
@@ -363,17 +373,15 @@
             justify-content: space-between;
         }
 
-        /* 1. HEADER */
         .cert-header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
         .cert-logo-wrap {
-            margin-bottom: 6px;
-            min-height: 48px;
+            margin-bottom: 5px;
+            min-height: 44px;
             max-height: 76px;
             display: flex;
             align-items: center;
@@ -389,13 +397,12 @@
         }
 
         .cert-inst-name {
-            font-size: 11pt;
+            font-size: 10.5pt;
             font-weight: 700;
             color: var(--cert-primary);
-            letter-spacing: 3.5px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             margin: 0;
-            font-family: system-ui, -apple-system, sans-serif;
         }
 
         .cert-header-line {
@@ -404,7 +411,7 @@
             justify-content: center;
             gap: 10px;
             width: 260px;
-            margin: 4px 0 3px 0;
+            margin: 3px 0 2px 0;
         }
 
         .cert-header-line .line {
@@ -420,10 +427,10 @@
         }
 
         .cert-title {
-            font-size: 25pt;
+            font-size: 22pt;
             font-weight: 800;
             color: var(--cert-primary);
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             margin: 2px 0 1px 0;
             font-family: 'Georgia', Times, serif;
@@ -431,19 +438,18 @@
         }
 
         .cert-subtitle {
-            font-size: 9.5pt;
+            font-size: 9pt;
             font-weight: 700;
             color: var(--cert-accent);
-            letter-spacing: 3px;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
-            margin: 0 0 5px 0;
-            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0 0 4px 0;
         }
 
         .cert-serial-line {
-            font-size: 8.5pt;
+            font-size: 8pt;
             color: var(--cert-muted);
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
             font-family: monospace, system-ui, sans-serif;
             display: inline-flex;
@@ -460,50 +466,48 @@
             font-weight: 700;
         }
 
-        /* 2. RECIPIENT & CITATION */
         .cert-recipient-section {
-            margin: 6px 0;
+            margin: 3px 0;
         }
 
         .cert-award-caption {
-            font-size: 11pt;
+            font-size: 10.5pt;
             font-style: italic;
             color: var(--cert-muted);
-            margin: 0 0 5px 0;
+            margin: 0 0 3px 0;
             font-family: 'Georgia', Times, serif;
         }
 
         .cert-student-name {
-            font-size: 26pt;
+            font-size: 23pt;
             font-weight: 700;
             color: var(--cert-dark);
             margin: 0;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             font-family: 'Georgia', Times, serif;
-            line-height: 1.2;
+            line-height: 1.15;
         }
 
         .cert-name-accent-line {
-            width: 170px;
+            width: 165px;
             height: 1.5px;
             background: var(--cert-accent);
-            margin: 5px auto 6px auto;
+            margin: 4px auto 4px auto;
         }
 
         .cert-student-id {
-            font-size: 9.5pt;
+            font-size: 9pt;
             color: var(--cert-muted);
             font-weight: 500;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
 
         .cert-statement {
-            font-size: 11pt;
-            line-height: 1.6;
+            font-size: 10pt;
+            line-height: 1.5;
             color: var(--cert-body);
             max-width: 820px;
-            margin: 0 auto;
+            margin: 0 auto 8px auto;
         }
 
         .cert-statement strong {
@@ -511,19 +515,17 @@
             font-weight: 700;
         }
 
-        /* 3. ACADEMIC CREDENTIALS GRID (Modern & Prestisius) */
+        /* Standard & Competency Summary Card */
         .cert-credentials-card {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #cbd5e1;
             border-top: 2.5px solid var(--cert-accent);
             border-radius: 6px;
-            padding: 7px 26px;
-            margin-top: 12px;
-            gap: 22px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            padding: 6px 22px;
+            gap: 18px;
         }
 
         .cert-cred-col {
@@ -534,9 +536,9 @@
         }
 
         .cert-cred-label {
-            font-size: 7.5pt;
+            font-size: 7pt;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.1px;
             text-transform: uppercase;
             color: var(--cert-muted);
             margin-bottom: 2px;
@@ -549,21 +551,98 @@
         }
 
         .cert-cred-status {
-            font-size: 9.5pt;
+            font-size: 9pt;
             font-weight: 800;
             color: #059669;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
         }
 
         .cert-cred-sep {
             width: 1px;
-            height: 28px;
+            height: 26px;
             background: #cbd5e1;
         }
 
-        /* 4. FOOTER (Security QR, Institutional Stamp, Real Signatures) */
+        /* Language Proficiency Section Breakdown Table */
+        .lang-score-wrap {
+            max-width: 700px;
+            margin: 0 auto;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .lang-score-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8.8pt;
+        }
+
+        .lang-score-table th {
+            background: var(--cert-primary);
+            color: #ffffff;
+            padding: 4px 10px;
+            font-size: 7.8pt;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .lang-score-table td {
+            padding: 4px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--cert-dark);
+        }
+
+        .lang-score-summary-bar {
+            background: #f0fdfa;
+            padding: 5px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9pt;
+            border-top: 1.5px solid var(--cert-accent);
+        }
+
+        /* Competency Seal Layout */
+        .competency-panel {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .competency-seal {
+            width: 78px;
+            height: 78px;
+            border-radius: 9999px;
+            border: 2.5px dashed var(--cert-accent);
+            background: rgba(46, 51, 255, 0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--cert-primary);
+        }
+
+        /* Metadata Info Strip: Tanggal Ujian, Tempat/Tanggal Terbit, Masa Berlaku */
+        .cert-schedule-strip {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 6px;
+            font-size: 7.8pt;
+            color: #475569;
+        }
+
+        /* Footer */
         .cert-footer-section {
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
         .cert-footer-row {
@@ -573,182 +652,145 @@
             padding: 0 4px;
         }
 
-        /* Left: Digital Security QR & Disclaimer Microtext */
         .cert-footer-left {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             text-align: left;
-            max-width: 290px;
+            max-width: 310px;
         }
 
         .cert-security-box {
             display: inline-flex;
             align-items: center;
-            gap: 11px;
+            gap: 10px;
             background: #ffffff;
             border: 1px solid #cbd5e1;
-            padding: 6px 12px 6px 7px;
+            padding: 5px 10px 5px 6px;
             border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-            width: fit-content;
         }
 
         .cert-qr-wrap {
             flex-shrink: 0;
-            width: 66px;
-            height: 66px;
+            width: 60px;
+            height: 60px;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
             padding: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .cert-qr-img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            display: block;
         }
 
         .cert-security-meta {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: left;
-            font-size: 7.2pt;
-            line-height: 1.35;
+            font-size: 7pt;
+            line-height: 1.3;
             color: var(--cert-muted);
         }
 
         .cert-security-title {
-            font-size: 8pt;
+            font-size: 7.5pt;
             font-weight: 700;
             color: var(--cert-primary);
-            letter-spacing: 0.8px;
+            letter-spacing: 0.7px;
             text-transform: uppercase;
-            margin-bottom: 2px;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        .cert-meta-item {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex;
-            gap: 4px;
-        }
-
-        .meta-label {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .meta-val {
-            color: var(--cert-dark);
-            font-weight: 600;
+            margin-bottom: 1px;
         }
 
         .cert-meta-url {
-            font-size: 7pt;
+            font-size: 6.8pt;
             color: var(--cert-primary);
             font-weight: 700;
-            margin-top: 2px;
-            letter-spacing: 0.3px;
+            margin-top: 1px;
         }
 
-        /* Microtext Footer Resmi di bawah Card QR Code */
         .cert-micro-footer {
-            font-size: 6.5pt;
-            color: #94a3b8;
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace, system-ui;
-            letter-spacing: 0.3px;
-            line-height: 1.35;
-            margin-top: 6px;
+            font-size: 6.2pt;
+            color: #64748b;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            margin-top: 4px;
             text-align: left;
-            max-width: 280px;
         }
 
-        /* Institutional Stamp Area (Tengah, Opsional) */
         .cert-stamp-area {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 90px;
+            min-width: 82px;
         }
 
         .cert-stamp-img {
-            max-height: 72px;
-            max-width: 110px;
+            max-height: 66px;
+            max-width: 96px;
             object-fit: contain;
             transform: rotate(-6deg);
             opacity: 0.88;
         }
 
-        /* Authorized Signatures Area (Pejabat 1 & Pejabat 2) */
         .cert-signers-group {
             display: flex;
-            align-items: flex-start;
-            gap: 56px;
+            align-items: flex-end;
+            gap: 36px;
         }
 
         .cert-signer-col {
-            width: 220px;
+            width: 215px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
+        .cert-signer-date-loc {
+            font-size: 7.8pt;
+            color: var(--cert-body);
+            margin-bottom: 1px;
+            font-weight: 600;
+        }
+
         .cert-signer-role {
-            font-size: 8.5pt;
+            font-size: 8pt;
             font-weight: 600;
             color: var(--cert-muted);
-            height: 20px;
-            line-height: 20px;
             margin-bottom: 2px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
+            letter-spacing: 0.4px;
         }
 
         .cert-signer-sig-box {
-            height: 52px;
+            height: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            margin: 3px 0;
+            margin: 2px 0;
             width: 100%;
         }
 
         .cert-signature-file {
-            max-height: 50px;
-            max-width: 160px;
+            max-height: 44px;
+            max-width: 145px;
             object-fit: contain;
         }
 
         .cert-signer-name {
             width: 100%;
-            font-size: 9.8pt;
+            font-size: 9.2pt;
             font-weight: 700;
             color: var(--cert-dark);
             border-top: 1.5px solid var(--cert-accent);
-            padding-top: 4px;
-            margin-top: 0;
-            white-space: nowrap;
-            line-height: 1.3;
+            padding-top: 3px;
+            line-height: 1.25;
         }
 
         .cert-signer-id {
-            font-size: 7.8pt;
+            font-size: 7.4pt;
             color: var(--cert-muted);
-            margin-top: 2px;
+            margin-top: 1px;
             font-family: monospace, system-ui, sans-serif;
-            white-space: nowrap;
         }
 
         .cert-viewport-wrapper,
@@ -778,7 +820,6 @@
             }
             .cert-viewport-wrapper,
             .doc-viewport-container {
-            box-sizing: border-box;
                 justify-content: flex-start;
             }
             .cert-container {
@@ -786,26 +827,21 @@
             }
         }
 
-        /* Optimasi Cetak (Print Stylesheet) */
         @media print {
             body {
                 background: none !important;
                 padding: 0 !important;
                 margin: 0 !important;
             }
-
             .no-print {
                 display: none !important;
             }
-
             .cert-viewport-wrapper,
             .doc-viewport-container {
-            box-sizing: border-box;
                 padding: 0 !important;
                 display: block !important;
                 overflow: visible !important;
             }
-
             .cert-container {
                 box-shadow: none !important;
                 margin: 0 !important;
@@ -819,15 +855,18 @@
 </head>
 <body>
 
-    <!-- ACTION BAR (Browser View Only) -->
     <div class="no-print">
         <div style="display: flex; align-items: center; gap: 12px;">
             <a href="{{ $backUrl }}" class="btn-back">&larr; {{ $backLabel }}</a>
             <div>
-                <strong style="color: #0f172a; font-size: 14px;">Sertifikat Kelulusan Resmi</strong>
+                <strong style="color: #0f172a; font-size: 14px;">{{ ucwords(strtolower($certTitle)) }}</strong>
                 <span style="display: block; font-size: 11px; color: #64748b;">
                     {{ $attempt->student->name }} &bull; {{ $attempt->exam->title }}
-                    @if($certBgUrl) &bull; <span style="color: #059669; font-weight: 700;">Menggunakan Desain Blangko A4 Institusi</span> @else &bull; <span style="color: #2563eb; font-weight: 600;">Desain Vektor Resmi Terpadu</span> @endif
+                    @if($certBgUrl)
+                        &bull; <span style="color: #059669; font-weight: 700;">Menggunakan Desain Blangko A4 Institusi</span>
+                    @else
+                        &bull; <span style="color: #2563eb; font-weight: 600;">Template {{ $certType === 'language_proficiency' ? 'Kecakapan Bahasa' : ($certType === 'competency' ? 'Kompetensi & Profesi' : 'Akademik Standar') }}</span>
+                    @endif
                 </span>
             </div>
         </div>
@@ -839,38 +878,30 @@
         </div>
     </div>
 
-    <!-- CERTIFICATE CANVAS A4 LANDSCAPE -->
     <div class="cert-viewport-wrapper doc-viewport-container">
     <div class="cert-container">
-
         <div class="cert-frame-outer">
-
             <div class="cert-frame-inner">
 
                 @if(! $certBgUrl)
-                    <!-- Sudut Geometris Minimalis Elegan (SVG Vector) -->
                     <svg class="cert-corner cert-corner-tl" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 0 H24 V2 H2 V24 H0 V0Z" fill="var(--cert-accent)"/>
                         <rect x="5" y="5" width="4" height="4" fill="var(--cert-accent)"/>
                     </svg>
-
                     <svg class="cert-corner cert-corner-tr" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 0 H24 V2 H2 V24 H0 V0Z" fill="var(--cert-accent)"/>
                         <rect x="5" y="5" width="4" height="4" fill="var(--cert-accent)"/>
                     </svg>
-
                     <svg class="cert-corner cert-corner-bl" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 0 H24 V2 H2 V24 H0 V0Z" fill="var(--cert-accent)"/>
                         <rect x="5" y="5" width="4" height="4" fill="var(--cert-accent)"/>
                     </svg>
-
                     <svg class="cert-corner cert-corner-br" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 0 H24 V2 H2 V24 H0 V0Z" fill="var(--cert-accent)"/>
                         <rect x="5" y="5" width="4" height="4" fill="var(--cert-accent)"/>
                     </svg>
                 @endif
 
-                <!-- Watermark Logo Samar di Latar Tengah -->
                 @if($certShowWatermark && $logoUrl)
                     <div class="cert-watermark">
                         <img src="{{ $logoUrl }}" alt="Watermark Institusi">
@@ -893,7 +924,7 @@
 
                         <div class="cert-header-line">
                             <span class="line"></span>
-                            <span class="emblem">❖</span>
+                            <span class="emblem">&diams;</span>
                             <span class="line"></span>
                         </div>
 
@@ -905,55 +936,128 @@
                         </div>
                     </div>
 
-                    <!-- 2. RECIPIENT & CITATION SECTION -->
+                    <!-- 2. RECIPIENT & CREDENTIAL SECTION (Menyesuaikan Template Type) -->
                     <div class="cert-recipient-section">
                         <p class="cert-award-caption">Diberikan secara terhormat kepada:</p>
-                        
+
                         <div class="cert-student-name">{{ $attempt->student->name }}</div>
                         <div class="cert-name-accent-line"></div>
-                        
+
                         <div class="cert-student-id">
-                            Nomor Induk Siswa / NIM: <strong>{{ $attempt->student->identity_number ?? $attempt->student->username }}</strong>
+                            Nomor Induk / ID Peserta: <strong>{{ $attempt->student->identity_number ?? $attempt->student->username }}</strong>
                         </div>
 
                         <div class="cert-statement">
                             {!! $parsedStatement !!}
                         </div>
 
-                        <!-- 3. ACADEMIC CREDENTIALS GRID -->
                         @if($certShowScore)
-                            <div>
+                            @if($certType === 'language_proficiency')
+                                <!-- Template Bahasa: Rincian Seksi (Listening, Structure, Reading) + Total Scaled Score + CEFR -->
+                                <div class="lang-score-wrap">
+                                    @if(! empty($sectionScores))
+                                        <table class="lang-score-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Komponen Kemahiran Bahasa (Section)</th>
+                                                    <th style="text-align: center;">Butir Benar</th>
+                                                    <th style="text-align: right;">Skor Seksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($sectionScores as $sec)
+                                                    <tr>
+                                                        <td style="text-align: left; font-weight: 600;">{{ $sec['label'] }}</td>
+                                                        <td style="text-align: center; font-family: monospace;">{{ $sec['correct_count'] }} / {{ $sec['total_questions'] }}</td>
+                                                        <td style="text-align: right; font-weight: 800; color: var(--cert-primary); font-family: monospace;">{{ $sec['formatted_score'] }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    @endif
+                                    <div class="lang-score-summary-bar">
+                                        <div>
+                                            <span style="color: #475569; font-weight: 600;">Skala:</span>
+                                            <strong style="color: var(--cert-primary);">{{ $scaleLabel }}</strong>
+                                            <span style="margin: 0 6px; color: #94a3b8;">&bull;</span>
+                                            <span style="color: #475569; font-weight: 600;">CEFR:</span>
+                                            <strong>{{ $cefrLevel }}</strong>
+                                        </div>
+                                        <div>
+                                            <span style="color: #475569; font-weight: 600; margin-right: 6px;">SKOR TOTAL:</span>
+                                            <strong style="font-size: 13pt; color: var(--cert-primary); font-family: monospace;">{{ $formattedFinalScore }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif($certType === 'competency')
+                                <!-- Template Kompetensi & Profesi: Credential + Competency Seal -->
+                                <div class="competency-panel">
+                                    <div class="competency-seal">
+                                        <span style="font-size: 6.5pt; font-weight: 800; letter-spacing: 0.8px;">STATUS</span>
+                                        <span style="font-size: 8.5pt; font-weight: 900; color: #059669;">KOMPETEN</span>
+                                    </div>
+                                    <div class="cert-credentials-card" style="flex: 1;">
+                                        <div class="cert-cred-col">
+                                            <div class="cert-cred-label">Skema / Bidang Uji</div>
+                                            <div class="cert-cred-value" style="font-size: 9.8pt;">{{ $subjectName }}</div>
+                                        </div>
+                                        <div class="cert-cred-sep"></div>
+                                        <div class="cert-cred-col">
+                                            <div class="cert-cred-label">Skor Capaian</div>
+                                            <div class="cert-cred-value" style="color: var(--cert-accent);">{{ $formattedFinalScore }}</div>
+                                        </div>
+                                        <div class="cert-cred-sep"></div>
+                                        <div class="cert-cred-col">
+                                            <div class="cert-cred-label">Kualifikasi</div>
+                                            <div class="cert-cred-status">{{ $letterGrade }} ({{ $gradePredicate }})</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <!-- Template Akademik Standar -->
                                 <div class="cert-credentials-card">
                                     <div class="cert-cred-col">
                                         <div class="cert-cred-label">Nilai Akhir</div>
-                                        <div class="cert-cred-value">{{ number_format($attempt->total_score ?? 0, 1) }}</div>
+                                        <div class="cert-cred-value">{{ $formattedFinalScore }}</div>
                                     </div>
                                     <div class="cert-cred-sep"></div>
                                     <div class="cert-cred-col">
                                         <div class="cert-cred-label">Predikat Kelulusan</div>
-                                        <div class="cert-cred-value">PREDIKAT: {{ $letterGrade }} ({{ $gradePredicate }})</div>
+                                        <div class="cert-cred-value" style="font-size: 11.5pt;">PREDIKAT: {{ $letterGrade }} ({{ $gradePredicate }})</div>
                                     </div>
                                     <div class="cert-cred-sep"></div>
                                     <div class="cert-cred-col">
                                         <div class="cert-cred-label">Status Kualifikasi</div>
                                         <div class="cert-cred-status">
-                                            @if($attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification()))
-                                                TERSERTIFIKASI / SELESAI
-                                            @else
-                                                LULUS (MEMENUHI KKM)
-                                            @endif
+                                            {{ $requiresKkm ? ($isPassed ? 'LULUS (MEMENUHI KKM)' : 'BELUM TUNTAS') : 'TERSERTIFIKASI / SELESAI' }}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
+
+                        <!-- Metadata Pelaksanaan Ujian, Penerbitan, dan Masa Berlaku -->
+                        <div class="cert-schedule-strip">
+                            <span>Tanggal Pelaksanaan Ujian: <strong>{{ $examTakenAt->translatedFormat('d F Y') }}</strong></span>
+                            <span>&bull;</span>
+                            <span>
+                                Masa Berlaku:
+                                @if($expiresAt)
+                                    <strong style="color: {{ $isExpired ? '#dc2626' : '#0f172a' }};">
+                                        Berlaku hingga {{ $expiresAt->translatedFormat('d F Y') }}
+                                    </strong>
+                                @else
+                                    <strong>Berlaku Seumur Hidup</strong>
+                                @endif
+                            </span>
+                        </div>
                     </div>
 
                     <!-- 4. FOOTER SECTION -->
                     <div class="cert-footer-section">
                         <div class="cert-footer-row">
-                            
-                            <!-- Left: Digital Security Verification Box & Microtext Disclaimer Underneath -->
+
+                            <!-- Left: Digital Verification QR -->
                             <div class="cert-footer-left">
                                 <div class="cert-security-box">
                                     <div class="cert-qr-wrap">
@@ -961,42 +1065,45 @@
                                     </div>
                                     <div class="cert-security-meta">
                                         <div class="cert-security-title">VERIFIKASI DIGITAL SAH</div>
-                                        <div class="cert-meta-item"><span class="meta-label">Resi:</span> <span class="meta-val font-mono">{{ $attempt->submission_receipt ?? '-' }}</span></div>
-                                        <div class="cert-meta-item"><span class="meta-label">Tanggal:</span> <span class="meta-val">{{ now()->translatedFormat('d F Y') }}</span></div>
-                                        <div class="cert-meta-item"><span class="meta-label">Hash:</span> <span class="meta-val font-mono">{{ $verificationHash }}</span></div>
-                                        <div class="cert-meta-url">sertifikat.tesloka.test</div>
+                                        <div>Resi: <strong style="color: #0f172a; font-family: monospace;">{{ $attempt->submission_receipt ?? '-' }}</strong></div>
+                                        <div>Terbit: <strong style="color: #0f172a;">{{ $issuanceCity !== '' ? $issuanceCity . ', ' : '' }}{{ $issuedAt->translatedFormat('d F Y') }}</strong></div>
+                                        <div>Hash: <span style="font-family: monospace;">{{ $verificationHash }}</span></div>
+                                        <div class="cert-meta-url">{{ $verifyHost }}</div>
                                     </div>
                                 </div>
 
-                                <!-- Microtext Footer Resmi (Di bawah Card QR Code sebelah kiri) -->
                                 <div class="cert-micro-footer">
                                     DOKUMEN INI ADALAH SERTIFIKAT ELEKTRONIK SAH YANG DITERBITKAN OLEH {{ strtoupper($instName) }}
                                 </div>
                             </div>
 
-                            <!-- Center: Stempel Institusi Resmi (Jika Ada) -->
+                            <!-- Center: Stamp -->
                             <div class="cert-stamp-area">
                                 @if($certStampUrl)
                                     <img src="{{ $certStampUrl }}" alt="Cap Stempel Resmi" class="cert-stamp-img">
                                 @endif
                             </div>
 
-                            <!-- Right: Authorized Signatures -->
+                            <!-- Right: 1 or 2 Signers -->
                             <div class="cert-signers-group">
                                 @if($certDualSignatures)
                                     <div class="cert-signer-col">
-                                        <div class="cert-signer-role">{{ $certSignerSecondaryTitle }}</div>
+                                        <div class="cert-signer-date-loc">Mengetahui,</div>
+                                        <div class="cert-signer-role">{{ $certSignerSecondaryTitle ?: 'Ketua Tim Penguji' }}</div>
                                         <div class="cert-signer-sig-box">
                                             @if($certSignerSecondarySigUrl)
                                                 <img src="{{ $certSignerSecondarySigUrl }}" alt="Tanda Tangan Pejabat Kedua" class="cert-signature-file">
                                             @endif
                                         </div>
                                         <div class="cert-signer-name">{{ $certSignerSecondaryName }}</div>
-                                        <div class="cert-signer-id">NIP. {{ $certSignerSecondaryNip }}</div>
+                                        @if(trim($certSignerSecondaryNip) !== '')
+                                            <div class="cert-signer-id">NIP. {{ $certSignerSecondaryNip }}</div>
+                                        @endif
                                     </div>
                                 @endif
 
                                 <div class="cert-signer-col">
+                                    <div class="cert-signer-date-loc">{{ $issuanceCity !== '' ? $issuanceCity . ', ' : '' }}{{ $issuedAt->translatedFormat('d F Y') }}</div>
                                     <div class="cert-signer-role">{{ $certSignerTitle }}</div>
                                     <div class="cert-signer-sig-box">
                                         @if($certSignerSigUrl)
@@ -1004,7 +1111,9 @@
                                         @endif
                                     </div>
                                     <div class="cert-signer-name">{{ $certSignerName }}</div>
-                                    <div class="cert-signer-id">NIP. {{ $certSignerNip }}</div>
+                                    @if(trim($certSignerNip) !== '')
+                                        <div class="cert-signer-id">NIP. {{ $certSignerNip }}</div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -1012,11 +1121,8 @@
                     </div>
 
                 </div>
-
             </div>
-
         </div>
-
     </div>
     </div>
 

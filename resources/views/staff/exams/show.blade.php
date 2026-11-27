@@ -204,8 +204,18 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Widget 1: Cetak Biru (Blueprint) Kisi-Kisi Soal -->
         <x-cbt.card flush title="Cetak Biru (Blueprint) Kisi-Kisi Soal">
-            <div class="p-4 sm:px-6 border-b border-default-200/80 bg-white">
-                <p class="text-xs text-default-500 {{ in_array($exam->status, ['draft', 'pending_approval']) ? 'mb-4' : '' }}">Tentukan distribusi jumlah butir soal yang ditarik dari bank soal terkait.</p>
+            <div class="p-4 sm:px-6 border-b border-default-200/80 bg-white space-y-3">
+                <div class="p-3 rounded-lg bg-sky-50/80 border border-sky-200/80 text-xs text-sky-900 space-y-1">
+                    <div class="font-bold flex items-center justify-between gap-2 flex-wrap">
+                        <span>Apa fungsi Cetak Biru (Blueprint)?</span>
+                        <span class="px-2 py-0.5 rounded-full bg-white border border-sky-200 font-mono text-[11px] font-bold text-primary">
+                            Total Soal Ditarik: {{ $totalBlueprintQuestions ?? $exam->blueprints->sum('total_questions') }} Butir
+                        </span>
+                    </div>
+                    <p class="text-[11px] text-sky-800 leading-relaxed">
+                        Blueprint menentukan resep komposisi soal ujian (dari bank soal mana, jumlah butir, tingkat kesulitan, dan seksi bahasa apa saja seperti Listening/Structure/Reading). Setiap aturan dapat menarik hingga <strong>500 butir soal</strong>, dan Anda bisa menambahkan beberapa aturan sekaligus (misal 50 Listening + 40 Structure + 50 Reading = 140 soal TOEFL).
+                    </p>
+                </div>
 
                 @if(in_array($exam->status, ['draft', 'pending_approval']))
                     <form action="{{ route('staff.exams.blueprints.store', $exam) }}" method="POST" class="p-3.5 bg-default-50/80 border border-default-200/90 rounded-xl space-y-3">
@@ -217,13 +227,13 @@
                                 <select name="question_bank_id" class="form-select w-full text-xs h-10 rounded-lg border-default-200/90 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
                                     <option value="">-- Pilih Bank Soal --</option>
                                     @foreach($questionBanks as $bank)
-                                        <option value="{{ $bank->id }}">{{ $bank->name }} ({{ $bank->code }})</option>
+                                        <option value="{{ $bank->id }}">{{ $bank->name }} ({{ $bank->code }} - {{ $bank->questions_count ?? 0 }} soal aktif)</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Target Jumlah Butir *</label>
-                                <input type="number" min="1" max="100" name="total_questions" value="10" class="form-input w-full text-xs h-10 rounded-lg border-default-200/90 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
+                                <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Target Jumlah Butir (Maks. 500) *</label>
+                                <input type="number" min="1" max="500" name="total_questions" value="10" class="form-input w-full text-xs h-10 rounded-lg border-default-200/90 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary" required>
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Filter Kesulitan</label>
@@ -234,10 +244,19 @@
                                     <option value="hard">Hanya Sukar</option>
                                 </select>
                             </div>
-                            <div class="flex items-end">
-                                <button type="submit" class="btn btn-sm w-full h-10 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 shadow-2xs transition">
+                            <div>
+                                <label class="block text-[11px] font-bold text-default-600 uppercase tracking-wider mb-1.5">Filter Seksi Bahasa</label>
+                                <select name="section_category" class="form-select w-full text-xs h-10 rounded-lg border-default-200/90 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                    <option value="">Semua Seksi / Umum</option>
+                                    @foreach(\App\Services\ScoreScaleService::questionSectionOptions() as $secKey => $secLabel)
+                                        <option value="{{ $secKey }}">{{ $secLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="md:col-span-2 flex justify-end">
+                                <button type="submit" class="btn btn-sm w-full sm:w-auto px-5 h-10 bg-primary hover:bg-primary-hover text-white font-semibold text-xs rounded-lg inline-flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer">
                                     <i data-lucide="plus" class="size-4"></i>
-                                    Tambah Aturan
+                                    Tambah Aturan Blueprint
                                 </button>
                             </div>
                         </div>
@@ -246,12 +265,13 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full min-w-[500px] divide-y divide-default-200/80 text-left text-xs text-default-600">
+                <table class="w-full min-w-[540px] divide-y divide-default-200/80 text-left text-xs text-default-600">
                     <thead class="bg-default-100 border-b border-default-200 text-xs font-semibold text-default-700">
                         <tr>
                             <th class="ps-4 sm:ps-6 pe-3 py-3 whitespace-nowrap">Bank Soal</th>
                             <th class="px-3 py-3 text-center whitespace-nowrap">Jumlah</th>
                             <th class="px-3 py-3 text-center whitespace-nowrap">Tingkat</th>
+                            <th class="px-3 py-3 text-center whitespace-nowrap">Seksi</th>
                             <th class="ps-3 pe-4 sm:pe-6 py-3 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
@@ -270,6 +290,11 @@
                                         {{ $bp->difficulty ?: 'Semua' }}
                                     </span>
                                 </td>
+                                <td class="px-3 py-3.5 text-center whitespace-nowrap">
+                                    <span class="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-[10px] font-semibold">
+                                        {{ $bp->section_category ? (\App\Services\ScoreScaleService::questionSectionOptions()[$bp->section_category] ?? $bp->section_category) : 'Semua' }}
+                                    </span>
+                                </td>
                                 <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-right whitespace-nowrap">
                                     @if(in_array($exam->status, ['draft', 'pending_approval']))
                                         <form action="{{ route('staff.exams.blueprints.destroy', $bp) }}" method="POST" class="inline" onsubmit="return confirm('Hapus aturan blueprint ini?')">
@@ -286,7 +311,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="p-0">
+                                <td colspan="5" class="p-0">
                                     <x-cbt.empty-state :bordered="false" title="Belum Ada Blueprint" message="Belum ada aturan cetak biru kisi-kisi." />
                                 </td>
                             </tr>
@@ -298,7 +323,12 @@
 
         <!-- Widget 2: Varian Paket Soal Snapshot Terisolasi -->
         <x-cbt.card title="Paket Soal Snapshot Terisolasi">
-            <p class="text-xs text-default-500 mb-4">Setiap paket menyimpan snapshot butir soal permanen yang tidak terpengaruh perubahan di bank soal.</p>
+            <div class="p-3 rounded-lg bg-purple-50/70 border border-purple-200/70 text-xs text-purple-900 space-y-1 mb-4">
+                <strong class="block">Mengapa menggunakan Paket Soal Snapshot?</strong>
+                <p class="text-[11px] text-purple-800 leading-relaxed">
+                    Tombol ini membekukan salinan soal dari Blueprint menjadi paket ujian permanen (Paket A, B, C, dst.). Jika di masa depan guru mengedit atau menghapus soal di Bank Soal, soal dan skor peserta pada ujian ini tetap aman terisolasi tidak berubah. Varian paket berbeda juga mengacak urutan soal dan opsi agar peserta berdekatan tidak mendapat urutan yang sama.
+                </p>
+            </div>
 
             @if(in_array($exam->status, ['draft', 'pending_approval']))
                 <form action="{{ route('staff.exams.generate-packages', $exam) }}" method="POST" class="p-3.5 bg-purple-50/70 border border-purple-200/80 rounded mb-4 space-y-3">

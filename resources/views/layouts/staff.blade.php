@@ -131,6 +131,18 @@
                                     <span class="menu-text">Sesi &amp; Penjadwalan</span>
                                 </a>
                             </li>
+                            @if(auth('staff')->user()->hasRole(['admin', 'super_admin', 'institution_admin', 'exam_coordinator', 'academic_operator']))
+                                @php $pendingPaymentsCount = \App\Models\ExamPayment::where('status', 'pending')->count(); @endphp
+                                <li class="menu-item">
+                                    <a href="{{ route('staff.payments.index') }}" class="menu-link {{ request()->routeIs('staff.payments.*') ? 'active !bg-primary !text-white' : '' }}">
+                                        <span class="menu-icon"><i data-lucide="credit-card" class="size-4.5"></i></span>
+                                        <span class="menu-text flex-1">Pembayaran &amp; Rekening</span>
+                                        @if($pendingPaymentsCount > 0)
+                                            <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500 text-white">{{ $pendingPaymentsCount }}</span>
+                                        @endif
+                                    </a>
+                                </li>
+                            @endif
                         @endif
 
                         <!-- 5. EVALUASI & KELULUSAN -->

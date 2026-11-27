@@ -19,33 +19,38 @@
         $docLetterheadPath = \App\Models\SystemSetting::get('branding.doc_letterhead_image');
         $docLetterheadUrl = $docLetterheadPath ? '/storage/' . ltrim((string) $docLetterheadPath, '/') : null;
 
-        // Pejabat Utama (Kanan)
-        $signerName = \App\Models\SystemSetting::get('branding.cert_signer_name', 'Dr. H. Muhammad Zainuddin, M.Pd.');
-        $signerTitle = \App\Models\SystemSetting::get('branding.cert_signer_title', 'Direktur / Kepala Akademik');
-        $signerNip = \App\Models\SystemSetting::get('branding.cert_signer_nip', '19690815 199403 1 001');
-        $signerSigPath = \App\Models\SystemSetting::get('branding.cert_signer_signature');
-        $signerSigUrl = $signerSigPath ? '/storage/' . ltrim((string) $signerSigPath, '/') : null;
+        $docService = app(\App\Services\DocumentConfigService::class);
+        $doc = $docService->getSettings($institution);
+        $tzAbbr = \App\Services\DocumentConfigService::timezoneAbbreviation();
 
-        // Pejabat Kedua (Kiri)
-        $signer2Name = \App\Models\SystemSetting::get('branding.cert_signer_secondary_name', 'Drs. H. M. Syatibi, M.Ag.');
-        $signer2Title = \App\Models\SystemSetting::get('branding.cert_signer_secondary_title', 'Ketua Tim Penguji CBT');
-        $signer2Nip = \App\Models\SystemSetting::get('branding.cert_signer_secondary_nip', '19780512 200312 1 002');
-        $signer2SigPath = \App\Models\SystemSetting::get('branding.cert_signer_secondary_signature');
-        $signer2SigUrl = $signer2SigPath ? '/storage/' . ltrim((string) $signer2SigPath, '/') : null;
+        // Pejabat Penandatangan
+        $signerName = $doc['primary_name'] !== '' ? $doc['primary_name'] : 'Dr. H. Muhammad Zainuddin, M.Pd.';
+        $signerTitle = $doc['primary_title'] !== '' ? $doc['primary_title'] : 'Direktur / Kepala Akademik';
+        $signerNip = $doc['primary_nip'];
+        $signerSigUrl = $doc['primary_signature_url'];
 
-        // Cap Stempel Resmi Institusi
-        $stampPath = \App\Models\SystemSetting::get('branding.cert_stamp');
-        $stampUrl = $stampPath ? '/storage/' . ltrim((string) $stampPath, '/') : null;
+        $signer2Name = $doc['secondary_name'];
+        $signer2Title = $doc['secondary_title'];
+        $signer2Nip = $doc['secondary_nip'];
+        $signer2SigUrl = $doc['secondary_signature_url'];
 
-        // Mode Tanda Tangan Ganda
-        $dualSignatures = (bool) \App\Models\SystemSetting::get('branding.cert_dual_signatures', true);
+        $stampUrl = $doc['stamp_url'];
+        $dualSignatures = (bool) ($doc['dual_signatures'] ?? true) && trim($signer2Name) !== '';
 
         // Nilai & Rincian Skor
         $breakdown = $breakdown ?? ($attempt->getScoreBreakdown() ?? [
             'mc_score' => (float) ($attempt->total_score ?? 0),
             'essay_score' => 0.0,
             'total_score' => (float) ($attempt->total_score ?? 0),
+            'scaled_score' => (float) ($attempt->total_score ?? 0),
+            'formatted_score' => $attempt->getFormattedFinalScore(),
+            'sections' => [],
         ]);
+        $formattedFinalScore = $attempt->getFormattedFinalScore();
+        $sectionScores = $attempt->getSectionScores();
+        $examTakenAt = $attempt->started_at ?? $attempt->submitted_at ?? $attempt->created_at ?? now();
+        $issuedAt = $attempt->getCertificateIssuedAt();
+        $expiresAt = $attempt->getCertificateExpiresAt();
         $letterGrade = $letterGrade ?? ($attempt->getLetterGrade() ?? 'A');
         $gradePredicate = $gradePredicate ?? ($attempt->getGradePredicate() ?? 'Sangat Memuaskan');
         $isPassed = $isPassed ?? ($attempt->isPassed() ?? true);
@@ -54,13 +59,11 @@
         $backUrl = $backUrl ?? ($isStaff ? route('staff.graduation.index') : route('student.dashboard'));
         $backLabel = $backLabel ?? ($isStaff ? 'Kembali ke Hasil & Kelulusan' : 'Kembali ke Beranda');
 
-        $docService = app(\App\Services\DocumentConfigService::class);
-        $doc = $docService->getSettings($institution);
         $transcriptNumber = $docService->formatNumber('transcript', [
             'exam_code' => $attempt->exam->code ?? 'EXAM',
             'attempt_id' => $attempt->id,
             'seq' => $attempt->id,
-            'date' => $attempt->submitted_at ?? now(),
+            'date' => $issuedAt,
         ], $institution);
 
         $receipt = $attempt->submission_receipt ?? 'RCP-' . str_pad($attempt->id, 6, '0', STR_PAD_LEFT);
@@ -479,9 +482,19 @@
                     <td class="value">{{ $attempt->exam->title }} (Kode: {{ $attempt->exam->code }})</td>
                 </tr>
                 <tr>
+                    <td class="label">Tanggal Pelaksanaan Ujian</td>
+                    <td class="separator">:</td>
+                    <td class="value">{{ $examTakenAt->translatedFormat('d F Y') }}</td>
+                </tr>
+                <tr>
                     <td class="label">Waktu Pengumpulan Sah</td>
                     <td class="separator">:</td>
-                    <td class="value">{{ $attempt->submitted_at?->translatedFormat('d F Y, H:i:s') ?? now()->translatedFormat('d F Y') }} WIB</td>
+                    <td class="value">{{ $attempt->submitted_at?->translatedFormat('d F Y, H:i:s') ?? $issuedAt->translatedFormat('d F Y') }} {{ $tzAbbr }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Masa Berlaku Dokumen</td>
+                    <td class="separator">:</td>
+                    <td class="value">{{ $expiresAt ? 'Berlaku hingga ' . $expiresAt->translatedFormat('d F Y') : 'Berlaku Seumur Hidup' }}</td>
                 </tr>
                 <tr>
                     <td class="label">Nomor Resi / Bukti Penyerahan Sah</td>
@@ -498,7 +511,7 @@
                         <th style="width: 8%;">No.</th>
                         <th style="width: 44%;">Komponen Penilaian</th>
                         <th style="width: 24%;">Skor Perolehan</th>
-                        <th style="width: 24%;">Bobot Maksimal</th>
+                        <th style="width: 24%;">Skala / Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -506,7 +519,7 @@
                         <td style="text-align: center;">1.</td>
                         <td>Butir Soal Objektif (Pilihan Ganda / Menjodohkan)</td>
                         <td style="text-align: center; font-weight: bold;">{{ number_format($breakdown['mc_score'], 1) }}</td>
-                        <td style="text-align: center;">100.0</td>
+                        <td style="text-align: center;">Skor Mentah</td>
                     </tr>
                     <tr>
                         <td style="text-align: center;">2.</td>
@@ -514,19 +527,27 @@
                         <td style="text-align: center; font-weight: bold;">{{ number_format($breakdown['essay_score'], 1) }}</td>
                         <td style="text-align: center;">-</td>
                     </tr>
+                    @foreach($sectionScores as $secIdx => $sec)
+                        <tr>
+                            <td style="text-align: center;">{{ $secIdx + 3 }}.</td>
+                            <td>Seksi Bahasa: <strong>{{ $sec['label'] }}</strong> ({{ $sec['correct_count'] }}/{{ $sec['total_questions'] }} benar)</td>
+                            <td style="text-align: center; font-weight: bold;">{{ $sec['formatted_score'] }}</td>
+                            <td style="text-align: center;">Sub-Seksi Terskala</td>
+                        </tr>
+                    @endforeach
                     <tr style="background-color: #f1f5f9; font-weight: bold;">
                         <td colspan="2" style="text-align: right; padding-right: 14px;">TOTAL NILAI AKHIR:</td>
                         <td style="text-align: center; font-size: 11.5pt; color: #2e33ff;">
-                            {{ number_format($breakdown['total_score'], 1) }}
+                            {{ $formattedFinalScore }}
                         </td>
-                        <td style="text-align: center;">100.0</td>
+                        <td style="text-align: center;">{{ \App\Services\ScoreScaleService::scoreScaleLabel($attempt->exam->score_scale ?? 'standard_100') }}</td>
                     </tr>
                     @php
-                        $isCert = $attempt->exam && (!($attempt->exam->has_passing_grade ?? true) || $attempt->exam->isCertification());
+                        $requiresKkm = $attempt->exam?->requiresPassingGrade() ?? true;
                     @endphp
                     <tr>
                         <td colspan="2" style="text-align: right; padding-right: 14px;">Kriteria Ketuntasan Minimal (KKM):</td>
-                        <td colspan="2" style="text-align: center; font-weight: bold;">{{ $isCert ? 'Tanpa KKM (Sertifikasi)' : number_format($attempt->exam->passing_grade ?? 75.0, 1) }}</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">{{ ! $requiresKkm ? 'Tanpa KKM (Sertifikasi)' : number_format((float) ($attempt->exam->passing_grade ?? 75.0), 1) }}</td>
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: right; padding-right: 14px;">Predikat Huruf &amp; Sebutan:</td>
@@ -534,12 +555,12 @@
                             {{ $letterGrade }} ({{ $gradePredicate }})
                         </td>
                     </tr>
-                    <tr style="background-color: {{ ($isCert || $isPassed) ? '#f0fdf4' : '#fef2f2' }};">
+                    <tr style="background-color: {{ $isPassed ? '#f0fdf4' : '#fef2f2' }};">
                         <td colspan="2" style="text-align: right; padding-right: 14px; font-weight: bold;">
-                            {{ $isCert ? 'STATUS EVALUASI / CAPAIAN:' : 'STATUS KELULUSAN / KETUNTASAN:' }}
+                            {{ ! $requiresKkm ? 'STATUS EVALUASI / CAPAIAN:' : 'STATUS KELULUSAN / KETUNTASAN:' }}
                         </td>
-                        <td colspan="2" style="text-align: center; font-weight: bold; font-size: 10.5pt; color: {{ ($isCert || $isPassed) ? '#166534' : '#991b1b' }};">
-                            {{ $isCert ? 'TERSERTIFIKASI / SELESAI' : ($isPassed ? 'LULUS (MEMENUHI KKM)' : 'BELUM TUNTAS (REMEDIAL)') }}
+                        <td colspan="2" style="text-align: center; font-weight: bold; font-size: 10.5pt; color: {{ $isPassed ? '#166534' : '#991b1b' }};">
+                            {{ ! $requiresKkm ? 'TERSERTIFIKASI / SELESAI' : ($isPassed ? 'LULUS (MEMENUHI KKM)' : 'BELUM TUNTAS (REMEDIAL)') }}
                         </td>
                     </tr>
                 </tbody>
@@ -579,7 +600,7 @@
                     @if($doc['city'] !== '')
                         <div>Ditetapkan di: {{ $doc['city'] }}</div>
                     @endif
-                    <div>Pada tanggal: {{ now()->translatedFormat('d F Y') }}</div>
+                    <div>Pada tanggal: {{ $issuedAt->translatedFormat('d F Y') }}</div>
                     <div>{{ $signerTitle }}</div>
                     <div class="stamp-overlay-wrap">
                         @if($stampUrl)

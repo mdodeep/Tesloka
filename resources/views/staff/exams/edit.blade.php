@@ -136,11 +136,41 @@
                             </div>
                         </div>
 
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @php
+                                $curDecimals = old('score_decimal_places', $exam->score_decimal_places);
+                            @endphp
+                            <div>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Format Pembulatan Nilai Akhir</label>
+                                <select name="score_decimal_places" id="select-score-decimals" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                    <option value="" {{ $curDecimals === null || $curDecimals === '' ? 'selected' : '' }}>Otomatis (Bilangan Bulat u/ Bahasa, 1 Desimal u/ Standar)</option>
+                                    <option value="0" {{ (string) $curDecimals === '0' ? 'selected' : '' }}>Bilangan Bulat (Tanpa Koma, cth: 550)</option>
+                                    <option value="1" {{ (string) $curDecimals === '1' ? 'selected' : '' }}>1 Angka Desimal (cth: 85.5)</option>
+                                    <option value="2" {{ (string) $curDecimals === '2' ? 'selected' : '' }}>2 Angka Desimal (cth: 85.75)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Masa Berlaku Sertifikat (Bulan)</label>
+                                <div class="flex gap-2">
+                                    <select id="preset-cert-validity" class="form-select flex-1 h-10 text-xs rounded border-default-200 bg-white">
+                                        <option value="">Pilih Cepat...</option>
+                                        <option value="0">Seumur Hidup / Permanen</option>
+                                        <option value="6">6 Bulan</option>
+                                        <option value="12">1 Tahun (12 Bulan)</option>
+                                        <option value="24">2 Tahun (24 Bulan - Standar TOEFL/IELTS)</option>
+                                        <option value="36">3 Tahun (36 Bulan - Standar Profesi)</option>
+                                    </select>
+                                    <input type="number" min="0" max="120" name="certificate_validity_months" id="input-cert-validity" value="{{ old('certificate_validity_months', $exam->certificate_validity_months ?? 0) }}" class="form-input w-24 h-10 text-xs rounded border-default-200 bg-white font-mono text-center" placeholder="Bln">
+                                </div>
+                                <p class="text-[11px] text-default-400 mt-1">Isi <code>0</code> bila sertifikat berlaku seumur hidup.</p>
+                            </div>
+                        </div>
+
                         <div class="p-3.5 rounded-lg border border-default-200 bg-default-50/60 space-y-3">
                             <label class="flex items-center justify-between cursor-pointer">
                                 <div>
                                     <span class="text-xs font-bold text-default-800 block">Terapkan Nilai Batas Kelulusan (KKM)</span>
-                                    <p class="text-[11px] text-default-500">Nonaktifkan untuk sertifikasi bahasa (TOEFL/EPT/ITP) di mana seluruh peserta memperoleh skor tanpa status Remedial.</p>
+                                    <p class="text-[11px] text-default-500">Mendukung KKM di atas 100 (misal 500 untuk syarat kelulusan TOEFL ITP universitas) atau nonaktifkan jika tanpa ambang batas.</p>
                                 </div>
                                 <input type="hidden" name="has_passing_grade" value="0">
                                 <input type="checkbox" name="has_passing_grade" id="toggle-has-passing-grade" value="1" {{ filter_var(old('has_passing_grade', $exam->has_passing_grade ?? true), FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }} class="form-switch">
@@ -148,7 +178,8 @@
 
                             <div id="container-passing-grade" class="pt-3 border-t border-default-200">
                                 <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Nilai Batas Kelulusan (KKM) *</label>
-                                <input type="number" step="0.1" min="0" max="100" name="passing_grade" id="input-passing-grade" value="{{ old('passing_grade', $exam->passing_grade) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <input type="number" step="0.01" min="0" max="10000" name="passing_grade" id="input-passing-grade" value="{{ old('passing_grade', $exam->passing_grade) }}" class="form-input w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-mono">
+                                <p id="passing-grade-hint" class="text-[11px] text-default-500 mt-1">Masukkan nilai batas lulus sesuai skala skor (contoh: 75 untuk skala 0-100, atau 500 untuk skala TOEFL ITP).</p>
                             </div>
                         </div>
 
@@ -176,10 +207,73 @@
                         <div>
                             <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Format Dokumen Kelulusan / Sertifikat</label>
                             <select name="certificate_type" id="select-certificate-type" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium">
-                                <option value="standard" {{ old('certificate_type', $exam->certificate_type ?? 'standard') == 'standard' ? 'selected' : '' }}>Sertifikat Kelulusan Standar (SKL Resmi)</option>
-                                <option value="language_proficiency" {{ old('certificate_type', $exam->certificate_type) == 'language_proficiency' ? 'selected' : '' }}>Sertifikat Kecakapan Bahasa (Proficiency Certificate)</option>
-                                <option value="competency" {{ old('certificate_type', $exam->certificate_type) == 'competency' ? 'selected' : '' }}>Sertifikat Uji Kompetensi Keahlian</option>
+                                <option value="standard" {{ old('certificate_type', $exam->certificate_type ?? 'standard') == 'standard' ? 'selected' : '' }}>Sertifikat Kelulusan Standar (Akademik)</option>
+                                <option value="language_proficiency" {{ old('certificate_type', $exam->certificate_type) == 'language_proficiency' ? 'selected' : '' }}>Sertifikat Kecakapan Bahasa (TOEFL / EPT / TOAFL)</option>
+                                <option value="competency" {{ old('certificate_type', $exam->certificate_type) == 'competency' ? 'selected' : '' }}>Sertifikat Uji Kompetensi &amp; Profesi</option>
                             </select>
+                        </div>
+
+                        @php
+                            $secCfg = is_array($exam->section_config) ? $exam->section_config : [];
+                            $isLangSelected = old('assessment_type', $exam->assessment_type) === 'certification_language' || old('certificate_type', $exam->certificate_type) === 'language_proficiency';
+                        @endphp
+                        <div id="panel-language-sections" class="p-3.5 rounded-lg border border-primary/25 bg-primary-50/40 space-y-3 {{ $isLangSelected ? '' : 'hidden' }}">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-xs font-bold text-primary-900 block">Label Kategori Penilaian Sertifikasi Bahasa</span>
+                                    <p class="text-[11px] text-default-600">Menampilkan rincian skor per bagian (Listening, Structure, Reading) di sertifikat &amp; transkrip.</p>
+                                </div>
+                                <div class="flex gap-1.5">
+                                    <button type="button" onclick="applyLanguageSectionPreset('en')" class="px-2 py-1 rounded bg-white border border-default-200 hover:bg-default-100 text-[10px] font-bold text-default-700 cursor-pointer">Preset TOEFL (EN)</button>
+                                    <button type="button" onclick="applyLanguageSectionPreset('ar')" class="px-2 py-1 rounded bg-white border border-default-200 hover:bg-default-100 text-[10px] font-bold text-default-700 cursor-pointer">Preset TOAFL (AR)</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-default-600 uppercase mb-1">Seksi 1 (Listening)</label>
+                                    <input type="text" id="sec_label_listening" name="section_labels[listening]" value="{{ old('section_labels.listening', $secCfg['listening'] ?? 'Listening Comprehension') }}" class="form-input h-9 text-xs bg-white">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-default-600 uppercase mb-1">Seksi 2 (Structure)</label>
+                                    <input type="text" id="sec_label_structure" name="section_labels[structure]" value="{{ old('section_labels.structure', $secCfg['structure'] ?? 'Structure and Written Expression') }}" class="form-input h-9 text-xs bg-white">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-default-600 uppercase mb-1">Seksi 3 (Reading)</label>
+                                    <input type="text" id="sec_label_reading" name="section_labels[reading]" value="{{ old('section_labels.reading', $secCfg['reading'] ?? 'Reading Comprehension') }}" class="form-input h-9 text-xs bg-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3.5 rounded-lg border border-default-200 bg-default-50/70 space-y-3">
+                            @php
+                                $reqPay = filter_var(old('requires_payment', $exam->requires_payment ?? false), FILTER_VALIDATE_BOOLEAN);
+                            @endphp
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <span class="text-xs font-bold text-default-800 block">Wajibkan Pembayaran Transfer Sebelum Ujian</span>
+                                    <p class="text-[11px] text-default-500">Peserta wajib mengunggah bukti transfer dan mendapat verifikasi Admin sebelum dapat membuka token &amp; mulai ujian.</p>
+                                </div>
+                                <input type="hidden" name="requires_payment" value="0">
+                                <input type="checkbox" name="requires_payment" id="toggle-requires-payment" value="1" {{ $reqPay ? 'checked' : '' }} class="form-switch">
+                            </label>
+                            <div id="container-payment-settings" class="pt-3 border-t border-default-200 space-y-3 {{ $reqPay ? '' : 'hidden' }}">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Biaya Pendaftaran Ujian (Rp) *</label>
+                                        <input type="number" min="0" step="1000" name="payment_amount" value="{{ old('payment_amount', $exam->payment_amount ?? 0) }}" class="form-input h-10 text-xs bg-white font-mono">
+                                    </div>
+                                    <div class="flex items-end pb-1">
+                                        <a href="{{ route('staff.payments.index') }}" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">
+                                            <i data-lucide="landmark" class="size-3.5"></i>
+                                            <span>Kelola Daftar Rekening Bank Institusi</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Instruksi Pembayaran Tambahan (Opsional)</label>
+                                    <textarea name="payment_instructions" rows="2" class="form-textarea text-xs bg-white" placeholder="Cantumkan NIM/Nama pada berita transfer...">{{ old('payment_instructions', $exam->payment_instructions) }}</textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </x-cbt.card>
@@ -266,13 +360,17 @@
                     </div>
                 </x-cbt.card>
 
-                @php($mediaCfg = $exam->getMediaAndDisplayConfig())
+                @php
+                    $mediaCfg = $exam->getMediaAndDisplayConfig();
+                @endphp
                 <x-cbt.card title="5. Pengaturan Media (Audio & Gambar) & Bahasa Arab (RTL)">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Batas Pemutaran Audio Listening</label>
                             <select name="audio_max_plays" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
-                                @php($curPlays = (string) old('audio_max_plays', $mediaCfg['audio_max_plays']))
+                                @php
+                                    $curPlays = (string) old('audio_max_plays', $mediaCfg['audio_max_plays']);
+                                @endphp
                                 <option value="0" {{ $curPlays === '0' ? 'selected' : '' }}>Tak Terbatas (Bebas Diputar Ulang Peserta)</option>
                                 <option value="1" {{ $curPlays === '1' ? 'selected' : '' }}>Maksimal 1 Kali (Standar TOEFL / TOAFL Resmi)</option>
                                 <option value="2" {{ $curPlays === '2' ? 'selected' : '' }}>Maksimal 2 Kali (Default Institusi)</option>
@@ -305,7 +403,9 @@
 
                         <div class="pt-2 border-t border-default-100">
                             <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Huruf Pilihan Jawaban Khusus Soal Arab (RTL)</label>
-                            @php($curRtlStyle = old('rtl_option_style', $mediaCfg['rtl_option_style']))
+                            @php
+                                $curRtlStyle = old('rtl_option_style', $mediaCfg['rtl_option_style']);
+                            @endphp
                             <select name="rtl_option_style" class="form-select w-full h-10 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">
                                 <option value="arabic_hijaiyah" {{ $curRtlStyle === 'arabic_hijaiyah' ? 'selected' : '' }}>أ، ب، ت، ث، ج (Alif, Ba, Ta - Hijaiyah)</option>
                                 <option value="arabic_abjadiyah" {{ $curRtlStyle === 'arabic_abjadiyah' ? 'selected' : '' }}>أ، ب، ج، د، هـ (Alif, Ba, Jim - Abjadiyah / TOAFL)</option>
@@ -345,9 +445,50 @@
         const togglePassingGrade = document.getElementById('toggle-has-passing-grade');
         const containerPassingGrade = document.getElementById('container-passing-grade');
         const inputPassingGrade = document.getElementById('input-passing-grade');
+        const passingGradeHint = document.getElementById('passing-grade-hint');
         const selectAssessmentType = document.getElementById('select-assessment-type');
         const selectScoreScale = document.getElementById('select-score-scale');
+        const selectScoreDecimals = document.getElementById('select-score-decimals');
         const selectCertificateType = document.getElementById('select-certificate-type');
+        const panelLangSections = document.getElementById('panel-language-sections');
+        const presetValidity = document.getElementById('preset-cert-validity');
+        const inputValidity = document.getElementById('input-cert-validity');
+        const togglePayment = document.getElementById('toggle-requires-payment');
+        const containerPayment = document.getElementById('container-payment-settings');
+
+        window.applyLanguageSectionPreset = function (lang) {
+            const listening = document.getElementById('sec_label_listening');
+            const structure = document.getElementById('sec_label_structure');
+            const reading = document.getElementById('sec_label_reading');
+            if (lang === 'ar') {
+                if (listening) listening.value = 'Fahm al-Masmu (Listening / Menyimak)';
+                if (structure) structure.value = 'Qawaid wa Tarakib (Structure / Tata Bahasa)';
+                if (reading) reading.value = 'Fahm al-Maqru (Reading / Membaca)';
+            } else {
+                if (listening) listening.value = 'Listening Comprehension';
+                if (structure) structure.value = 'Structure and Written Expression';
+                if (reading) reading.value = 'Reading Comprehension';
+            }
+        };
+
+        function updatePassingGradeHint() {
+            if (!passingGradeHint || !selectScoreScale) return;
+            const hints = {
+                standard_100: 'Skala Standar 0 - 100: contoh KKM 75.',
+                toefl_itp_677: 'Skala TOEFL ITP (310 - 677): boleh isi di atas 100, contoh KKM 450 atau 500.',
+                toefl_ibt_120: 'Skala TOEFL iBT (0 - 120): contoh KKM 80 atau 90.',
+                ielts_9: 'Skala IELTS Band (0 - 9.0): contoh KKM 6.0 atau 6.5.',
+                cefr: 'Skala CEFR dikonversi dari persentase 0 - 100.'
+            };
+            passingGradeHint.textContent = hints[selectScoreScale.value] || hints.standard_100;
+        }
+
+        function updateLangPanelVisibility() {
+            if (!panelLangSections) return;
+            const isLang = (selectAssessmentType && selectAssessmentType.value === 'certification_language')
+                || (selectCertificateType && selectCertificateType.value === 'language_proficiency');
+            panelLangSections.classList.toggle('hidden', !isLang);
+        }
 
         function updatePassingGradeVisibility() {
             if (!togglePassingGrade || !containerPassingGrade) return;
@@ -364,6 +505,23 @@
             togglePassingGrade.addEventListener('change', updatePassingGradeVisibility);
             updatePassingGradeVisibility();
         }
+        if (togglePayment && containerPayment) {
+            togglePayment.addEventListener('change', () => {
+                containerPayment.classList.toggle('hidden', !togglePayment.checked);
+            });
+        }
+        if (presetValidity && inputValidity) {
+            presetValidity.addEventListener('change', function () {
+                if (this.value !== '') inputValidity.value = this.value;
+            });
+        }
+        if (selectScoreScale) {
+            selectScoreScale.addEventListener('change', updatePassingGradeHint);
+            updatePassingGradeHint();
+        }
+        if (selectCertificateType) {
+            selectCertificateType.addEventListener('change', updateLangPanelVisibility);
+        }
 
         if (selectAssessmentType) {
             selectAssessmentType.addEventListener('change', function () {
@@ -374,7 +532,11 @@
                         updatePassingGradeVisibility();
                     }
                     if (selectScoreScale) selectScoreScale.value = 'toefl_itp_677';
+                    if (selectScoreDecimals) selectScoreDecimals.value = '0';
                     if (selectCertificateType) selectCertificateType.value = 'language_proficiency';
+                    if (inputValidity && (!inputValidity.value || Number(inputValidity.value) === 0)) {
+                        inputValidity.value = '24';
+                    }
                 } else if (val === 'certification_competency') {
                     if (selectCertificateType) selectCertificateType.value = 'competency';
                 } else if (val === 'academic') {
@@ -388,6 +550,8 @@
                     if (selectScoreScale) selectScoreScale.value = 'standard_100';
                     if (selectCertificateType) selectCertificateType.value = 'standard';
                 }
+                updatePassingGradeHint();
+                updateLangPanelVisibility();
             });
         }
     });

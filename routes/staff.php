@@ -14,6 +14,7 @@ use App\Http\Controllers\Staff\ExamBlueprintController;
 use App\Http\Controllers\Staff\ExamCameraController;
 use App\Http\Controllers\Staff\ExamController;
 use App\Http\Controllers\Staff\ExamGradingController;
+use App\Http\Controllers\Staff\ExamPaymentController;
 use App\Http\Controllers\Staff\ExamProctorMonitoringController;
 use App\Http\Controllers\Staff\ExamPublishController;
 use App\Http\Controllers\Staff\ExamReportController;
@@ -224,6 +225,18 @@ Route::prefix('staff')->name('staff.')->group(function () {
         });
 
         Route::get('reports', [ExamReportController::class, 'overview'])->name('reports.overview');
+
+        // Pembayaran Ujian & Rekening Bank Institusi
+        Route::prefix('payments')->middleware('role:admin,super_admin,institution_admin,exam_coordinator,academic_operator')->name('payments.')->group(function () {
+            Route::get('/', [ExamPaymentController::class, 'index'])->name('index');
+            Route::post('{payment}/approve', [ExamPaymentController::class, 'approve'])->name('approve');
+            Route::post('{payment}/reject', [ExamPaymentController::class, 'reject'])->name('reject');
+            Route::get('{payment}/proof', [ExamPaymentController::class, 'viewProof'])->name('proof');
+            Route::post('bank-accounts', [ExamPaymentController::class, 'storeBank'])->name('banks.store');
+            Route::put('bank-accounts/{bankAccount}', [ExamPaymentController::class, 'updateBank'])->name('banks.update');
+            Route::patch('bank-accounts/{bankAccount}/toggle', [ExamPaymentController::class, 'toggleBank'])->name('banks.toggle');
+            Route::delete('bank-accounts/{bankAccount}', [ExamPaymentController::class, 'destroyBank'])->name('banks.destroy');
+        });
 
         // Exam Rooms Management (DEC-001 max 30)
         Route::prefix('rooms')->name('rooms.')->group(function () {

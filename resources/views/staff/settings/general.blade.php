@@ -474,10 +474,10 @@
                                 <input type="checkbox" name="cert_show_score" value="1" {{ old('cert_show_score', $settings['cert_show_score']) ? 'checked' : '' }} class="rounded border-default-300 text-primary focus:ring-primary size-4">
                                 <span class="text-xs font-medium text-default-700">Nilai Akhir & Predikat KKM</span>
                             </label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-lg border border-default-200 bg-card hover:bg-default-50 cursor-pointer transition">
-                                <input type="checkbox" name="cert_dual_signatures" value="1" {{ old('cert_dual_signatures', $settings['cert_dual_signatures']) ? 'checked' : '' }} class="rounded border-default-300 text-primary focus:ring-primary size-4">
-                                <span class="text-xs font-medium text-default-700">Format Dua Tanda Tangan</span>
-                            </label>
+                            <div class="p-3 rounded-lg border border-default-200 bg-card flex flex-col justify-center">
+                                <span class="text-[11px] font-semibold text-default-600 uppercase tracking-wider mb-1">Jumlah Tanda Tangan</span>
+                                <span class="text-xs font-bold text-primary" id="dualSigBadgeSummary">{{ old('cert_dual_signatures', $settings['cert_dual_signatures']) ? '2 Pejabat (Ganda)' : '1 Pejabat (Tunggal)' }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -567,13 +567,32 @@
             <!-- Sub 2: Pejabat Penandatangan & Tanda Tangan Digital -->
             <x-cbt.card title="Pejabat Berwenang Penandatangan & Tanda Tangan Digital">
                 <div class="space-y-6">
-                    <div class="p-4 rounded-lg bg-default-50 border border-default-200">
+                    <div class="p-4 rounded-lg bg-default-50 border border-default-200 space-y-3">
                         <p class="text-xs text-default-600">
-                            Kelola data identitas pejabat penandatangan dan unggah berkas gambar tanda tangan asli bertransparan (PNG). Data <strong>Pejabat Utama</strong> (mis. Kepala Institusi / Direktur), <strong>Pejabat Kedua</strong> (mis. Ketua Panitia Ujian / Ketua Tim Penguji), tanda tangan digital, dan cap stempel resmi akan otomatis mengisi seluruh dokumen cetak resmi: Sertifikat Kelulusan, SKL, Transkrip SKHU, Berita Acara Pelaksanaan, Daftar Hadir, Surat Tugas Pengawas, Pakta Integritas, dan Laporan Resmi Hasil Ujian.
+                            Kelola data identitas pejabat penandatangan dan unggah berkas gambar tanda tangan asli bertransparan (PNG). Data pejabat akan mengisi dokumen Sertifikat Kelulusan, SKL, Transkrip SKHU, Berita Acara, dan Laporan Resmi Hasil Ujian.
                         </p>
+                        @php
+                            $isDualSig = filter_var(old('cert_dual_signatures', $settings['cert_dual_signatures']), FILTER_VALIDATE_BOOLEAN);
+                        @endphp
+                        <div class="pt-2 border-t border-default-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold text-default-800 block">Mode Jumlah Penandatangan Dokumen</span>
+                                <span class="text-[11px] text-default-500">Pilih <strong>1 Penandatangan</strong> jika lembaga hanya membutuhkan tanda tangan pimpinan utama, atau <strong>2 Penandatangan</strong> untuk pejabat utama &amp; ketua tim penguji.</span>
+                            </div>
+                            <div class="inline-flex rounded-lg border border-default-200 bg-white p-1 shrink-0 gap-1">
+                                <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold cursor-pointer transition has-[:checked]:bg-primary has-[:checked]:text-white text-default-600">
+                                    <input type="radio" name="cert_dual_signatures" value="0" {{ ! $isDualSig ? 'checked' : '' }} onchange="toggleSecondarySignerCard(false)" class="sr-only">
+                                    <span>1 Penandatangan</span>
+                                </label>
+                                <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold cursor-pointer transition has-[:checked]:bg-primary has-[:checked]:text-white text-default-600">
+                                    <input type="radio" name="cert_dual_signatures" value="1" {{ $isDualSig ? 'checked' : '' }} onchange="toggleSecondarySignerCard(true)" class="sr-only">
+                                    <span>2 Penandatangan</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div id="signersGridContainer" class="grid grid-cols-1 {{ $isDualSig ? 'md:grid-cols-2' : 'md:grid-cols-1 max-w-xl' }} gap-6">
                         <!-- Pejabat Utama (Kanan) -->
                         <div class="space-y-4 p-4 rounded-md border border-default-200 bg-default-50/40">
                             <div class="flex items-center justify-between pb-2 border-b border-default-100">
@@ -616,7 +635,7 @@
                         </div>
 
                         <!-- Pejabat Kedua (Kiri) -->
-                        <div class="space-y-4 p-4 rounded-md border border-default-200 bg-default-50/40">
+                        <div id="secondarySignerCard" class="{{ $isDualSig ? '' : 'hidden ' }}space-y-4 p-4 rounded-md border border-default-200 bg-default-50/40">
                             <div class="flex items-center justify-between pb-2 border-b border-default-100">
                                 <h5 class="text-xs font-bold text-default-800 uppercase tracking-wider flex items-center gap-1.5">
                                     <i data-lucide="users" class="size-4 text-primary"></i>
@@ -1857,6 +1876,17 @@
                 resultEl.textContent = 'Gagal mengirim permintaan uji koneksi LiveKit.';
             }
         });
+    }
+
+    function toggleSecondarySignerCard(isDual) {
+        const card = document.getElementById('secondarySignerCard');
+        const grid = document.getElementById('signersGridContainer');
+        const summary = document.getElementById('dualSigBadgeSummary');
+        if (card) card.classList.toggle('hidden', !isDual);
+        if (grid) {
+            grid.className = isDual ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'grid grid-cols-1 md:grid-cols-1 max-w-xl gap-6';
+        }
+        if (summary) summary.textContent = isDual ? '2 Pejabat (Ganda)' : '1 Pejabat (Tunggal)';
     }
 
     // Auto-restore tab from query param, hash, or sessionStorage on load

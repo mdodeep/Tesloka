@@ -13,6 +13,7 @@ class ExamBlueprint extends Model
     protected $fillable = [
         'exam_id',
         'question_bank_id',
+        'section_category',
         'rules',
         'total_questions',
     ];

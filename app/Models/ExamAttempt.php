@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\ScoreScaleService;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +31,9 @@ class ExamAttempt extends Model
         'question_order',
         'total_score',
         'is_graded',
+        'device_type',
+        'device_label',
+        'device_metadata',
         'metadata',
     ];
 
@@ -39,6 +44,7 @@ class ExamAttempt extends Model
             'deadline_at' => 'datetime',
             'submitted_at' => 'datetime',
             'question_order' => 'array',
+            'device_metadata' => 'array',
             'metadata' => 'array',
             'is_graded' => 'boolean',
             'total_score' => 'decimal:2',
@@ -158,31 +164,124 @@ class ExamAttempt extends Model
     }
 
     /**
-     * Hitung perolehan nilai dan rincian komponen (Pilihan Ganda vs Esai) (FULL-FEATURE 25 & 30).
+     * Hitung perolehan nilai dan rincian komponen (Pilihan Ganda vs Esai) serta bagian bahasa (FULL-FEATURE 25 & 30).
      */
     public function getScoreBreakdown(): array
     {
         $mcScore = 0.0;
         $essayScore = 0.0;
+        $maxWeight = 0.0;
+        $sectionItems = [];
 
         foreach ($this->answers as $ans) {
             $score = (float) ($ans->score ?? 0);
-            $type = $ans->packageQuestion?->question?->type;
+            $question = $ans->packageQuestion?->question;
+            $snap = is_array($ans->packageQuestion?->question_snapshot) ? $ans->packageQuestion->question_snapshot : [];
+            $type = $question?->type ?? ($snap['type'] ?? null);
+            $weight = (float) ($question?->weight ?? ($snap['weight'] ?? 1.0));
+            $maxWeight += $weight;
 
             if ($type === 'essay') {
                 $essayScore += $score;
             } else {
                 $mcScore += $score;
             }
+
+            $sectionItems[] = [
+                'section_category' => $snap['section_category'] ?? $question?->section_category ?? ($question?->metadata['section_category'] ?? null),
+                'question_bank_name' => $question?->questionBank?->name,
+                'stimulus_media_type' => $snap['stimulus']['media_type'] ?? $question?->stimulus?->media_type,
+                'weight' => $weight,
+                'score_earned' => $score,
+                'is_correct' => $score > 0,
+            ];
         }
 
         $total = (float) ($this->total_score ?? ($mcScore + $essayScore));
+        $scaleSvc = app(ScoreScaleService::class);
+        $exam = $this->exam;
+
+        $savedSections = $this->finalResult?->section_scores ?? $this->latestGrade?->section_scores;
+        $categorized = null;
+        if ($exam) {
+            $categorized = $scaleSvc->calculateCategorizedScores($sectionItems, $exam);
+        }
+
+        $sections = ! empty($savedSections) ? $savedSections : ($categorized['sections'] ?? []);
+        $savedScaled = $this->finalResult?->scaled_score ?? $this->latestGrade?->scaled_score;
+        $scaledScore = $savedScaled !== null
+            ? (float) $savedScaled
+            : ($exam && ($exam->score_scale ?? 'standard_100') !== 'standard_100'
+                ? (float) ($categorized['overall_scaled_score'] ?? $total)
+                : round($total, 2));
+
+        $decimals = $scaleSvc->effectiveDecimalPlaces($exam);
+
+        $effectivePercentage = $this->finalResult?->percentage
+            ?? $this->latestGrade?->percentage
+            ?? ($maxWeight > 0 ? round(($total / $maxWeight) * 100, 2) : $total);
 
         return [
             'mc_score' => round($mcScore, 2),
             'essay_score' => round($essayScore, 2),
             'total_score' => round($total, 2),
+            'max_score' => round($this->finalResult?->max_score ?? $this->latestGrade?->max_score ?? ($maxWeight > 0 ? $maxWeight : 100.0), 2),
+            'percentage' => round((float) $effectivePercentage, 2),
+            'scaled_score' => round($scaledScore, $decimals),
+            'formatted_score' => $scaleSvc->formatScorePlain($scaledScore, $exam),
+            'formatted_display_score' => $scaleSvc->formatNumber($scaledScore, $decimals),
+            'sections' => $sections,
+            'cefr_level' => ($maxWeight > 0 && ! empty($categorized['cefr_level']))
+                ? $categorized['cefr_level']
+                : ScoreScaleService::mapPercentageToCefr((float) $effectivePercentage),
         ];
+    }
+
+    public function getEffectiveDisplayScore(): float
+    {
+        $breakdown = $this->getScoreBreakdown();
+
+        return (float) $breakdown['scaled_score'];
+    }
+
+    public function getFormattedFinalScore(): string
+    {
+        $breakdown = $this->getScoreBreakdown();
+
+        return (string) $breakdown['formatted_score'];
+    }
+
+    public function getSectionScores(): array
+    {
+        $breakdown = $this->getScoreBreakdown();
+
+        return is_array($breakdown['sections'] ?? null) ? $breakdown['sections'] : [];
+    }
+
+    public function getCertificateIssuedAt(): CarbonInterface
+    {
+        return $this->finalResult?->finalized_at ?? $this->submitted_at ?? $this->created_at ?? now();
+    }
+
+    public function getCertificateExpiresAt(): ?CarbonInterface
+    {
+        if ($this->finalResult?->certificate_expires_at) {
+            return $this->finalResult->certificate_expires_at;
+        }
+
+        $months = (int) ($this->exam?->certificate_validity_months ?? 0);
+        if ($months <= 0) {
+            return null;
+        }
+
+        return $this->getCertificateIssuedAt()->copy()->addMonths($months);
+    }
+
+    public function isCertificateExpired(): bool
+    {
+        $expiresAt = $this->getCertificateExpiresAt();
+
+        return $expiresAt !== null && now()->greaterThan($expiresAt);
     }
 
     /**
@@ -190,13 +289,16 @@ class ExamAttempt extends Model
      */
     public function getLetterGrade(): string
     {
-        $score = (float) ($this->total_score ?? 0);
+        $percentage = (float) ($this->finalResult?->percentage ?? $this->latestGrade?->percentage ?? 0);
+        if ($percentage <= 0 && ($this->exam?->score_scale ?? 'standard_100') === 'standard_100') {
+            $percentage = (float) ($this->total_score ?? 0);
+        }
 
         return match (true) {
-            $score >= 85.0 => 'A',
-            $score >= 75.0 => 'B',
-            $score >= 65.0 => 'C',
-            $score >= 50.0 => 'D',
+            $percentage >= 85.0 => 'A',
+            $percentage >= 75.0 => 'B',
+            $percentage >= 65.0 => 'C',
+            $percentage >= 50.0 => 'D',
             default => 'E',
         };
     }
@@ -217,15 +319,24 @@ class ExamAttempt extends Model
 
     /**
      * Apakah siswa dinyatakan lulus / melampaui KKM (FULL-FEATURE 32.1).
-     * Pada mode sertifikasi bahasa atau ujian tanpa KKM, seluruh peserta dianggap tuntas/tersertifikasi.
+     * Jika ujian menonaktifkan batas KKM (`has_passing_grade === false`), seluruh peserta dianggap lulus/tersertifikasi.
+     * Jika batas KKM diaktifkan (termasuk KKM > 100 pada TOEFL/ITP/Bahasa), skor dibandingkan sesuai skala KKM ujian.
      */
     public function isPassed(): bool
     {
-        if ($this->exam && (! $this->exam->has_passing_grade || $this->exam->isCertification())) {
+        if ($this->exam && ! $this->exam->requiresPassingGrade()) {
             return true;
         }
 
+        if ($this->finalResult !== null && $this->finalResult->is_passed !== null) {
+            return (bool) $this->finalResult->is_passed;
+        }
+
         $kkm = (float) ($this->exam?->passing_grade ?? 75.0);
+        if (($this->exam?->score_scale ?? 'standard_100') !== 'standard_100' || $kkm > 100) {
+            return $this->getEffectiveDisplayScore() >= $kkm;
+        }
+
         $score = (float) ($this->total_score ?? 0);
 
         return $score >= $kkm;

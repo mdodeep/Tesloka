@@ -1076,19 +1076,19 @@
             </div>
 
             <!-- Bagian 1: Daftarkan Siswa Baru ke Kelas Ini -->
-            <div id="enroll-form-container" class="border border-default-200/90 rounded-xl p-4 bg-white space-y-3">
+            <div id="enroll-form-container" class="relative z-30 border border-default-200/90 rounded-xl p-4 bg-white space-y-3">
                 <div class="flex items-center justify-between flex-wrap gap-1">
                     <h5 class="text-xs font-bold text-default-800 flex items-center gap-1.5">
                         <i data-lucide="user-plus" class="size-4 text-primary"></i>
                         <span>Daftarkan Siswa ke Rombel</span>
                     </h5>
-                    <span class="text-[11px] text-default-400">Pilih dari akun siswa aktif yang belum memiliki rombel</span>
+                    <span class="text-[11px] text-default-400">Ketik nama, NISN/NIM, atau email siswa untuk pencarian real-time</span>
                 </div>
-                <form id="form-enroll-student" method="POST" action="" onsubmit="handleEnrollStudentSubmit(event)" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <form id="form-enroll-student" method="POST" action="" onsubmit="handleEnrollStudentSubmit(event)" class="flex flex-col sm:flex-row items-stretch sm:items-start gap-2">
                     @csrf
                     <input type="hidden" name="active_tab" value="classes">
-                    <div class="flex-1">
-                        <select id="select-enroll-student" name="student_id" required class="form-select w-full h-9 text-xs rounded-lg border-default-200 bg-white">
+                    <div class="flex-1 min-w-0">
+                        <select id="select-enroll-student" name="student_id" class="form-select w-full h-9 text-xs rounded-lg border-default-200 bg-white">
                             <option value="">-- Pilih Siswa untuk Didaftarkan --</option>
                         </select>
                     </div>
@@ -1307,6 +1307,40 @@
 
     // Kelola Peserta Didik Rombel / Kelas
     let currentManageClassId = null;
+    let enrollStudentChoices = null;
+
+    function syncEnrollStudentChoices(selectEl, isDisabled) {
+        if (!selectEl) return;
+        if (enrollStudentChoices) {
+            try {
+                enrollStudentChoices.destroy();
+            } catch (e) {}
+            enrollStudentChoices = null;
+        }
+        if (typeof window.Choices === 'function') {
+            enrollStudentChoices = new window.Choices(selectEl, {
+                searchEnabled: true,
+                searchChoices: true,
+                searchFloor: 0,
+                searchResultLimit: 100,
+                shouldSort: false,
+                itemSelectText: 'Pilih',
+                noResultsText: 'Siswa tidak ditemukan',
+                noChoicesText: 'Tidak ada siswa tersedia',
+                searchPlaceholderValue: 'Ketik nama, NISN/NIM, atau email...',
+                allowHTML: false,
+                fuseOptions: {
+                    threshold: 0.35,
+                    ignoreLocation: true
+                }
+            });
+            if (isDisabled) {
+                enrollStudentChoices.disable();
+            } else {
+                enrollStudentChoices.enable();
+            }
+        }
+    }
 
     function escapeHtml(str) {
         if (!str) return '';
@@ -1431,6 +1465,8 @@
                 if (btnSubmit) btnSubmit.disabled = false;
                 if (notice) notice.classList.add('hidden');
             }
+
+            syncEnrollStudentChoices(select, (available.length === 0 || isFull));
         }
 
         // Render enrolled table

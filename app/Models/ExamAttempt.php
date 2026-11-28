@@ -143,7 +143,7 @@ class ExamAttempt extends Model
                 return $locked->submission_receipt;
             }
 
-            $receiptCode = 'RCP-' . strtoupper(Str::random(4)) . '-' . strtoupper(Str::random(4)) . '-' . strtoupper(Str::random(4));
+            $receiptCode = 'RCP-'.strtoupper(Str::random(4)).'-'.strtoupper(Str::random(4)).'-'.strtoupper(Str::random(4));
 
             $locked->update([
                 'status' => 'submitted',

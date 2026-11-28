@@ -99,10 +99,10 @@
             </div>
 
             @if($license['is_activated'])
-                <form action="{{ route('staff.settings.license.deactivate') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin melepas lisensi pada server ini?')">
+                <form action="{{ route('staff.settings.license.deactivate') }}" method="POST" onsubmit="return confirm('Cabut dan lepas lisensi dari domain/server ini agar dapat dipindahkan ke domain lain?')">
                     @csrf
                     <button type="submit" class="px-3 py-1.5 rounded-lg border border-default-200 text-default-600 hover:text-danger hover:border-danger text-xs font-semibold transition cursor-pointer">
-                        Lepas Lisensi
+                        Cabut &amp; Lepas Lisensi
                     </button>
                 </form>
             @endif

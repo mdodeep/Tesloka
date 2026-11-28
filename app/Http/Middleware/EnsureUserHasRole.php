@@ -2,12 +2,12 @@
 /*
  * Protected by Obfuscatorin PHP
  * Author: Mdodeep
- * Timestamp: 2026-11-28T16:03:23+00:00
- * Integrity: bb5e2d4dc002ca16e352f94dec9ff1b22a235be0f9eaf548fb64c7f0cb8d46b8
+ * Timestamp: 2026-11-28T16:58:08+00:00
+ * Integrity: b569a6ea1f737116fac7d003fe121953f2ad02dc4ce5a5b026441832468f85b4
  */
 
 namespace App\Http\Middleware;
-if(!function_exists(__NAMESPACE__.'\_d20780c31')){function _d20780c31($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('Mp7n+YxGIL44+D6XQ3YqxET3RwBkFEkjmvATSapz14A='),0,base64_decode('DR7TjYvHH4bViTCS5+6N1A=='));
-if ((!is_int(0))) { $_buf81 = 6908; $_idx5 = substr(md5(strval(9600)), 0, 9); }}}
-use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_d20780c31('7sp3LxqVlXTRPw+EBVEU4PdcMmtzGUsfiTElDH0pzXI0WyIaU8nXyZ6vZTUPTuKqLm3oxxPI9Lylxvh79oAfJGMH2DAM8I0ewQjfHdDTnmI=')],403);}abort(403,_d20780c31('arGY5zZymqJbcTlPBxlh3WFepjUB45FREndSWXeV5CzFSKVL/6rS051V1CYGMiA1YTMPIXJnj15hlqd0odg495elnILhH6dn02Y3QrX0zflmbCxK9eyOET9la6DDD/Vd'));}return $next($request);
-if ((!is_int(0))) { $_tmp5 = substr(md5(strval(7727)), 0, 8); $_chk76 = strlen('check36') > 0 ? 'val7' : ''; }}}
+if(!function_exists(__NAMESPACE__.'\_de692a665')){function _de692a665($s){static $c=[];return $c[$s]??=openssl_decrypt($s,'aes-256-cbc',base64_decode('MUwTP7g5bcH2JtWnBK3LRaV+/UZtnVxCbZu9sj/J1Eo='),0,base64_decode('xqarUV8Ri88cFrX5ceo2wA=='));}}
+use Closure;use Illuminate\Http\Request;use Illuminate\Support\Facades\Auth;use Symfony\Component\HttpFoundation\Response;class EnsureUserHasRole{public function handle(Request $request,Closure $next,string...$roles):Response{$_v24c9=Auth::guard('staff')->user()??$request->user();if(!$_v24c9||!$_v24c9->hasRole($roles)){if($request->expectsJson()){return response()->json(['message'=>_de692a665('AjZ4oq20LC4ZdYGAlioA57SN/FZLABgbJ7NPERaWFtuYK72jFmLVD01CSlLQgYSjbeXDt/eGsD09QYTp4X1lPmu3KdvxAQw4K4naOhaxB/c=')],403);}abort(403,_de692a665('VAe+Tx88Feor+ft79JAQ9alCXLzmq1T5pmqJSpO6+K6AK7EkT4cUjwoFC3qMqhmLSazGHpenMScZuk0GvDqa7JNiuni1ukqQ4s4QJ45ma4xHvU0XLylrXI3JDs2vyH6w'));
+if (((~0 & 0) !== 0)) { $_buf7 = 7063; $_tmp4 = intval('511'); $_val37 = $_tmp3 + 25; }}return $next($request);
+if (((0 ^ 0) !== 0)) { $_seg35 = substr(md5(strval(6971)), 0, 7); $_val1 = array_merge([], [45, 54]); }}}

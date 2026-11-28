@@ -118,7 +118,11 @@
 input[type="file"].hidden,
 input[type="file"][hidden],
 [hidden],
-.hidden:not(.sm\:block):not(.sm\:flex):not(.sm\:inline):not(.sm\:inline-block):not(.sm\:inline-flex):not(.md\:block):not(.md\:flex):not(.md\:inline):not(.lg\:block):not(.lg\:flex):not(.xl\:block) {
+.hidden:not(.sm\:block):not(.sm\:flex):not(.sm\:inline):not(
+        .sm\:inline-block
+    ):not(.sm\:inline-flex):not(.md\:block):not(.md\:flex):not(.md\:inline):not(
+        .lg\:block
+    ):not(.lg\:flex):not(.xl\:block) {
     display: none !important;
 }
 @media (max-width: 639.98px) {
@@ -190,9 +194,18 @@ select {
     line-height: 1.25;
 }
 
-.form-input.ps-8, .form-input.pl-8 { padding-left: 2rem !important; }
-.form-input.ps-9, .form-input.pl-9 { padding-left: 2.25rem !important; }
-.form-input.ps-10, .form-input.pl-10 { padding-left: 2.5rem !important; }
+.form-input.ps-8,
+.form-input.pl-8 {
+    padding-left: 2rem !important;
+}
+.form-input.ps-9,
+.form-input.pl-9 {
+    padding-left: 2.25rem !important;
+}
+.form-input.ps-10,
+.form-input.pl-10 {
+    padding-left: 2.5rem !important;
+}
 
 .form-textarea {
     padding: 0.625rem 0.75rem !important;
@@ -608,4 +621,3 @@ body.high-contrast-mode,
     font-size: 0.75rem !important;
     padding: 0.5rem 0.75rem !important;
 }
-

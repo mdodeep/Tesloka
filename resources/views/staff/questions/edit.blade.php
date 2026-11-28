@@ -108,7 +108,9 @@
                                 </label>
                             </div>
 
-                            @php($currentRtlStyleMeta = old('rtl_option_style', $question->metadata['rtl_option_style'] ?? 'inherit'))
+                            @php
+                                $currentRtlStyleMeta = old('rtl_option_style', $question->metadata['rtl_option_style'] ?? 'inherit');
+                            @endphp
                             <div>
                                 <label class="block text-xs font-semibold text-default-700 uppercase mb-1">Gaya Huruf Opsi Arab (RTL)</label>
                                 <select name="rtl_option_style" class="form-select w-full h-9 text-xs rounded border-default-200 bg-white shadow-2xs focus:ring-2 focus:ring-primary/20 focus:border-primary">

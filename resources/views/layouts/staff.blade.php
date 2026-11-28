@@ -474,32 +474,32 @@
 
                     <!-- Flash Messages (Single Source of Truth) -->
                     @if (session('success'))
-                        <div class="mb-5 p-4 rounded bg-success/10 border border-success/30 text-success text-sm flex items-center justify-between gap-2.5">
+                        <div class="mb-5 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="check-circle" class="size-5 shrink-0 text-success"></i>
+                                <i data-lucide="check-circle" class="size-5 shrink-0 text-emerald-700"></i>
                                 <span>{{ session('success') }}</span>
                             </div>
-                            <button type="button" onclick="this.closest('.bg-success\\/10').remove()" class="text-success/70 hover:text-success transition" title="Tutup">
+                            <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-emerald-700 hover:text-emerald-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                                 <i data-lucide="x" class="size-4"></i>
                             </button>
                         </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="mb-5 p-4 rounded bg-danger/10 border border-danger/30 text-danger text-sm">
+                        <div class="mb-5 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm" role="alert">
                             <div class="flex items-start justify-between gap-2.5">
                                 <div class="flex items-start gap-2.5">
-                                    <i data-lucide="alert-octagon" class="size-5 shrink-0 text-danger mt-0.5"></i>
+                                    <i data-lucide="alert-octagon" class="size-5 shrink-0 text-rose-700 mt-0.5"></i>
                                     <div>
-                                        <h5 class="font-bold text-sm text-danger mb-1">Terdapat kesalahan pada isian formulir:</h5>
-                                        <ul class="list-disc list-inside space-y-0.5 text-xs text-danger/90">
+                                        <h5 class="font-bold text-sm text-rose-900 mb-1">Terdapat kesalahan pada isian formulir:</h5>
+                                        <ul class="list-disc list-inside space-y-0.5 text-xs text-rose-800">
                                             @foreach ($errors->all() as $error)
                                                 <li>{{ $error }}</li>
                                             @endforeach
                                         </ul>
                                     </div>
                                 </div>
-                                <button type="button" onclick="this.closest('.bg-danger\\/10').remove()" class="text-danger/70 hover:text-danger transition shrink-0" title="Tutup">
+                                <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-rose-700 hover:text-rose-900 transition shrink-0 cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                                     <i data-lucide="x" class="size-4"></i>
                                 </button>
                             </div>
@@ -507,57 +507,38 @@
                     @endif
 
                     @if (session('error') || session('danger'))
-                        <div class="mb-5 p-4 rounded bg-danger/10 border border-danger/30 text-danger text-sm flex items-center justify-between gap-2.5">
+                        <div class="mb-5 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="alert-octagon" class="size-5 shrink-0 text-danger"></i>
+                                <i data-lucide="alert-octagon" class="size-5 shrink-0 text-rose-700"></i>
                                 <span>{{ session('error') ?? session('danger') }}</span>
                             </div>
-                            <button type="button" onclick="this.closest('.bg-danger\\/10').remove()" class="text-danger/70 hover:text-danger transition" title="Tutup">
+                            <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-rose-700 hover:text-rose-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                                 <i data-lucide="x" class="size-4"></i>
                             </button>
                         </div>
                     @endif
 
                     @if (session('warning'))
-                        <div class="mb-5 p-4 rounded bg-warning/10 border border-warning/30 text-warning text-sm flex items-center justify-between gap-2.5">
+                        <div class="mb-5 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="alert-triangle" class="size-5 shrink-0 text-warning"></i>
+                                <i data-lucide="alert-triangle" class="size-5 shrink-0 text-amber-700"></i>
                                 <span>{{ session('warning') }}</span>
                             </div>
-                            <button type="button" onclick="this.closest('.bg-warning\\/10').remove()" class="text-warning/70 hover:text-warning transition" title="Tutup">
+                            <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-amber-700 hover:text-amber-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                                 <i data-lucide="x" class="size-4"></i>
                             </button>
                         </div>
                     @endif
 
                     @if (session('info') || session('status'))
-                        <div class="mb-5 p-4 rounded bg-info/10 border border-info/30 text-info text-sm flex items-center justify-between gap-2.5">
+                        <div class="mb-5 p-4 rounded-xl bg-sky-50 border border-sky-200 text-sky-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                             <div class="flex items-center gap-2.5">
-                                <i data-lucide="info" class="size-5 shrink-0 text-info"></i>
+                                <i data-lucide="info" class="size-5 shrink-0 text-sky-700"></i>
                                 <span>{{ session('info') ?? session('status') }}</span>
                             </div>
-                            <button type="button" onclick="this.closest('.bg-info\\/10').remove()" class="text-info/70 hover:text-info transition" title="Tutup">
+                            <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-sky-700 hover:text-sky-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                                 <i data-lucide="x" class="size-4"></i>
                             </button>
-                        </div>
-                    @endif
-
-                    @if (isset($errors) && $errors->any())
-                        <div class="mb-5 p-4 rounded bg-danger/10 border border-danger/30 text-danger text-sm relative">
-                            <div class="flex items-center justify-between mb-1">
-                                <div class="font-semibold flex items-center gap-2">
-                                    <i data-lucide="alert-octagon" class="size-5 shrink-0 text-danger"></i>
-                                    Terjadi Kesalahan
-                                </div>
-                                <button type="button" onclick="this.closest('.bg-danger\\/10').remove()" class="text-danger/70 hover:text-danger transition" title="Tutup">
-                                    <i data-lucide="x" class="size-4"></i>
-                                </button>
-                            </div>
-                            <ul class="list-disc list-inside space-y-1 text-xs">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
                         </div>
                     @endif
 
@@ -629,7 +610,21 @@
                 }
             } else if (e.key === 'Escape') {
                 closeCommandPalette();
+                document.querySelectorAll('.fixed.inset-0:not(#commandPaletteModal):not(.hidden)').forEach((el) => {
+                    if (el.id && el.hasAttribute('role') && el.getAttribute('role') === 'dialog') {
+                        el.classList.add('hidden');
+                    }
+                });
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.fixed.inset-0[id]').forEach((modalEl) => {
+                if (!modalEl.hasAttribute('role')) {
+                    modalEl.setAttribute('role', 'dialog');
+                    modalEl.setAttribute('aria-modal', 'true');
+                }
+            });
         });
 
         document.getElementById('commandPaletteModal')?.addEventListener('click', function (e) {

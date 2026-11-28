@@ -95,7 +95,7 @@
 </div>
 
 <!-- Modal Pratinjau Email (View Template) -->
-<div id="modal-template-preview" class="hidden fixed inset-0 z-50 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="modal-template-preview" role="dialog" aria-modal="true" aria-labelledby="previewModalHeading" class="hidden fixed inset-0 z-50 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-card rounded-lg max-w-3xl w-full p-6 shadow-2xl border border-default-200 max-h-[90vh] flex flex-col">
         <!-- Header Modal -->
         <div class="flex items-center justify-between pb-4 border-b border-default-200 shrink-0">
@@ -104,7 +104,7 @@
                     <i data-lucide="mail" class="size-5"></i>
                 </div>
                 <div>
-                    <h3 class="text-sm font-bold text-default-800">Pratinjau Template Email</h3>
+                    <h3 id="previewModalHeading" class="text-sm font-bold text-default-800">Pratinjau Template Email</h3>
                     <p id="previewModalTemplateName" class="text-xs text-default-500 font-medium">Akun Baru Pengguna (account_created)</p>
                 </div>
             </div>

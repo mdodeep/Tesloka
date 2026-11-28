@@ -42,7 +42,7 @@
                 <i data-lucide="receipt" class="size-4"></i>
                 <span>Antrean Verifikasi Pembayaran</span>
                 @if($stats['pending'] > 0)
-                    <span class="px-1.5 py-0.2 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">{{ $stats['pending'] }}</span>
+                    <span class="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">{{ $stats['pending'] }}</span>
                 @endif
             </a>
             <a href="{{ route('staff.payments.index', ['tab' => 'banks']) }}"
@@ -282,11 +282,11 @@
 </div>
 
 <!-- Modal Tolak Pembayaran -->
-<div id="rejectPaymentModal" class="hidden fixed inset-0 z-50 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+<div id="rejectPaymentModal" role="dialog" aria-modal="true" aria-labelledby="rejectPaymentModalTitle" class="hidden fixed inset-0 z-50 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
     <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-5 shadow-2xl">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
             <div>
-                <h3 class="text-sm font-bold text-default-900">Tolak Bukti Pembayaran</h3>
+                <h3 id="rejectPaymentModalTitle" class="text-sm font-bold text-default-900">Tolak Bukti Pembayaran</h3>
                 <p id="rejectPaymentStudentName" class="text-[11px] text-default-500 mt-0.5"></p>
             </div>
             <button type="button" onclick="document.getElementById('rejectPaymentModal').classList.add('hidden')" class="p-1 text-default-400 hover:text-default-700 cursor-pointer">
@@ -312,11 +312,11 @@
 </div>
 
 <!-- Modal Preview Bukti Gambar -->
-<div id="proofPreviewModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+<div id="proofPreviewModal" role="dialog" aria-modal="true" aria-labelledby="proofPreviewTitle" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
     <div class="card max-w-2xl w-full max-h-[90vh] flex flex-col p-4 shadow-2xl">
         <div class="flex items-center justify-between border-b border-default-200 pb-2.5 shrink-0">
             <h3 id="proofPreviewTitle" class="text-sm font-bold text-default-900">Pratinjau Bukti Transfer</h3>
-            <button type="button" onclick="document.getElementById('proofPreviewModal').classList.add('hidden')" class="p-1 text-default-500 hover:text-default-800 cursor-pointer">
+            <button type="button" onclick="document.getElementById('proofPreviewModal').classList.add('hidden')" class="p-1 text-default-500 hover:text-default-800 cursor-pointer" aria-label="Tutup dialog">
                 <i data-lucide="x" class="size-5"></i>
             </button>
         </div>
@@ -324,17 +324,17 @@
             <img id="proofPreviewImage" src="" alt="Bukti Transfer" class="max-h-[65vh] w-auto object-contain rounded">
         </div>
         <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2 border-t border-default-100 w-full sm:w-auto shrink-0">
-            <a id="proofDownloadLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-primary text-white font-semibold w-full sm:w-auto text-center">Buka Ukuran Penuh</a>
+            <a id="proofDownloadLink" href="#" onclick="if(!this.dataset.ready){return false;}" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-primary text-white font-semibold w-full sm:w-auto text-center">Buka Ukuran Penuh</a>
             <button type="button" onclick="document.getElementById('proofPreviewModal').classList.add('hidden')" class="btn btn-sm bg-default-100 text-default-700 font-semibold w-full sm:w-auto cursor-pointer">Tutup</button>
         </div>
     </div>
 </div>
 
 <!-- Modal Edit Bank -->
-<div id="editBankModal" class="hidden fixed inset-0 z-50 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+<div id="editBankModal" role="dialog" aria-modal="true" aria-labelledby="editBankModalTitle" class="hidden fixed inset-0 z-50 bg-default-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
     <div class="card max-w-md w-full max-h-[90vh] flex flex-col p-5 shadow-2xl">
         <div class="flex items-center justify-between border-b border-default-200 pb-3 shrink-0">
-            <h3 class="text-sm font-bold text-default-900">Edit Rekening Bank</h3>
+            <h3 id="editBankModalTitle" class="text-sm font-bold text-default-900">Edit Rekening Bank</h3>
             <button type="button" onclick="document.getElementById('editBankModal').classList.add('hidden')" class="p-1 text-default-400 hover:text-default-700 cursor-pointer">
                 <i data-lucide="x" class="size-5"></i>
             </button>
@@ -380,7 +380,9 @@
     function openProofPreviewModal(url, studentName) {
         document.getElementById('proofPreviewTitle').textContent = 'Bukti Transfer - ' + studentName;
         document.getElementById('proofPreviewImage').src = url;
-        document.getElementById('proofDownloadLink').href = url;
+        const dl = document.getElementById('proofDownloadLink');
+        dl.href = url;
+        dl.dataset.ready = url ? '1' : '';
         document.getElementById('proofPreviewModal').classList.remove('hidden');
     }
 

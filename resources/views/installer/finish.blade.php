@@ -31,29 +31,41 @@
                         <td><strong>{{ $summary['institution_name'] ?? '-' }}</strong></td>
                     </tr>
                     <tr>
-                        <td style="color: var(--color-muted);">Portal Staf & Administrasi</td>
+                        <td style="color: var(--color-muted);">Portal Staf &amp; Administrasi</td>
                         <td>
-                            <a href="{{ $summary['url_staff'] ?? '#' }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
-                                {{ $summary['url_staff'] ?? '-' }} &UpperRightArrow;
-                            </a>
+                            @if(! empty($summary['url_staff']))
+                                <a href="{{ $summary['url_staff'] }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                                    {{ $summary['url_staff'] }} &UpperRightArrow;
+                                </a>
+                            @else
+                                <span>-</span>
+                            @endif
                             <div class="form-hint">Digunakan oleh Admin, Proktor, Guru, dan Koordinator Ujian.</div>
                         </td>
                     </tr>
                     <tr>
                         <td style="color: var(--color-muted);">Portal Ujian Siswa</td>
                         <td>
-                            <a href="{{ $summary['url_student'] ?? '#' }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
-                                {{ $summary['url_student'] ?? '-' }} &UpperRightArrow;
-                            </a>
+                            @if(! empty($summary['url_student']))
+                                <a href="{{ $summary['url_student'] }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                                    {{ $summary['url_student'] }} &UpperRightArrow;
+                                </a>
+                            @else
+                                <span>-</span>
+                            @endif
                             <div class="form-hint">Alamat pengerjaan ujian untuk seluruh peserta didik.</div>
                         </td>
                     </tr>
                     <tr>
                         <td style="color: var(--color-muted);">Portal Verifikasi Publik</td>
                         <td>
-                            <a href="{{ $summary['url_cert'] ?? '#' }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
-                                {{ $summary['url_cert'] ?? '-' }} &UpperRightArrow;
-                            </a>
+                            @if(! empty($summary['url_cert']))
+                                <a href="{{ $summary['url_cert'] }}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">
+                                    {{ $summary['url_cert'] }} &UpperRightArrow;
+                                </a>
+                            @else
+                                <span>-</span>
+                            @endif
                             <div class="form-hint">Verifikasi keaslian ijazah, SKHU, dan sertifikat ber-QR code.</div>
                         </td>
                     </tr>

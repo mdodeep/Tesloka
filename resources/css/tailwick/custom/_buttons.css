@@ -11,6 +11,10 @@
             @apply px-3 py-1.5 text-xs rounded-md;
         }
 
+        &.btn-xs {
+            @apply px-2.5 py-1 text-[11px] rounded;
+        }
+
         &.btn-icon {
             @apply size-9 p-0 rounded-lg;
         }

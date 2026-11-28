@@ -89,7 +89,7 @@
             @csrf
             @method('PATCH')
             <input type="hidden" name="status" value="active">
-            <button type="submit" class="btn btn-sm bg-success hover:bg-success-hover text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+            <button type="submit" class="btn btn-sm bg-success hover:bg-emerald-700 text-white font-semibold inline-flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
                 <i data-lucide="play" class="size-4"></i>
                 <span>Mulai Sesi</span>
             </button>
@@ -200,7 +200,7 @@
                                 <div class="truncate">
                                     <strong class="text-default-800 block font-semibold truncate">{{ $prc->proctor->name }}</strong>
                                     <div class="flex items-center gap-1.5 mt-0.5">
-                                        <span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-white border border-default-200 text-default-600">{{ $prc->role_title }}</span>
+                                        <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-white border border-default-200 text-default-600">{{ $prc->role_title }}</span>
                                         <span class="text-default-400 text-[10px] truncate">{{ $prc->proctor->email }}</span>
                                     </div>
                                 </div>
@@ -304,12 +304,12 @@
                                         @if(($ptc->time_extension_percent ?? 0) > 0 || ($ptc->needs_scribe ?? false))
                                             <div class="flex items-center gap-1.5 mt-0.5 flex-wrap whitespace-nowrap">
                                                 @if(($ptc->time_extension_percent ?? 0) > 0)
-                                                    <span class="px-1.5 py-0.2 bg-blue-50 text-blue-700 text-[10px] font-bold rounded border border-blue-200 whitespace-nowrap" title="Akomodasi tambahan waktu">
+                                                    <span class="px-1.5 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded border border-blue-200 whitespace-nowrap" title="Akomodasi tambahan waktu">
                                                         +{{ $ptc->time_extension_percent }}% Waktu
                                                     </span>
                                                 @endif
                                                 @if($ptc->needs_scribe ?? false)
-                                                    <span class="px-1.5 py-0.2 bg-amber-50 text-amber-700 text-[10px] font-bold rounded border border-amber-200 whitespace-nowrap" title="Didampingi Scribe resmi">
+                                                    <span class="px-1.5 py-0.5 bg-amber-50 text-amber-700 text-[10px] font-bold rounded border border-amber-200 whitespace-nowrap" title="Didampingi Scribe resmi">
                                                         Scribe: {{ $ptc->scribe_name ?? 'Ada' }}
                                                     </span>
                                                 @endif

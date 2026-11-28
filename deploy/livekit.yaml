@@ -20,4 +20,4 @@ logging:
 room:
   auto_create: true
   empty_timeout: 300
-  max_participants: 60
+  max_participants: 120

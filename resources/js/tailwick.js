@@ -128,11 +128,20 @@ export class CbtLayout {
     openMobileSidebar() {
         this.html.setAttribute('data-sidenav-size', 'offcanvas');
         this.html.classList.add('sidenav-enable');
+        const toggleBtn = document.querySelector('#button-toggle-menu');
+        if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
         this.showBackdrop();
     }
 
-    closeMobileSidebar() {
+    closeMobileSidebar(restoreFocus = false) {
         this.html.classList.remove('sidenav-enable');
+        const toggleBtn = document.querySelector('#button-toggle-menu');
+        if (toggleBtn) {
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            if (restoreFocus && window.innerWidth <= 1024) {
+                toggleBtn.focus();
+            }
+        }
         this.hideBackdrop();
     }
 
@@ -182,8 +191,14 @@ export class CbtLayout {
 
         const closeBtn = document.querySelector('#button-close-mobile-menu');
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.closeMobileSidebar());
+            closeBtn.addEventListener('click', () => this.closeMobileSidebar(true));
         }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.html.classList.contains('sidenav-enable')) {
+                this.closeMobileSidebar(true);
+            }
+        });
 
         // Tutup otomatis drawer mobile saat pengguna mengklik item menu
         document.querySelectorAll('#staffSidebarNav a.menu-link').forEach(link => {

@@ -495,8 +495,19 @@
             </div>
         </div>
 
+        @if (isset($errors) && $errors->any())
+            <div class="alert alert-danger" role="alert">
+                <strong>Terdapat kesalahan pada isian formulir:</strong>
+                <ul style="margin: 0.375rem 0 0 1.125rem; padding: 0;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         @if (session('error'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" role="alert">
                 {{ session('error') }}
             </div>
         @endif

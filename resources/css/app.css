@@ -114,12 +114,39 @@
 @import "choices.js/public/assets/styles/choices.min.css";
 @import "simplebar/dist/simplebar.css";
 
-/* Enforce strict hidden file input */
+/* Enforce strict hidden state for modals/panels without clobbering Tailwind responsive display prefixes */
 input[type="file"].hidden,
 input[type="file"][hidden],
-.hidden,
-[hidden] {
+[hidden],
+.hidden:not(.sm\:block):not(.sm\:flex):not(.sm\:inline):not(.sm\:inline-block):not(.sm\:inline-flex):not(.md\:block):not(.md\:flex):not(.md\:inline):not(.lg\:block):not(.lg\:flex):not(.xl\:block) {
     display: none !important;
+}
+@media (max-width: 639.98px) {
+    .hidden.sm\:block,
+    .hidden.sm\:flex,
+    .hidden.sm\:inline,
+    .hidden.sm\:inline-block,
+    .hidden.sm\:inline-flex {
+        display: none !important;
+    }
+}
+@media (max-width: 767.98px) {
+    .hidden.md\:block,
+    .hidden.md\:flex,
+    .hidden.md\:inline {
+        display: none !important;
+    }
+}
+@media (max-width: 1023.98px) {
+    .hidden.lg\:block,
+    .hidden.lg\:flex {
+        display: none !important;
+    }
+}
+@media (max-width: 1279.98px) {
+    .hidden.xl\:block {
+        display: none !important;
+    }
 }
 
 /* CBT Bordered Dashed Dropzone */
@@ -484,6 +511,32 @@ body.high-contrast-mode,
 .high-contrast-mode button:hover svg {
     color: #000000 !important;
     stroke: #000000 !important;
+}
+
+/* Explicit High Contrast differentiation for Student CBT Palette & Selected Options */
+.high-contrast-mode #paletteGrid button.bg-emerald-600 {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+    border: 2px solid #ffffff !important;
+}
+.high-contrast-mode #paletteGrid button.bg-amber-500 {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    border: 2px dashed #ffff00 !important;
+}
+.high-contrast-mode #paletteGrid button.ring-primary {
+    outline: 3px solid #ffffff !important;
+    outline-offset: 2px !important;
+}
+.high-contrast-mode #optionsContainer button[aria-checked="true"] {
+    background-color: #2b2b00 !important;
+    border: 3px solid #ffff00 !important;
+    box-shadow: 0 0 0 2px #ffffff !important;
+}
+.high-contrast-mode #btnFinishSidebar[disabled],
+.high-contrast-mode #btnFinishTop[disabled] {
+    opacity: 0.55 !important;
+    border-style: dashed !important;
 }
 
 /* Badges & Alert boxes in High Contrast */

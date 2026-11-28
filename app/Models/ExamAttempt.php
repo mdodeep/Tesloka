@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ExamAttempt extends Model
@@ -131,36 +132,46 @@ class ExamAttempt extends Model
      */
     public function submit(string $reason = 'manual'): string
     {
-        if ($this->status === 'submitted' && $this->submission_receipt) {
-            return $this->submission_receipt;
-        }
+        return DB::transaction(function () use ($reason): string {
+            /** @var self $locked */
+            $locked = self::whereKey($this->id)->lockForUpdate()->firstOrFail();
 
-        $receiptCode = 'RCP-'.strtoupper(Str::random(4)).'-'.strtoupper(Str::random(4)).'-'.strtoupper(Str::random(4));
+            if ($locked->status === 'submitted' && $locked->submission_receipt) {
+                $this->syncOriginal();
+                $this->setRawAttributes($locked->getAttributes(), true);
 
-        $this->update([
-            'status' => 'submitted',
-            'submitted_at' => now(),
-            'submission_receipt' => $receiptCode,
-            'metadata' => array_merge($this->metadata ?? [], [
-                'submit_reason' => $reason,
-                'submitted_ip' => request()->ip(),
-            ]),
-        ]);
+                return $locked->submission_receipt;
+            }
 
-        // Perbarui status peserta jika ada
-        if ($this->participant) {
-            $this->participant->update(['status' => 'completed']);
-        }
+            $receiptCode = 'RCP-'.strtoupper(Str::random(4)).'-'.strtoupper(Str::random(4)).'-'.strtoupper(Str::random(4));
 
-        AuditLog::record(
-            'attempt.submitted',
-            $this,
-            ['status' => 'in_progress'],
-            ['status' => 'submitted', 'receipt' => $receiptCode, 'reason' => $reason],
-            "Percobaan ujian #{$this->id} ({$this->student->name}) dikumpulkan dengan bukti tanda terima {$receiptCode}"
-        );
+            $locked->update([
+                'status' => 'submitted',
+                'submitted_at' => now(),
+                'submission_receipt' => $receiptCode,
+                'metadata' => array_merge($locked->metadata ?? [], [
+                    'submit_reason' => $reason,
+                    'submitted_ip' => request()->ip(),
+                ]),
+            ]);
 
-        return $receiptCode;
+            // Perbarui status peserta jika ada
+            if ($locked->participant) {
+                $locked->participant->update(['status' => 'completed']);
+            }
+
+            AuditLog::record(
+                'attempt.submitted',
+                $locked,
+                ['status' => 'in_progress'],
+                ['status' => 'submitted', 'receipt' => $receiptCode, 'reason' => $reason],
+                "Percobaan ujian #{$locked->id} ({$locked->student->name}) dikumpulkan dengan bukti tanda terima {$receiptCode}"
+            );
+
+            $this->setRawAttributes($locked->getAttributes(), true);
+
+            return $receiptCode;
+        });
     }
 
     /**

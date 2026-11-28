@@ -56,12 +56,12 @@
 <body class="bg-default-100 text-default-800 font-sans min-h-screen flex flex-col no-select">
     <!-- Forensik Watermark & Lapisan Proteksi Anti-Tangkapan Layar -->
     <div id="cbtForensicWatermark" aria-hidden="true"></div>
-    <div id="privacySecurityCurtain" class="fixed inset-0 z-[9999] hidden bg-slate-950/95 backdrop-blur-2xl flex items-center justify-center p-6 text-white text-center select-none">
+    <div id="privacySecurityCurtain" role="dialog" aria-modal="true" aria-labelledby="privacyCurtainTitle" class="fixed inset-0 z-[9999] hidden bg-slate-950/95 backdrop-blur-2xl flex items-center justify-center p-6 text-white text-center select-none">
         <div class="max-w-md w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 sm:p-7 shadow-2xl space-y-4">
             <div class="size-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center mx-auto">
                 <i data-lucide="shield-alert" class="size-7"></i>
             </div>
-            <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-white">Layar Ujian Diamankan</h2>
+            <h2 id="privacyCurtainTitle" class="text-base sm:text-lg font-extrabold tracking-tight text-white">Layar Ujian Diamankan</h2>
             <p id="privacyCurtainReason" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
                 Sistem mendeteksi jendela ujian kehilangan fokus atau indikasi percobaan tangkapan layar. Konten soal disembunyikan untuk menjaga integritas ujian.
             </p>
@@ -123,7 +123,7 @@
                     <i data-lucide="maximize" class="size-4"></i>
                 </button>
 
-                <button type="button" onclick="document.getElementById('paletteSidebar').classList.toggle('hidden')" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-700 lg:hidden shrink-0 rounded-xl" title="Daftar Soal">
+                <button type="button" id="btnToggleMobilePalette" onclick="toggleMobilePalette()" aria-controls="paletteSidebar" aria-expanded="false" aria-label="Buka daftar nomor soal" class="btn btn-sm btn-icon bg-default-100 hover:bg-default-200 text-default-700 lg:hidden shrink-0 rounded-xl" title="Daftar Soal">
                     <i data-lucide="layout-grid" class="size-4"></i>
                 </button>
             </div>
@@ -240,7 +240,7 @@
             </div>
 
             <!-- Kolom Kanan: Palet Nomor Soal & Ringkasan (1 Kolom) -->
-            <div id="paletteSidebar" class="hidden lg:block fixed inset-0 lg:static z-50 lg:z-auto bg-black/40 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none flex items-center justify-center lg:items-stretch lg:justify-start p-3 sm:p-4 lg:p-0">
+            <div id="paletteSidebar" aria-label="Navigasi Daftar Soal" onclick="if (event.target === this && window.innerWidth < 1024) closeMobilePalette()" class="hidden lg:block fixed inset-0 lg:static z-50 lg:z-auto bg-black/40 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none flex items-center justify-center lg:items-stretch lg:justify-start p-3 sm:p-4 lg:p-0">
                 <div class="bg-white border border-default-200/90 rounded-2xl p-5 shadow-2xl lg:shadow-2xs space-y-4 sm:space-y-5 w-full max-w-sm lg:max-w-none max-h-[90vh] lg:max-h-none overflow-y-auto">
 
                     @if($attempt->exam->isCameraProctoringEnabled())
@@ -279,7 +279,7 @@
                         <h3 class="text-xs font-bold text-default-800 uppercase tracking-wide">Navigasi Soal</h3>
                         <div class="flex items-center gap-2">
                             <span class="text-xs text-default-400 font-mono">{{ count($orderedQuestions) }} Butir</span>
-                            <button type="button" onclick="document.getElementById('paletteSidebar').classList.add('hidden')" class="lg:hidden p-1 rounded-md hover:bg-default-100 text-default-500 transition cursor-pointer" title="Tutup Palet Soal">
+                            <button type="button" onclick="closeMobilePalette()" aria-label="Tutup Palet Soal" class="lg:hidden p-1 rounded-md hover:bg-default-100 text-default-500 transition cursor-pointer" title="Tutup Palet Soal">
                                 <i data-lucide="x" class="size-4"></i>
                             </button>
                         </div>
@@ -327,7 +327,7 @@
     </main>
 
     <!-- Modal Peringatan Khusus Pengawas (Urgent Proctor Warning - FULL-FEATURE 20.8, 22) -->
-    <div id="urgentWarningModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
+    <div id="urgentWarningModal" role="dialog" aria-modal="true" aria-labelledby="urgentWarningTitle" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/50 backdrop-blur-xs hidden p-3 sm:p-4">
         <div class="card max-w-md w-full p-6 text-center shadow-2xl border-2 border-rose-500 space-y-4 max-h-[90vh] flex flex-col">
             <div class="size-14 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center shrink-0">
                 <i data-lucide="alert-triangle" class="size-8"></i>
@@ -350,13 +350,13 @@
     </div>
 
     <!-- Modal Konfirmasi Pengumpulan Ujian -->
-    <div id="finishModal" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/60 backdrop-blur-xs hidden p-3 sm:p-4 transition-opacity">
+    <div id="finishModal" role="dialog" aria-modal="true" aria-labelledby="finishModalTitle" onclick="if (event.target === this) closeFinishModal()" class="fixed inset-0 z-50 flex items-center justify-center bg-default-900/60 backdrop-blur-xs hidden p-3 sm:p-4 transition-opacity">
         <div class="card max-w-md w-full p-5 sm:p-7 shadow-2xl rounded-2xl border border-default-200/90 space-y-4 max-h-[90vh] flex flex-col bg-white animate-in fade-in zoom-in-95 duration-150">
             <div class="text-center space-y-2 shrink-0">
                 <div class="size-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto text-2xl font-bold shadow-xs">
                     <i data-lucide="check-circle" class="size-7"></i>
                 </div>
-                <h3 class="text-lg font-black text-default-900 tracking-tight">Konfirmasi Selesai Ujian</h3>
+                <h3 id="finishModalTitle" class="text-lg font-black text-default-900 tracking-tight">Konfirmasi Selesai Ujian</h3>
                 <p class="text-xs text-default-500 max-w-xs mx-auto leading-relaxed">Apakah Anda yakin ingin mengumpulkan seluruh lembar jawaban ujian sekarang?</p>
             </div>
 
@@ -384,7 +384,7 @@
 
             <form action="{{ route('student.exam.submit', $attempt) }}" method="POST" id="submitExamForm" class="pt-2 flex flex-col-reverse sm:flex-row gap-2 justify-end shrink-0">
                 @csrf
-                <button type="button" onclick="document.getElementById('finishModal').classList.add('hidden')" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-bold text-xs rounded-xl cursor-pointer text-center justify-center w-full sm:w-auto px-4 py-2.5 transition">
+                <button type="button" onclick="closeFinishModal()" class="btn btn-sm bg-default-100 hover:bg-default-200 text-default-700 font-bold text-xs rounded-xl cursor-pointer text-center justify-center w-full sm:w-auto px-4 py-2.5 transition">
                     Periksa Kembali
                 </button>
                 <button type="submit" class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto px-4 py-2.5 transition active:scale-[0.98]">
@@ -510,34 +510,49 @@
         }
 
         let lastRenderedIndex = -1;
+        let lastZoomTriggerEl = null;
+
+        function escapeCbtHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function escapeCbtAttr(value) {
+            return escapeCbtHtml(value)
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
 
         function buildAudioPlayerHtml(src, label, q) {
-            const safeSrc = String(src || '').replace(/"/g, '&quot;');
+            const safeSrc = escapeCbtAttr(src || '');
+            const safeLabel = escapeCbtHtml(label || '');
             const examCfg = window.CBT_DATA.mediaConfig || {};
             const maxPlays = (q && q.audioMaxPlays !== null && q.audioMaxPlays !== undefined)
                 ? parseInt(q.audioMaxPlays, 10)
                 : (typeof examCfg.audioMaxPlays === 'number' ? examCfg.audioMaxPlays : 2);
             const allowSeek = examCfg.audioAllowSeek === false ? '0' : '1';
             return `<div class="cbt-audio-container mb-3.5 p-3 rounded-lg bg-slate-50 border border-default-200 space-y-2">
-                <audio controls preload="metadata" controlsList="nodownload noplaybackrate" src="${safeSrc}" data-max-plays="${maxPlays}" data-allow-seek="${allowSeek}" class="w-full block" oncontextmenu="return false;" onerror="window.handleCbtAudioError(this, '${safeSrc}')">
+                <audio controls preload="metadata" controlsList="nodownload noplaybackrate" src="${safeSrc}" data-src="${safeSrc}" data-max-plays="${maxPlays}" data-allow-seek="${allowSeek}" class="w-full block" oncontextmenu="return false;" onerror="window.handleCbtAudioError(this)">
                     Browser Anda tidak mendukung pemutar audio HTML5.
                 </audio>
                 <div class="cbt-audio-error hidden p-2.5 rounded bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between gap-2">
-                    <span>Berkas audio ${label} gagal dimuat atau tidak tersedia. Hubungi pengawas ruang jika berlanjut.</span>
-                    <button type="button" onclick="window.retryCbtAudio(this, '${safeSrc}')" class="px-2.5 py-1 rounded bg-white border border-rose-300 text-rose-800 font-semibold text-[11px] hover:bg-rose-100 shrink-0 cursor-pointer">Muat Ulang</button>
+                    <span>Berkas audio ${safeLabel} gagal dimuat atau tidak tersedia. Hubungi pengawas ruang jika berlanjut.</span>
+                    <button type="button" data-src="${safeSrc}" onclick="window.retryCbtAudio(this, this.dataset.src)" class="px-2.5 py-1 rounded bg-white border border-rose-300 text-rose-800 font-semibold text-[11px] hover:bg-rose-100 shrink-0 cursor-pointer">Muat Ulang</button>
                 </div>
             </div>`;
         }
 
         function buildImageHtml(src, altText) {
-            const safeSrc = String(src || '').replace(/"/g, '&quot;');
-            const safeAlt = String(altText || '').replace(/"/g, '&quot;');
+            const safeSrc = escapeCbtAttr(src || '');
+            const safeAlt = escapeCbtAttr(altText || '');
             const zoomEnabled = !window.CBT_DATA.mediaConfig || window.CBT_DATA.mediaConfig.imageZoomEnabled !== false;
             if (!zoomEnabled) {
                 return `<div class="cbt-image-container mb-3.5"><img src="${safeSrc}" alt="${safeAlt}" class="max-h-72 rounded border border-default-200"></div>`;
             }
             return `<div class="cbt-image-container mb-3.5">
-                <button type="button" onclick="window.openCbtImageZoom('${safeSrc}')" class="inline-block text-left cursor-zoom-in group" title="Klik untuk memperbesar gambar">
+                <button type="button" data-src="${safeSrc}" onclick="window.openCbtImageZoom(this.dataset.src, this)" class="inline-block text-left cursor-zoom-in group" title="Klik untuk memperbesar gambar">
                     <img src="${safeSrc}" alt="${safeAlt}" class="max-h-72 rounded border border-default-200 group-hover:opacity-95 transition">
                     <span class="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-primary group-hover:underline">
                         <i data-lucide="zoom-in" class="size-3.5"></i>
@@ -547,10 +562,11 @@
             </div>`;
         }
 
-        window.openCbtImageZoom = function(src) {
+        window.openCbtImageZoom = function(src, triggerEl) {
             const modal = document.getElementById('imageZoomModal');
             const img = document.getElementById('imageZoomTarget');
             if (modal && img && src) {
+                lastZoomTriggerEl = triggerEl || document.activeElement;
                 img.src = src;
                 modal.classList.remove('hidden');
             }
@@ -558,9 +574,15 @@
 
         window.closeCbtImageZoom = function(event) {
             const modal = document.getElementById('imageZoomModal');
-            if (!modal) return;
+            if (!modal || modal.classList.contains('hidden')) return;
             if (!event || event.target === modal) {
                 modal.classList.add('hidden');
+                const img = document.getElementById('imageZoomTarget');
+                if (img) img.src = '';
+                if (lastZoomTriggerEl && typeof lastZoomTriggerEl.focus === 'function') {
+                    lastZoomTriggerEl.focus();
+                }
+                lastZoomTriggerEl = null;
             }
         };
 
@@ -615,9 +637,6 @@
                     }
                 }
                 stimContentEl.innerHTML = stimHtml;
-                if (typeof lucide !== 'undefined' && lucide.createIcons) {
-                    lucide.createIcons();
-                }
             } else {
                 stimBox.classList.add('hidden');
             }
@@ -642,6 +661,9 @@
             }
 
             renderOptionsPanel(q);
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
             updateFlagButtonState(q);
             updateNavigationAndFinishButtons(idx);
             initAudioListeningLimiter();
@@ -655,61 +677,78 @@
             const alignOptionsRight = Boolean(q.isRtl && examMediaCfg.rtlAlignOptionsRight !== false);
 
             if (q.type === 'multiple_choice' || q.type === 'true_false') {
+                optBox.setAttribute('role', 'radiogroup');
+                optBox.setAttribute('aria-label', 'Pilihan jawaban');
                 q.options.forEach(opt => {
                     const isChecked = q.currentAnswer === opt.key;
                     const displayLabel = formatOptionLabel(opt.display_key || opt.key, q.isRtl, q.rtlOptionStyle);
-                    const div = document.createElement('div');
-                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${alignOptionsRight ? 'text-right' : ''} ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.setAttribute('role', 'radio');
+                    btn.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+                    btn.className = `w-full text-left p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${alignOptionsRight ? 'text-right' : ''} ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
                     if (alignOptionsRight) {
-                        div.setAttribute('dir', 'rtl');
+                        btn.setAttribute('dir', 'rtl');
                     }
-                    div.onclick = () => selectSingleOption(opt.key);
-                    div.innerHTML = `
+                    btn.onclick = () => selectSingleOption(opt.key);
+                    btn.innerHTML = `
                         <span class="size-8 rounded-lg flex items-center justify-center font-bold shrink-0 transition-colors ${q.isRtl ? 'font-serif text-sm' : 'text-xs'} ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
                             ${displayLabel}
                         </span>
                         <span class="text-sm sm:text-base text-default-900 leading-snug font-medium flex-1 ${q.isRtl ? 'text-right font-serif text-lg' : ''}">${opt.content}</span>
                     `;
-                    optBox.appendChild(div);
+                    optBox.appendChild(btn);
                 });
             } else if (q.type === 'multiple_choice_complex') {
+                optBox.setAttribute('role', 'group');
+                optBox.setAttribute('aria-label', 'Pilihan jawaban kompleks');
                 const currentArr = Array.isArray(q.currentAnswer) ? q.currentAnswer : [];
                 q.options.forEach(opt => {
                     const isChecked = currentArr.includes(opt.key);
                     const displayLabel = formatOptionLabel(opt.display_key || opt.key, q.isRtl, q.rtlOptionStyle);
-                    const div = document.createElement('div');
-                    div.className = `p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${alignOptionsRight ? 'text-right' : ''} ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.setAttribute('role', 'checkbox');
+                    btn.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+                    btn.className = `w-full text-left p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer flex items-start sm:items-center gap-3.5 ${alignOptionsRight ? 'text-right' : ''} ${isChecked ? 'bg-primary-50/40 border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-white border-default-200/90 hover:border-primary/40 hover:bg-default-50/60'}`;
                     if (alignOptionsRight) {
-                        div.setAttribute('dir', 'rtl');
+                        btn.setAttribute('dir', 'rtl');
                     }
-                    div.onclick = () => toggleComplexOption(opt.key);
-                    div.innerHTML = `
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} class="size-4.5 rounded text-primary pointer-events-none mt-1 sm:mt-0">
+                    btn.onclick = () => toggleComplexOption(opt.key);
+                    btn.innerHTML = `
+                        <span aria-hidden="true" class="size-4.5 rounded border flex items-center justify-center shrink-0 mt-1 sm:mt-0 text-[11px] font-bold ${isChecked ? 'bg-primary border-primary text-white' : 'bg-white border-default-300 text-transparent'}">&#10003;</span>
                         <span class="size-7 rounded-lg flex items-center justify-center font-bold shrink-0 transition-colors ${q.isRtl ? 'font-serif text-sm' : 'text-xs'} ${isChecked ? 'bg-primary text-white shadow-xs' : 'bg-default-100 text-default-700'}">
                             ${displayLabel}
                         </span>
                         <span class="text-sm sm:text-base text-default-900 leading-snug font-medium flex-1 ${q.isRtl ? 'text-right font-serif text-lg' : ''}">${opt.content}</span>
                     `;
-                    optBox.appendChild(div);
+                    optBox.appendChild(btn);
                 });
             } else if (q.type === 'short_answer' || q.type === 'numeric') {
-                const val = q.currentAnswer || '';
+                optBox.removeAttribute('role');
+                optBox.removeAttribute('aria-label');
+                const val = escapeCbtAttr(q.currentAnswer || '');
                 optBox.innerHTML = `
                     <div class="space-y-2">
-                        <label class="block text-xs font-semibold text-default-500 uppercase">Ketikkan Jawaban Anda:</label>
-                        <input type="text" id="shortAnswerInput" value="${val}" ${q.isRtl ? 'dir="rtl"' : ''} onblur="saveTextAnswer(this.value)" placeholder="Ketik jawaban di sini..." class="form-input w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium bg-white ${q.isRtl ? 'text-right font-serif' : ''}">
-                        <p class="text-xs text-default-400">Tekan di luar kotak input atau pindah soal untuk menyimpan otomatis.</p>
+                        <label for="shortAnswerInput" class="block text-xs font-semibold text-default-600 uppercase">Ketikkan Jawaban Anda:</label>
+                        <input type="text" id="shortAnswerInput" value="${val}" ${q.isRtl ? 'dir="rtl"' : ''} oninput="scheduleTextAutosave(this.value)" onblur="flushActiveTextAnswer()" placeholder="Ketik jawaban di sini..." class="form-input w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium bg-white ${q.isRtl ? 'text-right font-serif' : ''}">
+                        <p class="text-xs text-default-500">Jawaban otomatis tersimpan saat mengetik atau berpindah soal.</p>
                     </div>
                 `;
             } else if (q.type === 'essay') {
-                const val = q.currentAnswer || '';
+                optBox.removeAttribute('role');
+                optBox.removeAttribute('aria-label');
+                const val = escapeCbtHtml(q.currentAnswer || '');
                 optBox.innerHTML = `
                     <div class="space-y-2">
-                        <label class="block text-xs font-semibold text-default-500 uppercase">Tuliskan Uraian / Jawaban Esai:</label>
-                        <textarea id="essayInput" rows="6" ${q.isRtl ? 'dir="rtl"' : ''} onblur="saveTextAnswer(this.value)" placeholder="Tuliskan uraian lengkap di sini..." class="form-textarea w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed bg-white ${q.isRtl ? 'text-right font-serif' : ''}">${val}</textarea>
-                        <p class="text-xs text-default-400">Jawaban tersimpan otomatis saat Anda berpindah soal.</p>
+                        <label for="essayInput" class="block text-xs font-semibold text-default-600 uppercase">Tuliskan Uraian / Jawaban Esai:</label>
+                        <textarea id="essayInput" rows="6" ${q.isRtl ? 'dir="rtl"' : ''} oninput="scheduleTextAutosave(this.value)" onblur="flushActiveTextAnswer()" placeholder="Tuliskan uraian lengkap di sini..." class="form-textarea w-full text-base border-default-200 rounded p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary leading-relaxed bg-white ${q.isRtl ? 'text-right font-serif' : ''}">${val}</textarea>
+                        <p class="text-xs text-default-500">Jawaban tersimpan otomatis saat mengetik atau berpindah soal.</p>
                     </div>
                 `;
+            } else {
+                optBox.removeAttribute('role');
+                optBox.removeAttribute('aria-label');
             }
         }
 
@@ -765,7 +804,29 @@
             }
         }
 
+        let textAutosaveTimer = null;
+
+        function scheduleTextAutosave(val) {
+            if (textAutosaveTimer) clearTimeout(textAutosaveTimer);
+            textAutosaveTimer = setTimeout(() => {
+                textAutosaveTimer = null;
+                saveTextAnswer(val);
+            }, 350);
+        }
+
+        function flushActiveTextAnswer() {
+            if (textAutosaveTimer) {
+                clearTimeout(textAutosaveTimer);
+                textAutosaveTimer = null;
+            }
+            const activeInput = document.getElementById('shortAnswerInput') || document.getElementById('essayInput');
+            if (activeInput) {
+                saveTextAnswer(activeInput.value);
+            }
+        }
+
         function navigateQuestion(offset) {
+            flushActiveTextAnswer();
             const nextIdx = currentIndex + offset;
             if (nextIdx >= 0 && nextIdx < total) {
                 renderQuestion(nextIdx);
@@ -773,10 +834,11 @@
         }
 
         function jumpToQuestion(idx) {
+            flushActiveTextAnswer();
             renderQuestion(idx);
             // Hide sidebar on mobile after clicking
             if (window.innerWidth < 1024) {
-                document.getElementById('paletteSidebar').classList.add('hidden');
+                closeMobilePalette();
             }
         }
 
@@ -847,6 +909,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': window.CBT_DATA.csrfToken
                 },
                 body: JSON.stringify({
@@ -857,11 +920,19 @@
                     client_timestamp: new Date().toISOString()
                 })
             })
-            .then(res => res.json())
+            .then(async res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
+                }
+                return res.json();
+            })
             .then(data => {
-                if (data.status === 'saved') {
+                if (data.status === 'saved' || data.status === 'ignored_stale') {
                     statusText.innerText = 'Tersimpan di Server';
                     indicator.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200';
+                } else {
+                    statusText.innerText = 'Menunggu Sinkronisasi...';
+                    indicator.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 font-medium border border-rose-200';
                 }
             })
             .catch(() => {
@@ -929,10 +1000,22 @@
             }
         }
 
+        let cbtTimerInterval = null;
+        let timerExpiredHandled = false;
+
         function startTimer() {
             function updateTimerDisplay() {
                 if (remainingSeconds <= 0) {
+                    if (cbtTimerInterval) {
+                        clearInterval(cbtTimerInterval);
+                        cbtTimerInterval = null;
+                    }
                     document.getElementById('cbtTimerDisplay').innerText = '00:00:00';
+                    if (timerExpiredHandled) return;
+                    timerExpiredHandled = true;
+                    flushActiveTextAnswer();
+                    isRedirectingOut = true;
+                    stopCameraAndStreams();
                     alert('Waktu ujian telah habis! Sistem akan mengumpulkan lembar jawaban secara otomatis.');
                     document.getElementById('submitExamForm').submit();
                     return;
@@ -949,7 +1032,7 @@
             }
 
             updateTimerDisplay();
-            setInterval(updateTimerDisplay, 1000);
+            cbtTimerInterval = setInterval(updateTimerDisplay, 1000);
         }
 
         // ==========================================
@@ -1631,7 +1714,40 @@
             });
         }
 
+        function openMobilePalette() {
+            const sidebar = document.getElementById('paletteSidebar');
+            const toggleBtn = document.getElementById('btnToggleMobilePalette');
+            if (!sidebar) return;
+            sidebar.classList.remove('hidden');
+            if (window.innerWidth < 1024) {
+                sidebar.setAttribute('role', 'dialog');
+                sidebar.setAttribute('aria-modal', 'true');
+            }
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeMobilePalette() {
+            const sidebar = document.getElementById('paletteSidebar');
+            const toggleBtn = document.getElementById('btnToggleMobilePalette');
+            if (!sidebar) return;
+            sidebar.classList.add('hidden');
+            sidebar.removeAttribute('role');
+            sidebar.removeAttribute('aria-modal');
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleMobilePalette() {
+            const sidebar = document.getElementById('paletteSidebar');
+            if (!sidebar) return;
+            if (sidebar.classList.contains('hidden')) {
+                openMobilePalette();
+            } else {
+                closeMobilePalette();
+            }
+        }
+
         function openFinishModal() {
+            flushActiveTextAnswer();
             if (currentIndex < total - 1) {
                 const hint = document.getElementById('finishLockHint');
                 if (hint) {
@@ -1643,6 +1759,11 @@
             }
             updateSummaryCounts();
             document.getElementById('finishModal').classList.remove('hidden');
+        }
+
+        function closeFinishModal() {
+            const modal = document.getElementById('finishModal');
+            if (modal) modal.classList.add('hidden');
         }
 
         function toggleFullscreen() {
@@ -1717,14 +1838,20 @@
             window.addEventListener('offline', checkNetwork);
             window.addEventListener('online', checkNetwork);
             window.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') window.closeCbtImageZoom();
+                if (e.key === 'Escape') {
+                    window.closeCbtImageZoom();
+                    closeFinishModal();
+                    if (window.innerWidth < 1024) {
+                        closeMobilePalette();
+                    }
+                }
             });
             checkNetwork();
         })();
     </script>
 
     <!-- Lightbox Perbesar Gambar Soal Peserta -->
-    <div id="imageZoomModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4" onclick="window.closeCbtImageZoom(event)">
+    <div id="imageZoomModal" role="dialog" aria-modal="true" aria-label="Perbesaran Media Soal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4" onclick="window.closeCbtImageZoom(event)">
         <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
             <button type="button" onclick="window.closeCbtImageZoom()" class="mb-2 self-end px-3 py-1 rounded-full bg-white text-default-800 text-xs font-bold shadow cursor-pointer">Tutup</button>
             <img id="imageZoomTarget" src="" alt="Perbesaran Media Soal" class="max-h-[82vh] max-w-full rounded-lg shadow-2xl bg-white p-1 object-contain">

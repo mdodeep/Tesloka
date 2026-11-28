@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        <div class="mt-6 text-center text-xs text-default-400 font-medium">
+        <div class="mt-6 text-center text-xs text-default-600 font-medium">
             {!! $branding['footer_copyright'] !!}
         </div>
     </div>

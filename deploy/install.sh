@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# TESLOKA CBT — ONE-LINE AUTO-INSTALLER SCRIPT UNTUK VPS LINUX
+# TESLOKA CBT : ONE-LINE AUTO-INSTALLER SCRIPT UNTUK VPS LINUX
 # Mendukung: Fresh VPS (Ubuntu 20.04/22.04/24.04, Debian 11/12, AlmaLinux/Rocky 9)
 # Serta kompatibel 100% dengan aaPanel / Panel Web Hosting lainnya.
 # ==============================================================================
@@ -25,7 +25,7 @@ fi
 
 clear
 echo -e "${BLUE}${BOLD}====================================================================${NC}"
-echo -e "${CYAN}${BOLD}                 TESLOKA CBT — AUTO INSTALLER (VPS)                 ${NC}"
+echo -e "${CYAN}${BOLD}                 TESLOKA CBT : AUTO INSTALLER (VPS)                 ${NC}"
 echo -e "${BLUE}${BOLD}        Sistem Ujian Berbasis Komputer On-Premise Single-Tenant      ${NC}"
 echo -e "${BLUE}${BOLD}====================================================================${NC}"
 echo ""
@@ -204,7 +204,7 @@ else
     echo -e "    Mengunduh rilis resmi TESLOKA..."
     # Placeholder unduh rilis git/archive jika belum ada
     if [ ! -f "$TARGET_DIR/artisan" ]; then
-        git clone https://github.com/tesloka/cbt.git "$TARGET_DIR" || true
+        git clone https://github.com/mdodeep/Tesloka.git "$TARGET_DIR" || true
     fi
 fi
 
@@ -285,9 +285,25 @@ server {
         fastcgi_pass unix:${PHP_SOCK};
         fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
         include fastcgi_params;
-        fastcgi_buffer_size 16k;
-        fastcgi_buffers 4 16k;
+        fastcgi_buffer_size 32k;
+        fastcgi_buffers 16 16k;
     }
+
+    # Reverse Proxy Laravel Reverb WebSocket (aktifkan jika BROADCAST_CONNECTION=reverb)
+    # location ^~ /app/ {
+    #     proxy_pass http://127.0.0.1:8080;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header Upgrade \$http_upgrade;
+    #     proxy_set_header Connection "Upgrade";
+    #     proxy_set_header Host \$host;
+    # }
+    # location ^~ /apps/ {
+    #     proxy_pass http://127.0.0.1:8080;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header Upgrade \$http_upgrade;
+    #     proxy_set_header Connection "Upgrade";
+    #     proxy_set_header Host \$host;
+    # }
 
     location ~ /\.(?!well-known).* {
         deny all;
@@ -333,7 +349,7 @@ $PHP_BIN artisan optimize:clear > /dev/null 2>&1 || true
 # ==============================================================================
 clear
 echo -e "${GREEN}${BOLD}================================================================================${NC}"
-echo -e "${GREEN}${BOLD}                   TESLOKA CBT — INSTALASI BERHASIL 100%!                       ${NC}"
+echo -e "${GREEN}${BOLD}                   TESLOKA CBT : INSTALASI BERHASIL 100%!                       ${NC}"
 echo -e "${GREEN}${BOLD}================================================================================${NC}"
 echo ""
 echo -e "${BOLD}1. STATUS STACK DAN LAYANAN SERVER:${NC}"

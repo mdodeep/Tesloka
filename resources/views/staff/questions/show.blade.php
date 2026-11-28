@@ -92,7 +92,7 @@
 
                         @if($question->stimulus->media_url && $question->stimulus->media_type !== 'audio')
                             <div class="mt-3">
-                                <a href="{{ $question->stimulus->media_url }}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1">
+                                <a href="{{ $question->stimulus->media_url }}" target="_blank" rel="noopener noreferrer" class="text-xs text-primary hover:underline inline-flex items-center gap-1">
                                     <i data-lucide="paperclip" class="size-3.5"></i>
                                     <span>Buka Lampiran Berkas Stimulus</span>
                                 </a>
@@ -159,7 +159,9 @@
                         </div>
                     @else
                         @foreach($question->options as $opt)
-                            @php($displayOptionLetter = \App\Models\Question::formatOptionLabel($opt->option_key, $isRtlQuestion, $rtlOptionStyle))
+                            @php
+                                $displayOptionLetter = \App\Models\Question::formatOptionLabel($opt->option_key, $isRtlQuestion, $rtlOptionStyle);
+                            @endphp
                             <div class="p-3 border border-default-200 rounded bg-white flex items-center gap-3 {{ $isRtlQuestion ? 'text-right' : '' }}" {{ $isRtlQuestion ? 'dir=rtl' : '' }}>
                                 <span class="size-7 rounded-full border border-default-200 flex items-center justify-center font-bold text-xs text-default-700 bg-default-50 shrink-0 {{ $isRtlQuestion ? 'font-serif text-sm' : '' }}">
                                     {{ $displayOptionLetter }}
@@ -196,7 +198,9 @@
                         </div>
                     @else
                         @foreach($question->options as $opt)
-                            @php($displayOptionLetter = \App\Models\Question::formatOptionLabel($opt->option_key, $isRtlQuestion, $rtlOptionStyle))
+                            @php
+                                $displayOptionLetter = \App\Models\Question::formatOptionLabel($opt->option_key, $isRtlQuestion, $rtlOptionStyle);
+                            @endphp
                             <div class="p-3 rounded-lg flex items-center justify-between gap-3 {{ $opt->is_correct ? 'bg-emerald-50 border border-emerald-300' : 'bg-white border border-default-200' }}" {{ $isRtlQuestion ? 'dir=rtl' : '' }}>
                                 <div class="flex items-center gap-3 flex-1">
                                     <span class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 {{ $opt->is_correct ? 'bg-emerald-600 text-white' : 'bg-default-100 text-default-700' }} {{ $isRtlQuestion ? 'font-serif text-sm' : '' }}">
@@ -299,7 +303,7 @@
 </div>
 
 <!-- Lightbox Perbesar Gambar Soal -->
-<div id="staffImageZoomModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeStaffImageZoom(event)">
+<div id="staffImageZoomModal" role="dialog" aria-modal="true" aria-label="Perbesaran Media Soal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeStaffImageZoom(event)">
     <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
         <button type="button" onclick="closeStaffImageZoom()" class="mb-2 self-end px-3 py-1 rounded-full bg-white text-default-800 text-xs font-bold shadow cursor-pointer">Tutup</button>
         <img id="staffImageZoomTarget" src="" alt="Perbesaran Media Soal" class="max-h-[82vh] max-w-full rounded-lg shadow-2xl bg-white p-1 object-contain">

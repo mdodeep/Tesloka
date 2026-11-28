@@ -28,7 +28,7 @@
             <div class="text-xs text-default-600 font-semibold tracking-normal truncate">{!! $title !!}</div>
             <div class="text-2xl font-bold text-default-800 mt-1 truncate">{{ $value }}</div>
             @if ($subtitle)
-                <div class="text-xs text-default-400 mt-0.5 truncate">{!! $subtitle !!}</div>
+                <div class="text-xs text-default-600 mt-0.5 truncate">{!! $subtitle !!}</div>
             @endif
         </div>
         <div class="size-11 rounded-lg {{ $iconColor }} flex items-center justify-center shrink-0">

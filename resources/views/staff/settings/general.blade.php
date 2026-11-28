@@ -525,7 +525,7 @@
                                         <span class="text-amber-800">Institusi Anda saat ini menggunakan <strong>Desain Bingkai Resmi Bawaan</strong> yang elegan, profesional, dan presisi A4. Untuk mengunggah berkas blangko gambar kustom institusi Anda, silakan aktifkan Supporter License melalui donasi resmi.</span>
                                     </div>
                                 </div>
-                                <a href="{{ route('staff.settings.license.index') }}" class="px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shrink-0 shadow-xs inline-flex items-center gap-1.5">
+                                <a href="{{ route('staff.settings.license.index') }}" class="px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white font-bold text-xs transition shrink-0 shadow-xs inline-flex items-center gap-1.5">
                                     <i data-lucide="shield" class="size-3.5"></i>
                                     <span>Aktifkan Lisensi</span>
                                 </a>
@@ -891,7 +891,7 @@
                                         <i data-lucide="copy" class="size-3"></i>
                                         <span>Salin URL Peserta</span>
                                     </button>
-                                    <a href="{{ $studentRegisterUrl }}" target="_blank" rel="noopener" class="px-2.5 py-1 rounded border border-primary/20 bg-primary/5 hover:bg-primary/10 text-[11px] font-semibold text-primary inline-flex items-center gap-1 transition">
+                                    <a href="{{ $studentRegisterUrl }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded border border-primary/20 bg-primary/5 hover:bg-primary/10 text-[11px] font-semibold text-primary inline-flex items-center gap-1 transition">
                                         <i data-lucide="external-link" class="size-3"></i>
                                         <span>Buka Formulir Peserta</span>
                                     </a>
@@ -945,7 +945,7 @@
                                         <i data-lucide="copy" class="size-3"></i>
                                         <span>Salin URL Dosen/Staf</span>
                                     </button>
-                                    <a href="{{ $staffRegisterUrl }}" target="_blank" rel="noopener" class="px-2.5 py-1 rounded border border-primary/20 bg-primary/5 hover:bg-primary/10 text-[11px] font-semibold text-primary inline-flex items-center gap-1 transition">
+                                    <a href="{{ $staffRegisterUrl }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded border border-primary/20 bg-primary/5 hover:bg-primary/10 text-[11px] font-semibold text-primary inline-flex items-center gap-1 transition">
                                         <i data-lucide="external-link" class="size-3"></i>
                                         <span>Buka Formulir Dosen/Staf</span>
                                     </a>
@@ -1445,7 +1445,7 @@
                     </div>
                     <form action="{{ route('staff.settings.tools.clear-log') }}" method="POST" onsubmit="return confirm('Kosongkan berkas log teknis aplikasi?')">
                         @csrf
-                        <button type="submit" class="btn border border-warning/30 bg-card text-warning-hover hover:bg-warning/10 shadow-xs h-9 px-3 text-xs font-semibold w-full justify-center inline-flex items-center gap-2 cursor-pointer transition rounded-md" style="height: 36px;">
+                        <button type="submit" class="btn border border-warning/30 bg-card text-amber-700 hover:bg-warning/10 shadow-xs h-9 px-3 text-xs font-semibold w-full justify-center inline-flex items-center gap-2 cursor-pointer transition rounded-md" style="height: 36px;">
                             <i data-lucide="trash" class="size-3.5 shrink-0"></i>
                             <span>Kosongkan Log ({{ $diagnostics['log_size'] ?? '0 B' }})</span>
                         </button>

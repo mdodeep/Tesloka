@@ -34,7 +34,7 @@
             <img src="{{ $logoUrl }}" alt="{{ $instName }}" class="h-auto w-auto max-h-11 sm:max-h-12 max-w-[200px] sm:max-w-[290px] object-contain">
             <div class="hidden sm:block">
                 <div class="text-xs font-bold text-default-800 uppercase tracking-tight">{{ $instName }}</div>
-                <div class="text-[10px] text-default-400">Verifikasi Resmi Dokumen & Sertifikat</div>
+                <div class="text-[10px] text-default-600">Verifikasi Resmi Dokumen & Sertifikat</div>
             </div>
         </div>
         <div class="flex items-center gap-2">
@@ -86,7 +86,7 @@
                 </div>
 
                 <button type="submit" class="w-full py-3.5 px-4 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm shadow-xs transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]">
-                    <div id="btn-spinner" class="hidden inline-block border-2 rounded-full size-4 animate-spin border-s-transparent border-white"></div>
+                    <div id="btn-spinner" class="hidden border-2 rounded-full size-4 animate-spin border-s-transparent border-white"></div>
                     <i id="btn-icon" data-lucide="search" class="size-4"></i>
                     <span>Cari &amp; Verifikasi Sertifikat Sekarang</span>
                 </button>

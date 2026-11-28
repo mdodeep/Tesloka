@@ -57,7 +57,7 @@
                             </button>
                         </div>
                         <div id="studentNotifList" class="h-80 max-h-80 overflow-y-auto divide-y divide-default-100 text-xs">
-                            <div class="p-8 text-center text-default-400">
+                            <div class="p-8 text-center text-default-600">
                                 <div class="inline-block border-2 rounded-full size-6 animate-spin border-s-transparent border-primary mb-2"></div>
                                 <p class="text-xs">{{ __('Memuat notifikasi...') }}</p>
                             </div>
@@ -73,7 +73,7 @@
                     <div id="studentA11yMenu" class="hidden absolute right-0 mt-2 w-56 bg-card border border-default-200 rounded-xl shadow-lg z-50 p-3 space-y-2 text-xs">
                         <div class="font-bold text-default-800 pb-1 border-b border-default-100 flex items-center justify-between">
                             <span>Aksesibilitas</span>
-                            <span class="text-[10px] text-default-400 font-normal">Sec. 11</span>
+                            <span class="text-[10px] text-default-500 font-normal">Sec. 11</span>
                         </div>
                         <button type="button" onclick="toggleStudentDyslexic()" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-default-100 flex items-center justify-between cursor-pointer">
                             <span>Font Ramah Disleksia</span>
@@ -94,7 +94,7 @@
 
                 <div class="text-right hidden md:block">
                     <div class="text-xs font-semibold text-default-800">{{ auth('student')->user()->name }}</div>
-                    <div class="text-[11px] text-default-400 font-mono">{{ auth('student')->user()->identity_number ?? auth('student')->user()->username }}</div>
+                    <div class="text-[11px] text-default-600 font-mono">{{ auth('student')->user()->identity_number ?? auth('student')->user()->username }}</div>
                 </div>
 
                 <a href="{{ route('student.profile') }}" class="flex items-center gap-2 hover:opacity-90 transition" title="Profil Peserta">
@@ -117,65 +117,65 @@
         <div class="container-fluid">
             <!-- Flash Messages (Single Source of Truth) -->
             @if (session('success'))
-                <div class="mb-5 p-4 rounded bg-success/10 border border-success/30 text-success text-sm flex items-center justify-between gap-2.5">
+                <div class="mb-5 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                     <div class="flex items-center gap-2.5">
-                        <i data-lucide="check-circle" class="size-5 shrink-0 text-success"></i>
+                        <i data-lucide="check-circle" class="size-5 shrink-0 text-emerald-700"></i>
                         <span>{{ session('success') }}</span>
                     </div>
-                    <button type="button" onclick="this.closest('.bg-success\\/10').remove()" class="text-success/70 hover:text-success transition" title="Tutup">
+                    <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-emerald-700 hover:text-emerald-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                         <i data-lucide="x" class="size-4"></i>
                     </button>
                 </div>
             @endif
 
             @if (session('error') || session('danger'))
-                <div class="mb-5 p-4 rounded bg-danger/10 border border-danger/30 text-danger text-sm flex items-center justify-between gap-2.5">
+                <div class="mb-5 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                     <div class="flex items-center gap-2.5">
-                        <i data-lucide="alert-octagon" class="size-5 shrink-0 text-danger"></i>
+                        <i data-lucide="alert-octagon" class="size-5 shrink-0 text-rose-700"></i>
                         <span>{{ session('error') ?? session('danger') }}</span>
                     </div>
-                    <button type="button" onclick="this.closest('.bg-danger\\/10').remove()" class="text-danger/70 hover:text-danger transition" title="Tutup">
+                    <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-rose-700 hover:text-rose-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                         <i data-lucide="x" class="size-4"></i>
                     </button>
                 </div>
             @endif
 
             @if (session('warning'))
-                <div class="mb-5 p-4 rounded bg-warning/10 border border-warning/30 text-warning text-sm flex items-center justify-between gap-2.5">
+                <div class="mb-5 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                     <div class="flex items-center gap-2.5">
-                        <i data-lucide="alert-triangle" class="size-5 shrink-0 text-warning"></i>
+                        <i data-lucide="alert-triangle" class="size-5 shrink-0 text-amber-700"></i>
                         <span>{{ session('warning') }}</span>
                     </div>
-                    <button type="button" onclick="this.closest('.bg-warning\\/10').remove()" class="text-warning/70 hover:text-warning transition" title="Tutup">
+                    <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-amber-700 hover:text-amber-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                         <i data-lucide="x" class="size-4"></i>
                     </button>
                 </div>
             @endif
 
             @if (session('info') || session('status'))
-                <div class="mb-5 p-4 rounded bg-info/10 border border-info/30 text-info text-sm flex items-center justify-between gap-2.5">
+                <div class="mb-5 p-4 rounded-xl bg-sky-50 border border-sky-200 text-sky-900 text-sm flex items-center justify-between gap-2.5" role="alert">
                     <div class="flex items-center gap-2.5">
-                        <i data-lucide="info" class="size-5 shrink-0 text-info"></i>
+                        <i data-lucide="info" class="size-5 shrink-0 text-sky-700"></i>
                         <span>{{ session('info') ?? session('status') }}</span>
                     </div>
-                    <button type="button" onclick="this.closest('.bg-info\\/10').remove()" class="text-info/70 hover:text-info transition" title="Tutup">
+                    <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-sky-700 hover:text-sky-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                         <i data-lucide="x" class="size-4"></i>
                     </button>
                 </div>
             @endif
 
             @if (isset($errors) && $errors->any())
-                <div class="mb-5 p-4 rounded bg-danger/10 border border-danger/30 text-danger text-sm relative">
+                <div class="mb-5 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm relative" role="alert">
                     <div class="flex items-center justify-between mb-1">
-                        <div class="font-semibold flex items-center gap-2">
-                            <i data-lucide="alert-octagon" class="size-5 shrink-0 text-danger"></i>
+                        <div class="font-semibold flex items-center gap-2 text-rose-900">
+                            <i data-lucide="alert-octagon" class="size-5 shrink-0 text-rose-700"></i>
                             Terjadi Kesalahan
                         </div>
-                        <button type="button" onclick="this.closest('.bg-danger\\/10').remove()" class="text-danger/70 hover:text-danger transition" title="Tutup">
+                        <button type="button" onclick="this.closest('[role=alert]').remove()" class="text-rose-700 hover:text-rose-900 transition cursor-pointer" aria-label="Tutup pesan" title="Tutup">
                             <i data-lucide="x" class="size-4"></i>
                         </button>
                     </div>
-                    <ul class="list-disc list-inside space-y-1 text-xs">
+                    <ul class="list-disc list-inside space-y-1 text-xs text-rose-800">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -189,11 +189,11 @@
 
     <!-- Student Footer (Tailwind Footer Style) -->
     <footer class="mt-auto footer flex items-center py-5 border-t border-default-200 bg-card">
-        <div class="w-full px-6 lg:px-8 flex md:justify-between justify-center gap-4 text-xs text-default-500">
+        <div class="w-full px-6 lg:px-8 flex md:justify-between justify-center gap-4 text-xs text-default-600">
             <div>
                 {!! $branding['footer_copyright'] !!}
             </div>
-            <div class="md:flex hidden gap-2 items-center text-default-400">
+            <div class="md:flex hidden gap-2 items-center text-default-500">
                 Portal Pelaksanaan Ujian Terstandar
             </div>
         </div>

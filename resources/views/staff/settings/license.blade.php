@@ -24,7 +24,7 @@
             </p>
         </div>
         <div class="flex items-center gap-2.5">
-            <a href="{{ $donateServerUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs">
+            <a href="{{ $donateServerUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white font-bold text-xs transition shadow-2xs">
                 <span>Portal Anggota &amp; Lisensi</span>
                 <i data-lucide="external-link" class="size-3.5"></i>
             </a>
@@ -142,7 +142,7 @@
                         <h4 class="text-xs font-bold text-default-900">Tingkatkan ke Supporter License (Akses Auto-Update 1-Klik)</h4>
                         <p class="text-[11px] text-default-600 mt-0.5">Dukung pemeliharaan ekosistem TESLOKA mulai Rp 200.000 untuk menikmati pembaruan otomatis 1-klik dan kustomisasi latar sertifikat.</p>
                     </div>
-                    <a href="{{ $donateServerUrl }}/dashboard" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shrink-0 shadow-2xs">
+                    <a href="{{ $donateServerUrl }}/dashboard" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white font-bold text-xs transition shrink-0 shadow-2xs">
                         Upgrade ke Supporter
                     </a>
                 </div>
@@ -222,7 +222,7 @@
                         <form action="{{ route('staff.settings.license.perform-update') }}" method="POST" onsubmit="return confirm('Mulai proses pembaruan otomatis ke v{{ $updateAvailable['latest_version'] }}? Sistem akan membuat snapshot database sebelum memperbarui.')">
                             @csrf
                             <input type="hidden" name="target_version" value="{{ $updateAvailable['latest_version'] }}">
-                            <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-extrabold text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+                            <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-extrabold text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer">
                                 <i data-lucide="download" class="size-4"></i>
                                 <span>Perbarui Sekarang Secara Aman (1-Klik)</span>
                             </button>
@@ -306,7 +306,7 @@
                 </div>
 
                 <div>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs inline-flex items-center gap-2 cursor-pointer">
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs transition shadow-2xs inline-flex items-center gap-2 cursor-pointer">
                         <i data-lucide="upload-cloud" class="size-4"></i>
                         <span>Unggah &amp; Terapkan Pembaruan ZIP</span>
                     </button>
@@ -342,7 +342,7 @@
             </div>
 
             <div class="flex items-center gap-3 flex-wrap">
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs transition shadow-2xs flex items-center gap-1.5 cursor-pointer">
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs transition shadow-2xs flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="check" class="size-4"></i>
                     <span>Simpan &amp; Verifikasi Lisensi</span>
                 </button>

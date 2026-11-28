@@ -57,18 +57,18 @@ Manajemen Sesi & Perangkat Aktif
             <a href="{{ route('staff.security.sessions', ['status' => 'all']) }}"
                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition inline-flex items-center gap-1.5 {{ $status === 'all' ? 'bg-primary text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
                 <span>Semua Sesi</span>
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] {{ $status === 'all' ? 'bg-white/20 text-white' : 'bg-default-200 text-default-700' }}">{{ $totalCount }}</span>
+                <span class="px-1.5 py-0.5 rounded-full text-[10px] {{ $status === 'all' ? 'bg-white/20 text-white' : 'bg-default-200 text-default-700' }}">{{ $totalCount }}</span>
             </a>
             <a href="{{ route('staff.security.sessions', ['status' => 'active']) }}"
                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition inline-flex items-center gap-1.5 {{ $status === 'active' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
                 <span class="size-1.5 rounded-full {{ $status === 'active' ? 'bg-white' : 'bg-emerald-500' }}"></span>
                 <span>Aktif Saja</span>
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] {{ $status === 'active' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800' }}">{{ $activeCount }}</span>
+                <span class="px-1.5 py-0.5 rounded-full text-[10px] {{ $status === 'active' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800' }}">{{ $activeCount }}</span>
             </a>
             <a href="{{ route('staff.security.sessions', ['status' => 'revoked']) }}"
                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition inline-flex items-center gap-1.5 {{ $status === 'revoked' ? 'bg-rose-600 text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
                 <span>Dicabut Keluar</span>
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] {{ $status === 'revoked' ? 'bg-white/20 text-white' : 'bg-rose-100 text-rose-800' }}">{{ $revokedCount }}</span>
+                <span class="px-1.5 py-0.5 rounded-full text-[10px] {{ $status === 'revoked' ? 'bg-white/20 text-white' : 'bg-rose-100 text-rose-800' }}">{{ $revokedCount }}</span>
             </a>
         </div>
 

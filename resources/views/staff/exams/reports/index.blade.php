@@ -431,15 +431,18 @@
                     <tbody class="divide-y divide-default-200/70">
                         @forelse($remedialStudents as $idx => $rem)
                             @php
-                                $diff = ($exam->passing_grade ?? 75) - $rem->percentage;
+                                $targetKkm = (float) ($exam->passing_grade ?? 75);
+                                $isScaledExam = ($exam->score_scale ?? 'standard_100') !== 'standard_100' || $targetKkm > 100;
+                                $achievedScore = (float) ($isScaledExam ? ($rem->effective_score ?? $rem->total_score) : $rem->percentage);
+                                $diff = max(0, $targetKkm - $achievedScore);
                             @endphp
                             <tr class="hover:bg-default-50/80 transition">
                                 <td class="ps-4 sm:ps-6 pe-3 py-3.5 text-center font-bold text-default-500 whitespace-nowrap">{{ $loop->iteration }}</td>
                                 <td class="px-3 py-3.5 font-bold text-default-900 whitespace-nowrap">{{ $rem->student->name }}</td>
                                 <td class="px-3 py-3.5 font-mono text-default-500 whitespace-nowrap">{{ $rem->student->nisn ?? $rem->student->username }}</td>
-                                <td class="px-3 py-3.5 text-center font-mono font-bold whitespace-nowrap">{{ number_format($rem->total_score, 1) }}</td>
+                                <td class="px-3 py-3.5 text-center font-mono font-bold whitespace-nowrap">{{ number_format($rem->effective_score ?? $rem->total_score, $isScaledExam ? 0 : 1) }}</td>
                                 <td class="px-3 py-3.5 text-center font-bold text-rose-600 whitespace-nowrap">{{ number_format($rem->percentage, 1) }}%</td>
-                                <td class="px-3 py-3.5 text-center font-mono text-amber-600 whitespace-nowrap">-{{ number_format($diff, 1) }}%</td>
+                                <td class="px-3 py-3.5 text-center font-mono text-amber-700 whitespace-nowrap">-{{ number_format($diff, $isScaledExam ? 0 : 1) }}{{ $isScaledExam ? '' : '%' }}</td>
                                 <td class="ps-3 pe-4 sm:pe-6 py-3.5 text-center whitespace-nowrap">
                                     <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 whitespace-nowrap">
                                         Wajib Remedial

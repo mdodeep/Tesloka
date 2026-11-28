@@ -9,7 +9,7 @@
 <div class="space-y-6 w-full">
 
     <!-- Header Banner -->
-    <div class="bg-secondary text-white rounded-xl p-5 sm:p-6 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-secondary-800">
+    <div class="bg-secondary text-white rounded-xl p-5 sm:p-6 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
         <div>
             <div class="flex items-center gap-2 flex-wrap mb-1">
                 @if($proctoringConfig['livekit_configured'])
@@ -23,10 +23,10 @@
                         Kamera Snapshot &amp; Near-Live Zoom
                     </span>
                 @endif
-                <span class="px-2.5 py-0.5 bg-secondary-800 text-slate-300 text-xs rounded-md font-mono border border-secondary-700/80">
+                <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 text-xs rounded-md font-mono border border-slate-700/80">
                     {{ $session->room->name ?? 'Daring / Online' }} (Kapasitas: {{ $session->room->capacity ?? count($participants) }})
                 </span>
-                <span class="px-2 py-0.5 bg-secondary-800 text-slate-300 text-xs rounded-md font-mono border border-secondary-700/80" id="live-sync-indicator">
+                <span class="px-2 py-0.5 bg-slate-800 text-slate-300 text-xs rounded-md font-mono border border-slate-700/80" id="live-sync-indicator">
                     Sinkronisasi: Polling
                 </span>
             </div>
@@ -41,7 +41,7 @@
         </div>
 
         <div class="flex items-center gap-3 flex-wrap">
-            <button type="button" onclick="refreshCameraFeed()" class="btn btn-sm bg-secondary-800 hover:bg-secondary-700 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs border border-secondary-700 rounded-lg cursor-pointer">
+            <button type="button" onclick="refreshCameraFeed()" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs border border-slate-700 rounded-lg cursor-pointer">
                 <i data-lucide="refresh-cw" class="size-4" id="refresh-icon"></i>
                 <span>Segarkan Grid</span>
             </button>
@@ -176,7 +176,7 @@
 <!-- ======================================================== -->
 <!-- MODAL ZOOM KAMERA & TELEMETRI PESERTA (FULL DETAIL ZOOM) -->
 <!-- ======================================================== -->
-<div id="modalZoomCamera" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
+<div id="modalZoomCamera" role="dialog" aria-modal="true" aria-labelledby="zoomStudentName" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
     <div class="bg-slate-900 border border-slate-800 text-white rounded-lg w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         <!-- Modal Header -->
         <div class="p-4 sm:px-6 border-b border-slate-800 flex items-center justify-between shrink-0">
@@ -227,7 +227,7 @@
                             </button>
                             <span id="snapRequestFeedback" class="text-xs font-medium text-emerald-400 hidden"></span>
                         </div>
-                        <a id="zoomOpenFullImg" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-2 rounded inline-flex items-center gap-1.5 transition">
+                        <a id="zoomOpenFullImg" href="#" onclick="if(this.getAttribute('href')==='#'){return false;}" target="_blank" rel="noopener noreferrer" class="btn btn-sm bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-2 rounded inline-flex items-center gap-1.5 transition">
                             <i data-lucide="external-link" class="size-3.5"></i>
                             <span>Buka Gambar Asli</span>
                         </a>

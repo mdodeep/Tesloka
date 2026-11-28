@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/badge/PHP-%5E8.3%20%7C%208.4%20%7C%208.5-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP ^8.3">
   <img src="https://img.shields.io/badge/PostgreSQL-16%2B%20ACID-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
   <img src="https://img.shields.io/badge/Redis-7%2B%20Cache%20%26%20Queue-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis 7+">
-  <img src="https://img.shields.io/badge/Tests-389%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="389 Tests Passed">
-  <img src="https://img.shields.io/badge/Assertions-3.227%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="3.227 Assertions">
+  <img src="https://img.shields.io/badge/Tests-430%20Passed%20(100%25)-10b981?style=flat-square&logo=checkmarx&logoColor=white" alt="430 Tests Passed">
+  <img src="https://img.shields.io/badge/Assertions-3.671%20Verified-0ea5e9?style=flat-square&logo=databricks&logoColor=white" alt="3.671 Assertions">
   <img src="https://img.shields.io/badge/UI_Kit-Tailwind%20Native-6366f1?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind Native">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8">
@@ -121,7 +121,7 @@ Portal Staf (`/staff`) mengintegrasikan 16 modul tata kelola komprehensif yang t
    - Menjodohkan / Matching (menghubungkan pasangan premis kiri dan respons kanan)
    - Isian Singkat / Short Answer (pencocokan kata kunci toleran *case-insensitive*)
    - Esai Terstruktur Berbasis Rubrik (koreksi bertingkat dengan kriteria bobot dan opsi *Blind Marking*)
-   - Skala Likert (survei afektif, kepribadian, dan evaluasi pengajaran 1–5)
+   - Numeric Precision (jawaban angka eksak dengan rentang toleransi otomatis)
 2. **Editor Visual Quill Snow & Dual-Mode Switcher:**
    Penyusunan butir soal dilengkapi editor WYSIWYG Quill Snow modern dengan tombol alih mode instan: Mode Visual (format heading, bold, italic, underline, strike, sub/superskrip, lists, blok kode, blockquote, teks Arab RTL) dan Mode Teks Kode / Raw HTML dengan sinkronisasi dua arah real-time.
 3. **Pusat Collapsible Panduan KaTeX & Palet 50+ Simbol 1-Klik:**
@@ -164,7 +164,7 @@ Panduan operasional lengkap step-by-step telah didokumentasikan secara rinci pad
 ### Ringkasan Alur Operasional 12 Langkah:
 1. **Initial Setup Pasca-Deployment:**
    - Jalankan `php artisan tesloka:install` (atau kunjungi `https://staff.domainanda.sch.id/install` di browser).
-   - Bila menginisialisasi manual tanpa wizard: jalankan `php artisan migrate --force`, `php artisan storage:link`, dan `php artisan db:seed --class=ProductionCleanDatabaseSeeder --force` (atur `TESLOKA_ADMIN_PASSWORD` di `.env` atau catat kata sandi acak yang dicetak command).
+   - Bila menginisialisasi manual tanpa wizard: jalankan `php artisan migrate --force`, `php artisan storage:link`, dan `php artisan db:seed --class=ProductionSeeder --force` (atur `TESLOKA_ADMIN_PASSWORD` di `.env` atau catat kata sandi acak yang dicetak command).
    - Login ke `https://staff.domainanda.sch.id/staff/login` menggunakan akun administrator yang telah dikonfigurasi.
 2. **Branding & Konfigurasi Lembaga:**
    - Masuk ke menu `/staff/settings/general` untuk mengatur nama lembaga, alamat, NIP kepala lembaga, logo institusi, dan favicon.
@@ -484,7 +484,7 @@ php artisan tesloka:import-questions storage/app/PTIQ_EPT_Paket_A_Media_Bundle.z
 # 3. Uji Kesiapan Produksi (Memeriksa 8 Indikator Kritis Sistem):
 php artisan tesloka:production-check
 
-# 4. Menjalankan Seluruh Automated Test Suite (353 Tests, PHPUnit):
+# 4. Menjalankan Seluruh Automated Test Suite (430 Tests, PHPUnit):
 php artisan test
 
 # 5. Simulasi Beban Pengerjaan & Autosave Bersamaan:
@@ -523,13 +523,13 @@ Dokumentasi lengkap hasil pengujian dan matriks keterlacakan fitur tersedia di:
 ```
 tesloka/
 ├── app/
-│   ├── Http/Controllers/     # 41 Controller (Staff, Student, Public, Media, API)
+│   ├── Http/Controllers/     # 44 Controller (Staff, Student, Public, Media, API)
 │   ├── Http/Middleware/      # Pemisahan Portal, Safe Exam Browser, RBAC, Profil, Security
 │   ├── Jobs/                 # Queue background jobs (ekspor, regrade, email)
-│   ├── Models/               # 51 Model Eloquent & Relasi Database
+│   ├── Models/               # 53 Model Eloquent & Relasi Database
 │   └── Services/             # Logika bisnis (psikometri, grading, integrasi SEB, sanitasi)
 ├── database/
-│   ├── migrations/           # 30 Berkas migrasi skema tabel PostgreSQL
+│   ├── migrations/           # 31 Berkas migrasi skema tabel PostgreSQL
 │   └── seeders/              # Seeder produksi (bersih) & seeder simulasi lokal
 ├── deploy/                   # Konfigurasi deployment produksi siap pakai
 │   ├── nginx/                # Template virtual host Nginx (HTTP & HTTPS)
@@ -550,14 +550,14 @@ tesloka/
 ├── resources/
 │   ├── css/                  # Stylesheet tema antarmuka & Tailwind CSS 4
 │   ├── js/                   # Skrip interaktif, timer, autosave handler
-│   └── views/                # 103 Template Blade (staff, student, public, errors)
+│   └── views/                # 108 Template Blade (staff, student, public, errors)
 ├── routes/
 │   ├── staff.php             # Rute 16 modul staf & administrasi
 │   ├── student.php           # Rute portal ujian peserta
 │   ├── api.php               # API endpoint transaksional (autosave, heartbeat)
 │   └── web.php               # Router domain & portal verifikasi sertifikat publik
 ├── Soal/                     # Berkas asesmen siap upload PTIQ EPT & APT Arab masing-masing 140 butir + audio (Bahasa-Inggris/ & Bahasa-Arab/)
-└── tests/                    # 49 Berkas pengujian fitur, keamanan & unit (PHPUnit)
+└── tests/                    # 58 Berkas pengujian fitur, keamanan & unit (PHPUnit)
 ```
 
 ---

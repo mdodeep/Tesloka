@@ -51,7 +51,7 @@
         <a href="{{ route('staff.security.audit-logs', array_merge(request()->except('tab'), ['tab' => 'security'])) }}" class="px-4 py-2 rounded-lg transition inline-flex items-center gap-2 {{ ($activeTab ?? 'all') === 'security' ? 'bg-rose-600 text-white shadow-2xs' : 'bg-white border border-default-200/90 text-default-600 hover:bg-default-50' }}">
             <span>Insiden Keamanan</span>
             @if(($securityIncidentsCount ?? 0) > 0)
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold {{ ($activeTab ?? 'all') === 'security' ? 'bg-white text-rose-600' : 'bg-rose-100 text-rose-700' }}">
+                <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold {{ ($activeTab ?? 'all') === 'security' ? 'bg-white text-rose-600' : 'bg-rose-100 text-rose-700' }}">
                     {{ $securityIncidentsCount }}
                 </span>
             @endif
@@ -156,7 +156,7 @@
                                     <div class="flex items-center gap-1.5">
                                         <span class="font-bold text-default-900">{{ $log->user->name }}</span>
                                         @if($actorRoleLabel)
-                                            <span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-primary/10 text-primary">{{ $actorRoleLabel }}</span>
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary">{{ $actorRoleLabel }}</span>
                                         @endif
                                     </div>
                                     <div class="text-[10px] text-default-400 font-mono">{{ $log->user->username }}</div>

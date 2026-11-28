@@ -40,7 +40,7 @@
                 <i data-lucide="megaphone" class="size-4"></i>
                 <span>Siarkan Pengumuman</span>
             </button>
-            <button type="button" onclick="openIncidentModal()" class="btn btn-sm bg-danger hover:bg-danger-hover text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs cursor-pointer">
+            <button type="button" onclick="openIncidentModal()" class="btn btn-sm bg-danger hover:bg-rose-700 text-white font-semibold transition inline-flex items-center gap-1.5 shadow-2xs cursor-pointer">
                 <i data-lucide="alert-triangle" class="size-4"></i>
                 <span>Catat Insiden</span>
             </button>
@@ -241,7 +241,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-1.5">
                                 <span class="font-mono font-bold text-default-700">{{ $inc->incident_code }}</span>
-                                <span class="px-1.5 py-0.2 rounded font-semibold uppercase text-[10px] {{ $inc->severity === 'critical' ? 'bg-rose-100 text-rose-800' : ($inc->severity === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-default-700') }}">
+                                <span class="px-1.5 py-0.5 rounded font-semibold uppercase text-[10px] {{ $inc->severity === 'critical' ? 'bg-rose-100 text-rose-800' : ($inc->severity === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-default-700') }}">
                                     {{ $inc->severity }}
                                 </span>
                             </div>
@@ -289,10 +289,10 @@
 </div>
 
 <!-- Modal Siarkan Pengumuman -->
-<div id="modal-announcement" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+<div id="modal-announcement" role="dialog" aria-modal="true" aria-labelledby="modal-announcement-title" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
-            <h3 class="font-bold text-default-900 text-base">Siarkan Pengumuman Selama Ujian</h3>
+            <h3 id="modal-announcement-title" class="font-bold text-default-900 text-base">Siarkan Pengumuman Selama Ujian</h3>
             <button type="button" onclick="closeAnnouncementModal()" class="text-default-400 hover:text-default-600 cursor-pointer text-lg leading-none">&times;</button>
         </div>
         <form action="{{ route('staff.sessions.monitor.announcements.store', $session) }}" method="POST" class="space-y-4">
@@ -334,7 +334,7 @@
 </div>
 
 <!-- Modal Peringatan Khusus Peserta (Targeted Proctor Warning - FULL-FEATURE 20.8, 22) -->
-<div id="modal-student-warning" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+<div id="modal-student-warning" role="dialog" aria-modal="true" aria-label="Kirim Peringatan Khusus Peserta" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-rose-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-rose-100 pb-3">
             <div class="flex items-center gap-2">
@@ -394,7 +394,7 @@
 </div>
 
 <!-- Modal Catat Insiden -->
-<div id="modal-incident" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+<div id="modal-incident" role="dialog" aria-modal="true" aria-label="Catat Laporan Insiden Ujian" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <h3 class="font-bold text-default-900 text-base">Catat Laporan Insiden Ujian</h3>
@@ -447,7 +447,7 @@
 </div>
 
 <!-- Modal Tambah Waktu Ujian -->
-<div id="modal-add-time" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+<div id="modal-add-time" role="dialog" aria-modal="true" aria-label="Berikan Tambahan Waktu Ujian" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <h3 class="font-bold text-default-900 text-base">Berikan Tambahan Waktu Ujian</h3>
@@ -481,7 +481,7 @@
 </div>
 
 <!-- Modal Hentikan Paksa Ujian -->
-<div id="modal-force-stop" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+<div id="modal-force-stop" role="dialog" aria-modal="true" aria-label="Hentikan Paksa Percobaan Ujian" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <h3 class="font-bold text-rose-600 text-base">Hentikan Paksa Percobaan Ujian</h3>
@@ -509,7 +509,7 @@
 </div>
 
 <!-- Modal Reset / Force Logout Sesi Perangkat -->
-<div id="modal-force-logout" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+<div id="modal-force-logout" role="dialog" aria-modal="true" aria-label="Reset Sesi / Logout Paksa Perangkat" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <h3 class="font-bold text-amber-600 text-base">Reset Sesi / Logout Paksa Perangkat</h3>
@@ -537,7 +537,7 @@
 </div>
 
 <!-- Modal Tindak Lanjut Insiden (FULL-FEATURE 23.4) -->
-<div id="modal-resolve-incident" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+<div id="modal-resolve-incident" role="dialog" aria-modal="true" aria-label="Tindak Lanjuti &amp; Selesaikan Insiden" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col p-5 sm:p-6 space-y-4 shadow-xl border border-default-200 overflow-y-auto">
         <div class="flex items-center justify-between border-b border-default-100 pb-3">
             <h3 class="font-bold text-default-900 text-base">Tindak Lanjuti &amp; Selesaikan Insiden</h3>
@@ -811,7 +811,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-1.5">
                         <span class="font-mono font-bold text-default-700">${escapeHtml(inc.incident_code)}</span>
-                        <span class="px-1.5 py-0.2 rounded font-semibold uppercase text-[10px] ${sevBadge}">${escapeHtml(inc.severity)}</span>
+                        <span class="px-1.5 py-0.5 rounded font-semibold uppercase text-[10px] ${sevBadge}">${escapeHtml(inc.severity)}</span>
                     </div>
                     <span class="text-default-400 font-mono">${escapeHtml(inc.created_at_time || '')}</span>
                 </div>

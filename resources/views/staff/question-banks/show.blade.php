@@ -378,7 +378,7 @@
             <div id="guide-xlsx" class="p-3.5 bg-emerald-50 border border-emerald-200 rounded text-emerald-950 space-y-2">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <span class="font-bold text-emerald-900">Spesifikasi Format Excel (.xlsx):</span>
-                    <a href="{{ route('staff.question-banks.template-xlsx') }}" class="btn btn-sm bg-success hover:bg-success-hover text-white rounded font-bold text-[11px] inline-flex items-center gap-1 shadow-2xs shrink-0">
+                    <a href="{{ route('staff.question-banks.template-xlsx') }}" class="btn btn-sm bg-success hover:bg-emerald-700 text-white rounded font-bold text-[11px] inline-flex items-center gap-1 shadow-2xs shrink-0">
                         <i data-lucide="download" class="size-3.5"></i>
                         <span>Unduh Template Excel (.xlsx)</span>
                     </a>

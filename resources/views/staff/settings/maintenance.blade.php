@@ -13,7 +13,7 @@
         </span>
         <form action="{{ route('staff.settings.maintenance.disable') }}" method="POST" class="inline">
             @csrf
-            <button type="submit" class="btn btn-sm bg-success hover:bg-success-hover text-white flex items-center gap-1.5 cursor-pointer shadow-2xs">
+            <button type="submit" class="btn btn-sm bg-success hover:bg-emerald-700 text-white flex items-center gap-1.5 cursor-pointer shadow-2xs">
                 <i data-lucide="check" class="size-4"></i>
                 <span>Buka Sistem</span>
             </button>
@@ -172,7 +172,7 @@
                 </div>
 
                 <div class="pt-2 flex justify-end">
-                    <button type="submit" class="btn btn-sm bg-danger hover:bg-danger-hover text-white flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer shadow-2xs">
+                    <button type="submit" class="btn btn-sm bg-danger hover:bg-rose-700 text-white flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer shadow-2xs">
                         <i data-lucide="lock" class="size-4 shrink-0"></i>
                         <span>Aktifkan Mode Pemeliharaan Sekarang</span>
                     </button>
